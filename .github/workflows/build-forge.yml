@@ -22,9 +22,22 @@ jobs:
       image: registry.fedoraproject.org/fedora:43
     steps:
       - uses: actions/checkout@v4
-      - run: dnf install -y rpm-build rpmdevtools checkpolicy policycoreutils
-      - run: rpmdev-setuptree
-      - run: |
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-selinux/**') }}" >> $GITHUB_OUTPUT
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/rpmbuild/RPMS/
+          key: rpm-selinux-${{ steps.hash.outputs.hash }}
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: dnf install -y rpm-build rpmdevtools checkpolicy policycoreutils
+      - name: Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          rpmdev-setuptree
           cp specs/ermete-selinux/SOURCES/* ~/rpmbuild/SOURCES/
           rpmbuild -ba specs/ermete-selinux/ermete-selinux.spec
       - uses: actions/upload-artifact@v4
@@ -40,12 +53,24 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
-      - run: |
+      - name: Setup Repos and get Kernel Version
+        id: kernel
+        run: |
           curl -Lo /etc/yum.repos.d/fedora-nvidia.repo https://negativo17.org/repos/fedora-nvidia.repo
           curl -Lo /etc/yum.repos.d/bieszczaders-kernel-cachyos.repo https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos/repo/fedora-${{ env.FEDORA_VERSION }}/bieszczaders-kernel-cachyos-fedora-${{ env.FEDORA_VERSION }}.repo
-          dnf install -y kernel-cachyos kernel-cachyos-devel-matched akmods akmod-nvidia gcc gcc-c++ make elfutils-libelf-devel openssl-devel rpm-build rpmdevtools
-          QUALIFIED_KERNEL=$(rpm -q --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}\n' kernel-cachyos | sort -V | tail -n 1)
-          akmods --force --kernels "${QUALIFIED_KERNEL}" || true
+          dnf install -y kernel-cachyos kernel-cachyos-devel-matched
+          echo "kernel_ver=$(rpm -q --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}\n' kernel-cachyos | sort -V | tail -n 1)" >> $GITHUB_OUTPUT
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/akmods/nvidia/
+          key: rpm-nvidia-${{ steps.kernel.outputs.kernel_ver }}
+      - name: Install Dependencies and Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          dnf install -y akmods akmod-nvidia gcc gcc-c++ make elfutils-libelf-devel openssl-devel rpm-build rpmdevtools
+          akmods --force --kernels "${{ steps.kernel.outputs.kernel_ver }}" || true
       - uses: actions/upload-artifact@v4
         with:
           name: rpm-nvidia
@@ -58,11 +83,24 @@ jobs:
       image: registry.fedoraproject.org/fedora:41
     steps:
       - uses: actions/checkout@v4
-      - run: dnf install -y rpm-build rpmdevtools dnf5 dnf-plugins-core clang mimalloc-devel
-      - run: cp config/rpmmacros ~/.rpmmacros
-      - run: rpmdev-setuptree
-      - run: |
+      - name: Prepare DNF and Check Upstream Version
+        id: upstream
+        run: |
+          dnf install -y dnf-plugins-core
           dnf copr enable -y aylur/ags
+          echo "ags_ver=$(dnf info aylurs-gtk-shell | grep Version | head -n 1 | awk '{print $3}')" >> $GITHUB_OUTPUT
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/rpmbuild/RPMS/
+          key: rpm-ags-${{ steps.upstream.outputs.ags_ver }}-${{ hashFiles('config/rpmmacros') }}
+      - name: Install Dependencies and Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          dnf install -y rpm-build rpmdevtools clang mimalloc-devel
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
           dnf download --source aylurs-gtk-shell
           dnf builddep -y aylurs-gtk-shell-*.src.rpm
           export CC=clang
@@ -83,15 +121,28 @@ jobs:
       image: registry.fedoraproject.org/fedora:43
     steps:
       - uses: actions/checkout@v4
-      - run: dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel
-      - run: cp config/rpmmacros ~/.rpmmacros
-      - run: rpmdev-setuptree
-      - uses: actions/cache@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-starship/**', 'specs/ermete-matugen/**', 'specs/ermete-bibata/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/rpmbuild/RPMS/
+          key: rpm-rust-${{ steps.hash.outputs.hash }}
+      - name: Cache Cargo Registry
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
         with:
           path: /root/.cargo/registry
-          key: ${{ runner.os }}-fedora-cargo-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-fedora-cargo-
-      - run: |
+          key: cargo-registry-${{ steps.hash.outputs.hash }}
+          restore-keys: cargo-registry-
+      - name: Install Dependencies and Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
           for spec in specs/ermete-starship/ermete-starship.spec \
                       specs/ermete-matugen/ermete-matugen.spec \
                       specs/ermete-bibata/ermete-bibata.spec; do
