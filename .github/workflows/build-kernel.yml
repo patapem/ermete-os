@@ -27,6 +27,9 @@ jobs:
       
       - name: Install Build Dependencies
         run: |
+          echo "zchunk=False" >> /etc/dnf/dnf.conf
+          echo "fastestmirror=True" >> /etc/dnf/dnf.conf
+          dnf clean all
           dnf install -y rpm-build rpmdevtools gcc gcc-c++ make cmake flex bison ncurses-devel elfutils-libelf-devel openssl-devel bc rsync tar wget curl cpio perl zstd git llvm clang lld
       
       - name: Fetch Base Kernel and Patches
