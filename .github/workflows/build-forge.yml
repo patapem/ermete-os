@@ -11,7 +11,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/ermete-forge
   FEDORA_VERSION: 43
 
 jobs:
@@ -20,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: registry.fedoraproject.org/fedora:43
+      options: --privileged
     steps:
       - uses: actions/checkout@v4
       - name: Calculate Hash
@@ -44,6 +44,17 @@ jobs:
         with:
           name: rpm-selinux
           path: /github/home/rpmbuild/RPMS/*/*.rpm
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-selinux:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
 
   build-nvidia:
     name: 🎮 Build NVIDIA KMOD
@@ -75,12 +86,24 @@ jobs:
         with:
           name: rpm-nvidia
           path: /var/cache/akmods/nvidia/*.rpm
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /var/cache/akmods/nvidia/*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-nvidia:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
 
   build-ags:
     name: 🖥️ Build AGS (Gentoo/ClearLinux Extreme)
     runs-on: ubuntu-latest
     container:
       image: registry.fedoraproject.org/fedora:41
+      options: --privileged
     steps:
       - uses: actions/checkout@v4
       - name: Prepare DNF and Check Upstream Version
@@ -113,12 +136,24 @@ jobs:
         with:
           name: rpm-ags
           path: /github/home/rpmbuild/RPMS/*/*.rpm
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-ags:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
 
   build-rust:
     name: 🦀 Build Rust Tools & Assets
     runs-on: ubuntu-latest
     container:
       image: registry.fedoraproject.org/fedora:43
+      options: --privileged
     steps:
       - uses: actions/checkout@v4
       - name: Calculate Hash
@@ -154,31 +189,14 @@ jobs:
         with:
           name: rpm-rust
           path: /github/home/rpmbuild/RPMS/*/*.rpm
-
-  publish-oci:
-    name: 📦 Publish OCI-as-a-Repo
-    needs: [build-selinux, build-nvidia, build-ags, build-rust]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download all RPM Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: rpms/
-          merge-multiple: true
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and Push OCI Scratch Image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Containerfile
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rust:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
