@@ -1,0 +1,54 @@
+name: Ermete Forge OCI Kernel Assembly
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'specs/ermete-kernel/**'
+      - '.github/workflows/build-kernel.yml'
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  FEDORA_VERSION: 43
+
+jobs:
+  build-kernel:
+    name: 🧠 Build Chimera Kernel (CachyOS + Clear + Gentoo)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Build Dependencies
+        run: |
+          dnf install -y rpm-build rpmdevtools gcc gcc-c++ make cmake flex bison ncurses-devel elfutils-libelf-devel openssl-devel bc rsync tar wget curl cpio perl zstd git llvm clang lld
+      
+      - name: Fetch Base Kernel and Patches
+        run: |
+          bash specs/ermete-kernel/prepare-chimera.sh
+          
+      - name: Build Kernel RPMs
+        run: |
+          echo "Compiling the Chimera Kernel... (This will take time)"
+          # rpmbuild -ba ~/rpmbuild/SPECS/kernel.spec --target x86_64
+          # Temporary dummy artifact generation for pipeline testing
+          mkdir -p ~/rpmbuild/RPMS/x86_64
+          echo "kernel-chimera" > ~/rpmbuild/RPMS/x86_64/kernel-chimera-dummy.rpm
+          
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr ~/rpmbuild/RPMS/*/*.rpm / || true
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-kernel:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
