@@ -14,11 +14,11 @@ echo ">>> Preparing Chimera Kernel Bedrock..."
 # 1. Recupero base CachyOS
 echo ">>> Fetching CachyOS kernel tree..."
 rm -rf /tmp/kernel-cachyos
-git clone --depth 1 https://github.com/CachyOS/kernel-cachyos.git /tmp/kernel-cachyos
+git clone --depth 1 https://github.com/CachyOS/linux-cachyos.git /tmp/kernel-cachyos
 
 echo ">>> Populating rpmbuild directories..."
 cp -r /tmp/kernel-cachyos/* ~/rpmbuild/SOURCES/
-cp /tmp/kernel-cachyos/kernel-cachyos.spec ~/rpmbuild/SPECS/
+cp /tmp/kernel-cachyos/*.spec ~/rpmbuild/SPECS/kernel-cachyos.spec
 
 # 2. Iniezione patch ClearLinux (Es. Ottimizzazioni di memoria e boot)
 echo ">>> Injecting Clear Linux patches..."
