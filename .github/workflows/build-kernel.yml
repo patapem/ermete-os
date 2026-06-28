@@ -21,7 +21,7 @@ jobs:
       packages: write
     container:
       image: registry.fedoraproject.org/fedora:43
-      options: --privileged
+      options: --privileged --security-opt label=disable
     steps:
       - uses: actions/checkout@v4
       
@@ -53,9 +53,9 @@ jobs:
           export CCACHE_MAXSIZE=10G
           mkdir -p ~/.cache/ccache
           ccache -z
-          spectool -g -R ~/rpmbuild/SPECS/kernel-cachyos.spec
-          dnf builddep -y ~/rpmbuild/SPECS/kernel-cachyos.spec || true
-          rpmbuild -ba ~/rpmbuild/SPECS/kernel-cachyos.spec --target x86_64
+          spectool -g -R ~/rpmbuild/SPECS/kernel.spec
+          dnf builddep -y ~/rpmbuild/SPECS/kernel.spec || true
+          rpmbuild -ba ~/rpmbuild/SPECS/kernel.spec --target x86_64
           ccache -s
           
       - name: Publish Micro-Container OCI

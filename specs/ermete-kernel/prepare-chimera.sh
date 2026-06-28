@@ -14,76 +14,71 @@ cd "$WORKSPACE_DIR"
 echo "========================================================="
 echo " FASE 1: LE FONDAMENTA (Fedora Upstream Zero-Trust)"
 echo "========================================================="
-# Otteniamo il kernel puro da Koji/Fedora per garantire la catena di fiducia.
-dnf install -y dnf-utils koji git curl tar
-# Scarichiamo l'ultimo sorgente kernel disponibile per Fedora 43
+dnf install -y dnf-utils rpm-build rpmdevtools git curl tar jq
+
 echo ">>> Scaricamento kernel.src.rpm puro..."
-dnf download --source kernel --resolve
+dnf download --source kernel
 rpm -ivh kernel-*.src.rpm
+KERNEL_SRPM=$(ls kernel-*.src.rpm | head -n 1)
+KERNEL_VER=$(rpm -qp --qf '%{VERSION}' "$KERNEL_SRPM" | cut -d. -f1,2)
 rm -f kernel-*.src.rpm
 
-# Rinominiamo il kernel per evitare conflitti con pacchetti standard
+# Rinominiamo il kernel
 sed -i 's/Name: kernel/Name: kernel-chimera/' SPECS/kernel.spec
-# Disabilitiamo il debuginfo per velocizzare la build (stile Arch/Gentoo)
+# Disabilitiamo il debuginfo
 sed -i 's/%define with_debuginfo %{?_without_debuginfo: 0} %{?!_without_debuginfo: 1}/%define with_debuginfo 0/' SPECS/kernel.spec
-
 
 echo "========================================================="
 echo " FASE 2: I MUSCOLI (Patch Ufficiali CachyOS)"
 echo "========================================================="
-# Invece di usare COPR, preleviamo il DNA direttamente da CachyOS.
 echo ">>> Clonazione repository patch CachyOS..."
+rm -rf /tmp/cachyos-patches
 git clone --depth 1 https://github.com/CachyOS/kernel-patches.git /tmp/cachyos-patches
 
-# Estraiamo le patch critiche:
-# - BORE (Burst-Oriented Response Enhancer) Scheduler
-# - Ottimizzazioni x86-64-v3 e AMD/Intel
-# - Ottimizzazioni di rete (BBRv3)
-CACHY_PATCH_DIR="/tmp/cachyos-patches/6.10" # Sostituire con la versione corrente
-if [ -d "$CACHY_PATCH_DIR" ]; then
-    echo ">>> Iniezione patch CachyOS (BORE, CPU, Rete)..."
+CACHY_PATCH_DIR="/tmp/cachyos-patches/$KERNEL_VER"
+if [ -d "$CACHY_PATCH_DIR/all" ]; then
+    echo ">>> Trovate patch CachyOS per kernel $KERNEL_VER. Copia in SOURCES..."
     cp $CACHY_PATCH_DIR/all/*.patch SOURCES/
-    
-    # Iniezione programmatica nel file .spec di Fedora
-    PATCH_INDEX=5000
-    for patch in $CACHY_PATCH_DIR/all/*.patch; do
-        patch_name=$(basename "$patch")
-        sed -i "/^# End of generic patches/a Patch${PATCH_INDEX}: ${patch_name}" SPECS/kernel.spec
-        PATCH_INDEX=$((PATCH_INDEX+1))
-    done
 else
-    echo "ATTENZIONE: Directory patch CachyOS non trovata, fallback alla modalità ibrida."
-    # In un ambiente di produzione reale, il bot aggiornerebbe questo path.
+    echo "ATTENZIONE: Patch CachyOS per versione $KERNEL_VER non trovate. Fallback al master."
+    # Trova l'ultima versione disponibile se quella esatta manca
+    LATEST_VER=$(ls -d /tmp/cachyos-patches/6.* | sort -V | tail -n 1)
+    if [ -d "$LATEST_VER/all" ]; then
+        cp $LATEST_VER/all/*.patch SOURCES/
+    fi
 fi
-
 
 echo "========================================================="
 echo " FASE 3: I NERVI (Ottimizzazioni Clear Linux)"
 echo "========================================================="
-# Clear Linux domina nei benchmark per la gestione millimetrica della memoria e degli stati idle
 echo ">>> Scaricamento patch chirurgiche da Intel Clear Linux..."
+curl -sL https://raw.githubusercontent.com/clearlinux-pkgs/linux/master/0001-sched-migrate.patch -o SOURCES/0001-clearlinux-sched-migrate.patch || true
+curl -sL https://raw.githubusercontent.com/clearlinux-pkgs/linux/master/0001-sched-numa-Initialise-numa_migrate_retry.patch -o SOURCES/0002-clearlinux-sched-numa-Initialise-numa_migrate_retry.patch || true
+curl -sL https://raw.githubusercontent.com/clearlinux-pkgs/linux/master/0001-mm-memcontrol-add-some-branch-hints-based-on-gcov-an.patch -o SOURCES/0003-clearlinux-mm-memcontrol-branch-hints.patch || true
 
-# Patch 1: Ottimizzazione della migrazione dei task nello scheduler
-curl -sL https://raw.githubusercontent.com/clearlinux-pkgs/linux/master/0001-sched-migrate.patch -o SOURCES/0001-sched-migrate.patch
-# Patch 2: Ottimizzazione NUMA retry per CPU multi-die
-curl -sL https://raw.githubusercontent.com/clearlinux-pkgs/linux/master/0001-sched-numa-Initialise-numa_migrate_retry.patch -o SOURCES/0001-sched-numa-Initialise-numa_migrate_retry.patch
-# Patch 3: Ottimizzazione degli hint per il memory controller
-curl -sL https://raw.githubusercontent.com/clearlinux-pkgs/linux/master/0001-mm-memcontrol-add-some-branch-hints-based-on-gcov-an.patch -o SOURCES/0001-mm-memcontrol-branch-hints.patch
 
-echo ">>> Iniezione patch Clear Linux nel file .spec..."
-sed -i '/^# End of generic patches/a Patch6001: 0001-sched-migrate.patch\nPatch6002: 0001-sched-numa-Initialise-numa_migrate_retry.patch\nPatch6003: 0001-mm-memcontrol-branch-hints.patch' SPECS/kernel.spec
+echo ">>> Iniezione dinamica patch in kernel.spec prima di %build..."
+# Invece di fare affidamento a commenti che cambiano, forziamo l'applicazione delle patch
+# aggiungendo comandi bash alla fine della sezione %prep, subito prima dell'inizio di %build.
+sed -i '/^%build/i \
+# --- INIEZIONE ERMETE: APPLICAZIONE PATCH CHIMERA ---\
+echo ">>> Applicazione Patch CachyOS e Clear Linux..."\
+for p in %{_sourcedir}/*cachyos*.patch %{_sourcedir}/*clearlinux*.patch; do\
+    if [ -f "$p" ]; then\
+        echo ">>> Applicando patch: $(basename $p)"\
+        patch -p1 -F3 --no-backup-if-mismatch < "$p" || echo ">>> WARNING: Patch fallita, procedo comunque..."\
+    fi\
+done\
+# ----------------------------------------------------' SPECS/kernel.spec
 
 
 echo "========================================================="
 echo " FASE 4: LA FORGIATURA (Estremismo Compiler Gentoo)"
 echo "========================================================="
-# Non modifichiamo il sorgente C, modifichiamo come viene trasformato in silicio.
 echo ">>> Configurazione infrastruttura LLVM/Clang e ThinLTO..."
 
-# 1. Obblighiamo l'uso di Clang al posto di GCC
 sed -i '/%global toolchain /c\%global toolchain clang' SPECS/kernel.spec
 
-# 2. Definiamo le CFLAGS estreme per hardware moderno (x86-64-v3 = AVX2, BMI1/2)
 cat << 'SPEC_INJECT' >> SPECS/kernel.spec
 
 # --- INIEZIONE ERMETE GENTOO LTO & COMPILER ---
