@@ -15,7 +15,7 @@ Matugen is a tool to generate a colorscheme from an image or a color and export 
 Compiled natively in Ermete Forge with extreme optimizations.
 
 %prep
-%autosetup -n matugen-matugen-v%{version}
+%autosetup -n matugen-%{version}
 
 # Disable GCC LTO as it conflicts with Rust LLVM LTO and mold
 %define _lto_cflags %{nil}
