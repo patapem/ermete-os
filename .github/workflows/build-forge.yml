@@ -96,54 +96,38 @@ jobs:
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
 
-#  build-ags:
-#    name: 🖥️ Build AGS (Gentoo/ClearLinux Extreme)
-#    runs-on: ubuntu-latest
-#    permissions:
-#      contents: read
-#      packages: write
-#    container:
-#      image: registry.fedoraproject.org/fedora:40
-#      options: --privileged
-#    steps:
-#      - uses: actions/checkout@v4
-#      - name: Prepare DNF and Check Upstream Version
-#        id: upstream
-#        run: |
-#          dnf install -y dnf-plugins-core
-#          dnf copr enable -y aylur/ags
-#          echo "ags_ver=$(dnf info aylurs-gtk-shell | grep Version | head -n 1 | awk '{print $3}')" >> $GITHUB_OUTPUT
-#      - name: Cache RPMs
-#        id: cache
-#        uses: actions/cache@v4
-#        with:
-#          path: /github/home/rpmbuild/RPMS/
-#          key: rpm-ags-${{ steps.upstream.outputs.ags_ver }}-${{ hashFiles('config/rpmmacros') }}
-#      - name: Install Dependencies and Build
-#        if: steps.cache.outputs.cache-hit != 'true'
-#        run: |
-#          dnf install -y rpm-build rpmdevtools clang mimalloc-devel
-#          cp config/rpmmacros ~/.rpmmacros
-#          rpmdev-setuptree
-#          dnf download --source aylurs-gtk-shell
-#          dnf builddep -y aylurs-gtk-shell-*.src.rpm
-#          export CC=clang
-#          export CXX=clang++
-#          export CFLAGS="$CFLAGS -mllvm -polly -mllvm -polly-position=early"
-#          export CXXFLAGS="$CXXFLAGS -mllvm -polly -mllvm -polly-position=early"
-#          export LDFLAGS="$LDFLAGS -lmimalloc"
-#          rpmbuild --rebuild aylurs-gtk-shell-*.src.rpm
-#      - name: Publish Micro-Container OCI
-#        run: |
-#          dnf install -y buildah
-#          export STORAGE_DRIVER=vfs
-#          export BUILDAH_ISOLATION=chroot
-#          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
-#          ctr=$(buildah from scratch)
-#          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm / || true
-#          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-ags:latest" | tr '[:upper:]' '[:lower:]')
-#          buildah commit $ctr $IMAGE_LOWER
-#          buildah push $IMAGE_LOWER
+  build-ags:
+    name: 🖥️ Build AGS (Astal Extreme)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch Astal RPMs from COPR
+        run: |
+          dnf install -y dnf-plugins-core
+          dnf copr enable -y solopasha/hyprland
+          mkdir -p /github/home/RPMS
+          cd /github/home/RPMS
+          PACKAGES=$(dnf repoquery --repo=copr:copr.fedorainfracloud.org:solopasha:hyprland -a -q --arch=x86_64,noarch | grep -E '^astal|^aylurs-gtk-shell2' | grep -v 'debug' | grep -v '\.src$')
+          dnf download $PACKAGES
+          echo "Downloaded packages:"
+          ls -lh
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/RPMS/*.rpm / || true
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-ags:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
 
   build-starship:
     name: 🚀 Build Starship
