@@ -115,7 +115,7 @@ jobs:
           dnf copr enable -y solopasha/hyprland
           mkdir -p /github/home/RPMS
           cd /github/home/RPMS
-          PACKAGES=$(dnf repoquery --repo=copr:copr.fedorainfracloud.org:solopasha:hyprland -q --arch=x86_64,noarch | grep -E '^astal|^aylurs-gtk-shell2' | grep -v 'debug' | grep -v '\.src$')
+          PACKAGES=$(dnf repoquery --repo=copr:copr.fedorainfracloud.org:solopasha:hyprland -q --arch=x86_64,noarch | grep -E '^astal|^aylurs-gtk-shell2|^appmenu' | grep -v 'debug' | grep -v '\.src$')
           dnf download $PACKAGES
           echo "Downloaded packages:"
           ls -lh
