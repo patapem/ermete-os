@@ -73,6 +73,9 @@ jobs:
         run: |
           curl -Lo /etc/yum.repos.d/fedora-nvidia.repo https://negativo17.org/repos/fedora-nvidia.repo
           dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
           ctr=$(buildah from ghcr.io/${{ github.repository_owner }}/ermete-forge-kernel:latest)
           buildah mount $ctr
           mnt=$(buildah mount $ctr)
