@@ -25,23 +25,38 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Cache Compiler Objects (ccache)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ccache
+          key: kernel-ccache-${{ github.sha }}
+          restore-keys: |
+            kernel-ccache-
+
       - name: Install Build Dependencies
         run: |
           echo "zchunk=False" >> /etc/dnf/dnf.conf
           echo "fastestmirror=True" >> /etc/dnf/dnf.conf
           dnf clean all
-          dnf install -y rpm-build rpmdevtools gcc gcc-c++ make cmake flex bison ncurses-devel elfutils-libelf-devel openssl-devel bc rsync tar wget curl cpio perl zstd git llvm clang lld
-      
+          dnf install -y rpm-build rpmdevtools gcc gcc-c++ make cmake flex bison ncurses-devel elfutils-libelf-devel openssl-devel bc rsync tar wget curl cpio perl zstd git llvm clang lld ccache
+
       - name: Fetch Base Kernel and Patches
         run: |
           bash specs/ermete-kernel/prepare-chimera.sh
-          
+
       - name: Build Kernel RPMs
         run: |
           echo "Compiling the Chimera Kernel... (This will take time)"
+          export PATH="/usr/lib64/ccache:/usr/lib/ccache:$PATH"
+          export CCACHE_DIR=~/.cache/ccache
+          export CCACHE_COMPRESS=1
+          export CCACHE_MAXSIZE=10G
+          mkdir -p ~/.cache/ccache
+          ccache -z
           spectool -g -R ~/rpmbuild/SPECS/kernel-cachyos.spec
           dnf builddep -y ~/rpmbuild/SPECS/kernel-cachyos.spec || true
           rpmbuild -ba ~/rpmbuild/SPECS/kernel-cachyos.spec --target x86_64
+          ccache -s
           
       - name: Publish Micro-Container OCI
         run: |
