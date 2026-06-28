@@ -24,7 +24,10 @@ rpm -ivh kernel-cachyos*.src.rpm
 rm -f kernel-cachyos*.src.rpm
 
 # Assicura che ci sia sempre un kernel-cachyos.spec per il workflow
-mv ~/rpmbuild/SPECS/*.spec ~/rpmbuild/SPECS/kernel-cachyos.spec
+SPEC_FILE=$(ls ~/rpmbuild/SPECS/*.spec | head -n 1)
+if [ "$(basename "$SPEC_FILE")" != "kernel-cachyos.spec" ]; then
+    mv "$SPEC_FILE" ~/rpmbuild/SPECS/kernel-cachyos.spec
+fi
 
 # 2. Iniezione patch ClearLinux (Es. Ottimizzazioni di memoria e boot)
 echo ">>> Injecting Clear Linux patches..."
