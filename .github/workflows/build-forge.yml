@@ -40,10 +40,6 @@ jobs:
           rpmdev-setuptree
           cp specs/ermete-selinux/SOURCES/* ~/rpmbuild/SOURCES/
           rpmbuild -ba specs/ermete-selinux/ermete-selinux.spec
-      - uses: actions/upload-artifact@v4
-        with:
-          name: rpm-selinux
-          path: /github/home/rpmbuild/RPMS/*/*.rpm
       - name: Publish Micro-Container OCI
         run: |
           dnf install -y buildah
@@ -51,7 +47,7 @@ jobs:
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
-          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm / || true
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-selinux:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
@@ -82,10 +78,6 @@ jobs:
         run: |
           dnf install -y akmods akmod-nvidia gcc gcc-c++ make elfutils-libelf-devel openssl-devel rpm-build rpmdevtools
           akmods --force --kernels "${{ steps.kernel.outputs.kernel_ver }}" || true
-      - uses: actions/upload-artifact@v4
-        with:
-          name: rpm-nvidia
-          path: /var/cache/akmods/nvidia/*.rpm
       - name: Publish Micro-Container OCI
         run: |
           dnf install -y buildah
@@ -93,7 +85,7 @@ jobs:
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
-          buildah copy $ctr /var/cache/akmods/nvidia/*.rpm /
+          buildah copy $ctr /var/cache/akmods/nvidia/*.rpm / || true
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-nvidia:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
@@ -132,10 +124,6 @@ jobs:
           export CXXFLAGS="$CXXFLAGS -mllvm -polly -mllvm -polly-position=early"
           export LDFLAGS="$LDFLAGS -lmimalloc"
           rpmbuild --rebuild aylurs-gtk-shell-*.src.rpm
-      - uses: actions/upload-artifact@v4
-        with:
-          name: rpm-ags
-          path: /github/home/rpmbuild/RPMS/*/*.rpm
       - name: Publish Micro-Container OCI
         run: |
           dnf install -y buildah
@@ -143,13 +131,13 @@ jobs:
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
-          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm / || true
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-ags:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
 
-  build-rust:
-    name: 🦀 Build Rust Tools & Assets
+  build-starship:
+    name: 🚀 Build Starship
     runs-on: ubuntu-latest
     container:
       image: registry.fedoraproject.org/fedora:43
@@ -158,37 +146,29 @@ jobs:
       - uses: actions/checkout@v4
       - name: Calculate Hash
         id: hash
-        run: echo "hash=${{ hashFiles('specs/ermete-starship/**', 'specs/ermete-matugen/**', 'specs/ermete-bibata/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+        run: echo "hash=${{ hashFiles('specs/ermete-starship/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
       - name: Cache RPMs
         id: cache
         uses: actions/cache@v4
         with:
           path: /github/home/rpmbuild/RPMS/
-          key: rpm-rust-${{ steps.hash.outputs.hash }}
+          key: rpm-starship-${{ steps.hash.outputs.hash }}
       - name: Cache Cargo Registry
         if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/cache@v4
         with:
           path: /root/.cargo/registry
-          key: cargo-registry-${{ steps.hash.outputs.hash }}
-          restore-keys: cargo-registry-
+          key: cargo-registry-starship-${{ steps.hash.outputs.hash }}
+          restore-keys: cargo-registry-starship-
       - name: Install Dependencies and Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
-          for spec in specs/ermete-starship/ermete-starship.spec \
-                      specs/ermete-matugen/ermete-matugen.spec \
-                      specs/ermete-bibata/ermete-bibata.spec; do
-            spectool -g -R $spec
-            dnf builddep -y $spec || true
-            rpmbuild -ba $spec
-          done
-      - uses: actions/upload-artifact@v4
-        with:
-          name: rpm-rust
-          path: /github/home/rpmbuild/RPMS/*/*.rpm
+          spectool -g -R specs/ermete-starship/ermete-starship.spec
+          dnf builddep -y specs/ermete-starship/ermete-starship.spec || true
+          rpmbuild -ba specs/ermete-starship/ermete-starship.spec
       - name: Publish Micro-Container OCI
         run: |
           dnf install -y buildah
@@ -196,7 +176,97 @@ jobs:
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
-          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rust:latest" | tr '[:upper:]' '[:lower:]')
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm / || true
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-starship:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+
+  build-matugen:
+    name: 🎨 Build Matugen
+    runs-on: ubuntu-latest
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-matugen/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/rpmbuild/RPMS/
+          key: rpm-matugen-${{ steps.hash.outputs.hash }}
+      - name: Cache Cargo Registry
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+          path: /root/.cargo/registry
+          key: cargo-registry-matugen-${{ steps.hash.outputs.hash }}
+          restore-keys: cargo-registry-matugen-
+      - name: Install Dependencies and Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          spectool -g -R specs/ermete-matugen/ermete-matugen.spec
+          dnf builddep -y specs/ermete-matugen/ermete-matugen.spec || true
+          rpmbuild -ba specs/ermete-matugen/ermete-matugen.spec
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm / || true
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-matugen:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+
+  build-bibata:
+    name: 🖱️ Build Bibata
+    runs-on: ubuntu-latest
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-bibata/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/rpmbuild/RPMS/
+          key: rpm-bibata-${{ steps.hash.outputs.hash }}
+      - name: Cache Cargo Registry
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+          path: /root/.cargo/registry
+          key: cargo-registry-bibata-${{ steps.hash.outputs.hash }}
+          restore-keys: cargo-registry-bibata-
+      - name: Install Dependencies and Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          spectool -g -R specs/ermete-bibata/ermete-bibata.spec
+          dnf builddep -y specs/ermete-bibata/ermete-bibata.spec || true
+          rpmbuild -ba specs/ermete-bibata/ermete-bibata.spec
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm / || true
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-bibata:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
