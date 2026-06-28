@@ -6,7 +6,6 @@ on:
     paths:
       - 'specs/**'
       - 'config/**'
-      - 'scripts/**'
       - '.github/workflows/build-forge.yml'
   workflow_dispatch:
 
@@ -16,115 +15,115 @@ env:
   FEDORA_VERSION: 43
 
 jobs:
-  build-rpms:
-    name: 🏭 Compile & Forge RPMs
+  build-selinux:
+    name: 🛡️ Build SELinux Policies
+    runs-on: ubuntu-latest
+    container:
+      image: registry.fedoraproject.org/fedora:43
+    steps:
+      - uses: actions/checkout@v4
+      - run: dnf install -y rpm-build rpmdevtools checkpolicy policycoreutils
+      - run: rpmdev-setuptree
+      - run: |
+          cp specs/ermete-selinux/SOURCES/* ~/rpmbuild/SOURCES/
+          rpmbuild -ba specs/ermete-selinux/ermete-selinux.spec
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rpm-selinux
+          path: /github/home/rpmbuild/RPMS/*/*.rpm
+
+  build-nvidia:
+    name: 🎮 Build NVIDIA KMOD
     runs-on: ubuntu-latest
     container:
       image: registry.fedoraproject.org/fedora:43
       options: --privileged
-    
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: System Preparation
-        run: |
-          dnf install -y rpm-build rpmdevtools dnf5 \
-          gcc gcc-c++ make cmake clang lld mold \
-          cargo rust checkpolicy policycoreutils \
-          ccache sccache tar unzip wget curl mimalloc-devel
-          
-          # Inizializza l'albero RPM
-          rpmdev-setuptree
-          
-          # Inietta l'Overclock Globale (Macro CachyOS-level)
-          cp config/rpmmacros ~/.rpmmacros
-
-      - name: Set up ccache
-        uses: actions/cache@v4
-        with:
-          path: /root/.cache/ccache
-          key: ${{ runner.os }}-fedora${{ env.FEDORA_VERSION }}-ccache-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-fedora${{ env.FEDORA_VERSION }}-ccache-
-
-      - name: Build SELinux Policies (Ring 0)
-        run: |
-          cp specs/ermete-selinux/SOURCES/* ~/rpmbuild/SOURCES/
-          rpmbuild -ba specs/ermete-selinux/ermete-selinux.spec
-          
-      - name: Build NVIDIA KMOD (Ring 0)
-        run: |
+      - uses: actions/checkout@v4
+      - run: |
           curl -Lo /etc/yum.repos.d/fedora-nvidia.repo https://negativo17.org/repos/fedora-nvidia.repo
           curl -Lo /etc/yum.repos.d/bieszczaders-kernel-cachyos.repo https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos/repo/fedora-${{ env.FEDORA_VERSION }}/bieszczaders-kernel-cachyos-fedora-${{ env.FEDORA_VERSION }}.repo
-          dnf install -y kernel-cachyos kernel-cachyos-devel-matched akmods akmod-nvidia gcc gcc-c++ make elfutils-libelf-devel openssl-devel
+          dnf install -y kernel-cachyos kernel-cachyos-devel-matched akmods akmod-nvidia gcc gcc-c++ make elfutils-libelf-devel openssl-devel rpm-build rpmdevtools
           QUALIFIED_KERNEL=$(rpm -q --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}\n' kernel-cachyos | sort -V | tail -n 1)
           akmods --force --kernels "${QUALIFIED_KERNEL}" || true
-          cp /var/cache/akmods/nvidia/*.rpm ~/rpmbuild/RPMS/
-          
-      - name: Build Rust Tools & Assets (Ring 3)
-        run: |
-          dnf install -y rpm-build rpmdevtools
-          # Download sources via spectool and build
-          for spec in specs/ermete-starship/ermete-starship.spec \
-                      specs/ermete-matugen/ermete-matugen.spec \
-                      specs/ermete-bibata/ermete-bibata.spec; do
-            spectool -g -R $spec
-            dnf builddep -y $spec
-            rpmbuild -ba $spec
-          done
-          
-      - name: Build AGS from Source RPM (Ring 3 - Gentoo/ClearLinux Extreme)
-        run: |
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rpm-nvidia
+          path: /var/cache/akmods/nvidia/*.rpm
+
+  build-ags:
+    name: 🖥️ Build AGS (Gentoo/ClearLinux Extreme)
+    runs-on: ubuntu-latest
+    container:
+      image: registry.fedoraproject.org/fedora:43
+    steps:
+      - uses: actions/checkout@v4
+      - run: dnf install -y rpm-build rpmdevtools dnf5 dnf-plugins-core clang mimalloc-devel
+      - run: cp config/rpmmacros ~/.rpmmacros
+      - run: rpmdev-setuptree
+      - run: |
           dnf copr enable -y aylur/ags
-          dnf install -y dnf-plugins-core
           dnf download --source aylurs-gtk-shell
           dnf builddep -y aylurs-gtk-shell-*.src.rpm
-          # Force Clang, Polly, and Mimalloc for Ring 3 UX (The ClearLinux/Gentoo extreme)
           export CC=clang
           export CXX=clang++
           export CFLAGS="$CFLAGS -mllvm -polly -mllvm -polly-position=early"
           export CXXFLAGS="$CXXFLAGS -mllvm -polly -mllvm -polly-position=early"
           export LDFLAGS="$LDFLAGS -lmimalloc"
           rpmbuild --rebuild aylurs-gtk-shell-*.src.rpm
-          cp ~/rpmbuild/RPMS/*/*.rpm ~/rpmbuild/RPMS/ || true
-
-      - name: Collect Artifacts
-        run: |
-          mkdir -p /artifacts/rpms
-          find ~/rpmbuild/RPMS/ -type f -name "*.rpm" -exec cp {} /artifacts/rpms/ \;
-          
-      - name: Upload RPMs
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: forged-rpms
-          path: /artifacts/rpms/
+          name: rpm-ags
+          path: /github/home/rpmbuild/RPMS/*/*.rpm
+
+  build-rust:
+    name: 🦀 Build Rust Tools & Assets
+    runs-on: ubuntu-latest
+    container:
+      image: registry.fedoraproject.org/fedora:43
+    steps:
+      - uses: actions/checkout@v4
+      - run: dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl
+      - run: cp config/rpmmacros ~/.rpmmacros
+      - run: rpmdev-setuptree
+      - uses: actions/cache@v4
+        with:
+          path: /root/.cargo/registry
+          key: ${{ runner.os }}-fedora-cargo-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-fedora-cargo-
+      - run: |
+          for spec in specs/ermete-starship/ermete-starship.spec \
+                      specs/ermete-matugen/ermete-matugen.spec \
+                      specs/ermete-bibata/ermete-bibata.spec; do
+            spectool -g -R $spec
+            dnf builddep -y $spec || true
+            rpmbuild -ba $spec
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rpm-rust
+          path: /github/home/rpmbuild/RPMS/*/*.rpm
 
   publish-oci:
     name: 📦 Publish OCI-as-a-Repo
-    needs: build-rpms
+    needs: [build-selinux, build-nvidia, build-ags, build-rust]
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-      
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Download RPM Artifacts
+      - uses: actions/checkout@v4
+      - name: Download all RPM Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: forged-rpms
           path: rpms/
-
+          merge-multiple: true
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build and Push OCI Scratch Image
         uses: docker/build-push-action@v5
         with:
