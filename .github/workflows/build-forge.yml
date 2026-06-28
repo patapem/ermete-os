@@ -68,13 +68,18 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Repos and get Kernel Version
+      - name: Resolve Kernel Version and Install Chimera Headers
         id: kernel
         run: |
           curl -Lo /etc/yum.repos.d/fedora-nvidia.repo https://negativo17.org/repos/fedora-nvidia.repo
-          curl -Lo /etc/yum.repos.d/bieszczaders-kernel-cachyos.repo https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos/repo/fedora-${{ env.FEDORA_VERSION }}/bieszczaders-kernel-cachyos-fedora-${{ env.FEDORA_VERSION }}.repo
-          dnf install -y kernel-cachyos kernel-cachyos-devel-matched
-          echo "kernel_ver=$(rpm -q --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}\n' kernel-cachyos | sort -V | tail -n 1)" >> $GITHUB_OUTPUT
+          dnf install -y buildah
+          ctr=$(buildah from ghcr.io/${{ github.repository_owner }}/ermete-forge-kernel:latest)
+          buildah mount $ctr
+          mnt=$(buildah mount $ctr)
+          dnf install -y $mnt/*.rpm
+          buildah umount $ctr
+          QUALIFIED_KERNEL=$(rpm -q --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}\n' kernel-cachyos-devel-matched | sort -V | tail -n 1)
+          echo "kernel_ver=${QUALIFIED_KERNEL}" >> $GITHUB_OUTPUT
       - name: Cache RPMs
         id: cache
         uses: actions/cache@v4
