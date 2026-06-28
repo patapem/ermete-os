@@ -88,7 +88,7 @@ jobs:
           mkdir -p /etc/pki/akmods/certs /etc/pki/akmods/private
           cp certs/MOK.der /etc/pki/akmods/certs/public_key.der
           cp certs/MOK.priv /etc/pki/akmods/private/private_key.priv
-          chmod 0600 /etc/pki/akmods/private/private_key.priv
+          chmod 0644 /etc/pki/akmods/private/private_key.priv
           akmods --force --kernels "${{ steps.kernel.outputs.kernel_ver }}" || true
       - name: Publish Micro-Container OCI
         run: |
