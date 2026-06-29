@@ -10,6 +10,7 @@ Source0:        https://gitlab.com/ananicy-cpp/ananicy-cpp/-/archive/v%{version}
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  spdlog-devel
+BuildRequires:  fmt-devel
 BuildRequires:  systemd-devel
 BuildRequires:  nlohmann-json-devel
 
