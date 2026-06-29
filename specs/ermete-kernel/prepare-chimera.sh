@@ -25,9 +25,9 @@ rm -f kernel-*.src.rpm
 
 # Rinominiamo il kernel e disabilitiamo moduli che rompono la build LLVM o rallentano inutilmente (tools, selftests)
 sed -i 's/Name: kernel/Name: kernel-chimera/' SPECS/kernel.spec
-sed -i '1i %define with_selftests 0\n%define with_tools 0\n%define with_perf 0\n%define with_bpftool 0' SPECS/kernel.spec
+sed -i '1i %define _without_selftests 1\n%define _without_tools 1\n%define _without_perf 1\n%define _without_bpftool 1' SPECS/kernel.spec
 # Disabilitiamo il debuginfo
-sed -i 's/%define with_debuginfo %{?_without_debuginfo: 0} %{?!_without_debuginfo: 1}/%define with_debuginfo 0/' SPECS/kernel.spec
+sed -i 's/%define with_debuginfo %{?_without_debuginfo: 0} %{?!_without_debuginfo: 1}/%define _without_debuginfo 1/' SPECS/kernel.spec
 
 echo "========================================================="
 echo " FASE 2: I MUSCOLI (Patch Ufficiali CachyOS)"
@@ -43,9 +43,9 @@ if [ -d "$CACHY_PATCH_DIR/all" ]; then
 else
     echo "ATTENZIONE: Patch CachyOS per versione $KERNEL_VER non trovate. Fallback al master."
     # Trova l'ultima versione disponibile se quella esatta manca
-    LATEST_VER=$(ls -d /tmp/cachyos-patches/6.* | sort -V | tail -n 1)
+    LATEST_VER=$(ls -d /tmp/cachyos-patches/[0-9].* | sort -V | tail -n 1)
     if [ -d "$LATEST_VER/all" ]; then
-        cp $LATEST_VER/all/*.patch SOURCES/
+        cp "$LATEST_VER"/all/*.patch SOURCES/
     fi
 fi
 
