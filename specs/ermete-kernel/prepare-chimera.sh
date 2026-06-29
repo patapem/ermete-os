@@ -109,6 +109,11 @@ CONFIG_LRU_GEN_ENABLED=y
 CONFIG_MZEN3=y
 # CONFIG_GENERIC_CPU is not set
 
+# Ottimizzazione Tempi di Compilazione (Nessun Simbolo di Debug)
+CONFIG_DEBUG_INFO=n
+CONFIG_DEBUG_INFO_NONE=y
+# CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is not set
+
 # NT Sync per Gaming
 CONFIG_NTSYNC=y
 # -----------------------------------------
@@ -122,16 +127,21 @@ cat << 'EOF' > ~/.rpmmacros
 %buildid .chimera
 %toolchain clang
 %use_lto 1
-%_lto_cflags -flto=thin
-%optflags %{__global_compiler_flags} -O3 -march=znver3 -pipe -Wno-error -g
+# ThinLTO Cache massivo per velocizzare la fase di linking (Persistito in GitHub Cache)
+%_lto_cflags -flto=thin -Wl,--thinlto-cache-dir=/github/home/.cache/ccache/thinlto
+%optflags %{__global_compiler_flags} -O3 -march=znver3 -pipe -Wno-error
 %kcflags -O3 -march=znver3 -pipe -Wno-error
 
 # Disabilitazione nativa dei moduli non necessari/problematici (Fix LLVM LTO)
 %_without_selftests 1
 %_without_tools 1
-%_without_debug 1
 %_without_perf 1
 %_without_bpftool 1
+
+# Estreme riduzioni dei tempi di build (No Debuginfo, No DWARF, No Doc)
+%_without_debug 1
+%_without_debuginfo 1
+%_without_doc 1
 EOF
 
 echo "========================================================="
