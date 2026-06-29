@@ -94,8 +94,8 @@ cat << 'EOF' >> /tmp/patch_apply.txt
 echo ">>> [BEDROCK] Inizio applicazione difensiva delle patch CachyOS e ClearLinux..."
 for patch in %{_sourcedir}/bedrock-*.patch; do
     echo "-> Test di compatibilità per $(basename $patch)..."
-    if patch -p1 -F 3 --dry-run --silent < "$patch"; then
-        patch -p1 -F 3 < "$patch"
+    if patch -p1 -F 0 --dry-run --silent < "$patch"; then
+        patch -p1 -F 0 < "$patch"
         echo "   [SUCCESS] Patch applicata chirurgicamente."
     else
         echo "   [SKIP] Conflitto strutturale rilevato. Patch scartata per preservare l'integrità."
