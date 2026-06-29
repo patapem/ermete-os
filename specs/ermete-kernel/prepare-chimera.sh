@@ -27,14 +27,16 @@ git clone --depth 1 https://github.com/CachyOS/kernel-patches.git /tmp/cachyos-p
 
 CACHY_PATCH_DIR="/tmp/cachyos-patches/$KERNEL_VER"
 if [ ! -d "$CACHY_PATCH_DIR/all" ]; then
-    echo "ATTENZIONE: Patch CachyOS per $KERNEL_VER non trovate. Fallback..."
-    CACHY_PATCH_DIR=$(ls -d /tmp/cachyos-patches/[0-9].* | sort -V | tail -n 1)
+    echo "ERRORE FATALE: Patch CachyOS per $KERNEL_VER non trovate!"
+    echo "Zero-Trust Policy: Nessun fallback. Le patch del kernel devono essere esatte per evitare corruzioni silenziose."
+    exit 1
 fi
 
 echo ">>> Scansione e registrazione delle patch nello spec (Native RPM Best Practice)..."
 # Invece di concatenare file (hack), registriamo ogni patch con un suo ID univoco
 # all'interno del file spec. In questo modo RPM traccia nativamente i sorgenti
 # e in caso di errore sappiamo esattamente quale patch ha fallito.
+> /tmp/patch_apply.txt
 PATCH_ID=10000
 
 if [ -d "$CACHY_PATCH_DIR/all" ]; then
@@ -42,7 +44,7 @@ if [ -d "$CACHY_PATCH_DIR/all" ]; then
         cp "$patch" SOURCES/
         patch_name=$(basename "$patch")
         sed -i "/^Patch999999:/i Patch${PATCH_ID}: ${patch_name}" SPECS/kernel.spec
-        sed -i "/^%build/i %patch -P ${PATCH_ID} -p1" SPECS/kernel.spec
+        echo "%patch -P ${PATCH_ID} -p1" >> /tmp/patch_apply.txt
         ((PATCH_ID++))
     done
 fi
@@ -59,9 +61,13 @@ for patch_url in \
     curl -sL -f "$patch_url" -o "SOURCES/clearlinux-$patch_name"
     
     sed -i "/^Patch999999:/i Patch${PATCH_ID}: clearlinux-${patch_name}" SPECS/kernel.spec
-    sed -i "/^%build/i %patch -P ${PATCH_ID} -p1" SPECS/kernel.spec
+    echo "%patch -P ${PATCH_ID} -p1" >> /tmp/patch_apply.txt
     ((PATCH_ID++))
 done
+
+# Applicazione cronologica corretta ed esatta delle patch (risolve bug ordine inverso)
+awk '/^%build/{system("cat /tmp/patch_apply.txt")}1' SPECS/kernel.spec > SPECS/kernel.spec.new
+mv SPECS/kernel.spec.new SPECS/kernel.spec
 
 echo "========================================================="
 echo " FASE 3: TUNING KCONFIG E MACROS (Bedrock Naturale)"
@@ -119,6 +125,13 @@ cat << 'EOF' > ~/.rpmmacros
 %_lto_cflags -flto=thin
 %optflags %{__global_compiler_flags} -O3 -march=znver3 -pipe -Wno-error -g
 %kcflags -O3 -march=znver3 -pipe -Wno-error
+
+# Disabilitazione nativa dei moduli non necessari/problematici (Fix LLVM LTO)
+%_without_selftests 1
+%_without_tools 1
+%_without_debug 1
+%_without_perf 1
+%_without_bpftool 1
 EOF
 
 echo "========================================================="
