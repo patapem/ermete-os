@@ -131,8 +131,9 @@ for patch_name in \
 done
 
 # Applicazione cronologica corretta ed esatta delle patch (risolve bug ordine inverso)
-# Match esatto di ^%build$ per evitare conflitti con ^%buildroot_save_unstripped
-awk '/^%build$/{system("cat /tmp/patch_apply.txt")}1' SPECS/kernel.spec > SPECS/kernel.spec.new
+# Inseriamo i comandi %patch subito prima dell'esecuzione di process_configs.sh
+# in modo da operare all'interno della directory del kernel PRIMA del 'cd ..' finale del %prep
+awk '/RHJOBS=.*process_configs\.sh/{system("cat /tmp/patch_apply.txt")}1' SPECS/kernel.spec > SPECS/kernel.spec.new
 mv SPECS/kernel.spec.new SPECS/kernel.spec
 
 echo "========================================================="
