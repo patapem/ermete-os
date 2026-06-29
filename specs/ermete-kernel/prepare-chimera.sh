@@ -171,9 +171,9 @@ CONFIG_MODULE_COMPRESS_ZSTD=y
 CONFIG_LRU_GEN=y
 CONFIG_LRU_GEN_ENABLED=y
 
-# Ottimizzazione CPU Architettura Esatta (Zen 3 - Ryzen 5800X3D)
-CONFIG_MZEN3=y
-# CONFIG_GENERIC_CPU is not set
+# Ottimizzazione CPU: Moderna Universale (x86-64-v3 / AVX2)
+# Rende il kernel compatibile con tutti gli Intel/AMD dal 2015 in poi
+CONFIG_GENERIC_CPU=y
 
 # Ottimizzazione Nativa Bedrock (Demandare a Kbuild, NO Macro RPM)
 CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3=y
@@ -196,8 +196,8 @@ echo ">>> Generazione ~/.rpmmacros globale per la compilazione..."
 cat << 'EOF' > ~/.rpmmacros
 %buildid .chimera
 %toolchain clang
-%optflags %{__global_compiler_flags} -march=znver3 -pipe -Wno-error
-%kcflags -march=znver3 -pipe -Wno-error
+%optflags %{__global_compiler_flags} -march=x86-64-v3 -pipe -Wno-error
+%kcflags -march=x86-64-v3 -pipe -Wno-error
 
 # Disabilitazione nativa dei moduli non necessari/problematici (Fix LLVM LTO)
 %_without_selftests 1
