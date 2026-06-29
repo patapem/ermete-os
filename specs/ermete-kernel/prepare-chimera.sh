@@ -182,6 +182,7 @@ CONFIG_LTO_CLANG_THIN=y
 # Ottimizzazione Tempi di Compilazione (Nessun Simbolo di Debug)
 CONFIG_DEBUG_INFO=n
 CONFIG_DEBUG_INFO_NONE=y
+# CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is not set
 
 # NT Sync per Gaming
 CONFIG_NTSYNC=y
