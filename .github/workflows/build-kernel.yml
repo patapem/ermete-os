@@ -6,6 +6,8 @@ on:
     paths:
       - 'specs/ermete-kernel/**'
       - '.github/workflows/build-kernel.yml'
+      - '!**/*.md'
+      - '!**/*.txt'
   workflow_dispatch:
 
 env:
