@@ -219,6 +219,8 @@ cat << 'EOF' > ~/.rpmmacros
 %_without_selftests 1
 %_without_tools 1
 %_without_perf 1
+%_without_libperf 1
+%_without_ynl 1
 %_without_bpftool 1
 
 # Estreme riduzioni dei tempi di build (No Debuginfo, No DWARF, No Doc)
