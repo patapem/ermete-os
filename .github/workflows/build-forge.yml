@@ -116,9 +116,9 @@ jobs:
           
           chmod +x /usr/sbin/akmods /usr/bin/kmodtool
           mkdir -p /etc/pki/akmods/certs /etc/pki/akmods/private
-          cp certs/MOK.der /etc/pki/akmods/certs/public_key.der
-          cp certs/MOK.priv /etc/pki/akmods/private/private_key.priv
-          chmod 0644 /etc/pki/akmods/private/private_key.priv
+          echo "${{ secrets.MOK_PRIVATE_KEY }}" | base64 -d > /etc/pki/akmods/private/private_key.priv
+          echo "${{ secrets.MOK_PUBLIC_DER }}" | base64 -d > /etc/pki/akmods/certs/public_key.der
+          chmod 0600 /etc/pki/akmods/private/private_key.priv
           akmods --force --kernels "${{ steps.kernel.outputs.kernel_ver }}"
       - name: Publish Micro-Container OCI
         run: |
@@ -146,10 +146,10 @@ jobs:
       - name: Fetch Astal RPMs from COPR
         run: |
           dnf install -y dnf-plugins-core
-          dnf copr enable -y solopasha/hyprland
+          dnf copr enable -y aneagle/ags-3
           mkdir -p /github/home/RPMS
           cd /github/home/RPMS
-          PACKAGES=$(dnf repoquery --repo=copr:copr.fedorainfracloud.org:solopasha:hyprland -q --arch=x86_64,noarch | grep -E '^astal|^aylurs-gtk-shell2|^appmenu' | grep -v 'debug' | grep -v '\.src$')
+          PACKAGES=$(dnf repoquery --repo=copr:copr.fedorainfracloud.org:aneagle:ags-3 -q --arch=x86_64,noarch | grep -E '^astal|^ags|^aylurs-gtk-shell|^appmenu' | grep -v 'debug' | grep -v '\.src$')
           dnf download $PACKAGES
           echo "Downloaded packages:"
           ls -lh
