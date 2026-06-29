@@ -151,6 +151,6 @@ EOF
 
 echo "========================================================="
 echo " PREPARAZIONE COMPLETATA."
-echo " Zero 'sed' eseguiti. Il file .spec e' intatto."
+echo " Iniezioni 'sed'/'awk' eseguite chirurgicamente sul file .spec."
 echo " Tutte le flags LLVM/Gentoo sono passate in runtime tramite ~/.rpmmacros."
 echo "========================================================="
