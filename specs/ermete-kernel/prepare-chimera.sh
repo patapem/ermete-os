@@ -66,7 +66,8 @@ for patch_url in \
 done
 
 # Applicazione cronologica corretta ed esatta delle patch (risolve bug ordine inverso)
-awk '/^%build/{system("cat /tmp/patch_apply.txt")}1' SPECS/kernel.spec > SPECS/kernel.spec.new
+# Match esatto di ^%build$ per evitare conflitti con ^%buildroot_save_unstripped
+awk '/^%build$/{system("cat /tmp/patch_apply.txt")}1' SPECS/kernel.spec > SPECS/kernel.spec.new
 mv SPECS/kernel.spec.new SPECS/kernel.spec
 
 echo "========================================================="
