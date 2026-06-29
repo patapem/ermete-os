@@ -2,6 +2,7 @@
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 %global _vpath_srcdir subprojects/appmenu-glib-translator
+%define _lto_cflags %{nil}
 
 Name:           appmenu-glib-translator
 Version:        25.04^1.git%{shortcommit0}

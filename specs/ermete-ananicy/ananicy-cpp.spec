@@ -4,8 +4,8 @@ Release:        1%{?dist}
 Summary:        Ananicy rewritten in C++
 
 License:        GPLv3
-URL:            https://github.com/CachyOS/ananicy-cpp
-Source0:        https://github.com/CachyOS/ananicy-cpp/archive/refs/tags/v%{version}.tar.gz
+URL:            https://gitlab.com/ananicy-cpp/ananicy-cpp
+Source0:        https://gitlab.com/ananicy-cpp/ananicy-cpp/-/archive/v%{version}/ananicy-cpp-v%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
