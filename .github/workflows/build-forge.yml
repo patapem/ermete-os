@@ -92,9 +92,28 @@ jobs:
       - name: Install Dependencies and Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          dnf install -y akmods akmod-nvidia gcc gcc-c++ make elfutils-libelf-devel openssl-devel rpm-build rpmdevtools
+          dnf install -y akmods akmod-nvidia gcc gcc-c++ make elfutils-libelf-devel openssl-devel rpm-build rpmdevtools clang lld llvm
+          
+          # Force Clang/LLVM tooling for NVIDIA module to match the LTO-enabled Chimera Kernel
+          mkdir -p /usr/local/llvm-bin
+          ln -sf /usr/bin/clang /usr/local/llvm-bin/gcc
+          ln -sf /usr/bin/clang++ /usr/local/llvm-bin/g++
+          ln -sf /usr/bin/clang /usr/local/llvm-bin/cc
+          ln -sf /usr/bin/clang++ /usr/local/llvm-bin/c++
+          ln -sf /usr/bin/ld.lld /usr/local/llvm-bin/ld
+          ln -sf /usr/bin/llvm-ar /usr/local/llvm-bin/ar
+          ln -sf /usr/bin/llvm-nm /usr/local/llvm-bin/nm
+          ln -sf /usr/bin/llvm-objcopy /usr/local/llvm-bin/objcopy
+          ln -sf /usr/bin/llvm-objdump /usr/local/llvm-bin/objdump
+          ln -sf /usr/bin/llvm-readelf /usr/local/llvm-bin/readelf
+          ln -sf /usr/bin/llvm-strip /usr/local/llvm-bin/strip
+          
           cp scripts/akmods /usr/sbin/akmods
           cp scripts/kmodtool /usr/bin/kmodtool
+          
+          # Inject the LLVM wrapper PATH into the akmods script before rpmbuild is invoked
+          sed -i 's|/usr/sbin/akmodsbuild|PATH=/usr/local/llvm-bin:$PATH /usr/sbin/akmodsbuild|g' /usr/sbin/akmods
+          
           chmod +x /usr/sbin/akmods /usr/bin/kmodtool
           mkdir -p /etc/pki/akmods/certs /etc/pki/akmods/private
           cp certs/MOK.der /etc/pki/akmods/certs/public_key.der
