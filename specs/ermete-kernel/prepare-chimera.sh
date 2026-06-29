@@ -143,6 +143,9 @@ echo ">>> Iniezione chirurgica del tuning SOLO nei config x86_64..."
 # Applichiamo i Kconfig direttamente alle configurazioni x86_64 di base.
 
 for conf in SOURCES/kernel-x86_64*.config; do
+    # Pulizia chirurgica delle chiavi esistenti per evitare warning di override in Kconfig
+    sed -i -E '/^(# )?CONFIG_(HZ|HZ_1000|HZ_300|HZ_250|HZ_100|DEFAULT_BBR|TCP_CONG_BBR|DEFAULT_CUBIC|SCHED_BORE|MODULE_COMPRESS_ZSTD|MODULE_COMPRESS_XZ|LRU_GEN|LRU_GEN_ENABLED|GENERIC_CPU|CC_OPTIMIZE_FOR_PERFORMANCE_O3|LTO_CLANG_THIN|DEBUG_INFO|DEBUG_INFO_NONE|DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT|NTSYNC)( |=)/d' "$conf"
+
     cat << 'EOF' >> "$conf"
 # --- ERMETE FORGE: ZEN/LIQUORIX TUNING ---
 CONFIG_HZ_1000=y
