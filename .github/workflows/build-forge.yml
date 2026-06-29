@@ -44,7 +44,7 @@ jobs:
         run: |
           rpmdev-setuptree
           cp specs/ermete-selinux/SOURCES/* ~/rpmbuild/SOURCES/
-          rpmbuild -ba specs/ermete-selinux/ermete-selinux.spec
+          rpmbuild -bb specs/ermete-selinux/ermete-selinux.spec
       - name: Publish Micro-Container OCI
         run: |
           dnf install -y buildah
@@ -81,7 +81,7 @@ jobs:
           mnt=$(buildah mount $ctr)
           dnf install -y $mnt/*.rpm
           buildah umount $ctr
-          QUALIFIED_KERNEL=$(rpm -q --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}\n' kernel-cachyos-devel-matched | sort -V | tail -n 1)
+          QUALIFIED_KERNEL=$(rpm -q --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}\n' kernel-devel | sort -V | tail -n 1)
           echo "kernel_ver=${QUALIFIED_KERNEL}" >> $GITHUB_OUTPUT
       - name: Cache RPMs
         id: cache
@@ -188,7 +188,7 @@ jobs:
           rpmdev-setuptree
           spectool -g -R specs/ermete-starship/ermete-starship.spec
           dnf builddep -y specs/ermete-starship/ermete-starship.spec
-          rpmbuild -ba specs/ermete-starship/ermete-starship.spec
+          rpmbuild -bb specs/ermete-starship/ermete-starship.spec
       - name: Publish Micro-Container OCI
         run: |
           dnf install -y buildah
@@ -236,7 +236,7 @@ jobs:
           rpmdev-setuptree
           spectool -g -R specs/ermete-matugen/ermete-matugen.spec
           dnf builddep -y specs/ermete-matugen/ermete-matugen.spec
-          rpmbuild -ba specs/ermete-matugen/ermete-matugen.spec
+          rpmbuild -bb specs/ermete-matugen/ermete-matugen.spec
       - name: Publish Micro-Container OCI
         run: |
           dnf install -y buildah
@@ -284,7 +284,7 @@ jobs:
           rpmdev-setuptree
           spectool -g -R specs/ermete-bibata/ermete-bibata.spec
           dnf builddep -y specs/ermete-bibata/ermete-bibata.spec
-          rpmbuild -ba specs/ermete-bibata/ermete-bibata.spec
+          rpmbuild -bb specs/ermete-bibata/ermete-bibata.spec
       - name: Publish Micro-Container OCI
         run: |
           dnf install -y buildah
