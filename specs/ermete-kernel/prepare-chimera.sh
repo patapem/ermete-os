@@ -72,20 +72,37 @@ if [ -d "$CACHY_PATCH_DIR/all" ]; then
     done
 fi
 
+echo ">>> Clonazione repository patch Clear Linux..."
+rm -rf /tmp/clearlinux-patches
+git clone --depth 500 https://github.com/clearlinux-pkgs/linux.git /tmp/clearlinux-patches
+
+echo ">>> Sincronizzazione dinamica Clear Linux con Kernel $KERNEL_VER..."
+pushd /tmp/clearlinux-patches > /dev/null
+CLEAR_COMMIT=$(git log --grep="update.*$KERNEL_VER" -n 1 --format="%H" || true)
+if [ -n "$CLEAR_COMMIT" ]; then
+    echo ">>> Allineamento Clear Linux al commit: $CLEAR_COMMIT"
+    git checkout -q "$CLEAR_COMMIT"
+else
+    echo ">>> ATTENZIONE: Nessun commit specifico trovato per $KERNEL_VER. Utilizzo l'head di main."
+fi
+popd > /dev/null
+
 echo ">>> Aggiunta patch chirurgiche Clear Linux..."
-for patch_url in \
-    "https://raw.githubusercontent.com/clearlinux-pkgs/linux/main/0001-sched-migrate.patch" \
-    "https://raw.githubusercontent.com/clearlinux-pkgs/linux/main/0001-sched-numa-Initialise-numa_migrate_retry.patch" \
-    "https://raw.githubusercontent.com/clearlinux-pkgs/linux/main/0001-mm-memcontrol-add-some-branch-hints-based-on-gcov-an.patch" \
-    "https://raw.githubusercontent.com/clearlinux-pkgs/linux/main/0002-sched-core-add-some-branch-hints-based-on-gcov-analy.patch" \
-    "https://raw.githubusercontent.com/clearlinux-pkgs/linux/main/0170-sched-Add-unlikey-branch-hints-to-several-system-cal.patch"; do
+for patch_name in \
+    "0001-sched-migrate.patch" \
+    "0001-sched-numa-Initialise-numa_migrate_retry.patch" \
+    "0001-mm-memcontrol-add-some-branch-hints-based-on-gcov-an.patch" \
+    "0002-sched-core-add-some-branch-hints-based-on-gcov-analy.patch" \
+    "0170-sched-Add-unlikey-branch-hints-to-several-system-cal.patch"; do
     
-    patch_name=$(basename "$patch_url")
-    curl -sL -f "$patch_url" -o "SOURCES/clearlinux-$patch_name"
-    
-    sed -i "/^Patch999999:/i Patch${PATCH_ID}: clearlinux-${patch_name}" SPECS/kernel.spec
-    echo "%patch -P ${PATCH_ID} -p1" >> /tmp/patch_apply.txt
-    ((PATCH_ID++))
+    if [ -f "/tmp/clearlinux-patches/$patch_name" ]; then
+        cp "/tmp/clearlinux-patches/$patch_name" "SOURCES/clearlinux-$patch_name"
+        sed -i "/^Patch999999:/i Patch${PATCH_ID}: clearlinux-${patch_name}" SPECS/kernel.spec
+        echo "%patch -P ${PATCH_ID} -p1" >> /tmp/patch_apply.txt
+        ((PATCH_ID++))
+    else
+        echo ">>> ATTENZIONE: Patch $patch_name non trovata nel repo Clear Linux. Skippata."
+    fi
 done
 
 # Applicazione cronologica corretta ed esatta delle patch (risolve bug ordine inverso)
