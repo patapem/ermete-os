@@ -160,7 +160,7 @@ jobs:
           rpmdev-setuptree
           
           # Ordine di dipendenza critico per l'ecosistema Astal (AGS v3)
-          ASTAL_PKGS="appmenu-glib-translator astal astal-io astal-libs astal-gjs astal-gtk4 astal-lua aylurs-gtk-shell2"
+          ASTAL_PKGS="appmenu-glib-translator astal-io astal astal-libs astal-gjs astal-gtk4 astal-lua aylurs-gtk-shell2"
           
           for pkg in $ASTAL_PKGS; do
             echo "--- Compiling $pkg ---"
