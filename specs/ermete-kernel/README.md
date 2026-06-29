@@ -18,15 +18,16 @@ Al posto di ricompilare ciecamente il kernel vanilla, Ermete usa il kernel base 
 * **Scheduler BORE (Burst-Oriented Response Enhancer)**: Sostituisce la latenza del CFS standard, bilanciando in modo aggressivo compiti interattivi (Desktop/Gaming) rispetto a processi di calcolo in background.
 * **BBRv3**: L'algoritmo di congestione TCP di ultimissima generazione per massimizzare il throughput di rete.
 
-### Clear Linux (Boot e Power Management)
-* **Ottimizzazioni P-State e Boot**: Patch di derivazione Intel/ClearLinux per azzerare i tempi morti durante l'avvio, migliorare lo sleep/wake state (S3/S0ix) e forzare scaling governor focalizzati sulle performance senza sprecare cicli idle.
+### Clear Linux (Ottimizzazioni Branch/Scheduler)
+* **Branch Hints basati su gcov**: Patch chirurgiche per aggiungere `likely/unlikely` hints in chiamate di sistema critiche e core dello scheduler, ottimizzando le predizioni di salto della CPU.
+* *(Nota Storica)*: Inizialmente avevamo previsto patch su P-State e fastboot, ma per mantenere la purezza della codebase (Fuzz 0) ci siamo concentrati solo su hint dello scheduler.
 
 ---
 
 ## 3. Gestione Difensiva delle Patch (Bedrock Patching)
 Le patch vengono applicate tramite lo script `prepare-chimera.sh` con una logica draconiana.
 * **Strict Fuzz 0**: Non sono ammesse patch fuzzy (che si applicano a offset sballati rischiando di corrompere l'AST C inserendo frammenti di codice all'interno di commenti, causando errori `Error: expected identifier`).
-* **Dry-run Evaluation**: Ogni patch di Clear Linux o CachyOS viene prima validata con `patch --dry-run`. Se non matcha perfettamente la versione del kernel, viene ignorata per non compromettere la build.
+* **Dry-run Evaluation**: Ogni patch di Clear Linux o CachyOS viene prima validata con `patch --dry-run`. Se non matcha perfettamente la versione del kernel, viene ignorata per non compromettere la build. (Attualmente, per via di `Fuzz 0`, una larga percentuale di patch CachyOS e 4 su 5 patch di Clear Linux vengono scartate).
 * *Roadmap Futura (Il Santo Graal)*: Verrà implementato il "Fuzzing con Validazione Sintattica AST", dove si tenta l'applicazione fuzzy, si genera un check sintattico con `clang -fsyntax-only` e se l'Albero Sintattico C risulta puro e inviolato, la patch viene consolidata.
 
 ---
