@@ -152,10 +152,7 @@ CONFIG_HZ=1000
 # CONFIG_HZ_100 is not set
 
 # Lasciamo che CachyOS gestisca nativamente il PREEMPT per evitare conflitti Kconfig
-
-CONFIG_RCU_EXPERT=y
-CONFIG_RCU_BOOST=y
-CONFIG_RCU_BOOST_DELAY=500
+# Lasciamo a Kconfig i default di RCU per non innescare il validatore su RCU_EXPERT
 
 CONFIG_DEFAULT_BBR=y
 CONFIG_TCP_CONG_BBR=y
