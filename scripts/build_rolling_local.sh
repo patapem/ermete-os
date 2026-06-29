@@ -23,9 +23,14 @@ cd ~/rpmbuild/SRPMS
 dnf download --source $PACKAGE
 
 echo "========================================"
-echo "=== INSTALLAZIONE DIPENDENZE ==="
+echo "=== INSTALLAZIONE DIPENDENZE E FIX ==="
 echo "========================================"
 dnf builddep -y *.src.rpm
+
+# BEDROCK HACK: Fedora spesso omette i README.md nei pacchetti rust-*-devel per risparmiare spazio,
+# ma alcuni crate usano include_str!("../README.md") che causa il fallimento della build.
+# Creiamo file README.md vuoti per tutti i crate estratti.
+find /usr/share/cargo/registry/ -maxdepth 1 -mindepth 1 -type d -exec touch {}/README.md \;
 
 echo "========================================"
 echo "=== COMPILAZIONE ESTREMA (ROLLING) ==="

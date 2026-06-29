@@ -74,6 +74,9 @@ jobs:
           echo "--- Installazione dipendenze di build ---"
           dnf builddep -y *.src.rpm
           
+          echo "--- Bedrock Hack: Ripristino README.md mancanti per le dipendenze Rust ---"
+          find /usr/share/cargo/registry/ -maxdepth 1 -mindepth 1 -type d -exec touch {}/README.md \; || true
+          
           echo "--- Ricompilazione estrema con macro Ermete ---"
           rpmbuild --rebuild *.src.rpm
           
