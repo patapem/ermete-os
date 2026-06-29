@@ -1,0 +1,9 @@
+eza
+bat
+fd-find
+ripgrep
+nushell
+neovim
+libvirt
+niri
+pipewire
