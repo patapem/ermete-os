@@ -14,20 +14,32 @@ echo ">>> Clonazione repository patch CachyOS..."
 rm -rf /tmp/cachyos-patches
 git clone --depth 1 https://github.com/CachyOS/kernel-patches.git /tmp/cachyos-patches
 
+echo ">>> Clonazione repository patch Clear Linux..."
+rm -rf /tmp/clearlinux-patches
+git clone --depth 500 https://github.com/clearlinux-pkgs/linux.git /tmp/clearlinux-patches
+
 echo ">>> Determinazione massima versione kernel CachyOS supportata..."
 LATEST_CACHY_VER=$(ls -1d /tmp/cachyos-patches/* | grep -E '/[0-9]+\.[0-9]+$' | xargs -I{} sh -c 'if [ -d "{}/all" ]; then basename "{}"; fi' | sort -V | tail -n 1)
 
-if [ -z "$LATEST_CACHY_VER" ]; then
-    echo "ERRORE FATALE: Impossibile determinare la versione supportata da CachyOS!"
+pushd /tmp/clearlinux-patches > /dev/null
+LATEST_CLEAR_VER=$(git log --grep="update.*[0-9]\+\.[0-9]\+" -n 100 --format="%B" | grep -oE '[0-9]+\.[0-9]+' | sort -V | tail -n 1)
+popd > /dev/null
+
+if [ -z "$LATEST_CACHY_VER" ] || [ -z "$LATEST_CLEAR_VER" ]; then
+    echo "ERRORE FATALE: Impossibile determinare le versioni supportate!"
     exit 1
 fi
-echo ">>> Massima versione CachyOS supportata: $LATEST_CACHY_VER"
+echo ">>> Massima versione CachyOS: $LATEST_CACHY_VER"
+echo ">>> Massima versione Clear Linux: $LATEST_CLEAR_VER"
 
-echo ">>> Ricerca dinamica del Fedora Releasever per kernel-$LATEST_CACHY_VER..."
+TARGET_KERNEL_VER=$(echo -e "$LATEST_CACHY_VER\n$LATEST_CLEAR_VER" | sort -V | head -n 1)
+echo ">>> Versione target unificata (Intersezione sicura): $TARGET_KERNEL_VER"
+
+echo ">>> Ricerca dinamica del Fedora Releasever per kernel-$TARGET_KERNEL_VER..."
 TARGET_RELEASEVER=""
 for ver in {43..39}; do
     echo ">>> Controllo Fedora $ver..."
-    if dnf download --source kernel --releasever=$ver --url | grep -q "/kernel-${LATEST_CACHY_VER}"; then
+    if dnf download --source kernel --releasever=$ver --url | grep -q "/kernel-${TARGET_KERNEL_VER}"; then
         TARGET_RELEASEVER=$ver
         echo ">>> Trovato match esatto su Fedora $ver!"
         break
@@ -35,7 +47,7 @@ for ver in {43..39}; do
 done
 
 if [ -z "$TARGET_RELEASEVER" ]; then
-    echo "ERRORE FATALE: Il kernel $LATEST_CACHY_VER non esiste nei repo Fedora attivi."
+    echo "ERRORE FATALE: Il kernel $TARGET_KERNEL_VER non esiste nei repo Fedora attivi."
     exit 1
 fi
 
@@ -71,10 +83,6 @@ if [ -d "$CACHY_PATCH_DIR/all" ]; then
         ((PATCH_ID++))
     done
 fi
-
-echo ">>> Clonazione repository patch Clear Linux..."
-rm -rf /tmp/clearlinux-patches
-git clone --depth 500 https://github.com/clearlinux-pkgs/linux.git /tmp/clearlinux-patches
 
 echo ">>> Sincronizzazione dinamica Clear Linux con Kernel $KERNEL_VER..."
 pushd /tmp/clearlinux-patches > /dev/null
