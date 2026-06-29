@@ -12,7 +12,7 @@ echo " FASE 1: LE FONDAMENTA (Fedora Upstream Zero-Trust)"
 echo "========================================================="
 # [BEST PRACTICE] Lavoriamo con il kernel.spec nativo al 100%, ZERO comandi "sed".
 echo ">>> Scaricamento kernel.src.rpm puro..."
-dnf download --source kernel
+dnf download --source kernel --releasever=41
 rpm -ivh kernel-*.src.rpm
 KERNEL_SRPM=$(ls kernel-*.src.rpm | head -n 1)
 KERNEL_VER=$(rpm -qp --qf '%{VERSION}' "$KERNEL_SRPM" | cut -d. -f1,2)
