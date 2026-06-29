@@ -47,7 +47,28 @@ jobs:
         run: |
           bash specs/ermete-kernel/prepare-chimera.sh
 
+      - name: Bedrock Idempotency Check
+        id: idempotency
+        run: |
+          dnf install -y skopeo
+          # Calcolo l'hash dell'intero albero sorgente, garantendo idempotenza matematica perfetta
+          FINGERPRINT=$(find ~/rpmbuild/SPECS ~/rpmbuild/SOURCES -type f -exec sha256sum {} + | sort | sha256sum | awk '{print $1}')
+          echo "FINGERPRINT=$FINGERPRINT" >> $GITHUB_ENV
+          
+          IMAGE="${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-kernel:$FINGERPRINT"
+          IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+          
+          echo "Verifico se il kernel con fingerprint $FINGERPRINT esiste già..."
+          if skopeo inspect --creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} docker://$IMAGE_LOWER > /dev/null 2>&1; then
+            echo "Il Kernel è identico a una build esistente. Salto la compilazione!"
+            echo "skip_build=true" >> $GITHUB_OUTPUT
+          else
+            echo "Nuovo fingerprint rilevato. Procedo alla compilazione."
+            echo "skip_build=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Build Kernel RPMs
+        if: steps.idempotency.outputs.skip_build != 'true'
         run: |
           echo "Compiling the Chimera Kernel... (This will take time)"
           export PATH="/usr/lib64/ccache:/usr/lib/ccache:$PATH"
@@ -62,6 +83,7 @@ jobs:
           ccache -s
           
       - name: Publish Micro-Container OCI
+        if: steps.idempotency.outputs.skip_build != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs
@@ -69,6 +91,12 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
           buildah copy $ctr ~/rpmbuild/RPMS/*/*.rpm /
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-kernel:latest" | tr '[:upper:]' '[:lower:]')
-          buildah commit $ctr $IMAGE_LOWER
-          buildah push $IMAGE_LOWER
+          
+          IMAGE_LATEST=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-kernel:latest" | tr '[:upper:]' '[:lower:]')
+          IMAGE_FINGERPRINT=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-kernel:${{ env.FINGERPRINT }}" | tr '[:upper:]' '[:lower:]')
+          
+          buildah commit $ctr $IMAGE_LATEST
+          buildah tag $IMAGE_LATEST $IMAGE_FINGERPRINT
+          
+          buildah push $IMAGE_LATEST
+          buildah push $IMAGE_FINGERPRINT
