@@ -196,6 +196,7 @@ echo ">>> Generazione ~/.rpmmacros globale per la compilazione..."
 # compilatore (LLVM, LTO, identificatore OS) vengono iniettati tramite rpmmacros 
 # in modo nativo per rpmbuild.
 cat << 'EOF' > ~/.rpmmacros
+%_with_vanilla 1
 %buildid .chimera
 %toolchain clang
 %optflags %{__global_compiler_flags} -march=x86-64-v3 -pipe -Wno-error
