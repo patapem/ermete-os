@@ -52,10 +52,9 @@ echo "========================================================="
 echo " FASE 3: I NERVI (Ottimizzazioni Clear Linux)"
 echo "========================================================="
 echo ">>> Scaricamento patch chirurgiche da Intel Clear Linux..."
-curl -sL https://raw.githubusercontent.com/clearlinux-pkgs/linux/master/0001-sched-migrate.patch -o SOURCES/0001-clearlinux-sched-migrate.patch || true
-curl -sL https://raw.githubusercontent.com/clearlinux-pkgs/linux/master/0001-sched-numa-Initialise-numa_migrate_retry.patch -o SOURCES/0002-clearlinux-sched-numa-Initialise-numa_migrate_retry.patch || true
-curl -sL https://raw.githubusercontent.com/clearlinux-pkgs/linux/master/0001-mm-memcontrol-add-some-branch-hints-based-on-gcov-an.patch -o SOURCES/0003-clearlinux-mm-memcontrol-branch-hints.patch || true
-
+curl -sL -f https://raw.githubusercontent.com/clearlinux-pkgs/linux/master/0001-sched-migrate.patch -o SOURCES/0001-clearlinux-sched-migrate.patch || true
+curl -sL -f https://raw.githubusercontent.com/clearlinux-pkgs/linux/master/0001-sched-numa-Initialise-numa_migrate_retry.patch -o SOURCES/0002-clearlinux-sched-numa-Initialise-numa_migrate_retry.patch || true
+curl -sL -f https://raw.githubusercontent.com/clearlinux-pkgs/linux/master/0001-mm-memcontrol-add-some-branch-hints-based-on-gcov-an.patch -o SOURCES/0003-clearlinux-mm-memcontrol-branch-hints.patch || true
 
 echo ">>> Iniezione dinamica patch in kernel.spec prima di %build..."
 # Invece di fare affidamento a commenti che cambiano, forziamo l'applicazione delle patch
@@ -89,8 +88,7 @@ cat << 'SPEC_INJECT' >> SPECS/kernel.spec
 # ----------------------------------------------
 SPEC_INJECT
 
-# Forziamo LLVM nell'invocazione di make dentro il file spec
-sed -i 's/make %{?_smp_mflags}/make %{?_smp_mflags} LLVM=1 LLVM_IAS=1/g' SPECS/kernel.spec
+# Il toolchain clang nativo di Fedora gestirà automaticamente i flag LLVM
 
 echo "========================================================="
 echo " ASSEMBLAGGIO COMPLETATO. KERNEL CHIMERA PRONTO."
