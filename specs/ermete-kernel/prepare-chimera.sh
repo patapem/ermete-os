@@ -105,6 +105,7 @@ cat << 'EOF' > ~/.rpmmacros
 %use_lto 1
 %_lto_cflags -flto=thin
 %optflags %{__global_compiler_flags} -O3 -march=x86-64-v3 -pipe -Wno-error -g
+%kcflags -O3 -march=x86-64-v3 -pipe -Wno-error
 EOF
 
 echo "========================================================="
