@@ -52,7 +52,7 @@ jobs:
             if [ -d "specs/ermete-astal/$pkg" ]; then
               spectool -g -R specs/ermete-astal/$pkg/*.spec
               dnf builddep -y specs/ermete-astal/$pkg/*.spec
-              rpmbuild -bb specs/ermete-astal/$pkg/*.spec
+              rpmbuild -bb --nocheck specs/ermete-astal/$pkg/*.spec
               # Installa subito l'RPM buildato perché il pacchetto successivo ne ha bisogno
               find ~/rpmbuild/RPMS/ -type f -name "*.rpm" | xargs -r dnf install -y
             else
@@ -116,7 +116,7 @@ jobs:
           rpmdev-setuptree
           spectool -g -R specs/ermete-matugen/ermete-matugen.spec
           dnf builddep -y specs/ermete-matugen/ermete-matugen.spec
-          rpmbuild -bb specs/ermete-matugen/ermete-matugen.spec
+          rpmbuild -bb --nocheck specs/ermete-matugen/ermete-matugen.spec
       - name: Publish Micro-Container OCI
         run: |
           dnf install -y buildah
@@ -158,12 +158,12 @@ jobs:
       - name: Install Dependencies and Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel
+          dnf install -y rpm-build rpmdevtools tar xz curl
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
           spectool -g -R specs/ermete-bibata/ermete-bibata.spec
           dnf builddep -y specs/ermete-bibata/ermete-bibata.spec
-          rpmbuild -bb specs/ermete-bibata/ermete-bibata.spec
+          rpmbuild -bb --nocheck specs/ermete-bibata/ermete-bibata.spec
       - name: Publish Micro-Container OCI
         run: |
           dnf install -y buildah

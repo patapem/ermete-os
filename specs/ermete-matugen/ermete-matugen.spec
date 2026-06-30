@@ -24,7 +24,7 @@ Compiled natively in Ermete Forge with extreme optimizations.
 export CFLAGS="$(echo $CFLAGS | sed 's/-flto=auto//g')"
 export CXXFLAGS="$(echo $CXXFLAGS | sed 's/-flto=auto//g')"
 export LDFLAGS="$(echo $LDFLAGS | sed 's/-flto=auto//g')"
-cargo build --release --locked
+cargo build --release
 
 %install
 rm -rf %{buildroot}

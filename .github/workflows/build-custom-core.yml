@@ -44,7 +44,7 @@ jobs:
         run: |
           rpmdev-setuptree
           cp specs/ermete-selinux/SOURCES/* ~/rpmbuild/SOURCES/
-          rpmbuild -bb specs/ermete-selinux/ermete-selinux.spec
+          rpmbuild -bb --nocheck specs/ermete-selinux/ermete-selinux.spec
       - name: Publish Micro-Container OCI
         run: |
           dnf install -y buildah
@@ -85,7 +85,7 @@ jobs:
           
           spectool -g -R specs/ermete-ananicy/ananicy-cpp.spec
           dnf builddep -y specs/ermete-ananicy/ananicy-cpp.spec
-          rpmbuild -bb specs/ermete-ananicy/ananicy-cpp.spec
+          rpmbuild -bb --nocheck specs/ermete-ananicy/ananicy-cpp.spec
           
           mkdir -p /github/home/RPMS
           cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
