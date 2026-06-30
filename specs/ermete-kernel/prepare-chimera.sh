@@ -18,6 +18,26 @@ echo ">>> Clonazione repository patch Clear Linux..."
 rm -rf /tmp/clearlinux-patches
 git clone --depth 500 https://github.com/clearlinux-pkgs/linux.git /tmp/clearlinux-patches
 
+echo ">>> Clonazione repository patch linux-tkg..."
+rm -rf /tmp/tkg-patches
+git clone --depth 1 https://github.com/Frogging-Family/linux-tkg.git /tmp/tkg-patches
+
+echo ">>> Clonazione repository patch XanMod..."
+rm -rf /tmp/xanmod-patches
+git clone --depth 1 https://gitlab.com/xanmod/linux-patches.git /tmp/xanmod-patches || true
+
+echo ">>> Clonazione repository patch Zen Kernel..."
+rm -rf /tmp/zen-patches
+git clone --depth 1 -b zen https://github.com/zen-kernel/zen-kernel.git /tmp/zen-patches || true
+
+echo ">>> Clonazione repository patch Liquorix..."
+rm -rf /tmp/liquorix-patches
+git clone --depth 1 https://github.com/damentz/liquorix-package.git /tmp/liquorix-patches
+
+echo ">>> Clonazione repository patch Garuda..."
+rm -rf /tmp/garuda-patches
+git clone --depth 1 https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-common-settings.git /tmp/garuda-patches
+
 echo ">>> Ricerca della migliore versione kernel supportata (Fedora -> CachyOS -> ClearLinux)..."
 TARGET_RELEASEVER=""
 TARGET_KERNEL_VER=""
@@ -91,14 +111,46 @@ echo ">>> Scansione e registrazione delle patch nello spec (Native RPM Best Prac
 # applichiamo dinamicamente le singole patch. Se una patch fallisce il test (dry-run),
 # la saltiamo interamente per garantire che il codice C rimanga puro e compilabile.
 cat << 'EOF' >> /tmp/patch_apply.txt
-echo ">>> [BEDROCK] Inizio applicazione difensiva delle patch CachyOS e ClearLinux..."
+echo ">>> [BEDROCK] Inizio applicazione matrice universale (Fuzz+AST) per gli 8 Kernel..."
 for patch in %{_sourcedir}/bedrock-*.patch; do
     echo "-> Test di compatibilità per $(basename $patch)..."
+    
+    # Livello 1: Fuzz 0 (Puro)
     if patch -p1 -F 0 --dry-run --silent < "$patch"; then
-        patch -p1 -F 0 < "$patch"
-        echo "   [SUCCESS] Patch applicata chirurgicamente."
+        patch -p1 -F 0 < "$patch" > /dev/null
+        echo "   [SUCCESS] Patch applicata a Fuzz 0."
     else
-        echo "   [SKIP] Conflitto strutturale rilevato. Patch scartata per preservare l'integrità."
+        # Livello 2: Fuzz 3 (Estremo)
+        echo "   [WARNING] Fallito Fuzz 0. Tento Fuzz 3..."
+        if patch -p1 -F 3 --dry-run --silent < "$patch"; then
+            patch -p1 -F 3 < "$patch" > /dev/null
+            
+            # Livello 3: Validazione AST Chirurgica con Clang
+            echo "   [AST VALIDATION] Controllo purezza albero sintattico sui file toccati..."
+            # Trova i file .c modificati dalla patch
+            MODIFIED_C_FILES=$(grep -E '^\+\+\+ b/' "$patch" | awk '{print $2}' | sed 's/^b\///' | grep '\.c$' || true)
+            AST_FAILED=0
+            
+            for c_file in $MODIFIED_C_FILES; do
+                if [ -f "$c_file" ]; then
+                    # Sintassi pura (ignora i warning, controlla solo errori fatali AST)
+                    if ! clang -fsyntax-only -Wno-everything -Iinclude -Iarch/x86/include "$c_file" 2>/dev/null; then
+                        AST_FAILED=1
+                        echo "   [AST FATAL] Struttura C corrotta in $c_file!"
+                        break
+                    fi
+                fi
+            done
+            
+            if [ $AST_FAILED -eq 1 ]; then
+                echo "   [ROLLBACK] Conflitto sintattico rilevato! Scarto la patch."
+                patch -p1 -R -F 3 < "$patch" > /dev/null
+            else
+                echo "   [SUCCESS] Patch fusa e validata tramite AST."
+            fi
+        else
+            echo "   [SKIP] Conflitto strutturale (Fallito Fuzz 3). Patch scartata."
+        fi
     fi
 done
 EOF
@@ -109,6 +161,16 @@ if [ -d "$CACHY_PATCH_DIR" ]; then
         cp "$patch" "SOURCES/$patch_name"
     done
 fi
+
+echo ">>> Raccolta patch dagli altri repository (XanMod, Liquorix, Zen, Garuda, TKG)..."
+for repo in xanmod liquorix zen garuda tkg; do
+    if [ -d "/tmp/${repo}-patches" ]; then
+        find "/tmp/${repo}-patches" -name "*.patch" -type f | while read patch_file; do
+            patch_name="bedrock-${repo}-$(basename "$patch_file")"
+            cp "$patch_file" "SOURCES/$patch_name"
+        done
+    fi
+done
 
 echo ">>> Sincronizzazione dinamica Clear Linux con Kernel $KERNEL_VER..."
 pushd /tmp/clearlinux-patches > /dev/null

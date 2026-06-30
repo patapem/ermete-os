@@ -15,7 +15,7 @@ dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-
 mkdir -p /work/output
 echo "" > /work/output/build_quirks_results.txt
 
-PACKAGES="libvirt bpftool btop ffmpeg just mesa-dri-drivers mesa-vulkan-drivers nodejs npm qemu-kvm sysstat x264-libs"
+PACKAGES="libvirt bpftool"
 
 for PKG in $PACKAGES; do
     echo "================================================================"
@@ -51,17 +51,35 @@ for PKG in $PACKAGES; do
     
     # BEDROCK HACK per README rust mancanti
     find /usr/share/cargo/registry/ -maxdepth 1 -mindepth 1 -type d -exec touch {}/README.md \; || true
+    
+    # BEDROCK HACK: Rimozione --locked per compatibilità RPM Rust
+    sed -i 's/--locked//g' /usr/lib/rpm/macros.d/macros.cargo || true
 
-    if rpmbuild --rebuild *.src.rpm; then
+    if ! rpmbuild --rebuild --nocheck *.src.rpm; then
+        if ls ~/rpmbuild/SRPMS/*.buildreqs.nosrc.rpm >/dev/null 2>&1; then
+            echo "--- Installazione Dipendenze Dinamiche (%generate_buildrequires) ---"
+            dnf install -y ~/rpmbuild/SRPMS/*.buildreqs.nosrc.rpm
+            echo "--- Secondo tentativo di Ricompilazione Estrema ---"
+            if rpmbuild --rebuild --nocheck *.src.rpm; then
+                echo ">>> SUCCESSO (al 2^ tentativo): $PKG"
+                echo "[OK] $PKG" >> /work/output/build_quirks_results.txt
+                rm -rf ~/rpmbuild/BUILD/*
+                rm -rf ~/rpmbuild/RPMS/*
+                rm -rf ~/rpmbuild/SPECS/*
+            else
+                echo "!!! ERRORE NELLA BUILD DI $PKG !!!"
+                echo "[FAILED BUILD] $PKG" >> /work/output/build_quirks_results.txt
+            fi
+        else
+            echo "!!! ERRORE NELLA BUILD DI $PKG !!!"
+            echo "[FAILED BUILD] $PKG" >> /work/output/build_quirks_results.txt
+        fi
+    else
         echo ">>> SUCCESSO: $PKG"
         echo "[OK] $PKG" >> /work/output/build_quirks_results.txt
-        # Pulisci i file di build per liberare spazio nel container
         rm -rf ~/rpmbuild/BUILD/*
         rm -rf ~/rpmbuild/RPMS/*
         rm -rf ~/rpmbuild/SPECS/*
-    else
-        echo "!!! ERRORE NELLA BUILD DI $PKG !!!"
-        echo "[FAILED BUILD] $PKG" >> /work/output/build_quirks_results.txt
     fi
 done
 

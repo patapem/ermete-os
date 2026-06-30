@@ -4,7 +4,7 @@ echo "--- Applicazione Quirks per $PKG ---"
 
 # Disabilitazione Globale LTO / MOLD per pacchetti non compatibili
 case "$PKG" in
-    mesa-dri-drivers|mesa-vulkan-drivers|qemu-kvm|libvirt|sysstat|x264-libs|nodejs|npm|bpftool)
+    mesa-dri-drivers|mesa-vulkan-drivers|qemu-kvm|libvirt|sysstat|x264-libs|nodejs|npm|bpftool|nushell|bat)
         echo "Disattivazione totale LTO e MOLD per $PKG (Rust/C/C++ Ribelle)..."
         # 1. Rimuovi LTO da C/C++
         sed -i '/%_lto_cflags/d' ~/.rpmmacros
