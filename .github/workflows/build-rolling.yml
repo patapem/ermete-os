@@ -79,7 +79,7 @@ jobs:
           find /usr/share/cargo/registry/ -maxdepth 1 -mindepth 1 -type d -exec touch {}/README.md \; || true
           
           echo "--- Applicazione Quirks Specifici ---"
-          bash config/apply-quirks.sh "${{ matrix.package }}"
+          bash $GITHUB_WORKSPACE/config/apply-quirks.sh "${{ matrix.package }}"
           
           echo "--- Ricompilazione estrema con macro Ermete ---"
           if ! rpmbuild --rebuild *.src.rpm; then
