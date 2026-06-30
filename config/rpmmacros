@@ -43,3 +43,11 @@
 # MULTITHREADING
 # =========================================================================
 %_smp_mflags -j%{_smp_build_ncpus}
+
+# =========================================================================
+# BEDROCK LTO INJECTION (Protezione Globale Rust)
+# =========================================================================
+# Inietta LTO nativo di Cargo su ogni singolo pacchetto Rust upstream,
+# evitando il crash globale sulle macro procedurali che avremmo con RUSTFLAGS.
+%__spec_build_pre %{___build_pre}\
+  export CARGO_PROFILE_RELEASE_LTO="thin"\
