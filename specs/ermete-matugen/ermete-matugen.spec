@@ -21,6 +21,8 @@ Compiled natively in Ermete Forge with extreme optimizations.
 %define _lto_cflags %{nil}
 
 %build
+%set_build_flags
+export RUSTFLAGS="%{rustflags}"
 export CFLAGS="$(echo $CFLAGS | sed 's/-flto=auto//g')"
 export CXXFLAGS="$(echo $CXXFLAGS | sed 's/-flto=auto//g')"
 export LDFLAGS="$(echo $LDFLAGS | sed 's/-flto=auto//g')"
