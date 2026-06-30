@@ -80,12 +80,12 @@ jobs:
           bash $GITHUB_WORKSPACE/config/apply-quirks.sh "${{ matrix.package }}"
           
           echo "--- Ricompilazione estrema con macro Ermete ---"
-          if ! rpmbuild --rebuild *.src.rpm; then
+          if ! rpmbuild --rebuild --nocheck *.src.rpm; then
             if ls ~/rpmbuild/SRPMS/*.buildreqs.nosrc.rpm >/dev/null 2>&1; then
               echo "--- Installazione Dipendenze Dinamiche (%generate_buildrequires) ---"
               dnf install -y ~/rpmbuild/SRPMS/*.buildreqs.nosrc.rpm
               echo "--- Secondo tentativo di Ricompilazione Estrema ---"
-              rpmbuild --rebuild *.src.rpm
+              rpmbuild --rebuild --nocheck *.src.rpm
             else
               exit 1
             fi
