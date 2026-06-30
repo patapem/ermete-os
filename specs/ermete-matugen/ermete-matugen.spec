@@ -1,4 +1,5 @@
 Name:           ermete-matugen
+%global debug_package %{nil}
 Version:        4.1.0
 Release:        1%{?dist}
 Summary:        Material Design 3 color generation tool

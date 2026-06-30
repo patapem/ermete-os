@@ -1,4 +1,5 @@
 Name:           ermete-starship
+%global debug_package %{nil}
 Version:        1.26.0
 Release:        1%{?dist}
 Summary:        The minimal, blazing-fast, and infinitely customizable prompt for any shell!
