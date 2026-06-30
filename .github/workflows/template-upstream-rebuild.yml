@@ -1,15 +1,11 @@
-name: Ermete Forge Rolling Assembly
+name: Template Upstream Rebuild
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'config/rolling_packages.txt'
-      - 'config/rpmmacros'
-      - '.github/workflows/build-rolling.yml'
-  workflow_dispatch:
-  schedule:
-    - cron: '0 4 * * *'
+  workflow_call:
+    inputs:
+      package_list_file:
+        required: true
+        type: string
 
 env:
   REGISTRY: ghcr.io
@@ -27,7 +23,7 @@ jobs:
         id: set-matrix
         run: |
           # Legge il file ignorando le righe vuote e i commenti, convertendolo in array JSON
-          PKGS=$(grep -v '^\s*#' config/rolling_packages.txt | grep -v '^\s*$' | jq -R -s -c 'split("\n")[:-1]')
+          PKGS=$(grep -v '^\s*#' ${{ inputs.package_list_file }} | grep -v '^\s*$' | jq -R -s -c 'split("\n")[:-1]')
           echo "packages=$PKGS" >> $GITHUB_OUTPUT
 
   build-rolling:
@@ -107,6 +103,6 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/RPMS/*.rpm /
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}:latest" | tr '[:upper:]' '[:lower:]')
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-upstream-${{ matrix.package }}:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER

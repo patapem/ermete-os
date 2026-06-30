@@ -1,4 +1,4 @@
-name: Ermete Forge Desktop
+name: Ermete Custom Desktop
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
       - 'specs/ermete-astal/**'
       - 'specs/ermete-matugen/**'
       - 'specs/ermete-bibata/**'
-      - '.github/workflows/build-forge-desktop.yml'
+      - '.github/workflows/build-custom-desktop.yml'
   workflow_dispatch:
   schedule:
     - cron: '0 3 * * *'
@@ -78,7 +78,7 @@ jobs:
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/RPMS/*.rpm / || true
           buildah copy $ctr /github/home/BIN/dart-sass /dart-sass || true
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-ags:latest" | tr '[:upper:]' '[:lower:]')
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-custom-ags:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
   build-matugen:
@@ -125,7 +125,7 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-matugen:latest" | tr '[:upper:]' '[:lower:]')
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-custom-matugen:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
   build-bibata:
@@ -172,6 +172,6 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-bibata:latest" | tr '[:upper:]' '[:lower:]')
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-custom-bibata:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER

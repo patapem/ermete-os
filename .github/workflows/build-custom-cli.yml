@@ -1,11 +1,11 @@
-name: Ermete Forge CLI
+name: Ermete Custom CLI
 
 on:
   push:
     branches: [ main ]
     paths:
       - 'specs/ermete-starship/**'
-      - '.github/workflows/build-forge-cli.yml'
+      - '.github/workflows/build-custom-cli.yml'
   workflow_dispatch:
   schedule:
     - cron: '0 3 * * *'
@@ -59,6 +59,6 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-starship:latest" | tr '[:upper:]' '[:lower:]')
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-custom-starship:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER

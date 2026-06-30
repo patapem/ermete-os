@@ -1,0 +1,20 @@
+name: Ermete Upstream Media
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'config/upstream_media.txt'
+      - 'config/rpmmacros'
+      - '.github/workflows/build-upstream-media.yml'
+      - '.github/workflows/template-upstream-rebuild.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 4 * * *'
+
+jobs:
+  build:
+    uses: ./.github/workflows/template-upstream-rebuild.yml
+    with:
+      package_list_file: 'config/upstream_media.txt'
+    secrets: inherit

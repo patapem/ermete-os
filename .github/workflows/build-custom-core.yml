@@ -1,4 +1,4 @@
-name: Ermete Forge Core
+name: Ermete Custom Core
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
     paths:
       - 'specs/ermete-selinux/**'
       - 'specs/ermete-ananicy/**'
-      - '.github/workflows/build-forge-core.yml'
+      - '.github/workflows/build-custom-core.yml'
   workflow_dispatch:
   schedule:
     - cron: '0 3 * * *'
@@ -53,7 +53,7 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-selinux:latest" | tr '[:upper:]' '[:lower:]')
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-custom-selinux:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
   build-ananicy:
@@ -97,6 +97,6 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/RPMS/*.rpm /
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-ananicy:latest" | tr '[:upper:]' '[:lower:]')
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-custom-ananicy:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER

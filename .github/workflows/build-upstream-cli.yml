@@ -1,0 +1,20 @@
+name: Ermete Upstream CLI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'config/upstream_cli.txt'
+      - 'config/rpmmacros'
+      - '.github/workflows/build-upstream-cli.yml'
+      - '.github/workflows/template-upstream-rebuild.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 4 * * *'
+
+jobs:
+  build:
+    uses: ./.github/workflows/template-upstream-rebuild.yml
+    with:
+      package_list_file: 'config/upstream_cli.txt'
+    secrets: inherit

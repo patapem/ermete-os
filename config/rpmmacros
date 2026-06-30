@@ -33,7 +33,6 @@
 # =========================================================================
 # RUST & CARGO EXTREME MACROS
 # =========================================================================
-%__cargo_common_opts --locked
 # opt-level=3: Ottimizzazione aggressiva massima
 # lto=thin: ThinLTO per bilanciare tempi di link e performance
 # codegen-units=1: Piattaforma singola per max LTO puro (lento ma potente)

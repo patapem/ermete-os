@@ -5,7 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'specs/ermete-kernel/**'
-      - '.github/workflows/build-kernel.yml'
+      - '.github/workflows/build-custom-kernel.yml'
       - '!**/*.md'
       - '!**/*.txt'
   workflow_dispatch:
@@ -55,7 +55,7 @@ jobs:
           FINGERPRINT=$(find ~/rpmbuild/SPECS ~/rpmbuild/SOURCES -type f -exec sha256sum {} + | sort | sha256sum | awk '{print $1}')
           echo "FINGERPRINT=$FINGERPRINT" >> $GITHUB_ENV
           
-          IMAGE="${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-kernel:$FINGERPRINT"
+          IMAGE="${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-custom-kernel:$FINGERPRINT"
           IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
           
           echo "Verifico se il kernel con fingerprint $FINGERPRINT esiste già..."
@@ -92,8 +92,8 @@ jobs:
           ctr=$(buildah from scratch)
           buildah copy $ctr ~/rpmbuild/RPMS/*/*.rpm /
           
-          IMAGE_LATEST=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-kernel:latest" | tr '[:upper:]' '[:lower:]')
-          IMAGE_FINGERPRINT=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-kernel:${{ env.FINGERPRINT }}" | tr '[:upper:]' '[:lower:]')
+          IMAGE_LATEST=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-custom-kernel:latest" | tr '[:upper:]' '[:lower:]')
+          IMAGE_FINGERPRINT=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-custom-kernel:${{ env.FINGERPRINT }}" | tr '[:upper:]' '[:lower:]')
           
           buildah commit $ctr $IMAGE_LATEST
           buildah tag $IMAGE_LATEST $IMAGE_FINGERPRINT

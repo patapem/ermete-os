@@ -1,0 +1,14 @@
+eza
+bat
+fd-find
+ripgrep
+nushell
+just
+btop
+parallel
+playerctl
+wl-clipboard
+wl-mirror
+wlr-randr
+nodejs
+npm
