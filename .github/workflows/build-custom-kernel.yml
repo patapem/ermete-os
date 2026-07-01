@@ -12,7 +12,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  FEDORA_VERSION: 43
 
 jobs:
   build-kernel:
@@ -51,8 +50,7 @@ jobs:
         id: idempotency
         run: |
           dnf install -y skopeo
-          # Calcolo l'hash dell'intero albero sorgente, garantendo idempotenza matematica perfetta
-          FINGERPRINT=$(find ~/rpmbuild/SPECS ~/rpmbuild/SOURCES -type f -exec sha256sum {} + | sort | sha256sum | awk '{print $1}')
+          FINGERPRINT=$(find ~/rpmbuild/BUILD/linux-* -name '*.patch' -type f -exec sha256sum {} + | sort | sha256sum | awk '{print $1}' || echo "new_build")
           echo "FINGERPRINT=$FINGERPRINT" >> $GITHUB_ENV
           
           IMAGE="${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-kernel:$FINGERPRINT"
@@ -71,8 +69,10 @@ jobs:
         if: steps.idempotency.outputs.skip_build != 'true'
         run: |
           echo "Iniezione sensori GCOV per profilazione empirica..."
-          echo "CONFIG_GCOV_KERNEL=y" >> ~/rpmbuild/SOURCES/kernel-x86_64.config
-          echo "CONFIG_GCOV_PROFILE_ALL=y" >> ~/rpmbuild/SOURCES/kernel-x86_64.config
+          cd ~/rpmbuild/BUILD/linux-*
+          ./scripts/config --enable GCOV_KERNEL
+          ./scripts/config --enable GCOV_PROFILE_ALL
+          make olddefconfig
           
           export PATH="/usr/lib64/ccache:/usr/lib/ccache:$PATH"
           export CCACHE_DIR=~/.cache/ccache
@@ -81,9 +81,8 @@ jobs:
           mkdir -p ~/.cache/ccache
           ccache -z
           
-          spectool -g -R ~/rpmbuild/SPECS/kernel.spec
-          dnf builddep -y ~/rpmbuild/SPECS/kernel.spec
-          rpmbuild -bb ~/rpmbuild/SPECS/kernel.spec --target x86_64
+          echo "Avvio compilazione RPM Upstream Nativa..."
+          make -j$(nproc) binrpm-pkg
           ccache -s
 
       - name: Fase 2 - Stress Test Agnostico QEMU (Estrazione Termica)
@@ -92,11 +91,11 @@ jobs:
           echo "Estrazione del kernel strumentato..."
           mkdir -p /tmp/pgo_kernel
           cd /tmp/pgo_kernel
-          rpm2cpio ~/rpmbuild/RPMS/x86_64/kernel-core-*.rpm | cpio -idmv
+          rpm2cpio ~/rpmbuild/RPMS/x86_64/kernel-*.rpm | cpio -idmv
           KERNEL_IMAGE=$(ls boot/vmlinuz-* | head -n 1)
           
           echo "Creazione demone di Init per lo stress test estremo..."
-          cat << 'EOF' > /init
+          cat << 'INITSCRIPT' > /init
           #!/bin/bash
           export PATH=/usr/bin:/usr/sbin:/bin:/sbin
           mount -t proc none /proc
@@ -120,13 +119,12 @@ jobs:
           
           echo "Spegnimento QEMU..."
           poweroff -f
-          EOF
+          INITSCRIPT
           chmod +x /init
           
           mkdir -p /tmp/host_gcov
           
           echo "Avvio virtualizzazione isolata 9pfs..."
-          # Usiamo il container stesso (/) come rootfs in QEMU tramite 9pfs
           qemu-system-x86_64 -kernel $KERNEL_IMAGE \
             -append "root=host_root rootfstype=9p rootflags=trans=virtio,version=9p2000.L rw init=/init console=ttyS0" \
             -fsdev local,security_model=none,id=fsdev-root,path=/ \
@@ -139,33 +137,24 @@ jobs:
         if: steps.idempotency.outputs.skip_build != 'true'
         run: |
           echo "Rimozione sensori GCOV (Cristallizzazione)..."
-          sed -i '/CONFIG_GCOV/d' ~/rpmbuild/SOURCES/kernel-x86_64.config
+          cd ~/rpmbuild/BUILD/linux-*
+          ./scripts/config --disable GCOV_KERNEL
+          ./scripts/config --disable GCOV_PROFILE_ALL
+          make olddefconfig
           
           echo "Iniezione mappa termica nel compilatore GCC..."
-          # Aggiungiamo i flag PGO preservando le macro Holy Grail
-          cat << 'EOF' >> ~/.rpmmacros
+          cat << 'MACRO' >> ~/.rpmmacros
           %optflags %{__global_compiler_flags} -march=x86-64-v3 -pipe -Wno-error -fprofile-use=/tmp/host_gcov -Wno-missing-profile
           %kcflags -march=x86-64-v3 -pipe -Wno-error -fprofile-use=/tmp/host_gcov -Wno-missing-profile
-          %_without_selftests 1
-          %_without_tools 1
-          %_without_perf 1
-          %_without_libperf 1
-          %_without_ynl 1
-          %_without_bpftool 1
-          %_without_debug 1
-          %_without_debuginfo 1
-          %_without_doc 1
-          %_binary_payload w1.zstdio
-          %_source_payload w1.zstdio
-          EOF
+          MACRO
           
           echo "Pulizia build precedente..."
-          rm -rf ~/rpmbuild/BUILD/* ~/rpmbuild/RPMS/*
+          rm -rf ~/rpmbuild/RPMS/*
           
           echo "Compilazione del Kernel Ottimizzato (Cristallizzazione)..."
           export PATH="/usr/lib64/ccache:/usr/lib/ccache:$PATH"
           export CCACHE_DIR=~/.cache/ccache
-          rpmbuild -bb ~/rpmbuild/SPECS/kernel.spec --target x86_64
+          make -j$(nproc) binrpm-pkg
           ccache -s
           
       - name: Publish Micro-Container OCI
@@ -176,7 +165,7 @@ jobs:
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
-          buildah copy $ctr ~/rpmbuild/RPMS/*/*.rpm /
+          buildah copy $ctr ~/rpmbuild/RPMS/x86_64/*.rpm /
           
           IMAGE_LATEST=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-kernel:latest" | tr '[:upper:]' '[:lower:]')
           IMAGE_FINGERPRINT=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-kernel:${{ env.FINGERPRINT }}" | tr '[:upper:]' '[:lower:]')

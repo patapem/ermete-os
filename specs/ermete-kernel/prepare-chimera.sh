@@ -1,14 +1,14 @@
 #!/bin/bash
-# Ermete OS: The Ultimate Chimera Kernel Bedrock Builder
+# Ermete OS: The Ultimate Chimera Kernel Bedrock Builder (Upstream Mainline Torvalds)
 
 set -e
 
-WORKSPACE_DIR="$HOME/rpmbuild"
-mkdir -p "$WORKSPACE_DIR"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+WORKSPACE_DIR="$HOME/rpmbuild/BUILD"
+mkdir -p "$WORKSPACE_DIR"
 cd "$WORKSPACE_DIR"
 
 echo "========================================================="
-echo " FASE 1: RISOLUZIONE DINAMICA KERNEL E PATCH"
+echo " FASE 1: RISOLUZIONE DINAMICA KERNEL UPSTREAM"
 echo "========================================================="
 echo ">>> Clonazione repository patch CachyOS..."
 rm -rf /tmp/cachyos-patches
@@ -38,115 +38,91 @@ echo ">>> Clonazione repository patch Garuda..."
 rm -rf /tmp/garuda-patches
 git clone --depth 1 https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-common-settings.git /tmp/garuda-patches
 
-echo ">>> Ricerca della migliore versione kernel supportata (Fedora -> CachyOS -> ClearLinux)..."
-TARGET_RELEASEVER=""
-TARGET_KERNEL_VER=""
+echo ">>> Determinazione della versione Mainline massima supportata da CachyOS..."
+TARGET_KERNEL_VER=$(ls -d /tmp/cachyos-patches/*/all 2>/dev/null | awk -F/ '{print $4}' | sort -V | tail -n 1)
 
-source /etc/os-release
-CURRENT_FVER=$VERSION_ID
-MIN_FVER=$((CURRENT_FVER - 4))
+if [ -z "$TARGET_KERNEL_VER" ]; then
+    echo "ERRORE FATALE: Impossibile determinare la versione CachyOS."
+    exit 1
+fi
 
-for (( ver=$CURRENT_FVER; ver>=$MIN_FVER; ver-- )); do
-    echo ">>> Analisi Fedora $ver..."
-    
-    URL=$(dnf download --source kernel --releasever=$ver --url 2>/dev/null | grep -E '\.src\.rpm' | head -n 1 || true)
-    if [ -z "$URL" ]; then
-        echo "    Nessun kernel sorgente trovato nei repo per Fedora $ver."
-        continue
+echo ">>> MATCH PERFETTO! Costruiremo il kernel Mainline versione: $TARGET_KERNEL_VER"
+
+echo "========================================================="
+echo " FASE 2: FONDAMENTA (Upstream Torvalds)"
+echo "========================================================="
+KERNEL_TARBALL="linux-${TARGET_KERNEL_VER}.tar.xz"
+echo ">>> Scaricamento Kernel Upstream Torvalds ($KERNEL_TARBALL)..."
+if [ ! -f "$KERNEL_TARBALL" ]; then
+    wget -q "https://cdn.kernel.org/pub/linux/kernel/v6.x/$KERNEL_TARBALL"
+fi
+
+echo ">>> Estrazione del Kernel..."
+rm -rf "linux-${TARGET_KERNEL_VER}"
+tar -xf "$KERNEL_TARBALL"
+cd "linux-${TARGET_KERNEL_VER}"
+
+CACHY_PATCH_DIR="/tmp/cachyos-patches/$TARGET_KERNEL_VER"
+
+echo ">>> Sincronizzazione dinamica Clear Linux con Kernel $TARGET_KERNEL_VER..."
+pushd /tmp/clearlinux-patches > /dev/null
+KERNEL_VER_ESC="${TARGET_KERNEL_VER//./\\.}"
+CLEAR_COMMIT=$(git log --grep="update.*${KERNEL_VER_ESC}\\b" -n 1 --format="%H" || true)
+if [ -n "$CLEAR_COMMIT" ]; then
+    echo ">>> Allineamento Clear Linux al commit: $CLEAR_COMMIT"
+    git checkout -q "$CLEAR_COMMIT"
+else
+    echo ">>> ATTENZIONE: Nessun commit specifico trovato per $TARGET_KERNEL_VER. Utilizzo l'head di main."
+fi
+popd > /dev/null
+
+echo ">>> Copia delle patch per validazione Kbuild..."
+mkdir -p .patches
+if [ -d "$CACHY_PATCH_DIR" ]; then
+    cp "$CACHY_PATCH_DIR"/*.patch .patches/ || true
+fi
+for repo in xanmod liquorix zen garuda tkg; do
+    if [ -d "/tmp/${repo}-patches" ]; then
+        find "/tmp/${repo}-patches" -name "*.patch" -type f -exec cp {} .patches/ \; || true
     fi
-    
-    # Estraiamo la versione major.minor (es. 6.17 da kernel-6.17.10-100.fc41.src.rpm)
-    F_VER=$(basename "$URL" | sed -E 's/^kernel-([0-9]+\.[0-9]+).*/\1/')
-    echo "    Kernel in Fedora $ver: $F_VER"
-    
-    # 1. Controllo CachyOS
-    if [ ! -d "/tmp/cachyos-patches/$F_VER/all" ]; then
-        echo "    CachyOS NON supporta $F_VER. Passo al precedente..."
-        continue
-    fi
-    
-    # 2. Controllo Clear Linux
-    pushd /tmp/clearlinux-patches > /dev/null
-    F_VER_ESC="${F_VER//./\\.}"
-    CLEAR_COMMIT=$(git log --grep="update.*${F_VER_ESC}\\b" -n 1 --format="%H" || true)
-    popd > /dev/null
-    
-    if [ -z "$CLEAR_COMMIT" ]; then
-        echo "    Clear Linux NON ha patch per $F_VER. Passo al precedente..."
-        continue
-    fi
-    
-    echo ">>> MATCH PERFETTO! Fedora $ver fornisce kernel $F_VER, pienamente supportato da CachyOS e ClearLinux."
-    TARGET_RELEASEVER=$ver
-    TARGET_KERNEL_VER=$F_VER
-    break
 done
 
-if [ -z "$TARGET_RELEASEVER" ]; then
-    echo "ERRORE FATALE: Nessun kernel compatibile trovato incrociando Fedora, CachyOS e Clear Linux."
-    exit 1
-fi
+for patch_name in \
+    "0001-sched-migrate.patch" \
+    "0001-sched-numa-Initialise-numa_migrate_retry.patch" \
+    "0001-mm-memcontrol-add-some-branch-hints-based-on-gcov-an.patch" \
+    "0002-sched-core-add-some-branch-hints-based-on-gcov-analy.patch" \
+    "0170-sched-Add-unlikey-branch-hints-to-several-system-cal.patch"; do
+    if [ -f "/tmp/clearlinux-patches/$patch_name" ]; then
+        cp "/tmp/clearlinux-patches/$patch_name" .patches/ || true
+    fi
+done
 
-echo "========================================================="
-echo " FASE 2: LE FONDAMENTA (Fedora Upstream Zero-Trust)"
-echo "========================================================="
-echo ">>> Scaricamento kernel.src.rpm puro (Releasever: $TARGET_RELEASEVER)..."
-dnf download --source kernel --releasever=$TARGET_RELEASEVER
-rpm -ivh kernel-*.src.rpm
-KERNEL_SRPM=$(ls kernel-*.src.rpm | head -n 1)
-KERNEL_VER=$(rpm -qp --qf '%{VERSION}' "$KERNEL_SRPM" | cut -d. -f1,2)
-rm -f kernel-*.src.rpm
+# Genera un default Kconfig per permettere a Kbuild di funzionare (ci serve per AST validazione)
+make defconfig
 
-CACHY_PATCH_DIR="/tmp/cachyos-patches/$KERNEL_VER"
-if [ ! -d "$CACHY_PATCH_DIR" ]; then
-    echo "ERRORE FATALE: Discrepanza dinamica. Trovato $KERNEL_VER ma mancano le patch CachyOS!"
-    exit 1
-fi
-
-echo ">>> Scansione e registrazione delle patch nello spec (Native RPM Best Practice)..."
-> /tmp/patch_apply.txt
-
-# [BEDROCK DEFENSIVE PATCHING]
-# Invece di applicare il monolite 'all.patch' (che fallisce al minimo hunk),
-# applichiamo dinamicamente le singole patch. Se una patch fallisce il test (dry-run),
-# la saltiamo interamente per garantire che il codice C rimanga puro e compilabile.
-cat << 'EOF' >> /tmp/patch_apply.txt
 echo ">>> [BEDROCK] Inizio applicazione matrice universale Kbuild per gli 8 Kernel..."
-
-# Configurazione preparatoria per permettere a Kbuild di validare le patch in tempo reale
-cp configs/kernel-x86_64.config .config
-make olddefconfig
-make prepare
-
-for patch in %{_sourcedir}/bedrock-*.patch; do
+for patch in .patches/*.patch; do
+    if [ ! -f "$patch" ]; then continue; fi
     echo "-> Test di compatibilità per $(basename $patch)..."
     
-    # Livello 1: Fuzz 2 (Standard Linux)
     if patch -p1 -F 2 --force --dry-run --silent < "$patch"; then
         patch -p1 -F 2 --force < "$patch" > /dev/null || true
         echo "   [SUCCESS] Patch applicata a Fuzz 2."
     else
-        # Livello 2: Fuzz 3 (Estremo)
         echo "   [WARNING] Fallito Fuzz 2. Tento Fuzz 3..."
-        
-        # Autorizziamo Fuzz 3 SOLO se la patch tocca *esclusivamente* file .c,
-        # perché solo questi possono essere testati chirurgicamente tramite make .s
         NON_C_FILES=$(grep -E '^\+\+\+ b/' "$patch" | awk '{print $2}' | sed 's/^b\///' | grep -v '\.c$' || true)
-        
         if [ -n "$NON_C_FILES" ]; then
              echo "   [SKIP] La patch tocca file non-C. Impossibile validare con AST. Fuzz 3 vietato. Scartata."
         elif patch -p1 -F 3 --force --dry-run --silent < "$patch"; then
             patch -p1 -F 3 --force < "$patch" > /dev/null || true
             
-            # Livello 3: Validazione AST Chirurgica con Kbuild
             echo "   [AST VALIDATION] Controllo purezza albero sintattico tramite Kbuild Assembly..."
             MODIFIED_C_FILES=$(grep -E '^\+\+\+ b/' "$patch" | awk '{print $2}' | sed 's/^b\///' | grep '\.c$' || true)
             AST_FAILED=0
-            
             for c_file in $MODIFIED_C_FILES; do
                 if [ -f "$c_file" ]; then
                     target_s="${c_file%.c}.s"
-                    # Compilazione dry-run in assembly. Kbuild userà il 100% dei flag/include corretti.
                     if ! make "$target_s" >/dev/null 2>&1; then
                         AST_FAILED=1
                         echo "   [AST FATAL] Kbuild ha fallito la compilazione AST di $c_file!"
@@ -154,7 +130,6 @@ for patch in %{_sourcedir}/bedrock-*.patch; do
                     fi
                 fi
             done
-            
             if [ $AST_FAILED -eq 1 ]; then
                 echo "   [ROLLBACK] Conflitto sintattico rilevato! Scarto la patch."
                 patch -p1 -R -F 3 --force < "$patch" > /dev/null || true
@@ -166,164 +141,72 @@ for patch in %{_sourcedir}/bedrock-*.patch; do
         fi
     fi
 done
-EOF
-
-if [ -d "$CACHY_PATCH_DIR" ]; then
-    for patch in "$CACHY_PATCH_DIR"/*.patch; do
-        patch_name="bedrock-cachyos-$(basename "$patch")"
-        cp "$patch" "SOURCES/$patch_name"
-    done
-fi
-
-echo ">>> Raccolta patch dagli altri repository (XanMod, Liquorix, Zen, Garuda, TKG)..."
-for repo in xanmod liquorix zen garuda tkg; do
-    if [ -d "/tmp/${repo}-patches" ]; then
-        find "/tmp/${repo}-patches" -name "*.patch" -type f | while read patch_file; do
-            patch_name="bedrock-${repo}-$(basename "$patch_file")"
-            cp "$patch_file" "SOURCES/$patch_name"
-        done
-    fi
-done
-
-echo ">>> Sincronizzazione dinamica Clear Linux con Kernel $KERNEL_VER..."
-pushd /tmp/clearlinux-patches > /dev/null
-KERNEL_VER_ESC="${KERNEL_VER//./\\.}"
-CLEAR_COMMIT=$(git log --grep="update.*${KERNEL_VER_ESC}\\b" -n 1 --format="%H" || true)
-if [ -n "$CLEAR_COMMIT" ]; then
-    echo ">>> Allineamento Clear Linux al commit: $CLEAR_COMMIT"
-    git checkout -q "$CLEAR_COMMIT"
-else
-    echo ">>> ATTENZIONE: Nessun commit specifico trovato per $KERNEL_VER. Utilizzo l'head di main."
-fi
-popd > /dev/null
-
-echo ">>> Pulizia patch obsolete (ntsync è upstream in 6.14)..."
-rm -f SOURCES/*ntsync*.patch || true
-
-echo ">>> Aggiunta patch chirurgiche Clear Linux..."
-for patch_name in \
-    "0001-sched-migrate.patch" \
-    "0001-sched-numa-Initialise-numa_migrate_retry.patch" \
-    "0001-mm-memcontrol-add-some-branch-hints-based-on-gcov-an.patch" \
-    "0002-sched-core-add-some-branch-hints-based-on-gcov-analy.patch" \
-    "0170-sched-Add-unlikey-branch-hints-to-several-system-cal.patch"; do
-    
-    if [ -f "/tmp/clearlinux-patches/$patch_name" ]; then
-        cp "/tmp/clearlinux-patches/$patch_name" "SOURCES/bedrock-clearlinux-$patch_name"
-    else
-        echo ">>> ATTENZIONE: Patch $patch_name non trovata nel repo Clear Linux. Skippata."
-    fi
-done
-
-# Applicazione cronologica corretta ed esatta delle patch (risolve bug ordine inverso)
-# Inseriamo i comandi %patch subito prima di '# END OF PATCH APPLICATIONS'
-# in modo da operare all'interno della root del kernel, prima che entri in 'configs/'
-awk '/# END OF PATCH APPLICATIONS/{system("cat /tmp/patch_apply.txt")}1' SPECS/kernel.spec > SPECS/kernel.spec.new
-mv SPECS/kernel.spec.new SPECS/kernel.spec
 
 echo "========================================================="
-echo " FASE 3: TUNING KCONFIG E MACROS (Bedrock Naturale)"
+echo " FASE 3: TUNING KCONFIG (Bedrock Naturale)"
 echo "========================================================="
-echo ">>> Iniezione chirurgica del tuning SOLO nei config x86_64..."
-# Evitiamo di rompere le build arm64/powerpc iniettando MZEN3 globalmente.
-# Applichiamo i Kconfig direttamente alle configurazioni x86_64 di base.
+# Configurazione Kconfig avanzata tramite script Kconfig integrato in upstream
+./scripts/config --enable HZ_1000
+./scripts/config --set-val HZ 1000
+./scripts/config --disable HZ_300
+./scripts/config --disable HZ_250
+./scripts/config --disable HZ_100
+./scripts/config --enable DEFAULT_BBR
+./scripts/config --enable TCP_CONG_BBR
+./scripts/config --disable DEFAULT_CUBIC
+./scripts/config --enable SCHED_BORE
+./scripts/config --enable MODULE_COMPRESS_ZSTD
+./scripts/config --disable MODULE_COMPRESS_XZ
+./scripts/config --enable LRU_GEN
+./scripts/config --enable LRU_GEN_ENABLED
+./scripts/config --enable GENERIC_CPU
+./scripts/config --enable CC_OPTIMIZE_FOR_PERFORMANCE_O3
+./scripts/config --disable LTO_CLANG_THIN
+./scripts/config --disable DEBUG_INFO
+./scripts/config --enable DEBUG_INFO_NONE
+./scripts/config --disable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+./scripts/config --enable NTSYNC
+./scripts/config --disable RUST
 
-for conf in SOURCES/kernel-x86_64*.config; do
-    # Pulizia chirurgica delle chiavi esistenti per evitare warning di override in Kconfig
-    sed -i -E '/^(# )?CONFIG_(HZ|HZ_1000|HZ_300|HZ_250|HZ_100|DEFAULT_BBR|TCP_CONG_BBR|DEFAULT_CUBIC|SCHED_BORE|MODULE_COMPRESS_ZSTD|MODULE_COMPRESS_XZ|LRU_GEN|LRU_GEN_ENABLED|GENERIC_CPU|CC_OPTIMIZE_FOR_PERFORMANCE_O3|LTO_CLANG_THIN|DEBUG_INFO|DEBUG_INFO_NONE|DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT|NTSYNC|RUST|VIRTIO_PCI|VIRTIO_CONSOLE|NET_9P|NET_9P_VIRTIO|9P_FS)( |=)/d' "$conf"
+# Tuning PGO QEMU Boot
+./scripts/config --enable VIRTIO_PCI
+./scripts/config --enable VIRTIO_CONSOLE
+./scripts/config --enable NET_9P
+./scripts/config --enable NET_9P_VIRTIO
+./scripts/config --enable 9P_FS
 
-    cat << 'EOF' >> "$conf"
-# --- ERMETE FORGE: ZEN/LIQUORIX TUNING ---
-CONFIG_HZ_1000=y
-CONFIG_HZ=1000
-# CONFIG_HZ_300 is not set
-# CONFIG_HZ_250 is not set
-# CONFIG_HZ_100 is not set
-
-# Lasciamo che CachyOS gestisca nativamente il PREEMPT per evitare conflitti Kconfig
-# Lasciamo a Kconfig i default di RCU per non innescare il validatore su RCU_EXPERT
-
-CONFIG_DEFAULT_BBR=y
-CONFIG_TCP_CONG_BBR=y
-# CONFIG_DEFAULT_CUBIC is not set
-
-CONFIG_SCHED_BORE=y
-
-# ZSTD Rapida per Moduli (Ottimizza Tempo di Compilazione)
-CONFIG_MODULE_COMPRESS_ZSTD=y
-# CONFIG_MODULE_COMPRESS_XZ is not set
-
-# Ottimizzazione MGLRU (Multi-Gen LRU) attiva per default (Ottimo per 32GB RAM)
-CONFIG_LRU_GEN=y
-CONFIG_LRU_GEN_ENABLED=y
-
-# I driver storage (NVMe, AHCI, BTRFS) rimangono moduli (=m) per non rompere
-# il manifest %files di rpmbuild. Saranno inglobati dall'initramfs via dracut.
-
-# Ottimizzazione CPU: Moderna Universale (x86-64-v3 / AVX2)
-# Rende il kernel compatibile con tutti gli Intel/AMD dal 2015 in poi
-CONFIG_GENERIC_CPU=y
-
-# Ottimizzazione Nativa Bedrock (Demandare a Kbuild, NO Macro RPM)
-CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3=y
-# CONFIG_LTO_CLANG_THIN is not set
-
-# Ottimizzazione Tempi di Compilazione (Nessun Simbolo di Debug)
-CONFIG_DEBUG_INFO=n
-CONFIG_DEBUG_INFO_NONE=y
-# CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is not set
-
-# NT Sync per Gaming
-CONFIG_NTSYNC=y
-
-# Disabilita Rust (Fix per crash rustc 'no-jump-tables' con LLVM=1)
-# Incrementa massivamente la velocità di compilazione e rimuove instabilità compiler-side.
-# CONFIG_RUST is not set
-
-# --- ERMETE FORGE: PGO QEMU 9PFS BOOT (Senza Initramfs) ---
-CONFIG_VIRTIO_PCI=y
-CONFIG_VIRTIO_CONSOLE=y
-CONFIG_NET_9P=y
-CONFIG_NET_9P_VIRTIO=y
-CONFIG_9P_FS=y
-# -----------------------------------------
-EOF
-done
+make olddefconfig
 
 echo ">>> Generazione ~/.rpmmacros globale per la compilazione..."
-# [BEST PRACTICE] Zero modifiche al file kernel.spec. Tutte le macro e i flag del
-# compilatore vengono iniettati tramite rpmmacros in modo nativo per rpmbuild.
-# IMPORTANTE: Ereditiamo le ottimizzazioni Holy Grail (O3, LTO, MOLD) dalla Forgia.
-cat ../../config/rpmmacros > ~/.rpmmacros
-
-cat << 'EOF' >> ~/.rpmmacros
+cat /var/home/ermete/GEMINI/ermete/ermete-forge/config/rpmmacros > ~/.rpmmacros
+cat << 'MCR' >> ~/.rpmmacros
 %_with_vanilla 1
 %buildid .chimera
 %toolchain gcc
 %optflags %{__global_compiler_flags} -march=x86-64-v3 -pipe -Wno-error
 %kcflags -march=x86-64-v3 -pipe -Wno-error
 
-# Disabilitazione nativa dei moduli non necessari/problematici (Fix LLVM LTO)
 %_without_selftests 1
 %_without_tools 1
 %_without_perf 1
 %_without_libperf 1
 %_without_ynl 1
 %_without_bpftool 1
-
-# Estreme riduzioni dei tempi di build (No Debuginfo, No DWARF, No Doc)
 %_without_debug 1
 %_without_debuginfo 1
 %_without_doc 1
-
-# Compressione RPM istantanea (Elimina colli di bottiglia Single-Thread)
-# Essendo destinati a un container OCI, la compressione RPM è inutile e ridondante.
 %_binary_payload w1.zstdio
 %_source_payload w1.zstdio
-EOF
+MCR
 
 echo "========================================================="
 echo " PREPARAZIONE COMPLETATA."
-echo " Iniezioni 'sed'/'awk' eseguite chirurgicamente sul file .spec."
-echo " Tutte le flags LLVM/Gentoo sono passate in runtime tramite ~/.rpmmacros."
+echo " Il Kernel è pronto nella cartella $(pwd)"
+echo " Usa 'make binrpm-pkg' per compilare un RPM nativo upstream."
 echo "========================================================="
+
+# Fix Keys errors in upstream build
+./scripts/config --set-str SYSTEM_TRUSTED_KEYS ""
+./scripts/config --set-str SYSTEM_REVOCATION_KEYS ""
+./scripts/config --disable DEBUG_INFO_BTF
+make olddefconfig
