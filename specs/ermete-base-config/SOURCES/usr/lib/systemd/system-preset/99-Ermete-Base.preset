@@ -6,3 +6,11 @@ enable nvidia-resume.service
 enable nvidia-hibernate.service
 
 
+disable akmods-keygen@.service
+disable akmods-keygen@akmods-keygen.service
+disable systemd-remount-fs.service
+disable NetworkManager-wait-online.service
+disable systemd-networkd-wait-online.service
+disable systemd-udev-settle.service
+disable plymouth-quit-wait.service
+disable dkms.service
