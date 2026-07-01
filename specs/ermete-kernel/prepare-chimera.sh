@@ -178,7 +178,7 @@ echo "========================================================="
 make olddefconfig
 
 echo ">>> Generazione ~/.rpmmacros globale per la compilazione..."
-cat /var/home/ermete/GEMINI/ermete/ermete-forge/config/rpmmacros > ~/.rpmmacros
+cat $GITHUB_WORKSPACE/config/rpmmacros > ~/.rpmmacros
 cat << 'MCR' >> ~/.rpmmacros
 %_with_vanilla 1
 %buildid .chimera
