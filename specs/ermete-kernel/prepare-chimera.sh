@@ -241,13 +241,8 @@ CONFIG_MODULE_COMPRESS_ZSTD=y
 CONFIG_LRU_GEN=y
 CONFIG_LRU_GEN_ENABLED=y
 
-# Storage & FS Root Built-in (Anti Kernel-Panic Bedrock)
-CONFIG_NVME_CORE=y
-CONFIG_BLK_DEV_NVME=y
-CONFIG_SATA_AHCI=y
-CONFIG_BTRFS_FS=y
-CONFIG_BTRFS_FS_POSIX_ACL=y
-CONFIG_EXT4_FS=y
+# I driver storage (NVMe, AHCI, BTRFS) rimangono moduli (=m) per non rompere
+# il manifest %files di rpmbuild. Saranno inglobati dall'initramfs via dracut.
 
 # Ottimizzazione CPU: Moderna Universale (x86-64-v3 / AVX2)
 # Rende il kernel compatibile con tutti gli Intel/AMD dal 2015 in poi
