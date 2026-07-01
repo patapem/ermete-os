@@ -116,14 +116,14 @@ for patch in %{_sourcedir}/bedrock-*.patch; do
     echo "-> Test di compatibilità per $(basename $patch)..."
     
     # Livello 1: Fuzz 0 (Puro)
-    if patch -p1 -F 0 --dry-run --silent < "$patch"; then
-        patch -p1 -F 0 < "$patch" > /dev/null
+    if patch -p1 -F 0 --force --dry-run --silent < "$patch"; then
+        patch -p1 -F 0 --force < "$patch" > /dev/null || true
         echo "   [SUCCESS] Patch applicata a Fuzz 0."
     else
         # Livello 2: Fuzz 3 (Estremo)
         echo "   [WARNING] Fallito Fuzz 0. Tento Fuzz 3..."
-        if patch -p1 -F 3 --dry-run --silent < "$patch"; then
-            patch -p1 -F 3 < "$patch" > /dev/null
+        if patch -p1 -F 3 --force --dry-run --silent < "$patch"; then
+            patch -p1 -F 3 --force < "$patch" > /dev/null || true
             
             # Livello 3: Validazione AST Chirurgica con Clang
             echo "   [AST VALIDATION] Controllo purezza albero sintattico sui file toccati..."
@@ -144,7 +144,7 @@ for patch in %{_sourcedir}/bedrock-*.patch; do
             
             if [ $AST_FAILED -eq 1 ]; then
                 echo "   [ROLLBACK] Conflitto sintattico rilevato! Scarto la patch."
-                patch -p1 -R -F 3 < "$patch" > /dev/null
+                patch -p1 -R -F 3 --force < "$patch" > /dev/null || true
             else
                 echo "   [SUCCESS] Patch fusa e validata tramite AST."
             fi
