@@ -35,6 +35,10 @@ case "$PKG" in
         # Bat is now statically built via ermete-bat spec, no quirks needed here.
         echo "Nessun quirk dinamico necessario per BAT, usa spec canonico in ermete-bat."
         ;;
+    nushell)
+        echo "Applicazione Quirk Chirurgico per NUSHELL (Rimozione mimalloc incompatibile con LTO)..."
+        patch -p1 ~/rpmbuild/SPECS/nushell.spec < $BASE_DIR/specs/nushell/nushell-mimalloc.patch || true
+        ;;
     *)
         echo "Nessun quirk necessario per $PKG."
         ;;

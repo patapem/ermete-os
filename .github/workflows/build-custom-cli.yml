@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'specs/ermete-starship/**'
+      - 'specs/ermete-bat/**'
       - '.github/workflows/build-custom-cli.yml'
   workflow_dispatch:
   schedule:
@@ -60,5 +61,53 @@ jobs:
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-starship:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+
+  build-bat:
+    name: 🦇 Build Bat
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-bat/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/rpmbuild/RPMS/
+          key: rpm-bat-${{ steps.hash.outputs.hash }}
+      - name: Cache Cargo Registry
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+          path: /root/.cargo/registry
+          key: cargo-registry-bat-${{ steps.hash.outputs.hash }}
+          restore-keys: cargo-registry-bat-
+      - name: Install Dependencies and Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          spectool -g -R specs/ermete-bat/bat.spec
+          dnf builddep -y specs/ermete-bat/bat.spec
+          rpmbuild -bb --nocheck specs/ermete-bat/bat.spec
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-bat:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER

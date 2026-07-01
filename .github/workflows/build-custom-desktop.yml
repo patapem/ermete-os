@@ -55,7 +55,7 @@ jobs:
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
-          buildah copy $ctr /github/home/RPMS/appmenu-glib-translator*.rpm / || true
+          buildah copy $ctr /github/home/RPMS/appmenu-glib-translator*.rpm /
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-appmenu-glib-translator:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
@@ -105,7 +105,7 @@ jobs:
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
-          buildah copy $ctr /github/home/RPMS/astal-io*.rpm / || true
+          buildah copy $ctr /github/home/RPMS/astal-io*.rpm /
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-astal-io:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
@@ -155,7 +155,7 @@ jobs:
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
-          buildah copy $ctr /github/home/RPMS/astal*.rpm / || true
+          buildah copy $ctr /github/home/RPMS/astal*.rpm /
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-astal:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
@@ -205,7 +205,7 @@ jobs:
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
-          buildah copy $ctr /github/home/RPMS/astal-libs*.rpm / || true
+          buildah copy $ctr /github/home/RPMS/astal-libs*.rpm /
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-astal-libs:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
@@ -255,7 +255,7 @@ jobs:
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
-          buildah copy $ctr /github/home/RPMS/astal-gjs*.rpm / || true
+          buildah copy $ctr /github/home/RPMS/astal-gjs*.rpm /
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-astal-gjs:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
@@ -305,7 +305,7 @@ jobs:
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
-          buildah copy $ctr /github/home/RPMS/astal-gtk4*.rpm / || true
+          buildah copy $ctr /github/home/RPMS/astal-gtk4*.rpm /
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-astal-gtk4:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
@@ -355,7 +355,7 @@ jobs:
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
-          buildah copy $ctr /github/home/RPMS/astal-lua*.rpm / || true
+          buildah copy $ctr /github/home/RPMS/astal-lua*.rpm /
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-astal-lua:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
@@ -405,7 +405,7 @@ jobs:
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
-          buildah copy $ctr /github/home/RPMS/aylurs-gtk-shell*.rpm / || true
+          buildah copy $ctr /github/home/RPMS/aylurs-gtk-shell*.rpm /
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-aylurs-gtk-shell:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
@@ -458,7 +458,7 @@ jobs:
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
-          buildah copy $ctr /github/home/RPMS/hyprpanel*.rpm / || true
+          buildah copy $ctr /github/home/RPMS/hyprpanel*.rpm /
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-hyprpanel:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
