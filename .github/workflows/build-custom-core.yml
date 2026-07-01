@@ -6,6 +6,7 @@ on:
     paths:
       - 'specs/ermete-selinux/**'
       - 'specs/ermete-ananicy/**'
+      - 'specs/ermete-system-tweaks/**'
       - '.github/workflows/build-custom-core.yml'
   workflow_dispatch:
   schedule:
@@ -98,5 +99,45 @@ jobs:
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/RPMS/*.rpm /
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-custom-ananicy:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+  build-system-tweaks:
+    name: ⚙️ Build System Tweaks (BootC)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-system-tweaks/**') }}" >> $GITHUB_OUTPUT
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/rpmbuild/RPMS/
+          key: rpm-system-tweaks-${{ steps.hash.outputs.hash }}
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: dnf install -y rpm-build rpmdevtools
+      - name: Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          rpmdev-setuptree
+          cp specs/ermete-system-tweaks/SOURCES/* ~/rpmbuild/SOURCES/
+          rpmbuild -bb --nocheck specs/ermete-system-tweaks/ermete-system-tweaks.spec
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-system-tweaks:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
