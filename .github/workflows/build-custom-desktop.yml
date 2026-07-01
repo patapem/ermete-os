@@ -63,24 +63,43 @@ jobs:
           
           mkdir -p /github/home/RPMS
           cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
-      - name: Fetch standalone dart-sass
-        run: |
-          mkdir -p /github/home/BIN
-          cd /github/home/BIN
-          curl -sL https://github.com/sass/dart-sass/releases/download/1.101.0/dart-sass-1.101.0-linux-x64.tar.gz -o dart-sass.tar.gz
-          tar -xzf dart-sass.tar.gz
-      - name: Publish Micro-Container OCI
+      - name: Publish Micro-Container OCI (Separazione Rigorosa)
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
-          ctr=$(buildah from scratch)
-          buildah copy $ctr /github/home/RPMS/*.rpm / || true
-          buildah copy $ctr /github/home/BIN/dart-sass /dart-sass || true
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-custom-ags:latest" | tr '[:upper:]' '[:lower:]')
-          buildah commit $ctr $IMAGE_LOWER
-          buildah push $IMAGE_LOWER
+          
+          # Ordine di dipendenza critico per l'ecosistema Astal (AGS v3)
+          ASTAL_PKGS="appmenu-glib-translator astal-io astal astal-libs astal-gjs astal-gtk4 astal-lua aylurs-gtk-shell2"
+          
+          for pkg in $ASTAL_PKGS; do
+            echo "--- Creazione Micro-Container Isolato per $pkg ---"
+            ctr=$(buildah from scratch)
+            
+            # Copiamo solo gli RPM del pacchetto specifico (se aylurs-gtk-shell2 crea aylurs-gtk-shell, usiamo un glob esteso)
+            if [[ "$pkg" == "aylurs-gtk-shell2" ]]; then
+                buildah copy $ctr /github/home/RPMS/aylurs-gtk-shell*.rpm / || true
+            else
+                buildah copy $ctr /github/home/RPMS/${pkg}*.rpm / || true
+            fi
+            
+            IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository }}/${pkg}:latest" | tr '[:upper:]' '[:lower:]')
+            # Correggo il target name per aylurs-gtk-shell per allinearlo alla direttiva del Containerfile
+            if [[ "$pkg" == "aylurs-gtk-shell2" ]]; then
+                IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository }}/aylurs-gtk-shell:latest" | tr '[:upper:]' '[:lower:]')
+            fi
+            
+            buildah commit $ctr $IMAGE_LOWER
+            buildah push $IMAGE_LOWER
+            
+            # Il Containerfile richiede anche esplicitamente 'aylurs-gtk-shell2:latest'. Duplichiamo il tag.
+            if [[ "$pkg" == "aylurs-gtk-shell2" ]]; then
+                IMAGE_LOWER2=$(echo "${{ env.REGISTRY }}/${{ github.repository }}/aylurs-gtk-shell2:latest" | tr '[:upper:]' '[:lower:]')
+                buildah commit $ctr $IMAGE_LOWER2
+                buildah push $IMAGE_LOWER2
+            fi
+          done
   build-matugen:
     name: 🎨 Build Matugen
     runs-on: ubuntu-latest
@@ -125,7 +144,7 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-custom-matugen:latest" | tr '[:upper:]' '[:lower:]')
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository }}/ermete-matugen:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
   build-bibata:
@@ -172,6 +191,6 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-custom-bibata:latest" | tr '[:upper:]' '[:lower:]')
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository }}/ermete-bibata:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER

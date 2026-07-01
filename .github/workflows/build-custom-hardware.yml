@@ -34,7 +34,7 @@ jobs:
           export STORAGE_DRIVER=vfs
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
-          ctr=$(buildah from ghcr.io/${{ github.repository_owner }}/ermete-custom-kernel:latest)
+          ctr=$(buildah from ghcr.io/${{ github.repository }}/ermete-kernel:latest)
           buildah mount $ctr
           mnt=$(buildah mount $ctr)
           dnf install -y $mnt/*.rpm
@@ -86,6 +86,6 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
           buildah copy $ctr /var/cache/akmods/nvidia/*.rpm /
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-custom-nvidia:latest" | tr '[:upper:]' '[:lower:]')
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository }}/ermete-nvidia:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
