@@ -230,7 +230,7 @@ echo ">>> Iniezione chirurgica del tuning SOLO nei config x86_64..."
 
 for conf in SOURCES/kernel-x86_64*.config; do
     # Pulizia chirurgica delle chiavi esistenti per evitare warning di override in Kconfig
-    sed -i -E '/^(# )?CONFIG_(HZ|HZ_1000|HZ_300|HZ_250|HZ_100|DEFAULT_BBR|TCP_CONG_BBR|DEFAULT_CUBIC|SCHED_BORE|MODULE_COMPRESS_ZSTD|MODULE_COMPRESS_XZ|LRU_GEN|LRU_GEN_ENABLED|GENERIC_CPU|CC_OPTIMIZE_FOR_PERFORMANCE_O3|LTO_CLANG_THIN|DEBUG_INFO|DEBUG_INFO_NONE|DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT|NTSYNC|RUST)( |=)/d' "$conf"
+    sed -i -E '/^(# )?CONFIG_(HZ|HZ_1000|HZ_300|HZ_250|HZ_100|DEFAULT_BBR|TCP_CONG_BBR|DEFAULT_CUBIC|SCHED_BORE|MODULE_COMPRESS_ZSTD|MODULE_COMPRESS_XZ|LRU_GEN|LRU_GEN_ENABLED|GENERIC_CPU|CC_OPTIMIZE_FOR_PERFORMANCE_O3|LTO_CLANG_THIN|DEBUG_INFO|DEBUG_INFO_NONE|DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT|NTSYNC|RUST|VIRTIO_PCI|VIRTIO_CONSOLE|NET_9P|NET_9P_VIRTIO|9P_FS)( |=)/d' "$conf"
 
     cat << 'EOF' >> "$conf"
 # --- ERMETE FORGE: ZEN/LIQUORIX TUNING ---
@@ -279,15 +279,24 @@ CONFIG_NTSYNC=y
 # Disabilita Rust (Fix per crash rustc 'no-jump-tables' con LLVM=1)
 # Incrementa massivamente la velocità di compilazione e rimuove instabilità compiler-side.
 # CONFIG_RUST is not set
+
+# --- ERMETE FORGE: PGO QEMU 9PFS BOOT (Senza Initramfs) ---
+CONFIG_VIRTIO_PCI=y
+CONFIG_VIRTIO_CONSOLE=y
+CONFIG_NET_9P=y
+CONFIG_NET_9P_VIRTIO=y
+CONFIG_9P_FS=y
 # -----------------------------------------
 EOF
 done
 
 echo ">>> Generazione ~/.rpmmacros globale per la compilazione..."
 # [BEST PRACTICE] Zero modifiche al file kernel.spec. Tutte le macro e i flag del
-# compilatore (LLVM, LTO, identificatore OS) vengono iniettati tramite rpmmacros 
-# in modo nativo per rpmbuild.
-cat << 'EOF' > ~/.rpmmacros
+# compilatore vengono iniettati tramite rpmmacros in modo nativo per rpmbuild.
+# IMPORTANTE: Ereditiamo le ottimizzazioni Holy Grail (O3, LTO, MOLD) dalla Forgia.
+cat ../../config/rpmmacros > ~/.rpmmacros
+
+cat << 'EOF' >> ~/.rpmmacros
 %_with_vanilla 1
 %buildid .chimera
 %toolchain gcc

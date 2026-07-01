@@ -142,11 +142,8 @@ jobs:
           sed -i '/CONFIG_GCOV/d' ~/rpmbuild/SOURCES/kernel-x86_64.config
           
           echo "Iniezione mappa termica nel compilatore GCC..."
-          # Riscriviamo le macro per includere la mappa empirica PGO
-          cat << 'EOF' > ~/.rpmmacros
-          %_with_vanilla 1
-          %buildid .chimera
-          %toolchain gcc
+          # Aggiungiamo i flag PGO preservando le macro Holy Grail
+          cat << 'EOF' >> ~/.rpmmacros
           %optflags %{__global_compiler_flags} -march=x86-64-v3 -pipe -Wno-error -fprofile-use=/tmp/host_gcov -Wno-missing-profile
           %kcflags -march=x86-64-v3 -pipe -Wno-error -fprofile-use=/tmp/host_gcov -Wno-missing-profile
           %_without_selftests 1

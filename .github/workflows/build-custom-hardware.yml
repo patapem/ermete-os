@@ -76,6 +76,7 @@ jobs:
           mkdir -p /etc/pki/akmods/certs /etc/pki/akmods/private
           echo "${{ secrets.MOK_PRIVATE_KEY }}" | base64 -d > /etc/pki/akmods/private/private_key.priv
           echo "${{ secrets.MOK_PUBLIC_DER }}" | base64 -d > /etc/pki/akmods/certs/public_key.der
+          cp config/rpmmacros ~/.rpmmacros
           chmod 0600 /etc/pki/akmods/private/private_key.priv
           akmods --force --kernels "${{ steps.kernel.outputs.kernel_ver }}"
       - name: Publish Micro-Container OCI
