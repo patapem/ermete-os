@@ -122,7 +122,12 @@ for patch in %{_sourcedir}/bedrock-*.patch; do
     else
         # Livello 2: Fuzz 3 (Estremo)
         echo "   [WARNING] Fallito Fuzz 0. Tento Fuzz 3..."
-        if patch -p1 -F 3 --force --dry-run --silent < "$patch"; then
+        
+        # [KCONFIG/MAKEFILE SHIELD] Fuzz 3 su Kconfig/Makefile è matematicamente distruttivo.
+        # Corrompe la sintassi (es. "choice member must be bool") eludendo l'AST di Clang.
+        if grep -qE '^\+\+\+ b/.*(Kconfig|Makefile)' "$patch"; then
+             echo "   [SKIP] La patch tocca Kconfig/Makefile. Applicare con Fuzz 3 corromperebbe la build. Patch scartata."
+        elif patch -p1 -F 3 --force --dry-run --silent < "$patch"; then
             patch -p1 -F 3 --force < "$patch" > /dev/null || true
             
             # Livello 3: Validazione AST Chirurgica con Clang
