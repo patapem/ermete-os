@@ -24,21 +24,21 @@ echo ">>> Clonazione repository patch linux-tkg..."
 rm -rf /tmp/tkg-patches
 git clone --depth 1 https://github.com/Frogging-Family/linux-tkg.git /tmp/tkg-patches
 
-echo ">>> Clonazione repository patch XanMod..."
+echo ">>> Clonazione repository patch XanMod (fetch completo per time-travel)..."
 rm -rf /tmp/xanmod-patches
-git clone --depth 1 https://gitlab.com/xanmod/linux-patches.git /tmp/xanmod-patches || true
+git clone --depth 500 https://gitlab.com/xanmod/linux-patches.git /tmp/xanmod-patches || true
 
-echo ">>> Clonazione repository patch Liquorix..."
+echo ">>> Clonazione base repository patch Liquorix..."
 rm -rf /tmp/liquorix-patches
-git clone --depth 1 https://github.com/damentz/liquorix-package.git /tmp/liquorix-patches
+git clone --depth 1 https://github.com/damentz/liquorix-package.git /tmp/liquorix-patches || true
 
 echo ">>> Calcolo intersezione versioni perfette (Matrice Universale)..."
 CACHY_VERSIONS=$(ls -d /tmp/cachyos-patches/*/all 2>/dev/null | awk -F/ '{print $4}' | sort -V || true)
 TKG_VERSIONS=$(ls -d /tmp/tkg-patches/linux-tkg-patches/* 2>/dev/null | awk -F/ '{print $5}' | sort -V || true)
-XANMOD_VERSIONS=$(ls -d /tmp/xanmod-patches/linux-*-xanmod 2>/dev/null | awk -F- '{print $2}' | sed 's/\.y//' | sort -V || true)
+XANMOD_VERSIONS=$( (ls -d /tmp/xanmod-patches/linux-*-xanmod 2>/dev/null || true; ls -d /tmp/xanmod-patches/eol/linux-*-xanmod 2>/dev/null || true) | awk -F- '{print $2}' | sed 's/\.y//' | sort -V -u || true)
 
 TARGET_KERNEL_VER=""
-# Cerca la versione più alta che esista sia in CachyOS che in TKG e Xanmod
+# Cerca la versione più alta che esista sia in CachyOS, TKG e Xanmod
 for v in $(echo "$CACHY_VERSIONS" | tac); do
     if echo "$TKG_VERSIONS" | grep -q "^$v$" && echo "$XANMOD_VERSIONS" | grep -q "^$v$"; then
         TARGET_KERNEL_VER="$v"
@@ -46,7 +46,6 @@ for v in $(echo "$CACHY_VERSIONS" | tac); do
     fi
 done
 
-# Fallback: Se Xanmod è troppo avanti, cerchiamo tra CachyOS e TKG
 if [ -z "$TARGET_KERNEL_VER" ]; then
     echo ">>> Xanmod non ha una versione compatibile, cerco intersezione CachyOS + TKG..."
     for v in $(echo "$CACHY_VERSIONS" | tac); do
@@ -57,9 +56,7 @@ if [ -z "$TARGET_KERNEL_VER" ]; then
     done
 fi
 
-# Fallback finale: Solo CachyOS
 if [ -z "$TARGET_KERNEL_VER" ]; then
-    echo ">>> Nessuna intersezione trovata, fallback forzato sull'ultima versione di CachyOS..."
     TARGET_KERNEL_VER=$(echo "$CACHY_VERSIONS" | tail -n 1)
 fi
 
@@ -83,52 +80,73 @@ echo ">>> Estrazione del Kernel..."
 tar -xf "$KERNEL_TARBALL"
 cd "linux-${TARGET_KERNEL_VER}"
 
-echo ">>> Sincronizzazione dinamica Clear Linux con Kernel $TARGET_KERNEL_VER..."
+mkdir -p .patches
+
+echo ">>> [TIME-TRAVEL] Sincronizzazione dinamica Clear Linux..."
 pushd /tmp/clearlinux-patches > /dev/null
 KERNEL_VER_ESC="${TARGET_KERNEL_VER//./\\.}"
 CLEAR_COMMIT=$(git log --grep="update.*${KERNEL_VER_ESC}\\b" -n 1 --format="%H" || true)
 if [ -n "$CLEAR_COMMIT" ]; then
-    echo ">>> Allineamento Clear Linux al commit: $CLEAR_COMMIT"
+    echo "    Allineamento Clear Linux al commit: $CLEAR_COMMIT"
     git checkout -q "$CLEAR_COMMIT"
 else
-    echo ">>> ATTENZIONE: Nessun commit specifico trovato per $TARGET_KERNEL_VER. Utilizzo l'head di main."
+    echo "    ATTENZIONE: Nessun commit specifico trovato. Utilizzo l'head di main."
 fi
-popd > /dev/null
-
-echo ">>> Importazione Chirurgica delle Patch (Solo versioni compatibili!)..."
-mkdir -p .patches
-
-# 1. CachyOS (Sempre compatibile)
-if [ -d "/tmp/cachyos-patches/$TARGET_KERNEL_VER" ]; then
-    cp "/tmp/cachyos-patches/$TARGET_KERNEL_VER"/*.patch .patches/ || true
-fi
-
-# 2. Linux-TKG (Solo se compatibile)
-if [ -d "/tmp/tkg-patches/linux-tkg-patches/$TARGET_KERNEL_VER" ]; then
-    cp "/tmp/tkg-patches/linux-tkg-patches/$TARGET_KERNEL_VER"/*.patch .patches/ || true
-fi
-
-# 3. XanMod (Solo se compatibile)
-if [ -d "/tmp/xanmod-patches/linux-${TARGET_KERNEL_VER}.y-xanmod" ]; then
-    cp "/tmp/xanmod-patches/linux-${TARGET_KERNEL_VER}.y-xanmod"/*.patch .patches/ || true
-fi
-
-# 4. Clear Linux (Patch specifiche)
 for patch_name in \
     "0001-sched-migrate.patch" \
     "0001-sched-numa-Initialise-numa_migrate_retry.patch" \
     "0001-mm-memcontrol-add-some-branch-hints-based-on-gcov-an.patch" \
     "0002-sched-core-add-some-branch-hints-based-on-gcov-analy.patch" \
     "0170-sched-Add-unlikey-branch-hints-to-several-system-cal.patch"; do
-    if [ -f "/tmp/clearlinux-patches/$patch_name" ]; then
-        cp "/tmp/clearlinux-patches/$patch_name" .patches/ || true
+    if [ -f "$patch_name" ]; then
+        cp "$patch_name" "$WORKSPACE_DIR/linux-${TARGET_KERNEL_VER}/.patches/" || true
     fi
 done
+popd > /dev/null
+
+echo ">>> [TIME-TRAVEL] Sincronizzazione dinamica XanMod..."
+if [ -d "/tmp/xanmod-patches" ]; then
+    pushd /tmp/xanmod-patches > /dev/null
+    XANMOD_COMMIT=$(git log --format="%H" -n 1 -- eol/linux-${TARGET_KERNEL_VER}.y-xanmod linux-${TARGET_KERNEL_VER}.y-xanmod || true)
+    if [ -n "$XANMOD_COMMIT" ]; then
+        echo "    Allineamento XanMod al commit: $XANMOD_COMMIT"
+        git checkout -q "$XANMOD_COMMIT"
+    fi
+    if [ -d "linux-${TARGET_KERNEL_VER}.y-xanmod" ]; then
+        cp linux-${TARGET_KERNEL_VER}.y-xanmod/*.patch "$WORKSPACE_DIR/linux-${TARGET_KERNEL_VER}/.patches/" || true
+    elif [ -d "eol/linux-${TARGET_KERNEL_VER}.y-xanmod" ]; then
+        cp eol/linux-${TARGET_KERNEL_VER}.y-xanmod/*.patch "$WORKSPACE_DIR/linux-${TARGET_KERNEL_VER}/.patches/" || true
+    fi
+    popd > /dev/null
+fi
+
+echo ">>> [TIME-TRAVEL] Sincronizzazione dinamica Liquorix..."
+if [ -d "/tmp/liquorix-patches" ]; then
+    pushd /tmp/liquorix-patches > /dev/null
+    git fetch origin "refs/heads/${TARGET_KERNEL_VER}/master:refs/heads/${TARGET_KERNEL_VER}/master" --depth 1 || true
+    if git show-ref --verify --quiet "refs/heads/${TARGET_KERNEL_VER}/master"; then
+        echo "    Allineamento Liquorix al branch: ${TARGET_KERNEL_VER}/master"
+        git checkout -q "${TARGET_KERNEL_VER}/master"
+        # Liquorix patches (contains Zen)
+        cp linux-liquorix/debian/patches/zen/*.patch "$WORKSPACE_DIR/linux-${TARGET_KERNEL_VER}/.patches/" || true
+    else
+        echo "    ATTENZIONE: Branch ${TARGET_KERNEL_VER}/master non trovato in Liquorix."
+    fi
+    popd > /dev/null
+fi
+
+echo ">>> Sincronizzazione CachyOS e Linux-TKG..."
+if [ -d "/tmp/cachyos-patches/$TARGET_KERNEL_VER/all" ]; then
+    cp /tmp/cachyos-patches/$TARGET_KERNEL_VER/all/*.patch .patches/ || true
+fi
+if [ -d "/tmp/tkg-patches/linux-tkg-patches/$TARGET_KERNEL_VER" ]; then
+    cp /tmp/tkg-patches/linux-tkg-patches/$TARGET_KERNEL_VER/*.patch .patches/ || true
+fi
 
 # Genera un default Kconfig per permettere a Kbuild di funzionare (ci serve per AST validazione)
 make defconfig
 
-echo ">>> [BEDROCK] Inizio applicazione matrice universale Kbuild per gli 8 Kernel..."
+echo ">>> [BEDROCK] Inizio applicazione matrice universale Kbuild..."
 for patch in .patches/*.patch; do
     if [ ! -f "$patch" ]; then continue; fi
     echo "-> Test di compatibilità per $(basename "$patch")..."
@@ -172,7 +190,6 @@ done
 echo "========================================================="
 echo " FASE 3: TUNING KCONFIG (Bedrock Naturale)"
 echo "========================================================="
-# Configurazione Kconfig avanzata tramite script Kconfig integrato in upstream
 ./scripts/config --enable HZ_1000
 ./scripts/config --set-val HZ 1000
 ./scripts/config --disable HZ_300
@@ -195,7 +212,6 @@ echo "========================================================="
 ./scripts/config --enable NTSYNC
 ./scripts/config --disable RUST
 
-# Tuning PGO QEMU Boot
 ./scripts/config --enable VIRTIO_PCI
 ./scripts/config --enable VIRTIO_CONSOLE
 ./scripts/config --enable NET_9P
@@ -232,7 +248,6 @@ echo " Il Kernel è pronto nella cartella $(pwd)"
 echo " Usa 'make binrpm-pkg' per compilare un RPM nativo upstream."
 echo "========================================================="
 
-# Fix Keys errors in upstream build
 ./scripts/config --set-str SYSTEM_TRUSTED_KEYS ""
 ./scripts/config --set-str SYSTEM_REVOCATION_KEYS ""
 ./scripts/config --disable DEBUG_INFO_BTF
