@@ -157,65 +157,73 @@ for patch in $(ls .patches/*.patch | sort -V); do
     if [ ! -f "$patch" ]; then continue; fi
     echo "-> Test di compatibilità per $(basename "$patch")..."
     
+    APPLIED=0
+    FUZZ=0
     # Fuzz 0 attempt
     if patch -p1 -F 0 --force --dry-run --silent < "$patch"; then
         patch -p1 -F 0 --force < "$patch" > /dev/null || true
         echo "   [SUCCESS] Patch applicata a Fuzz 0."
+        APPLIED=1
+        FUZZ=0
     else
         echo "   [WARNING] Fallito Fuzz 0. Tento Fuzz 3..."
-        
-        # Fuzz 3 attempt
         if patch -p1 -F 3 --force --dry-run --silent < "$patch"; then
             patch -p1 -F 3 --force < "$patch" > /dev/null || true
-            
-            # Step 1: Validate Kconfig/Makefile integrity if touched
-            KCONFIG_FAILED=0
-            if grep -E '^\+\+\+ b/(Kconfig|Makefile|.*/Kconfig|.*/Makefile)' "$patch" >/dev/null 2>&1; then
-                echo "   [KBUILD VALIDATION] Verifico integrità dell'albero Kconfig..."
-                cp .config .config.bak
-                if ! make allnoconfig >/dev/null 2>&1; then
-                    KCONFIG_FAILED=1
-                    echo "   [KBUILD FATAL] La patch ha corrotto la struttura Kconfig/Makefile!"
-                fi
-                mv .config.bak .config
-                make olddefconfig >/dev/null 2>&1
+            echo "   [SUCCESS] Patch applicata a Fuzz 3."
+            APPLIED=1
+            FUZZ=3
+        else
+            echo "   [SKIP] Conflitto strutturale (Fallito Fuzz sia 0 che 3). Patch scartata."
+            continue
+        fi
+    fi
+
+    if [ $APPLIED -eq 1 ]; then
+        # Step 1: Validate Kconfig/Makefile integrity if touched
+        KCONFIG_FAILED=0
+        if grep -E '^\+\+\+ b/(Kconfig|Makefile|.*/Kconfig|.*/Makefile)' "$patch" >/dev/null 2>&1; then
+            echo "   [KBUILD VALIDATION] Verifico integrità dell'albero Kconfig..."
+            cp .config .config.bak
+            if ! make allnoconfig >/dev/null 2>&1; then
+                KCONFIG_FAILED=1
+                echo "   [KBUILD FATAL] La patch ha corrotto la struttura Kconfig/Makefile!"
             fi
-            
-            if [ $KCONFIG_FAILED -eq 1 ]; then
-                echo "   [ROLLBACK] Conflitto strutturale (Kbuild). Scarto la patch."
-                patch -p1 -R -F 3 --force < "$patch" > /dev/null || true
-                continue
-            fi
-            
-            # Step 2: AST Validation for existing C files
-            echo "   [AST VALIDATION] Controllo purezza albero sintattico sorgenti C/H modificati..."
-            MODIFIED_C_FILES=$(grep -E '^\+\+\+ b/' "$patch" | awk '{print $2}' | sed 's/^b\///' | grep -E '\.(c|h)$' || true)
-            AST_FAILED=0
-            for c_file in $MODIFIED_C_FILES; do
-                if [ -f "$c_file" ]; then
-                    if echo "$c_file" | grep -q '\.c$'; then
-                        o_file="${c_file%.c}.o"
-                        # Dynamic Extraction of CFLAGS from Kbuild (Bedrock Holy Grail)
-                        CFLAGS=$(make CC=clang V=1 "$o_file" -n </dev/null 2>/dev/null | grep -E "clang.*-c.*$c_file" | head -n 1 | sed "s/.*clang //; s/-c.*//" || true)
-                        if [ -n "$CFLAGS" ]; then
-                            if ! clang -fsyntax-only $CFLAGS "$c_file" >/dev/null 2>&1; then
-                                AST_FAILED=1
-                                echo "   [AST FATAL] Clang ha fallito la validazione sintattica di $c_file!"
-                                break
-                            fi
+            mv .config.bak .config
+            make olddefconfig >/dev/null 2>&1
+        fi
+        
+        if [ $KCONFIG_FAILED -eq 1 ]; then
+            echo "   [ROLLBACK] Conflitto strutturale (Kbuild). Scarto la patch."
+            patch -p1 -R -F $FUZZ --force < "$patch" > /dev/null || true
+            continue
+        fi
+        
+        # Step 2: AST Validation for existing C files
+        echo "   [AST VALIDATION] Controllo purezza albero sintattico sorgenti C/H modificati..."
+        MODIFIED_C_FILES=$(grep -E '^\+\+\+ b/' "$patch" | awk '{print $2}' | sed 's/^b\///' | grep -E '\.(c|h)$' || true)
+        AST_FAILED=0
+        for c_file in $MODIFIED_C_FILES; do
+            if [ -f "$c_file" ]; then
+                if echo "$c_file" | grep -q '\.c$'; then
+                    o_file="${c_file%.c}.o"
+                    # Dynamic Extraction of CFLAGS from Kbuild (Bedrock Holy Grail)
+                    CFLAGS=$(make CC=clang V=1 "$o_file" -n </dev/null 2>/dev/null | grep -E "clang.*-c.*$c_file" | head -n 1 | sed "s/.*clang //; s/-c.*//" || true)
+                    if [ -n "$CFLAGS" ]; then
+                        if ! clang -fsyntax-only $CFLAGS "$c_file" >/dev/null 2>&1; then
+                            AST_FAILED=1
+                            echo "   [AST FATAL] Clang ha fallito la validazione sintattica di $c_file!"
+                            break
                         fi
                     fi
                 fi
-            done
-            
-            if [ $AST_FAILED -eq 1 ]; then
-                echo "   [ROLLBACK] Conflitto sintattico rilevato! Scarto la patch."
-                patch -p1 -R -F 3 --force < "$patch" > /dev/null || true
-            else
-                echo "   [SUCCESS] Patch fusa e validata nativamente tramite AST Clang & Kbuild."
             fi
+        done
+        
+        if [ $AST_FAILED -eq 1 ]; then
+            echo "   [ROLLBACK] Conflitto sintattico rilevato! Scarto la patch."
+            patch -p1 -R -F $FUZZ --force < "$patch" > /dev/null || true
         else
-            echo "   [SKIP] Conflitto strutturale (Fallito Fuzz 3). Patch scartata."
+            echo "   [SUCCESS] Patch fusa e validata nativamente tramite AST Clang & Kbuild."
         fi
     fi
 done
