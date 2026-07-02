@@ -19,7 +19,7 @@ env:
 jobs:
   build-appmenu-glib-translator:
     name: 🖥️ Build AGS (appmenu-glib-translator)
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: read
       packages: write
@@ -61,7 +61,7 @@ jobs:
           buildah push $IMAGE_LOWER
   build-astal-io:
     name: 🖥️ Build AGS (astal-io)
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-appmenu-glib-translator
     permissions:
       contents: read
@@ -111,7 +111,7 @@ jobs:
           buildah push $IMAGE_LOWER
   build-astal:
     name: 🖥️ Build AGS (astal)
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-astal-io
     permissions:
       contents: read
@@ -161,7 +161,7 @@ jobs:
           buildah push $IMAGE_LOWER
   build-astal-libs:
     name: 🖥️ Build AGS (astal-libs)
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-astal
     permissions:
       contents: read
@@ -211,7 +211,7 @@ jobs:
           buildah push $IMAGE_LOWER
   build-astal-gjs:
     name: 🖥️ Build AGS (astal-gjs)
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-astal-libs
     permissions:
       contents: read
@@ -261,7 +261,7 @@ jobs:
           buildah push $IMAGE_LOWER
   build-astal-gtk4:
     name: 🖥️ Build AGS (astal-gtk4)
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-astal-gjs
     permissions:
       contents: read
@@ -311,7 +311,7 @@ jobs:
           buildah push $IMAGE_LOWER
   build-astal-lua:
     name: 🖥️ Build AGS (astal-lua)
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-astal-gtk4
     permissions:
       contents: read
@@ -361,7 +361,7 @@ jobs:
           buildah push $IMAGE_LOWER
   build-aylurs-gtk-shell:
     name: 🖥️ Build AGS (aylurs-gtk-shell)
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-astal-lua
     permissions:
       contents: read
@@ -417,7 +417,7 @@ jobs:
           fi
   build-aylurs-gtk-shell2:
     name: 🖥️ Build AGS (aylurs-gtk-shell2)
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-astal-lua
     permissions:
       contents: read
@@ -467,7 +467,7 @@ jobs:
           buildah push $IMAGE_LOWER
   build-hyprpanel:
     name: 🖥️ Build AGS (hyprpanel)
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [build-aylurs-gtk-shell, build-aylurs-gtk-shell2]
     permissions:
       contents: read
@@ -517,7 +517,7 @@ jobs:
           buildah push $IMAGE_LOWER
   build-matugen:
     name: 🎨 Build Matugen
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: read
       packages: write
@@ -564,7 +564,7 @@ jobs:
           buildah push $IMAGE_LOWER
   build-bibata:
     name: 🖱️ Build Bibata
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: read
       packages: write

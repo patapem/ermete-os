@@ -10,7 +10,7 @@ on:
 jobs:
   prepare-matrix:
     name: 📋 Parse Packages
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       packages: ${{ steps.set-matrix.outputs.packages }}
     steps:
@@ -25,7 +25,7 @@ jobs:
   build-rolling:
     needs: prepare-matrix
     name: 🔄 Build ${{ matrix.package }}
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       fail-fast: false
       matrix:

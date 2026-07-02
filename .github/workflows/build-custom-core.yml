@@ -19,7 +19,7 @@ env:
 jobs:
   build-selinux:
     name: 🛡️ Build SELinux Policies
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: read
       packages: write
@@ -59,7 +59,7 @@ jobs:
           buildah push $IMAGE_LOWER
   build-ananicy:
     name: ⚡ Build Ananicy CPP
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: read
       packages: write
@@ -103,7 +103,7 @@ jobs:
           buildah push $IMAGE_LOWER
   build-base-config:
     name: 🏗️ Build Base Config
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: read
       packages: write

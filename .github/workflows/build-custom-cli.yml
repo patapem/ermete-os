@@ -18,7 +18,7 @@ env:
 jobs:
   build-starship:
     name: 🚀 Build Starship
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: read
       packages: write
@@ -66,7 +66,7 @@ jobs:
 
   build-bat:
     name: 🦇 Build Bat
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: read
       packages: write
@@ -114,7 +114,7 @@ jobs:
 
   build-bore-sysctl:
     name: ⚙️ Build bore-sysctl
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: read
       packages: write
@@ -140,7 +140,7 @@ jobs:
 
   build-scx-scheds:
     name: ⚙️ Build scx-scheds
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: read
       packages: write
@@ -166,7 +166,7 @@ jobs:
 
   build-scx-tools:
     name: ⚙️ Build scx-tools
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: read
       packages: write
