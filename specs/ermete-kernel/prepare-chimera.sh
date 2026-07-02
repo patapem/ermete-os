@@ -153,9 +153,6 @@ fi
 make defconfig
 
 echo ">>> [BEDROCK] Inizio applicazione matrice universale AST (Holy Grail)..."
-# Genera compilation database per clang
-make CC=clang compile_commands.json >/dev/null 2>&1 || true
-
 for patch in $(ls .patches/*.patch | sort -V); do
     if [ ! -f "$patch" ]; then continue; fi
     echo "-> Test di compatibilità per $(basename "$patch")..."
@@ -193,9 +190,10 @@ for patch in $(ls .patches/*.patch | sort -V); do
             AST_FAILED=0
             for c_file in $MODIFIED_C_FILES; do
                 if [ -f "$c_file" ]; then
-                    # We only AST validate .c files that are in the compilation database (existing files)
                     if echo "$c_file" | grep -q '\.c$'; then
-                        CFLAGS=$(grep -A 5 "$c_file" compile_commands.json 2>/dev/null | grep '"command"' | head -n 1 | sed 's/.*"command": "//; s/ -c .*//' || true)
+                        o_file="${c_file%.c}.o"
+                        # Dynamic Extraction of CFLAGS from Kbuild (Bedrock Holy Grail)
+                        CFLAGS=$(make CC=clang V=1 "$o_file" -n 2>/dev/null | grep -E "clang.*-c.*$c_file" | head -n 1 | sed "s/.*clang //; s/-c.*//" || true)
                         if [ -n "$CFLAGS" ]; then
                             if ! clang -fsyntax-only $CFLAGS "$c_file" >/dev/null 2>&1; then
                                 AST_FAILED=1
