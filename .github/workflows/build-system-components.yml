@@ -20,7 +20,7 @@ env:
 jobs:
   build-ags-config:
     name: ⚙️ Build AGS Config
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
@@ -45,7 +45,7 @@ jobs:
 
   build-niri-session:
     name: ⚙️ Build Niri Session
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
@@ -70,7 +70,7 @@ jobs:
 
   build-ide-bootstrap:
     name: ⚙️ Build IDE Bootstrap
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
@@ -95,7 +95,7 @@ jobs:
 
   build-system-services:
     name: ⚙️ Build System Services
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
@@ -120,7 +120,7 @@ jobs:
 
   build-nix-support:
     name: ⚙️ Build Nix Support
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
@@ -145,7 +145,7 @@ jobs:
 
   build-system-config:
     name: ⚙️ Build System Config
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
@@ -170,7 +170,7 @@ jobs:
 
   build-system-tweaks:
     name: ⚙️ Build System Tweaks
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
