@@ -73,9 +73,6 @@ jobs:
           echo "Iniezione sensori GCOV per profilazione empirica..."
           cd ~/rpmbuild/BUILD/$(cat ~/rpmbuild/BUILD/.kernel_version)
           
-          echo ">>> [PONYTAIL] Auto-Tuning HW (localmodconfig): disattivazione chirurgica moduli inutilizzati..."
-          yes "" | make LSMOD=/proc/modules localmodconfig || true
-          
           ./scripts/config --enable GCOV_KERNEL
           ./scripts/config --enable GCOV_PROFILE_ALL
           make olddefconfig
@@ -86,19 +83,16 @@ jobs:
           export CCACHE_MAXSIZE=10G
           mkdir -p ~/.cache/ccache
           ccache -z
-          
-          echo "Avvio compilazione RPM Upstream Nativa..."
-          make -j$(nproc) binrpm-pkg
+          echo "Avvio compilazione micro-kernel (bzImage) per profilazione..."
+          make -j$(nproc) bzImage
           ccache -s
 
       - name: Fase 2 - Stress Test Agnostico QEMU (Estrazione Termica)
         if: steps.idempotency.outputs.skip_build != 'true'
         run: |
           echo "Estrazione del kernel strumentato..."
-          mkdir -p /tmp/pgo_kernel
-          cd /tmp/pgo_kernel
-          rpm2cpio ~/rpmbuild/RPMS/x86_64/kernel-*.rpm | cpio -idmv
-          KERNEL_IMAGE=$(ls boot/vmlinuz-* | head -n 1)
+          KERNEL_DIR=~/rpmbuild/BUILD/$(cat ~/rpmbuild/BUILD/.kernel_version)
+          KERNEL_IMAGE="$KERNEL_DIR/arch/x86/boot/bzImage"
           
           echo "Creazione demone di Init per lo stress test estremo (Dynamic Discovery)..."
           cat << 'INITSCRIPT' > /init

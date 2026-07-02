@@ -319,7 +319,6 @@ done
 ./scripts/config --disable GENERIC_CPU
 ./scripts/config --enable GENERIC_CPU3
 ./scripts/config --enable X86_64_VERSION=3
-./scripts/config --enable MNATIVE
 
 # Ottimizzazione Compilatore
 ./scripts/config --enable CC_OPTIMIZE_FOR_PERFORMANCE_O3
