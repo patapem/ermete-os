@@ -3,6 +3,9 @@
 # Holy Grail Optimizations: Clear Linux + CachyOS + Gentoo LTO
 # =========================================================================
 
+# Ignora i file decompressi ma non pacchettizzati (necessario per Ponytail Ultra che rimuove %doc)
+%_unpackaged_files_terminate_build 0
+
 # Clear Linux & CachyOS C/C++ Flags
 # -O3: Maximum optimization (Gentoo/CachyOS)
 # -march=x86-64-v3: AVX2, BMI1/2, FMA (CachyOS baseline)
@@ -16,8 +19,8 @@
 
 %_optflags -O3 -g -march=x86-64-v3 -mtune=generic -pipe -fno-semantic-interposition -falign-functions=32 -fno-math-errno -fno-trapping-math -mprefer-vector-width=256 -fPIC -Wp,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer
 
-# LTO CFlags
-%_lto_cflags -flto=auto -fno-semantic-interposition
+# LTO CFlags (fat-lto-objects to prevent cross-language link issues in Rust/C like niri libspa)
+%_lto_cflags -flto=auto -ffat-lto-objects -fno-semantic-interposition
 
 # CachyOS Linker Flags
 # -Wl,-O2: Ottimizzazione interna del linker (non del compilatore)
