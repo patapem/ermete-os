@@ -8,3 +8,5 @@ libva-utils
 imv
 mesa-dri-drivers
 mesa-vulkan-drivers
+nodejs
+npm

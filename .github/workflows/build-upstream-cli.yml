@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        package: ["btop", "eza", "fd-find", "git", "inotify-tools", "just", "nodejs", "npm", "nushell", "parallel", "playerctl", "ripgrep", "rsync", "sqlite3", "unzip", "wl-clipboard", "wl-mirror", "wlr-randr"]
+        package: ["btop", "eza", "fd-find", "git", "inotify-tools", "just", "nushell", "parallel", "playerctl", "ripgrep", "rsync", "sqlite3", "unzip", "wl-clipboard", "wl-mirror", "wlr-randr"]
     permissions:
       contents: read
       packages: write
@@ -75,7 +75,7 @@ jobs:
       - name: Fetch, Patch and Build ${{ matrix.package }}
         if: steps.check_idempotency.outputs.skip != 'true'
         run: |
-          dnf install -y rpm-build dnf-plugins-core rpmdevtools
+          dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
           cd ~/rpmbuild/SRPMS

@@ -4,8 +4,6 @@ fd-find
 git
 inotify-tools
 just
-nodejs
-npm
 nushell
 parallel
 playerctl

@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        package: ["pipewire", "ffmpeg", "mpv", "wireplumber", "x264-libs", "libva-nvidia-driver", "libva-utils", "imv", "mesa-dri-drivers", "mesa-vulkan-drivers"]
+        package: ["pipewire", "nodejs", "npm", "ffmpeg", "mpv", "wireplumber", "x264-libs", "libva-nvidia-driver", "libva-utils", "imv", "mesa-dri-drivers", "mesa-vulkan-drivers"]
     permissions:
       contents: read
       packages: write
@@ -75,7 +75,7 @@ jobs:
       - name: Fetch, Patch and Build ${{ matrix.package }}
         if: steps.check_idempotency.outputs.skip != 'true'
         run: |
-          dnf install -y rpm-build dnf-plugins-core rpmdevtools
+          dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
           cd ~/rpmbuild/SRPMS
