@@ -83,7 +83,7 @@ tar -xf "$KERNEL_LATEST_TARBALL"
 cd "$KERNEL_EXTRACT_DIR"
 
 # Salviamo la versione esatta per l'idempotency check nella Action
-echo "$KERNEL_EXTRACT_DIR" > .kernel_version
+echo "$KERNEL_EXTRACT_DIR" > ../.kernel_version
 
 
 mkdir -p .patches
