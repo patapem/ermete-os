@@ -101,11 +101,11 @@ jobs:
           echo "--- Iniezione Dinamica Ponytail Ultra ---"
           for spec in ~/rpmbuild/SPECS/*.spec; do
             # Disattiva pacchetti di debug globalmente
-            if ! grep -q "debug_package %{nil}" "$spec"; then
-              awk '/^Name:/ { print "%global debug_package %{nil}"; print $0; next } 1' "$spec" > "$spec.tmp" && mv "$spec.tmp" "$spec"
+            if ! grep -q "debug_package %nil" "$spec"; then
+              awk '/^Name:/ { print "%global debug_package %nil"; print $0; next } 1' "$spec" > "$spec.tmp" && mv "$spec.tmp" "$spec"
             fi
             # Elimina file di documentazione e man pages per ridurre il footprint
-            awk '!/^[[:space:]]*%doc/ && !/%{_mandir}/' "$spec" > "$spec.tmp" && mv "$spec.tmp" "$spec"
+            awk '!/^[[:space:]]*%doc/ && !/%_mandir/' "$spec" > "$spec.tmp" && mv "$spec.tmp" "$spec"
           done
           
           echo "--- Ricompilazione estrema con macro Ermete e Ponytail ---"
