@@ -325,6 +325,54 @@ done
 ./scripts/config --disable LTO_CLANG_THIN
 ./scripts/config --enable DEBUG_INFO_NONE
 
+echo ">>> [BEDROCK] Iniezione dei 64 Pilastri KSPP e Ottimizzazioni Tails OS..."
+# TAILS OS: Amnesia e Anti-Forensics (Nessun dump o traccia RAM su disco)
+./scripts/config --disable HIBERNATION
+./scripts/config --disable CRASH_DUMP
+./scripts/config --disable COREDUMP
+./scripts/config --disable KEXEC
+./scripts/config --disable KEXEC_FILE
+./scripts/config --disable PROC_KCORE
+./scripts/config --disable COMPAT_VDSO
+./scripts/config --disable BINFMT_MISC
+
+# 64 PILASTRI (KSPP): Protezione Memoria (Slub/Slab Hardening)
+./scripts/config --enable SLAB_FREELIST_RANDOM
+./scripts/config --enable SLAB_FREELIST_HARDENED
+./scripts/config --enable HARDENED_USERCOPY
+./scripts/config --disable HARDENED_USERCOPY_FALLBACK
+./scripts/config --enable FORTIFY_SOURCE
+./scripts/config --enable INIT_ON_ALLOC_DEFAULT_ON
+./scripts/config --enable INIT_ON_FREE_DEFAULT_ON
+
+# 64 PILASTRI (KSPP): KASLR e Isolamento
+./scripts/config --enable RANDOMIZE_BASE
+./scripts/config --enable RANDOMIZE_MEMORY
+./scripts/config --enable PAGE_TABLE_ISOLATION
+
+# 64 PILASTRI (KSPP): Superficie di Attacco e Syscall
+./scripts/config --enable BPF_UNPRIV_DEFAULT_OFF
+./scripts/config --enable SECURITY_DMESG_RESTRICT
+./scripts/config --disable USERFAULTFD
+./scripts/config --disable MODIFY_LDT_SYSCALL
+./scripts/config --enable LEGACY_VSYSCALL_NONE
+./scripts/config --disable LEGACY_VSYSCALL_EMULATE
+./scripts/config --disable LEGACY_VSYSCALL_XONLY
+
+# 64 PILASTRI (KSPP): Accesso Hardware
+./scripts/config --enable STRICT_DEVMEM
+./scripts/config --enable IO_STRICT_DEVMEM
+./scripts/config --disable DEVKMEM
+./scripts/config --disable ACPI_CUSTOM_METHOD
+
+# 64 PILASTRI (KSPP): Integrità e Reazione
+./scripts/config --enable BUG_ON_DATA_CORRUPTION
+./scripts/config --enable SCHED_STACK_END_CHECK
+./scripts/config --enable PANIC_ON_OOPS
+./scripts/config --enable SECURITY_YAMA
+./scripts/config --enable SECURITY_LOCKDOWN_LSM
+./scripts/config --enable SECURITY_LOCKDOWN_LSM_EARLY
+
 ./scripts/config --enable NTSYNC
 ./scripts/config --disable RUST
 
