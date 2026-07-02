@@ -49,19 +49,19 @@ jobs:
         id: check_idempotency
         run: |
           dnf install -y dnf5 skopeo jq
-          cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
-[rpmfusion-free-rawhide]
-name=RPM Fusion for Fedora Rawhide - Free
-baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
-enabled=1
-gpgcheck=0
-
-[rpmfusion-nonfree-rawhide]
-name=RPM Fusion for Fedora Rawhide - Nonfree
-baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
-enabled=1
-gpgcheck=0
-REPO
+                    cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
+          [rpmfusion-free-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Free
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          
+          [rpmfusion-nonfree-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Nonfree
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          REPO
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}:latest" | tr '[:upper:]' '[:lower:]')
           
           # Trova versione upstream su Fedora (inclusi RPM Fusion)
@@ -94,19 +94,19 @@ REPO
           cd ~/rpmbuild/SRPMS
           
           echo "--- Abilitazione RPM Fusion (Rawhide) ---"
-          cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
-[rpmfusion-free-rawhide]
-name=RPM Fusion for Fedora Rawhide - Free
-baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
-enabled=1
-gpgcheck=0
-
-[rpmfusion-nonfree-rawhide]
-name=RPM Fusion for Fedora Rawhide - Nonfree
-baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
-enabled=1
-gpgcheck=0
-REPO
+                    cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
+          [rpmfusion-free-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Free
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          
+          [rpmfusion-nonfree-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Nonfree
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          REPO
           
           echo "--- Downloading Source RPM per ${{ matrix.package }} ---"
           dnf download --source ${{ matrix.package }}
