@@ -42,7 +42,7 @@ jobs:
           echo "fastestmirror=True" >> /etc/dnf/dnf.conf
           echo "install_weak_deps=False" >> /etc/dnf/dnf.conf
           dnf clean all
-          dnf install -y rpm-build rpmdevtools gcc gcc-c++ make cmake flex bison ncurses-devel elfutils-libelf-devel openssl-devel bc rsync tar wget curl cpio perl zstd git llvm clang lld ccache qemu-kvm stress-ng iperf3 jq gnupg2
+          dnf install -y rpm-build rpmdevtools gcc gcc-c++ make cmake flex bison ncurses-devel elfutils-libelf-devel openssl-devel bc rsync tar wget curl cpio perl zstd git llvm clang lld ccache qemu-kvm stress-ng iperf3 jq gnupg2 hostname
 
       - name: Fetch Base Kernel and Patches
         run: |
