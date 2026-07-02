@@ -40,6 +40,10 @@ docker run --rm -i \
     echo '>>> [BEDROCK] Build Veloce (No PGO) per Sviluppo Locale...'
     ./scripts/config --disable GCOV_KERNEL
     ./scripts/config --disable GCOV_PROFILE_ALL
+    
+    echo '>>> [PONYTAIL] Auto-Tuning HW (localmodconfig): disattivazione chirurgica moduli inutilizzati...'
+    yes "" | make LSMOD=/proc/modules localmodconfig || true
+    
     make olddefconfig
     
     echo '>>> Configurazione CCACHE locale persistente...'

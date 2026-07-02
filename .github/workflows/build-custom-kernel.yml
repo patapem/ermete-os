@@ -72,6 +72,10 @@ jobs:
         run: |
           echo "Iniezione sensori GCOV per profilazione empirica..."
           cd ~/rpmbuild/BUILD/$(cat ~/rpmbuild/BUILD/.kernel_version)
+          
+          echo ">>> [PONYTAIL] Auto-Tuning HW (localmodconfig): disattivazione chirurgica moduli inutilizzati..."
+          yes "" | make LSMOD=/proc/modules localmodconfig || true
+          
           ./scripts/config --enable GCOV_KERNEL
           ./scripts/config --enable GCOV_PROFILE_ALL
           make olddefconfig
