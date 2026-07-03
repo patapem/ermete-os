@@ -1,0 +1,1909 @@
+name: 🌋 Ermete Forge Orchestrator
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    - cron: '0 4 * * *'
+
+env:
+  REGISTRY: ghcr.io
+  FEDORA_VERSION: 43
+
+jobs:
+  build-starship:
+    name: 🚀 Build Starship
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-starship/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/rpmbuild/RPMS/
+          key: rpm-starship-${{ steps.hash.outputs.hash }}
+      - name: Cache Cargo Registry
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+          path: /root/.cargo/registry
+          key: cargo-registry-starship-${{ steps.hash.outputs.hash }}
+          restore-keys: cargo-registry-starship-
+      - name: Install Dependencies and Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          spectool -g -R specs/ermete-starship/ermete-starship.spec
+          dnf builddep -y specs/ermete-starship/ermete-starship.spec
+          rpmbuild -bb --nocheck specs/ermete-starship/ermete-starship.spec
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-starship:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+
+  build-bat:
+    name: 🦇 Build Bat
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-bat/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/rpmbuild/RPMS/
+          key: rpm-bat-${{ steps.hash.outputs.hash }}
+      - name: Cache Cargo Registry
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+          path: /root/.cargo/registry
+          key: cargo-registry-bat-${{ steps.hash.outputs.hash }}
+          restore-keys: cargo-registry-bat-
+      - name: Install Dependencies and Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          spectool -g -R specs/ermete-bat/bat.spec
+          dnf builddep -y specs/ermete-bat/bat.spec
+          rpmbuild -bb --nocheck specs/ermete-bat/bat.spec
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-bat:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+
+  build-bore-sysctl:
+    name: ⚙️ Build bore-sysctl
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - name: Fetch and Package
+        run: |
+          dnf install -y dnf5 curl
+          curl -Lo /etc/yum.repos.d/bieszczaders.repo "https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos-addons/repo/fedora-43/bieszczaders-kernel-cachyos-addons-fedora-43.repo"
+          mkdir -p /github/home/RPMS
+          dnf5 download -y --destdir=/github/home/RPMS bore-sysctl
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/RPMS/*.rpm /
+          IMAGE=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-bore-sysctl:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE && buildah push $IMAGE
+
+  build-scx-scheds:
+    name: ⚙️ Build scx-scheds
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - name: Fetch and Package
+        run: |
+          dnf install -y dnf5 curl
+          curl -Lo /etc/yum.repos.d/bieszczaders.repo "https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos-addons/repo/fedora-43/bieszczaders-kernel-cachyos-addons-fedora-43.repo"
+          mkdir -p /github/home/RPMS
+          dnf5 download -y --destdir=/github/home/RPMS scx-scheds
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/RPMS/*.rpm /
+          IMAGE=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-scx-scheds:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE && buildah push $IMAGE
+
+  build-scx-tools:
+    name: ⚙️ Build scx-tools
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - name: Fetch and Package
+        run: |
+          dnf install -y dnf5 curl
+          curl -Lo /etc/yum.repos.d/bieszczaders.repo "https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos-addons/repo/fedora-43/bieszczaders-kernel-cachyos-addons-fedora-43.repo"
+          mkdir -p /github/home/RPMS
+          dnf5 download -y --destdir=/github/home/RPMS scx-tools
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/RPMS/*.rpm /
+          IMAGE=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-scx-tools:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE && buildah push $IMAGE
+
+  build-selinux:
+    name: 🛡️ Build SELinux Policies
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-selinux/**') }}" >> $GITHUB_OUTPUT
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/rpmbuild/RPMS/
+          key: rpm-selinux-${{ steps.hash.outputs.hash }}
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools checkpolicy policycoreutils
+      - name: Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          rpmdev-setuptree
+          cp specs/ermete-selinux/SOURCES/* ~/rpmbuild/SOURCES/
+          rpmbuild -bb --nocheck specs/ermete-selinux/ermete-selinux.spec
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-selinux:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+  build-ananicy:
+    name: ⚡ Build Ananicy CPP
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-ananicy/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/RPMS/
+          key: rpm-ananicy-${{ steps.hash.outputs.hash }}
+      - name: Install Dependencies and Build Ananicy
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools cmake gcc-c++ spdlog-devel systemd-devel nlohmann-json-devel fmt-devel
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          
+          spectool -g -R specs/ermete-ananicy/ananicy-cpp.spec
+          dnf builddep -y specs/ermete-ananicy/ananicy-cpp.spec
+          rpmbuild -bb --nocheck specs/ermete-ananicy/ananicy-cpp.spec
+          
+          mkdir -p /github/home/RPMS
+          cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/RPMS/*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-ananicy:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+  build-base-config:
+    name: 🏗️ Build Base Config
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build RPM
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools
+          mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+          cp -r specs/ermete-base-config/SOURCES/* ~/rpmbuild/SOURCES/
+          cp specs/ermete-base-config/ermete-base-config.spec ~/rpmbuild/SPECS/
+          rpmbuild -ba ~/rpmbuild/SPECS/ermete-base-config.spec
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+          ctr=$(buildah from scratch)
+          buildah copy $ctr ~/rpmbuild/RPMS/noarch/*.rpm /
+          IMAGE_LOWER=$(echo "ghcr.io/${{ github.repository_owner }}/ermete-forge-base-config:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+
+  build-appmenu-glib-translator:
+    name: 🖥️ Build AGS (appmenu-glib-translator)
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Dependencies and Build
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools meson ninja-build gcc gcc-c++ vala pkgconf-pkg-config
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          if [ -d "specs/ermete-astal/appmenu-glib-translator" ]; then
+            spectool -g -R specs/ermete-astal/appmenu-glib-translator/*.spec
+            dnf builddep -y specs/ermete-astal/appmenu-glib-translator/*.spec
+            rpmbuild -bb --nocheck specs/ermete-astal/appmenu-glib-translator/*.spec
+          else
+            echo "Error: specs/ermete-astal/appmenu-glib-translator not found"
+            exit 1
+          fi
+          mkdir -p /github/home/RPMS
+          cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
+      - name: Upload RPMs
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpm-ags-appmenu-glib-translator
+          path: /github/home/RPMS/*.rpm
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/RPMS/appmenu-glib-translator*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-appmenu-glib-translator:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+  build-astal-io:
+    name: 🖥️ Build AGS (astal-io)
+    runs-on: self-hosted
+    needs: build-appmenu-glib-translator
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Previous RPMs
+        uses: actions/download-artifact@v4
+        with:
+          path: /github/home/PREV_RPMS/
+          pattern: rpm-ags-*
+          merge-multiple: true
+      - name: Install Dependencies and Build
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools meson ninja-build gcc gcc-c++ vala pkgconf-pkg-config
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          find /github/home/PREV_RPMS/ -type f -name "*.rpm" | xargs -r dnf install -y
+          if [ -d "specs/ermete-astal/astal-io" ]; then
+            spectool -g -R specs/ermete-astal/astal-io/*.spec
+            dnf builddep -y specs/ermete-astal/astal-io/*.spec
+            rpmbuild -bb --nocheck specs/ermete-astal/astal-io/*.spec
+          else
+            echo "Error: specs/ermete-astal/astal-io not found"
+            exit 1
+          fi
+          mkdir -p /github/home/RPMS
+          cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
+      - name: Upload RPMs
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpm-ags-astal-io
+          path: /github/home/RPMS/*.rpm
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/RPMS/astal-io*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-astal-io:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+  build-astal:
+    name: 🖥️ Build AGS (astal)
+    runs-on: self-hosted
+    needs: build-astal-io
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Previous RPMs
+        uses: actions/download-artifact@v4
+        with:
+          path: /github/home/PREV_RPMS/
+          pattern: rpm-ags-*
+          merge-multiple: true
+      - name: Install Dependencies and Build
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools meson ninja-build gcc gcc-c++ vala pkgconf-pkg-config
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          find /github/home/PREV_RPMS/ -type f -name "*.rpm" | xargs -r dnf install -y
+          if [ -d "specs/ermete-astal/astal" ]; then
+            spectool -g -R specs/ermete-astal/astal/*.spec
+            dnf builddep -y specs/ermete-astal/astal/*.spec
+            rpmbuild -bb --nocheck specs/ermete-astal/astal/*.spec
+          else
+            echo "Error: specs/ermete-astal/astal not found"
+            exit 1
+          fi
+          mkdir -p /github/home/RPMS
+          cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
+      - name: Upload RPMs
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpm-ags-astal
+          path: /github/home/RPMS/*.rpm
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/RPMS/astal*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-astal:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+  build-astal-libs:
+    name: 🖥️ Build AGS (astal-libs)
+    runs-on: self-hosted
+    needs: build-astal
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Previous RPMs
+        uses: actions/download-artifact@v4
+        with:
+          path: /github/home/PREV_RPMS/
+          pattern: rpm-ags-*
+          merge-multiple: true
+      - name: Install Dependencies and Build
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools meson ninja-build gcc gcc-c++ vala pkgconf-pkg-config
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          find /github/home/PREV_RPMS/ -type f -name "*.rpm" | xargs -r dnf install -y
+          if [ -d "specs/ermete-astal/astal-libs" ]; then
+            spectool -g -R specs/ermete-astal/astal-libs/*.spec
+            dnf builddep -y specs/ermete-astal/astal-libs/*.spec
+            rpmbuild -bb --nocheck specs/ermete-astal/astal-libs/*.spec
+          else
+            echo "Error: specs/ermete-astal/astal-libs not found"
+            exit 1
+          fi
+          mkdir -p /github/home/RPMS
+          cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
+      - name: Upload RPMs
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpm-ags-astal-libs
+          path: /github/home/RPMS/*.rpm
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/RPMS/astal-libs*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-astal-libs:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+  build-astal-gjs:
+    name: 🖥️ Build AGS (astal-gjs)
+    runs-on: self-hosted
+    needs: build-astal-libs
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Previous RPMs
+        uses: actions/download-artifact@v4
+        with:
+          path: /github/home/PREV_RPMS/
+          pattern: rpm-ags-*
+          merge-multiple: true
+      - name: Install Dependencies and Build
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools meson ninja-build gcc gcc-c++ vala pkgconf-pkg-config
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          find /github/home/PREV_RPMS/ -type f -name "*.rpm" | xargs -r dnf install -y
+          if [ -d "specs/ermete-astal/astal-gjs" ]; then
+            spectool -g -R specs/ermete-astal/astal-gjs/*.spec
+            dnf builddep -y specs/ermete-astal/astal-gjs/*.spec
+            rpmbuild -bb --nocheck specs/ermete-astal/astal-gjs/*.spec
+          else
+            echo "Error: specs/ermete-astal/astal-gjs not found"
+            exit 1
+          fi
+          mkdir -p /github/home/RPMS
+          cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
+      - name: Upload RPMs
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpm-ags-astal-gjs
+          path: /github/home/RPMS/*.rpm
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/RPMS/astal-gjs*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-astal-gjs:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+  build-astal-gtk4:
+    name: 🖥️ Build AGS (astal-gtk4)
+    runs-on: self-hosted
+    needs: build-astal-gjs
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Previous RPMs
+        uses: actions/download-artifact@v4
+        with:
+          path: /github/home/PREV_RPMS/
+          pattern: rpm-ags-*
+          merge-multiple: true
+      - name: Install Dependencies and Build
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools meson ninja-build gcc gcc-c++ vala pkgconf-pkg-config
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          find /github/home/PREV_RPMS/ -type f -name "*.rpm" | xargs -r dnf install -y
+          if [ -d "specs/ermete-astal/astal-gtk4" ]; then
+            spectool -g -R specs/ermete-astal/astal-gtk4/*.spec
+            dnf builddep -y specs/ermete-astal/astal-gtk4/*.spec
+            rpmbuild -bb --nocheck specs/ermete-astal/astal-gtk4/*.spec
+          else
+            echo "Error: specs/ermete-astal/astal-gtk4 not found"
+            exit 1
+          fi
+          mkdir -p /github/home/RPMS
+          cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
+      - name: Upload RPMs
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpm-ags-astal-gtk4
+          path: /github/home/RPMS/*.rpm
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/RPMS/astal-gtk4*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-astal-gtk4:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+  build-astal-lua:
+    name: 🖥️ Build AGS (astal-lua)
+    runs-on: self-hosted
+    needs: build-astal-gtk4
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Previous RPMs
+        uses: actions/download-artifact@v4
+        with:
+          path: /github/home/PREV_RPMS/
+          pattern: rpm-ags-*
+          merge-multiple: true
+      - name: Install Dependencies and Build
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools meson ninja-build gcc gcc-c++ vala pkgconf-pkg-config
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          find /github/home/PREV_RPMS/ -type f -name "*.rpm" | xargs -r dnf install -y
+          if [ -d "specs/ermete-astal/astal-lua" ]; then
+            spectool -g -R specs/ermete-astal/astal-lua/*.spec
+            dnf builddep -y specs/ermete-astal/astal-lua/*.spec
+            rpmbuild -bb --nocheck specs/ermete-astal/astal-lua/*.spec
+          else
+            echo "Error: specs/ermete-astal/astal-lua not found"
+            exit 1
+          fi
+          mkdir -p /github/home/RPMS
+          cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
+      - name: Upload RPMs
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpm-ags-astal-lua
+          path: /github/home/RPMS/*.rpm
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/RPMS/astal-lua*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-astal-lua:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+  build-aylurs-gtk-shell:
+    name: 🖥️ Build AGS (aylurs-gtk-shell)
+    runs-on: self-hosted
+    needs: build-astal-lua
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Previous RPMs
+        uses: actions/download-artifact@v4
+        with:
+          path: /github/home/PREV_RPMS/
+          pattern: rpm-ags-*
+          merge-multiple: true
+      - name: Install Dependencies and Build
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools meson ninja-build gcc gcc-c++ vala pkgconf-pkg-config
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          find /github/home/PREV_RPMS/ -type f -name "*.rpm" | xargs -r dnf install -y
+          if [ -d "specs/ermete-astal/aylurs-gtk-shell" ]; then
+            spectool -g -R specs/ermete-astal/aylurs-gtk-shell/*.spec
+            dnf builddep -y specs/ermete-astal/aylurs-gtk-shell/*.spec
+            rpmbuild -bb --nocheck specs/ermete-astal/aylurs-gtk-shell/*.spec
+          else
+            echo "Warning: specs/ermete-astal/aylurs-gtk-shell not found, skipping build"
+            mkdir -p /github/home/RPMS
+            exit 0
+          fi
+          mkdir -p /github/home/RPMS
+          cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
+      - name: Upload RPMs
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpm-ags-aylurs-gtk-shell
+          path: /github/home/RPMS/*.rpm
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          # Solo procedi se ci sono RPM
+          if ls /github/home/RPMS/aylurs-gtk-shell*.rpm >/dev/null 2>&1; then
+            buildah copy $ctr /github/home/RPMS/aylurs-gtk-shell*.rpm /
+            IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-aylurs-gtk-shell:latest" | tr '[:upper:]' '[:lower:]')
+            buildah commit $ctr $IMAGE_LOWER
+            buildah push $IMAGE_LOWER
+          else
+            echo "Nessun RPM prodotto per aylurs-gtk-shell, skip publish"
+          fi
+  build-aylurs-gtk-shell2:
+    name: 🖥️ Build AGS (aylurs-gtk-shell2)
+    runs-on: self-hosted
+    needs: build-astal-lua
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Previous RPMs
+        uses: actions/download-artifact@v4
+        with:
+          path: /github/home/PREV_RPMS/
+          pattern: rpm-ags-*
+          merge-multiple: true
+      - name: Install Dependencies and Build
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools meson ninja-build gcc gcc-c++ vala pkgconf-pkg-config
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          find /github/home/PREV_RPMS/ -type f -name "*.rpm" | xargs -r dnf install -y
+          if [ -d "specs/ermete-astal/aylurs-gtk-shell2" ]; then
+            spectool -g -R specs/ermete-astal/aylurs-gtk-shell2/*.spec
+            dnf builddep -y specs/ermete-astal/aylurs-gtk-shell2/*.spec
+            rpmbuild -bb --nocheck specs/ermete-astal/aylurs-gtk-shell2/*.spec
+          else
+            echo "Error: specs/ermete-astal/aylurs-gtk-shell2 not found"
+            exit 1
+          fi
+          mkdir -p /github/home/RPMS
+          cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
+      - name: Upload RPMs
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpm-ags-aylurs-gtk-shell2
+          path: /github/home/RPMS/*.rpm
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/RPMS/aylurs-gtk-shell2*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-aylurs-gtk-shell2:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+  build-hyprpanel:
+    name: 🖥️ Build AGS (hyprpanel)
+    runs-on: self-hosted
+    needs: [build-aylurs-gtk-shell, build-aylurs-gtk-shell2]
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Previous RPMs
+        uses: actions/download-artifact@v4
+        with:
+          path: /github/home/PREV_RPMS/
+          pattern: rpm-ags-*
+          merge-multiple: true
+      - name: Install Dependencies and Build
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools meson ninja-build gcc gcc-c++ vala pkgconf-pkg-config
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          find /github/home/PREV_RPMS/ -type f -name "*.rpm" | xargs -r dnf install -y
+          if [ -d "specs/ermete-astal/hyprpanel" ]; then
+            spectool -g -R specs/ermete-astal/hyprpanel/*.spec
+            dnf builddep -y specs/ermete-astal/hyprpanel/*.spec
+            rpmbuild -bb --nocheck specs/ermete-astal/hyprpanel/*.spec
+          else
+            echo "Error: specs/ermete-astal/hyprpanel not found"
+            exit 1
+          fi
+          mkdir -p /github/home/RPMS
+          cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
+      - name: Upload RPMs
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpm-ags-hyprpanel
+          path: /github/home/RPMS/*.rpm
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/RPMS/hyprpanel*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-hyprpanel:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+  build-matugen:
+    name: 🎨 Build Matugen
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-matugen/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/rpmbuild/RPMS/
+          key: rpm-matugen-${{ steps.hash.outputs.hash }}
+      - name: Cache Cargo Registry
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+          path: /root/.cargo/registry
+          key: cargo-registry-matugen-${{ steps.hash.outputs.hash }}
+          restore-keys: cargo-registry-matugen-
+      - name: Install Dependencies and Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          spectool -g -R specs/ermete-matugen/ermete-matugen.spec
+          dnf builddep -y specs/ermete-matugen/ermete-matugen.spec
+          rpmbuild -bb --nocheck specs/ermete-matugen/ermete-matugen.spec
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-matugen:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+  build-bibata:
+    name: 🖱️ Build Bibata
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-bibata/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/rpmbuild/RPMS/
+          key: rpm-bibata-${{ steps.hash.outputs.hash }}
+      - name: Cache Cargo Registry
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+          path: /root/.cargo/registry
+          key: cargo-registry-bibata-${{ steps.hash.outputs.hash }}
+          restore-keys: cargo-registry-bibata-
+      - name: Install Dependencies and Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools tar xz curl
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          spectool -g -R specs/ermete-bibata/ermete-bibata.spec
+          dnf builddep -y specs/ermete-bibata/ermete-bibata.spec
+          rpmbuild -bb --nocheck specs/ermete-bibata/ermete-bibata.spec
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-bibata:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+
+  build-nvidia:
+    name: 🎮 Build NVIDIA KMOD
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Resolve Kernel Version and Install Chimera Headers
+        id: kernel
+        run: |
+          curl -Lo /etc/yum.repos.d/fedora-nvidia.repo https://negativo17.org/repos/fedora-nvidia.repo
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+          ctr=$(buildah from ghcr.io/${{ github.repository_owner }}/ermete-forge-kernel:latest)
+          buildah mount $ctr
+          mnt=$(buildah mount $ctr)
+          dnf install -y $mnt/*.rpm
+          buildah umount $ctr
+          QUALIFIED_KERNEL=$(rpm -q --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}\n' kernel-devel | sort -V | tail -n 1)
+          echo "kernel_ver=${QUALIFIED_KERNEL}" >> $GITHUB_OUTPUT
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/akmods/nvidia/
+          key: rpm-nvidia-${{ steps.kernel.outputs.kernel_ver }}
+      - name: Install Dependencies and Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          dnf install -y akmods akmod-nvidia gcc gcc-c++ make elfutils-libelf-devel openssl-devel rpm-build rpmdevtools clang lld llvm
+          
+          # Removed fake LLVM symlinks because the kernel is built natively with GCC and GCOV.          
+          cp scripts/akmods /usr/sbin/akmods
+          cp scripts/kmodtool /usr/bin/kmodtool
+          
+          # No PATH export needed for gcc          
+          chmod +x /usr/sbin/akmods /usr/bin/kmodtool
+          mkdir -p /etc/pki/akmods/certs /etc/pki/akmods/private
+          echo "${{ secrets.MOK_PRIVATE_KEY }}" | base64 -d > /etc/pki/akmods/private/private_key.priv
+          echo "${{ secrets.MOK_PUBLIC_DER }}" | base64 -d > /etc/pki/akmods/certs/public_key.der
+          cp config/rpmmacros ~/.rpmmacros
+          chmod 0600 /etc/pki/akmods/private/private_key.priv
+          akmods --force --kernels "${{ steps.kernel.outputs.kernel_ver }}"
+      - name: Publish Micro-Container OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /var/cache/akmods/nvidia/*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-nvidia:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+
+  build-kernel:
+    name: 🧠 Build Chimera Kernel (CachyOS + Clear + Gentoo)
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged --security-opt label=disable
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Cache Compiler Objects (ccache)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ccache
+          key: kernel-ccache-${{ github.sha }}
+          restore-keys: |
+            kernel-ccache-
+
+      - name: Install Build Dependencies
+        run: |
+          echo "zchunk=False" >> /etc/dnf/dnf.conf
+          echo "fastestmirror=True" >> /etc/dnf/dnf.conf
+          echo "install_weak_deps=False" >> /etc/dnf/dnf.conf
+          dnf clean all
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools gcc gcc-c++ make cmake flex bison ncurses-devel elfutils-libelf-devel openssl-devel bc rsync tar wget curl cpio perl zstd git llvm clang lld ccache qemu-kvm stress-ng iperf3 jq gnupg2 hostname elfutils-devel dwarves openssl
+
+      - name: Fetch Base Kernel and Patches
+        run: |
+          bash specs/ermete-kernel/prepare-chimera.sh
+
+      - name: Bedrock Idempotency Check
+        id: idempotency
+        run: |
+          dnf install -y skopeo
+          FINGERPRINT=$(find ~/rpmbuild/BUILD/ -type f \( -name '*.patch' -o -name '.kernel_version' \) -exec sha256sum {} + | sort | sha256sum | awk '{print $1}' || echo "new_build")
+          echo "FINGERPRINT=$FINGERPRINT" >> $GITHUB_ENV
+          
+          IMAGE="${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-kernel:$FINGERPRINT"
+          IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+          
+          echo "Verifico se il kernel con fingerprint $FINGERPRINT esiste già..."
+          if skopeo inspect --creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} docker://$IMAGE_LOWER > /dev/null 2>&1; then
+            echo "Il Kernel è identico a una build esistente. Salto la compilazione!"
+            echo "skip_build=true" >> $GITHUB_OUTPUT
+          else
+            echo "Nuovo fingerprint rilevato. Procedo alla compilazione."
+            echo "skip_build=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Fase 1 - Build PGO Strumentata (Sensori GCOV)
+        if: steps.idempotency.outputs.skip_build != 'true'
+        run: |
+          echo "Iniezione sensori GCOV per profilazione empirica..."
+          cd ~/rpmbuild/BUILD/$(cat ~/rpmbuild/BUILD/.kernel_version)
+          
+          ./scripts/config --enable GCOV_KERNEL
+          ./scripts/config --enable GCOV_PROFILE_ALL
+          make olddefconfig
+          
+          export PATH="/usr/lib64/ccache:/usr/lib/ccache:$PATH"
+          export CCACHE_DIR=~/.cache/ccache
+          export CCACHE_COMPRESS=1
+          export CCACHE_MAXSIZE=10G
+          mkdir -p ~/.cache/ccache
+          ccache -z
+          echo "Avvio compilazione micro-kernel (bzImage) per profilazione..."
+          make -j$(nproc) bzImage
+          ccache -s
+
+      - name: Fase 2 - Stress Test Agnostico QEMU (Estrazione Termica)
+        if: steps.idempotency.outputs.skip_build != 'true'
+        run: |
+          echo "Estrazione del kernel strumentato..."
+          KERNEL_DIR=~/rpmbuild/BUILD/$(cat ~/rpmbuild/BUILD/.kernel_version)
+          KERNEL_IMAGE="$KERNEL_DIR/arch/x86/boot/bzImage"
+          
+          echo "Creazione demone di Init per lo stress test estremo (Dynamic Discovery)..."
+          cat << 'INITSCRIPT' > /init
+          #!/bin/bash
+          export PATH=/usr/bin:/usr/sbin:/bin:/sbin
+          mount -t proc none /proc
+          mount -t sysfs none /sys
+          mount -t debugfs none /sys/kernel/debug
+          
+          # Dynamic Discovery of QEMU internal resources
+          CORES=$(nproc)
+          echo "Risorse rilevate in QEMU: $CORES Cores"
+          
+          echo "Inizio STRESS TERMICO (CPU, VFS, Scheduler, Mutex, Memoria)..."
+          stress-ng --cpu $CORES --io $CORES --vm 2 --vm-bytes 1G --matrix $CORES --sched $CORES --mutex $CORES --timeout 60s
+          
+          echo "Inizio STRESS RETE (TCP/IP BBR + FQ)..."
+          iperf3 -s & IPERF_PID=$!
+          sleep 2
+          iperf3 -c 127.0.0.1 -t 15 -P $CORES
+          kill $IPERF_PID || true
+          
+          echo "Inizio STRESS SVILUPPO (VFS, Fork, Page Faults)..."
+          cat << 'CCODE' > /tmp/test.c
+          #include <stdio.h>
+          int main() { return 0; }
+          CCODE
+          for i in $(seq 1 100); do gcc -O2 /tmp/test.c -o /tmp/test; done
+          
+          echo "Estrazione dati GCOV empirici verso l'host..."
+          mkdir -p /mnt/host_gcov
+          mount -t 9p -o trans=virtio,version=9p2000.L host_gcov /mnt/host_gcov
+          cp -a /sys/kernel/debug/gcov/* /mnt/host_gcov/ || true
+          sync
+          
+          echo "Spegnimento QEMU..."
+          poweroff -f
+          INITSCRIPT
+          chmod +x /init
+          
+          mkdir -p /tmp/host_gcov
+          
+          # Dynamic Host Resource Allocation for QEMU
+          HOST_CORES=$(nproc)
+          HOST_RAM=$(awk '/MemTotal/ {print int($2/1024/1024/2)}' /proc/meminfo)
+          if [ "$HOST_RAM" -lt 4 ]; then HOST_RAM=4; fi
+          
+          echo "Avvio virtualizzazione isolata 9pfs con $HOST_CORES Cores e ${HOST_RAM}G RAM..."
+          qemu-system-x86_64 -kernel $KERNEL_IMAGE \
+            -append "root=host_root rootfstype=9p rootflags=trans=virtio,version=9p2000.L rw init=/init console=ttyS0" \
+            -virtfs local,path=/,mount_tag=host_root,security_model=none \
+            -virtfs local,path=/tmp/host_gcov,mount_tag=host_gcov,security_model=none \
+            -m ${HOST_RAM}G -smp $HOST_CORES -nographic -no-reboot
+
+      - name: Fase 3 - Build PGO Cristallizzata (Performance Assoluta)
+        if: steps.idempotency.outputs.skip_build != 'true'
+        run: |
+          echo "Rimozione sensori GCOV (Cristallizzazione)..."
+          cd ~/rpmbuild/BUILD/$(cat ~/rpmbuild/BUILD/.kernel_version)
+          ./scripts/config --disable GCOV_KERNEL
+          ./scripts/config --disable GCOV_PROFILE_ALL
+          make olddefconfig
+          
+          echo "Pulizia build precedente..."
+          rm -rf ~/rpmbuild/RPMS/*
+          
+          echo "Compilazione del Kernel Ottimizzato (Cristallizzazione)..."
+          export PATH="/usr/lib64/ccache:/usr/lib/ccache:$PATH"
+          export CCACHE_DIR=~/.cache/ccache
+          export KCFLAGS="-march=x86-64-v3 -pipe -Wno-error -fprofile-use=/tmp/host_gcov -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize"
+          export KCPPFLAGS="-march=x86-64-v3 -pipe -Wno-error"
+          make -j$(nproc) binrpm-pkg
+          ccache -s
+          
+      - name: Publish Micro-Container OCI
+        if: steps.idempotency.outputs.skip_build != 'true'
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr ~/rpmbuild/BUILD/linux-*/rpmbuild/RPMS/*/*.rpm /
+          
+          IMAGE_LATEST=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-kernel:latest" | tr '[:upper:]' '[:lower:]')
+          IMAGE_FINGERPRINT=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-kernel:${{ env.FINGERPRINT }}" | tr '[:upper:]' '[:lower:]')
+          
+          buildah commit $ctr $IMAGE_LATEST
+          buildah tag $IMAGE_LATEST $IMAGE_FINGERPRINT
+          
+          buildah push $IMAGE_LATEST
+          buildah push $IMAGE_FINGERPRINT
+
+  build-ags-config:
+    name: ⚙️ Build AGS Config
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build RPM
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools
+          rpmdev-setuptree
+          rpmbuild -bb --nocheck specs/ermete-ags-config/ermete-ags-config.spec
+      - name: Publish OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          IMAGE=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-ags-config:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE && buildah push $IMAGE
+
+  build-niri-session:
+    name: ⚙️ Build Niri Session
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build RPM
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools
+          rpmdev-setuptree
+          rpmbuild -bb --nocheck specs/ermete-niri-session/ermete-niri-session.spec
+      - name: Publish OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          IMAGE=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-niri-session:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE && buildah push $IMAGE
+
+  build-ide-bootstrap:
+    name: ⚙️ Build IDE Bootstrap
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build RPM
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools
+          rpmdev-setuptree
+          rpmbuild -bb --nocheck specs/ermete-ide-bootstrap/ermete-ide-bootstrap.spec
+      - name: Publish OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          IMAGE=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-ide-bootstrap:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE && buildah push $IMAGE
+
+  build-system-services:
+    name: ⚙️ Build System Services
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build RPM
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools
+          rpmdev-setuptree
+          rpmbuild -bb --nocheck specs/ermete-system-services/ermete-system-services.spec
+      - name: Publish OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          IMAGE=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-system-services:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE && buildah push $IMAGE
+
+  build-nix-support:
+    name: ⚙️ Build Nix Support
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build RPM
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools
+          rpmdev-setuptree
+          rpmbuild -bb --nocheck specs/ermete-nix-support/ermete-nix-support.spec
+      - name: Publish OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          IMAGE=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-nix-support:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE && buildah push $IMAGE
+
+  build-system-config:
+    name: ⚙️ Build System Config
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build RPM
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools
+          rpmdev-setuptree
+          rpmbuild -bb --nocheck specs/ermete-system-config/ermete-system-config.spec
+      - name: Publish OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          IMAGE=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-system-config:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE && buildah push $IMAGE
+
+  build-system-tweaks:
+    name: ⚙️ Build System Tweaks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: registry.fedoraproject.org/fedora:43
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build RPM
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build rpmdevtools
+          rpmdev-setuptree
+          rpmbuild -bb --nocheck specs/ermete-system-tweaks/ermete-system-tweaks.spec
+      - name: Publish OCI
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
+          IMAGE=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-system-tweaks:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE && buildah push $IMAGE
+
+  upstream-cli:
+    name: 📦 Upstream Cli
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ["btop", "eza", "fd-find", "git", "inotify-tools", "just", "nushell", "parallel", "playerctl", "ripgrep", "rsync", "sqlite", "unzip", "wl-clipboard", "wl-mirror", "wlr-randr"]
+    permissions:
+      contents: read
+      packages: write
+    env:
+      REGISTRY: ghcr.io
+      FEDORA_VERSION: 43
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('config/rpmmacros') }}" >> $GITHUB_OUTPUT
+        
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/rpmbuild/RPMS/
+          key: rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-${{ github.run_id }}
+          restore-keys: |
+            rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-
+            rpm-rolling-${{ matrix.package }}-
+            
+      - name: Check Idempotency (Upstream Version Match)
+        id: check_idempotency
+        run: |
+          dnf install -y dnf5 skopeo jq
+                    cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
+          [rpmfusion-free-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Free
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          
+          [rpmfusion-nonfree-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Nonfree
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          REPO
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}:latest" | tr '[:upper:]' '[:lower:]')
+          
+          # Trova versione upstream su Fedora (inclusi RPM Fusion)
+          UPSTREAM_INFO=$(dnf5 info ${{ matrix.package }})
+          UPSTREAM_VER=$(echo "$UPSTREAM_INFO" | awk '/^Version/ {print $3}' | head -n 1)
+          UPSTREAM_REL=$(echo "$UPSTREAM_INFO" | awk '/^Release/ {print $3}' | head -n 1)
+          UPSTREAM_FULL="${UPSTREAM_VER}-${UPSTREAM_REL}"
+          
+          # Trova versione remota su GHCR
+          REMOTE_FULL=$(skopeo inspect docker://$IMAGE_LOWER | jq -r '.Labels."org.opencontainers.image.version" // "none"' || echo "none")
+          
+          echo "Upstream: $UPSTREAM_FULL"
+          echo "Remote: $REMOTE_FULL"
+          
+          if [ "$UPSTREAM_FULL" == "$REMOTE_FULL" ] && [ "$REMOTE_FULL" != "none" ]; then
+            echo "Match esatto. Salto la compilazione."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "Nuova versione rilevata. Procedo con la compilazione."
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "version=$UPSTREAM_FULL" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Fetch, Patch and Build ${{ matrix.package }}
+        if: steps.check_idempotency.outputs.skip != 'true'
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          cd ~/rpmbuild/SRPMS
+          
+          echo "--- Abilitazione RPM Fusion (Rawhide) ---"
+                    cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
+          [rpmfusion-free-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Free
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          
+          [rpmfusion-nonfree-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Nonfree
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          REPO
+          
+          echo "--- Downloading Source RPM per ${{ matrix.package }} ---"
+          dnf download --source ${{ matrix.package }}
+          
+          echo "--- Estrazione SRPM per applicare Ponytail Ultra ---"
+          rpm -ivh *.src.rpm
+          
+          echo "--- Risoluzione Dipendenze Estrema (su SPEC) ---"
+          dnf builddep -y ~/rpmbuild/SPECS/*.spec
+          
+          echo "--- Iniezione Dinamica Ponytail Ultra ---"
+          for spec in ~/rpmbuild/SPECS/*.spec; do
+            # Disattiva pacchetti di debug globalmente
+            if ! grep -q "debug_package %nil" "$spec"; then
+              awk '/^Name:/ { print "%global debug_package %nil"; print $0; next } 1' "$spec" > "$spec.tmp" && mv "$spec.tmp" "$spec"
+            fi
+            # Elimina file di documentazione e man pages per ridurre il footprint
+            awk '!/^[[:space:]]*%doc/ && !/%_mandir/' "$spec" > "$spec.tmp" && mv "$spec.tmp" "$spec"
+          done
+          
+          echo "--- Ricompilazione estrema con macro Ermete e Ponytail ---"
+          if ! rpmbuild -bb --nocheck ~/rpmbuild/SPECS/*.spec; then
+            if ls ~/rpmbuild/SRPMS/*.buildreqs.nosrc.rpm >/dev/null 2>&1; then
+              echo "--- Installazione Dipendenze Dinamiche (%generate_buildrequires) ---"
+              dnf install -y ~/rpmbuild/SRPMS/*.buildreqs.nosrc.rpm
+              echo "--- Secondo tentativo di Ricompilazione Estrema ---"
+              rpmbuild -bb --nocheck ~/rpmbuild/SPECS/*.spec
+            else
+              exit 1
+            fi
+          fi
+          
+          mkdir -p /github/home/RPMS
+          cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
+          
+      - name: Publish Micro-Container OCI
+        if: steps.check_idempotency.outputs.skip != 'true'
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah config --label org.opencontainers.image.version="${{ steps.check_idempotency.outputs.version }}" $ctr
+          buildah copy $ctr /github/home/RPMS/*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+
+  upstream-core:
+    name: 📦 Upstream Core
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ["brightnessctl", "btrfs-progs", "dbus-tools", "dbus-x11", "distribution-gpg-keys", "drm_info", "file-roller", "firewalld", "fuse", "fwupd", "gnome-keyring", "gnome-keyring-pam", "greenboot", "greenboot-default-health-checks", "gvfs", "libnotify", "libxcrypt-compat", "lm_sensors", "mokutil", "nftables", "openssl", "qemu-kvm", "sbsigntools", "squashfuse", "sysstat", "upower", "virt-manager"]
+    permissions:
+      contents: read
+      packages: write
+    env:
+      REGISTRY: ghcr.io
+      FEDORA_VERSION: 43
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('config/rpmmacros') }}" >> $GITHUB_OUTPUT
+        
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/rpmbuild/RPMS/
+          key: rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-${{ github.run_id }}
+          restore-keys: |
+            rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-
+            rpm-rolling-${{ matrix.package }}-
+            
+      - name: Check Idempotency (Upstream Version Match)
+        id: check_idempotency
+        run: |
+          dnf install -y dnf5 skopeo jq
+                    cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
+          [rpmfusion-free-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Free
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          
+          [rpmfusion-nonfree-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Nonfree
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          REPO
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}:latest" | tr '[:upper:]' '[:lower:]')
+          
+          # Trova versione upstream su Fedora (inclusi RPM Fusion)
+          UPSTREAM_INFO=$(dnf5 info ${{ matrix.package }})
+          UPSTREAM_VER=$(echo "$UPSTREAM_INFO" | awk '/^Version/ {print $3}' | head -n 1)
+          UPSTREAM_REL=$(echo "$UPSTREAM_INFO" | awk '/^Release/ {print $3}' | head -n 1)
+          UPSTREAM_FULL="${UPSTREAM_VER}-${UPSTREAM_REL}"
+          
+          # Trova versione remota su GHCR
+          REMOTE_FULL=$(skopeo inspect docker://$IMAGE_LOWER | jq -r '.Labels."org.opencontainers.image.version" // "none"' || echo "none")
+          
+          echo "Upstream: $UPSTREAM_FULL"
+          echo "Remote: $REMOTE_FULL"
+          
+          if [ "$UPSTREAM_FULL" == "$REMOTE_FULL" ] && [ "$REMOTE_FULL" != "none" ]; then
+            echo "Match esatto. Salto la compilazione."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "Nuova versione rilevata. Procedo con la compilazione."
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "version=$UPSTREAM_FULL" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Fetch, Patch and Build ${{ matrix.package }}
+        if: steps.check_idempotency.outputs.skip != 'true'
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          cd ~/rpmbuild/SRPMS
+          
+          echo "--- Abilitazione RPM Fusion (Rawhide) ---"
+                    cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
+          [rpmfusion-free-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Free
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          
+          [rpmfusion-nonfree-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Nonfree
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          REPO
+          
+          echo "--- Downloading Source RPM per ${{ matrix.package }} ---"
+          dnf download --source ${{ matrix.package }}
+          
+          echo "--- Estrazione SRPM per applicare Ponytail Ultra ---"
+          rpm -ivh *.src.rpm
+          
+          echo "--- Risoluzione Dipendenze Estrema (su SPEC) ---"
+          dnf builddep -y ~/rpmbuild/SPECS/*.spec
+          
+          echo "--- Iniezione Dinamica Ponytail Ultra ---"
+          for spec in ~/rpmbuild/SPECS/*.spec; do
+            # Disattiva pacchetti di debug globalmente
+            if ! grep -q "debug_package %nil" "$spec"; then
+              awk '/^Name:/ { print "%global debug_package %nil"; print $0; next } 1' "$spec" > "$spec.tmp" && mv "$spec.tmp" "$spec"
+            fi
+            # Elimina file di documentazione e man pages per ridurre il footprint
+            awk '!/^[[:space:]]*%doc/ && !/%_mandir/' "$spec" > "$spec.tmp" && mv "$spec.tmp" "$spec"
+          done
+          
+          echo "--- Ricompilazione estrema con macro Ermete e Ponytail ---"
+          if ! rpmbuild -bb --nocheck ~/rpmbuild/SPECS/*.spec; then
+            if ls ~/rpmbuild/SRPMS/*.buildreqs.nosrc.rpm >/dev/null 2>&1; then
+              echo "--- Installazione Dipendenze Dinamiche (%generate_buildrequires) ---"
+              dnf install -y ~/rpmbuild/SRPMS/*.buildreqs.nosrc.rpm
+              echo "--- Secondo tentativo di Ricompilazione Estrema ---"
+              rpmbuild -bb --nocheck ~/rpmbuild/SPECS/*.spec
+            else
+              exit 1
+            fi
+          fi
+          
+          mkdir -p /github/home/RPMS
+          cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
+          
+      - name: Publish Micro-Container OCI
+        if: steps.check_idempotency.outputs.skip != 'true'
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah config --label org.opencontainers.image.version="${{ steps.check_idempotency.outputs.version }}" $ctr
+          buildah copy $ctr /github/home/RPMS/*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+
+  upstream-desktop:
+    name: 📦 Upstream Desktop
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ["niri", "adw-gtk3-theme", "fontawesome-fonts-all", "foot", "greetd", "gtk4-layer-shell", "gtk-layer-shell", "jetbrains-mono-fonts", "papirus-icon-theme", "qt5-qtwayland", "qt6-qtwayland", "rsms-inter-fonts", "swaybg", "swaylock", "thunar", "thunar-archive-plugin", "thunar-volman", "tuigreet", "wayland-utils", "xdg-desktop-portal-gnome", "xdg-desktop-portal-gtk", "xdg-user-dirs", "xdg-user-dirs-gtk", "xorg-x11-server-Xwayland"]
+    permissions:
+      contents: read
+      packages: write
+    env:
+      REGISTRY: ghcr.io
+      FEDORA_VERSION: 43
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('config/rpmmacros') }}" >> $GITHUB_OUTPUT
+        
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/rpmbuild/RPMS/
+          key: rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-${{ github.run_id }}
+          restore-keys: |
+            rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-
+            rpm-rolling-${{ matrix.package }}-
+            
+      - name: Check Idempotency (Upstream Version Match)
+        id: check_idempotency
+        run: |
+          dnf install -y dnf5 skopeo jq
+                    cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
+          [rpmfusion-free-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Free
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          
+          [rpmfusion-nonfree-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Nonfree
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          REPO
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}:latest" | tr '[:upper:]' '[:lower:]')
+          
+          # Trova versione upstream su Fedora (inclusi RPM Fusion)
+          UPSTREAM_INFO=$(dnf5 info ${{ matrix.package }})
+          UPSTREAM_VER=$(echo "$UPSTREAM_INFO" | awk '/^Version/ {print $3}' | head -n 1)
+          UPSTREAM_REL=$(echo "$UPSTREAM_INFO" | awk '/^Release/ {print $3}' | head -n 1)
+          UPSTREAM_FULL="${UPSTREAM_VER}-${UPSTREAM_REL}"
+          
+          # Trova versione remota su GHCR
+          REMOTE_FULL=$(skopeo inspect docker://$IMAGE_LOWER | jq -r '.Labels."org.opencontainers.image.version" // "none"' || echo "none")
+          
+          echo "Upstream: $UPSTREAM_FULL"
+          echo "Remote: $REMOTE_FULL"
+          
+          if [ "$UPSTREAM_FULL" == "$REMOTE_FULL" ] && [ "$REMOTE_FULL" != "none" ]; then
+            echo "Match esatto. Salto la compilazione."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "Nuova versione rilevata. Procedo con la compilazione."
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "version=$UPSTREAM_FULL" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Fetch, Patch and Build ${{ matrix.package }}
+        if: steps.check_idempotency.outputs.skip != 'true'
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          cd ~/rpmbuild/SRPMS
+          
+          echo "--- Abilitazione RPM Fusion (Rawhide) ---"
+                    cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
+          [rpmfusion-free-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Free
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          
+          [rpmfusion-nonfree-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Nonfree
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          REPO
+          
+          echo "--- Downloading Source RPM per ${{ matrix.package }} ---"
+          dnf download --source ${{ matrix.package }}
+          
+          echo "--- Estrazione SRPM per applicare Ponytail Ultra ---"
+          rpm -ivh *.src.rpm
+          
+          echo "--- Risoluzione Dipendenze Estrema (su SPEC) ---"
+          dnf builddep -y ~/rpmbuild/SPECS/*.spec
+          
+          echo "--- Iniezione Dinamica Ponytail Ultra ---"
+          for spec in ~/rpmbuild/SPECS/*.spec; do
+            # Disattiva pacchetti di debug globalmente
+            if ! grep -q "debug_package %nil" "$spec"; then
+              awk '/^Name:/ { print "%global debug_package %nil"; print $0; next } 1' "$spec" > "$spec.tmp" && mv "$spec.tmp" "$spec"
+            fi
+            # Elimina file di documentazione e man pages per ridurre il footprint
+            awk '!/^[[:space:]]*%doc/ && !/%_mandir/' "$spec" > "$spec.tmp" && mv "$spec.tmp" "$spec"
+          done
+          
+          echo "--- Ricompilazione estrema con macro Ermete e Ponytail ---"
+          if ! rpmbuild -bb --nocheck ~/rpmbuild/SPECS/*.spec; then
+            if ls ~/rpmbuild/SRPMS/*.buildreqs.nosrc.rpm >/dev/null 2>&1; then
+              echo "--- Installazione Dipendenze Dinamiche (%generate_buildrequires) ---"
+              dnf install -y ~/rpmbuild/SRPMS/*.buildreqs.nosrc.rpm
+              echo "--- Secondo tentativo di Ricompilazione Estrema ---"
+              rpmbuild -bb --nocheck ~/rpmbuild/SPECS/*.spec
+            else
+              exit 1
+            fi
+          fi
+          
+          mkdir -p /github/home/RPMS
+          cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
+          
+      - name: Publish Micro-Container OCI
+        if: steps.check_idempotency.outputs.skip != 'true'
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah config --label org.opencontainers.image.version="${{ steps.check_idempotency.outputs.version }}" $ctr
+          buildah copy $ctr /github/home/RPMS/*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+
+  upstream-media:
+    name: 📦 Upstream Media
+
+    runs-on: self-hosted
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ["pipewire", "nodejs", "npm", "ffmpeg", "mpv", "wireplumber", "x264-libs", "libva-nvidia-driver", "libva-utils", "imv", "mesa-dri-drivers", "mesa-vulkan-drivers"]
+    permissions:
+      contents: read
+      packages: write
+    env:
+      REGISTRY: ghcr.io
+      FEDORA_VERSION: 43
+    container:
+      image: registry.fedoraproject.org/fedora:43
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('config/rpmmacros') }}" >> $GITHUB_OUTPUT
+        
+      - name: Cache RPMs
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/rpmbuild/RPMS/
+          key: rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-${{ github.run_id }}
+          restore-keys: |
+            rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-
+            rpm-rolling-${{ matrix.package }}-
+            
+      - name: Check Idempotency (Upstream Version Match)
+        id: check_idempotency
+        run: |
+          dnf install -y dnf5 skopeo jq
+                    cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
+          [rpmfusion-free-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Free
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          
+          [rpmfusion-nonfree-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Nonfree
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          REPO
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}:latest" | tr '[:upper:]' '[:lower:]')
+          
+          # Trova versione upstream su Fedora (inclusi RPM Fusion)
+          UPSTREAM_INFO=$(dnf5 info ${{ matrix.package }})
+          UPSTREAM_VER=$(echo "$UPSTREAM_INFO" | awk '/^Version/ {print $3}' | head -n 1)
+          UPSTREAM_REL=$(echo "$UPSTREAM_INFO" | awk '/^Release/ {print $3}' | head -n 1)
+          UPSTREAM_FULL="${UPSTREAM_VER}-${UPSTREAM_REL}"
+          
+          # Trova versione remota su GHCR
+          REMOTE_FULL=$(skopeo inspect docker://$IMAGE_LOWER | jq -r '.Labels."org.opencontainers.image.version" // "none"' || echo "none")
+          
+          echo "Upstream: $UPSTREAM_FULL"
+          echo "Remote: $REMOTE_FULL"
+          
+          if [ "$UPSTREAM_FULL" == "$REMOTE_FULL" ] && [ "$REMOTE_FULL" != "none" ]; then
+            echo "Match esatto. Salto la compilazione."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "Nuova versione rilevata. Procedo con la compilazione."
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "version=$UPSTREAM_FULL" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Fetch, Patch and Build ${{ matrix.package }}
+        if: steps.check_idempotency.outputs.skip != 'true'
+        run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
+          dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++
+          cp config/rpmmacros ~/.rpmmacros
+          rpmdev-setuptree
+          cd ~/rpmbuild/SRPMS
+          
+          echo "--- Abilitazione RPM Fusion (Rawhide) ---"
+                    cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
+          [rpmfusion-free-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Free
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          
+          [rpmfusion-nonfree-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Nonfree
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          REPO
+          
+          echo "--- Downloading Source RPM per ${{ matrix.package }} ---"
+          dnf download --source ${{ matrix.package }}
+          
+          echo "--- Estrazione SRPM per applicare Ponytail Ultra ---"
+          rpm -ivh *.src.rpm
+          
+          echo "--- Risoluzione Dipendenze Estrema (su SPEC) ---"
+          dnf builddep -y ~/rpmbuild/SPECS/*.spec
+          
+          echo "--- Iniezione Dinamica Ponytail Ultra ---"
+          for spec in ~/rpmbuild/SPECS/*.spec; do
+            # Disattiva pacchetti di debug globalmente
+            if ! grep -q "debug_package %nil" "$spec"; then
+              awk '/^Name:/ { print "%global debug_package %nil"; print $0; next } 1' "$spec" > "$spec.tmp" && mv "$spec.tmp" "$spec"
+            fi
+            # Elimina file di documentazione e man pages per ridurre il footprint
+            awk '!/^[[:space:]]*%doc/ && !/%_mandir/' "$spec" > "$spec.tmp" && mv "$spec.tmp" "$spec"
+          done
+          
+          echo "--- Ricompilazione estrema con macro Ermete e Ponytail ---"
+          if ! rpmbuild -bb --nocheck ~/rpmbuild/SPECS/*.spec; then
+            if ls ~/rpmbuild/SRPMS/*.buildreqs.nosrc.rpm >/dev/null 2>&1; then
+              echo "--- Installazione Dipendenze Dinamiche (%generate_buildrequires) ---"
+              dnf install -y ~/rpmbuild/SRPMS/*.buildreqs.nosrc.rpm
+              echo "--- Secondo tentativo di Ricompilazione Estrema ---"
+              rpmbuild -bb --nocheck ~/rpmbuild/SPECS/*.spec
+            else
+              exit 1
+            fi
+          fi
+          
+          mkdir -p /github/home/RPMS
+          cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
+          
+      - name: Publish Micro-Container OCI
+        if: steps.check_idempotency.outputs.skip != 'true'
+        run: |
+          dnf install -y buildah
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+          ctr=$(buildah from scratch)
+          buildah config --label org.opencontainers.image.version="${{ steps.check_idempotency.outputs.version }}" $ctr
+          buildah copy $ctr /github/home/RPMS/*.rpm /
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+
