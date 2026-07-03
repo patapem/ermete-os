@@ -238,6 +238,7 @@ License:        Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Cla
 %{bash_completions_dir}/bat.bash
 %{fish_completions_dir}/bat.fish
 %{zsh_completions_dir}/_bat
+%{_mandir}/man1/bat.1*
 
 %package        devel
 Summary:        %{summary}
@@ -487,7 +488,7 @@ use the "wild" feature of the "%{crate}" crate.
 %install
 %cargo_install
 # install man page
-find target/release/build -name bat.1 -print -quit | xargs -I {} install -Dpm0644 {} \
+find target/release/build -name bat.1 -print -quit | xargs -I {} install -Dpm0644 {} %{buildroot}/%{_mandir}/man1/bat.1
 # install shell completions
 install -Dpm0644 target/release/build/%{crate}-*/out/assets/completions/bat.bash \
     %{buildroot}/%{bash_completions_dir}/bat.bash
