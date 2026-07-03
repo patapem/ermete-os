@@ -112,7 +112,7 @@ jobs:
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           
-          for pkg in appmenu-glib-translator astal-io astal astal-libs astal-gjs astal-gtk4 astal-lua aylurs-gtk-shell aylurs-gtk-shell2 hyprpanel; do
+          for pkg in appmenu-glib-translator astal-io astal astal-libs astal-gjs astal-gtk4 astal-lua aylurs-gtk-shell2 hyprpanel; do
             echo "========================================"
             echo "Building $pkg..."
             echo "========================================"
@@ -395,6 +395,8 @@ jobs:
           echo "${{ secrets.MOK_PUBLIC_DER }}" | base64 -d > /etc/pki/akmods/certs/public_key.der
           cp config/rpmmacros ~/.rpmmacros
           chmod 0600 /etc/pki/akmods/private/private_key.priv
+          mkdir -p /lib/modules/${{ steps.kernel.outputs.kernel_ver }}
+          ln -sf /usr/src/kernels/${{ steps.kernel.outputs.kernel_ver }} /lib/modules/${{ steps.kernel.outputs.kernel_ver }}/build
           akmods --force --kernels "${{ steps.kernel.outputs.kernel_ver }}"
       - name: Publish Micro-Container OCI
         run: |
@@ -496,7 +498,7 @@ jobs:
           dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm || true
           
           echo "--- Downloading Source RPM per ${{ matrix.package }} ---"
-          dnf download --source ${{ matrix.package }}
+          dnf download --source ${{ matrix.package }} || dnf download --source --disablerepo="rpmfusion*" ${{ matrix.package }}
           
           echo "--- Estrazione SRPM per applicare Ponytail Ultra ---"
           rpm -ivh *.src.rpm
@@ -629,7 +631,7 @@ jobs:
           dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm || true
           
           echo "--- Downloading Source RPM per ${{ matrix.package }} ---"
-          dnf download --source ${{ matrix.package }}
+          dnf download --source ${{ matrix.package }} || dnf download --source --disablerepo="rpmfusion*" ${{ matrix.package }}
           
           echo "--- Estrazione SRPM per applicare Ponytail Ultra ---"
           rpm -ivh *.src.rpm
@@ -762,7 +764,7 @@ jobs:
           dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm || true
           
           echo "--- Downloading Source RPM per ${{ matrix.package }} ---"
-          dnf download --source ${{ matrix.package }}
+          dnf download --source ${{ matrix.package }} || dnf download --source --disablerepo="rpmfusion*" ${{ matrix.package }}
           
           echo "--- Estrazione SRPM per applicare Ponytail Ultra ---"
           rpm -ivh *.src.rpm
@@ -896,7 +898,7 @@ jobs:
           dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm || true
           
           echo "--- Downloading Source RPM per ${{ matrix.package }} ---"
-          dnf download --source ${{ matrix.package }}
+          dnf download --source ${{ matrix.package }} || dnf download --source --disablerepo="rpmfusion*" ${{ matrix.package }}
           
           echo "--- Estrazione SRPM per applicare Ponytail Ultra ---"
           rpm -ivh *.src.rpm
