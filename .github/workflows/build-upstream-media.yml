@@ -88,6 +88,7 @@ jobs:
       - name: Fetch, Patch and Build ${{ matrix.package }}
         if: steps.check_idempotency.outputs.skip != 'true'
         run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree

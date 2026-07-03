@@ -9,7 +9,7 @@ parallel
 playerctl
 ripgrep
 rsync
-sqlite3
+sqlite
 unzip
 wl-clipboard
 wl-mirror

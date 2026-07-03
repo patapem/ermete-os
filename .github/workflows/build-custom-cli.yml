@@ -46,6 +46,7 @@ jobs:
       - name: Install Dependencies and Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
@@ -94,6 +95,7 @@ jobs:
       - name: Install Dependencies and Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
+          sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
