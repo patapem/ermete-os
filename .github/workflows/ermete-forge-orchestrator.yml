@@ -71,6 +71,13 @@ jobs:
               dnf builddep -y ~/rpmbuild/SRPMS/*.nosrc.rpm || true
           fi
           
+          # Workaround for Fedora 43 rust-sysinfo bug
+          if ls /usr/share/cargo/registry/sysinfo-*/src/lib.rs 1> /dev/null 2>&1; then
+              for sysinfo_dir in /usr/share/cargo/registry/sysinfo-*/; do
+                  touch "$sysinfo_dir/README.md"
+              done
+          fi
+          
           # Second attempt (actual build)
           rpmbuild -bb --nocheck specs/ermete-${{ matrix.package }}/*.spec
           
