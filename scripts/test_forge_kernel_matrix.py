@@ -6,8 +6,7 @@ import forge_kernel_matrix
 
 class TestMatrixCLI(unittest.TestCase):
     def test_parse_args(self):
-        sys.argv = ['forge-kernel-matrix.py', '--patch-dir', '/tmp/patches', '--kernel-src', '/tmp/linux']
-        args = forge_kernel_matrix.parse_args()
+        args = forge_kernel_matrix.parse_args(['--patch-dir', '/tmp/patches', '--kernel-src', '/tmp/linux'])
         self.assertEqual(args.patch_dir, '/tmp/patches')
         self.assertEqual(args.kernel_src, '/tmp/linux')
 
