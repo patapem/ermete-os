@@ -12,14 +12,14 @@ PACKAGE=$1
 echo "========================================"
 echo "=== INIZIALIZZAZIONE AMBIENTE BEDROCK =="
 echo "========================================"
-dnf install -y rpm-build dnf-plugins-core rpmdevtools
+sudo dnf install -y rpm-build dnf-plugins-core rpmdevtools
 cp config/rpmmacros ~/.rpmmacros
 rpmdev-setuptree
 
 echo "========================================"
 echo "=== PREPARAZIONE REPOSITORIES (RPMFusion) ==="
 echo "========================================"
-dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm || true
+sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm || true
 
 echo "========================================"
 echo "=== DOWNLOAD SORGENTI ==="
@@ -30,7 +30,7 @@ dnf download --source $PACKAGE
 echo "========================================"
 echo "=== INSTALLAZIONE DIPENDENZE E FIX ==="
 echo "========================================"
-dnf builddep -y *.src.rpm
+sudo dnf builddep -y *.src.rpm
 
 
 

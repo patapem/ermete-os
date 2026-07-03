@@ -52,7 +52,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true' && steps.check.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
-          dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel checkpolicy policycoreutils spdlog-devel systemd-devel nlohmann-json-devel fmt-devel which autoconf automake libtool
+          dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel checkpolicy policycoreutils spdlog-devel systemd-devel nlohmann-json-devel fmt-devel which autoconf automake libtool cargo-rpm-macros
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
           
