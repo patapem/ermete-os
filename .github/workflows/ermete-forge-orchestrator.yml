@@ -52,7 +52,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true' && steps.check.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
-          dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel checkpolicy policycoreutils spdlog-devel systemd-devel nlohmann-json-devel fmt-devel
+          dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel checkpolicy policycoreutils spdlog-devel systemd-devel nlohmann-json-devel fmt-devel which autoconf automake libtool
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
           
@@ -60,9 +60,7 @@ jobs:
             cp -a specs/ermete-${{ matrix.package }}/SOURCES/* ~/rpmbuild/SOURCES/ || true
           fi
           
-          if grep -q "Source0:.*http" specs/ermete-${{ matrix.package }}/*.spec 2>/dev/null; then
-             spectool -g -R specs/ermete-${{ matrix.package }}/*.spec
-          fi
+          spectool -g -R specs/ermete-${{ matrix.package }}/*.spec || true
           
           dnf builddep -y specs/ermete-${{ matrix.package }}/*.spec || true
           rpmbuild -bb --nocheck specs/ermete-${{ matrix.package }}/*.spec
@@ -98,7 +96,7 @@ jobs:
       - name: Build and Publish AGS Components
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
-          dnf install -y rpm-build rpmdevtools meson ninja-build gcc gcc-c++ vala pkgconf-pkg-config buildah skopeo
+          dnf install -y rpm-build rpmdevtools meson ninja-build gcc gcc-c++ vala pkgconf-pkg-config buildah skopeo which autoconf automake libtool
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
           export STORAGE_DRIVER=vfs
@@ -118,9 +116,7 @@ jobs:
             if skopeo inspect "$IMAGE_LOWER" >/dev/null 2>&1; then
               echo "Immagine trovata per $pkg, skip."
             else
-              if grep -q "Source0:.*http" specs/ermete-astal/$pkg/*.spec 2>/dev/null; then
-                 spectool -g -R specs/ermete-astal/$pkg/*.spec
-              fi
+              spectool -g -R specs/ermete-astal/$pkg/*.spec || true
               dnf builddep -y specs/ermete-astal/$pkg/*.spec || true
               rpmbuild -bb --nocheck specs/ermete-astal/$pkg/*.spec
               
@@ -196,7 +192,7 @@ jobs:
           echo "install_weak_deps=False" >> /etc/dnf/dnf.conf
           dnf clean all
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
-          dnf install -y rpm-build rpmdevtools gcc gcc-c++ make cmake flex bison ncurses-devel elfutils-libelf-devel openssl-devel bc rsync tar wget curl cpio perl zstd git llvm clang lld ccache qemu-kvm stress-ng iperf3 jq gnupg2 hostname elfutils-devel dwarves openssl
+          dnf install -y rpm-build rpmdevtools gcc gcc-c++ make cmake flex bison ncurses-devel elfutils-libelf-devel openssl-devel bc rsync tar wget curl cpio perl zstd git llvm clang lld ccache qemu-kvm stress-ng iperf3 jq gnupg2 hostname elfutils-devel dwarves openssl which autoconf automake libtool
 
       - name: Fetch Base Kernel and Patches
         run: |
@@ -444,13 +440,13 @@ jobs:
                     cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
           [rpmfusion-free-rawhide]
           name=RPM Fusion for Fedora Rawhide - Free
-          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/$basearch/os/
           enabled=1
           gpgcheck=0
           
           [rpmfusion-nonfree-rawhide]
           name=RPM Fusion for Fedora Rawhide - Nonfree
-          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/$basearch/os/
           enabled=1
           gpgcheck=0
           REPO
@@ -481,7 +477,7 @@ jobs:
         if: steps.check_idempotency.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
-          dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++
+          dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++ which autoconf automake libtool
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
           cd ~/rpmbuild/SRPMS
@@ -490,13 +486,13 @@ jobs:
                     cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
           [rpmfusion-free-rawhide]
           name=RPM Fusion for Fedora Rawhide - Free
-          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/$basearch/os/
           enabled=1
           gpgcheck=0
           
           [rpmfusion-nonfree-rawhide]
           name=RPM Fusion for Fedora Rawhide - Nonfree
-          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/$basearch/os/
           enabled=1
           gpgcheck=0
           REPO
@@ -589,13 +585,13 @@ jobs:
                     cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
           [rpmfusion-free-rawhide]
           name=RPM Fusion for Fedora Rawhide - Free
-          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/$basearch/os/
           enabled=1
           gpgcheck=0
           
           [rpmfusion-nonfree-rawhide]
           name=RPM Fusion for Fedora Rawhide - Nonfree
-          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/$basearch/os/
           enabled=1
           gpgcheck=0
           REPO
@@ -626,7 +622,7 @@ jobs:
         if: steps.check_idempotency.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
-          dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++
+          dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++ which autoconf automake libtool
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
           cd ~/rpmbuild/SRPMS
@@ -635,13 +631,13 @@ jobs:
                     cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
           [rpmfusion-free-rawhide]
           name=RPM Fusion for Fedora Rawhide - Free
-          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/$basearch/os/
           enabled=1
           gpgcheck=0
           
           [rpmfusion-nonfree-rawhide]
           name=RPM Fusion for Fedora Rawhide - Nonfree
-          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/$basearch/os/
           enabled=1
           gpgcheck=0
           REPO
@@ -734,13 +730,13 @@ jobs:
                     cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
           [rpmfusion-free-rawhide]
           name=RPM Fusion for Fedora Rawhide - Free
-          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/$basearch/os/
           enabled=1
           gpgcheck=0
           
           [rpmfusion-nonfree-rawhide]
           name=RPM Fusion for Fedora Rawhide - Nonfree
-          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/$basearch/os/
           enabled=1
           gpgcheck=0
           REPO
@@ -771,7 +767,7 @@ jobs:
         if: steps.check_idempotency.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
-          dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++
+          dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++ which autoconf automake libtool
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
           cd ~/rpmbuild/SRPMS
@@ -780,13 +776,13 @@ jobs:
                     cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
           [rpmfusion-free-rawhide]
           name=RPM Fusion for Fedora Rawhide - Free
-          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/$basearch/os/
           enabled=1
           gpgcheck=0
           
           [rpmfusion-nonfree-rawhide]
           name=RPM Fusion for Fedora Rawhide - Nonfree
-          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/$basearch/os/
           enabled=1
           gpgcheck=0
           REPO
@@ -880,13 +876,13 @@ jobs:
                     cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
           [rpmfusion-free-rawhide]
           name=RPM Fusion for Fedora Rawhide - Free
-          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/$basearch/os/
           enabled=1
           gpgcheck=0
           
           [rpmfusion-nonfree-rawhide]
           name=RPM Fusion for Fedora Rawhide - Nonfree
-          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/$basearch/os/
           enabled=1
           gpgcheck=0
           REPO
@@ -917,7 +913,7 @@ jobs:
         if: steps.check_idempotency.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
-          dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++
+          dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++ which autoconf automake libtool
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
           cd ~/rpmbuild/SRPMS
@@ -926,13 +922,13 @@ jobs:
                     cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
           [rpmfusion-free-rawhide]
           name=RPM Fusion for Fedora Rawhide - Free
-          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/$basearch/os/
           enabled=1
           gpgcheck=0
           
           [rpmfusion-nonfree-rawhide]
           name=RPM Fusion for Fedora Rawhide - Nonfree
-          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/$basearch/os/
           enabled=1
           gpgcheck=0
           REPO
