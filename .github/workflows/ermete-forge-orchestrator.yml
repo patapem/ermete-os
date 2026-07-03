@@ -62,6 +62,16 @@ jobs:
           
           dnf builddep -y specs/ermete-${{ matrix.package }}/*.spec || true
           spectool -g -R specs/ermete-${{ matrix.package }}/*.spec || true
+          
+          # First attempt (generates buildreqs.nosrc.rpm for Rust packages)
+          rpmbuild -bb --nocheck specs/ermete-${{ matrix.package }}/*.spec || true
+          
+          # Install dynamic dependencies if generated
+          if ls ~/rpmbuild/SRPMS/*.nosrc.rpm 1> /dev/null 2>&1; then
+              dnf builddep -y ~/rpmbuild/SRPMS/*.nosrc.rpm || true
+          fi
+          
+          # Second attempt (actual build)
           rpmbuild -bb --nocheck specs/ermete-${{ matrix.package }}/*.spec
           
           mkdir -p /github/home/RPMS
@@ -156,6 +166,7 @@ jobs:
           curl -Lo /etc/yum.repos.d/bieszczaders.repo "https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos-addons/repo/fedora-43/bieszczaders-kernel-cachyos-addons-fedora-43.repo"
           mkdir -p /github/home/RPMS
           dnf5 download -y --destdir=/github/home/RPMS ${{ matrix.package }}
+          rm -f /github/home/RPMS/*.src.rpm
           
           export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
