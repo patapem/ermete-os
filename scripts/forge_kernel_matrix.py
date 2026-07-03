@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import sys
+import os
 import subprocess
 
 def parse_args(args=None):
@@ -10,6 +11,7 @@ def parse_args(args=None):
     return parser.parse_args(args)
 
 def dry_run_patch(patch_path, src_dir):
+    patch_path = os.path.abspath(patch_path)
     result = subprocess.run(
         ["patch", "-p1", "--dry-run", "-i", patch_path],
         cwd=src_dir,
