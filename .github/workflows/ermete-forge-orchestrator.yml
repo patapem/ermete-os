@@ -23,24 +23,37 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
+      - name: Check Idempotency
+        id: check
+        run: |
+          dnf install -y skopeo
+          IMAGE="docker://${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-starship:${{ steps.hash.outputs.hash }}"
+          IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+          if skopeo inspect "$IMAGE_LOWER" >/dev/null 2>&1; then
+            echo "Immagine trovata, skip."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
       - name: Calculate Hash
         id: hash
         run: echo "hash=${{ hashFiles('specs/ermete-starship/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
       - name: Cache RPMs
         id: cache
+        if: steps.check.outputs.skip != 'true'
         uses: actions/cache@v4
         with:
           path: /github/home/rpmbuild/RPMS/
           key: rpm-starship-${{ steps.hash.outputs.hash }}
       - name: Cache Cargo Registry
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache.outputs.cache-hit != 'true' && steps.check.outputs.skip != 'true'
         uses: actions/cache@v4
         with:
           path: /root/.cargo/registry
           key: cargo-registry-starship-${{ steps.hash.outputs.hash }}
           restore-keys: cargo-registry-starship-
       - name: Install Dependencies and Build
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache.outputs.cache-hit != 'true' && steps.check.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel
@@ -50,6 +63,7 @@ jobs:
           dnf builddep -y specs/ermete-starship/ermete-starship.spec
           rpmbuild -bb --nocheck specs/ermete-starship/ermete-starship.spec
       - name: Publish Micro-Container OCI
+        if: steps.check.outputs.skip != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs
@@ -57,9 +71,11 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-starship:latest" | tr '[:upper:]' '[:lower:]')
-          buildah commit $ctr $IMAGE_LOWER
-          buildah push $IMAGE_LOWER
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-starship" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER:latest
+          buildah tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.hash.outputs.hash }}
+          buildah push $IMAGE_LOWER:latest
+          buildah push $IMAGE_LOWER:${{ steps.hash.outputs.hash }}
 
   build-bat:
     name: 🦇 Build Bat
@@ -72,24 +88,37 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
+      - name: Check Idempotency
+        id: check
+        run: |
+          dnf install -y skopeo
+          IMAGE="docker://${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-bat:${{ steps.hash.outputs.hash }}"
+          IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+          if skopeo inspect "$IMAGE_LOWER" >/dev/null 2>&1; then
+            echo "Immagine trovata, skip."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
       - name: Calculate Hash
         id: hash
         run: echo "hash=${{ hashFiles('specs/ermete-bat/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
       - name: Cache RPMs
         id: cache
+        if: steps.check.outputs.skip != 'true'
         uses: actions/cache@v4
         with:
           path: /github/home/rpmbuild/RPMS/
           key: rpm-bat-${{ steps.hash.outputs.hash }}
       - name: Cache Cargo Registry
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache.outputs.cache-hit != 'true' && steps.check.outputs.skip != 'true'
         uses: actions/cache@v4
         with:
           path: /root/.cargo/registry
           key: cargo-registry-bat-${{ steps.hash.outputs.hash }}
           restore-keys: cargo-registry-bat-
       - name: Install Dependencies and Build
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache.outputs.cache-hit != 'true' && steps.check.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel
@@ -99,6 +128,7 @@ jobs:
           dnf builddep -y specs/ermete-bat/bat.spec
           rpmbuild -bb --nocheck specs/ermete-bat/bat.spec
       - name: Publish Micro-Container OCI
+        if: steps.check.outputs.skip != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs
@@ -106,9 +136,11 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-bat:latest" | tr '[:upper:]' '[:lower:]')
-          buildah commit $ctr $IMAGE_LOWER
-          buildah push $IMAGE_LOWER
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-bat" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER:latest
+          buildah tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.hash.outputs.hash }}
+          buildah push $IMAGE_LOWER:latest
+          buildah push $IMAGE_LOWER:${{ steps.hash.outputs.hash }}
 
   build-bore-sysctl:
     name: ⚙️ Build bore-sysctl
@@ -199,26 +231,40 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
+      - name: Check Idempotency
+        id: check
+        run: |
+          dnf install -y skopeo
+          IMAGE="docker://${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-selinux:${{ steps.hash.outputs.hash }}"
+          IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+          if skopeo inspect "$IMAGE_LOWER" >/dev/null 2>&1; then
+            echo "Immagine trovata, skip."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
       - name: Calculate Hash
         id: hash
         run: echo "hash=${{ hashFiles('specs/ermete-selinux/**') }}" >> $GITHUB_OUTPUT
       - name: Cache RPMs
         id: cache
+        if: steps.check.outputs.skip != 'true'
         uses: actions/cache@v4
         with:
           path: /github/home/rpmbuild/RPMS/
           key: rpm-selinux-${{ steps.hash.outputs.hash }}
       - name: Install Dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache.outputs.cache-hit != 'true' && steps.check.outputs.skip != 'true'
         run: sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools checkpolicy policycoreutils
       - name: Build
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache.outputs.cache-hit != 'true' && steps.check.outputs.skip != 'true'
         run: |
           rpmdev-setuptree
           cp specs/ermete-selinux/SOURCES/* ~/rpmbuild/SOURCES/
           rpmbuild -bb --nocheck specs/ermete-selinux/ermete-selinux.spec
       - name: Publish Micro-Container OCI
+        if: steps.check.outputs.skip != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs
@@ -226,9 +272,11 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-selinux:latest" | tr '[:upper:]' '[:lower:]')
-          buildah commit $ctr $IMAGE_LOWER
-          buildah push $IMAGE_LOWER
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-selinux" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER:latest
+          buildah tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.hash.outputs.hash }}
+          buildah push $IMAGE_LOWER:latest
+          buildah push $IMAGE_LOWER:${{ steps.hash.outputs.hash }}
   build-ananicy:
     name: ⚡ Build Ananicy CPP
     runs-on: ubuntu-latest
@@ -240,17 +288,30 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
+      - name: Check Idempotency
+        id: check
+        run: |
+          dnf install -y skopeo
+          IMAGE="docker://${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-ananicy:${{ steps.hash.outputs.hash }}"
+          IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+          if skopeo inspect "$IMAGE_LOWER" >/dev/null 2>&1; then
+            echo "Immagine trovata, skip."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
       - name: Calculate Hash
         id: hash
         run: echo "hash=${{ hashFiles('specs/ermete-ananicy/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
       - name: Cache RPMs
         id: cache
+        if: steps.check.outputs.skip != 'true'
         uses: actions/cache@v4
         with:
           path: /github/home/RPMS/
           key: rpm-ananicy-${{ steps.hash.outputs.hash }}
       - name: Install Dependencies and Build Ananicy
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache.outputs.cache-hit != 'true' && steps.check.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools cmake gcc-c++ spdlog-devel systemd-devel nlohmann-json-devel fmt-devel
@@ -264,6 +325,7 @@ jobs:
           mkdir -p /github/home/RPMS
           cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
       - name: Publish Micro-Container OCI
+        if: steps.check.outputs.skip != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs
@@ -271,9 +333,11 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/RPMS/*.rpm /
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-ananicy:latest" | tr '[:upper:]' '[:lower:]')
-          buildah commit $ctr $IMAGE_LOWER
-          buildah push $IMAGE_LOWER
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-ananicy" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER:latest
+          buildah tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.hash.outputs.hash }}
+          buildah push $IMAGE_LOWER:latest
+          buildah push $IMAGE_LOWER:${{ steps.hash.outputs.hash }}
   build-base-config:
     name: 🏗️ Build Base Config
     runs-on: ubuntu-latest
@@ -285,7 +349,23 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-base-config/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+      - name: Check Idempotency
+        id: check
+        run: |
+          dnf install -y skopeo
+          IMAGE="docker://${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-base-config:${{ steps.hash.outputs.hash }}"
+          IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+          if skopeo inspect "$IMAGE_LOWER" >/dev/null 2>&1; then
+            echo "Immagine trovata, skip."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
       - name: Build RPM
+        if: steps.check.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools
@@ -294,6 +374,7 @@ jobs:
           cp specs/ermete-base-config/ermete-base-config.spec ~/rpmbuild/SPECS/
           rpmbuild -ba ~/rpmbuild/SPECS/ermete-base-config.spec
       - name: Publish Micro-Container OCI
+        if: steps.check.outputs.skip != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs
@@ -301,9 +382,11 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
           ctr=$(buildah from scratch)
           buildah copy $ctr ~/rpmbuild/RPMS/noarch/*.rpm /
-          IMAGE_LOWER=$(echo "ghcr.io/${{ github.repository_owner }}/ermete-forge-base-config:latest" | tr '[:upper:]' '[:lower:]')
-          buildah commit $ctr $IMAGE_LOWER
-          buildah push $IMAGE_LOWER
+          IMAGE_LOWER=$(echo "ghcr.io/${{ github.repository_owner }}/ermete-forge-base-config" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER:latest
+          buildah tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.hash.outputs.hash }}
+          buildah push $IMAGE_LOWER:latest
+          buildah push $IMAGE_LOWER:${{ steps.hash.outputs.hash }}
 
   build-appmenu-glib-translator:
     name: 🖥️ Build AGS (appmenu-glib-translator)
@@ -824,24 +907,37 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
+      - name: Check Idempotency
+        id: check
+        run: |
+          dnf install -y skopeo
+          IMAGE="docker://${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-matugen:${{ steps.hash.outputs.hash }}"
+          IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+          if skopeo inspect "$IMAGE_LOWER" >/dev/null 2>&1; then
+            echo "Immagine trovata, skip."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
       - name: Calculate Hash
         id: hash
         run: echo "hash=${{ hashFiles('specs/ermete-matugen/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
       - name: Cache RPMs
         id: cache
+        if: steps.check.outputs.skip != 'true'
         uses: actions/cache@v4
         with:
           path: /github/home/rpmbuild/RPMS/
           key: rpm-matugen-${{ steps.hash.outputs.hash }}
       - name: Cache Cargo Registry
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache.outputs.cache-hit != 'true' && steps.check.outputs.skip != 'true'
         uses: actions/cache@v4
         with:
           path: /root/.cargo/registry
           key: cargo-registry-matugen-${{ steps.hash.outputs.hash }}
           restore-keys: cargo-registry-matugen-
       - name: Install Dependencies and Build
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache.outputs.cache-hit != 'true' && steps.check.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel
@@ -851,6 +947,7 @@ jobs:
           dnf builddep -y specs/ermete-matugen/ermete-matugen.spec
           rpmbuild -bb --nocheck specs/ermete-matugen/ermete-matugen.spec
       - name: Publish Micro-Container OCI
+        if: steps.check.outputs.skip != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs
@@ -858,9 +955,11 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-matugen:latest" | tr '[:upper:]' '[:lower:]')
-          buildah commit $ctr $IMAGE_LOWER
-          buildah push $IMAGE_LOWER
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-matugen" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER:latest
+          buildah tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.hash.outputs.hash }}
+          buildah push $IMAGE_LOWER:latest
+          buildah push $IMAGE_LOWER:${{ steps.hash.outputs.hash }}
   build-bibata:
     name: 🖱️ Build Bibata
     runs-on: self-hosted
@@ -872,24 +971,37 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
+      - name: Check Idempotency
+        id: check
+        run: |
+          dnf install -y skopeo
+          IMAGE="docker://${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-bibata:${{ steps.hash.outputs.hash }}"
+          IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+          if skopeo inspect "$IMAGE_LOWER" >/dev/null 2>&1; then
+            echo "Immagine trovata, skip."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
       - name: Calculate Hash
         id: hash
         run: echo "hash=${{ hashFiles('specs/ermete-bibata/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
       - name: Cache RPMs
         id: cache
+        if: steps.check.outputs.skip != 'true'
         uses: actions/cache@v4
         with:
           path: /github/home/rpmbuild/RPMS/
           key: rpm-bibata-${{ steps.hash.outputs.hash }}
       - name: Cache Cargo Registry
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache.outputs.cache-hit != 'true' && steps.check.outputs.skip != 'true'
         uses: actions/cache@v4
         with:
           path: /root/.cargo/registry
           key: cargo-registry-bibata-${{ steps.hash.outputs.hash }}
           restore-keys: cargo-registry-bibata-
       - name: Install Dependencies and Build
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache.outputs.cache-hit != 'true' && steps.check.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools tar xz curl
@@ -899,6 +1011,7 @@ jobs:
           dnf builddep -y specs/ermete-bibata/ermete-bibata.spec
           rpmbuild -bb --nocheck specs/ermete-bibata/ermete-bibata.spec
       - name: Publish Micro-Container OCI
+        if: steps.check.outputs.skip != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs
@@ -906,9 +1019,11 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/rpmbuild/RPMS/*/*.rpm /
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-bibata:latest" | tr '[:upper:]' '[:lower:]')
-          buildah commit $ctr $IMAGE_LOWER
-          buildah push $IMAGE_LOWER
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-bibata" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER:latest
+          buildah tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.hash.outputs.hash }}
+          buildah push $IMAGE_LOWER:latest
+          buildah push $IMAGE_LOWER:${{ steps.hash.outputs.hash }}
 
   build-nvidia:
     name: 🎮 Build NVIDIA KMOD
@@ -1153,7 +1268,23 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-ags-config/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+      - name: Check Idempotency
+        id: check
+        run: |
+          dnf install -y skopeo
+          IMAGE="docker://${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-ags-config:${{ steps.hash.outputs.hash }}"
+          IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+          if skopeo inspect "$IMAGE_LOWER" >/dev/null 2>&1; then
+            echo "Immagine trovata, skip."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
       - name: Build RPM
+        if: steps.check.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools
@@ -1161,6 +1292,7 @@ jobs:
           if [ -d "specs/ermete-ags-config/SOURCES" ]; then cp -a specs/ermete-ags-config/SOURCES/* ~/rpmbuild/SOURCES/ || true; fi
           rpmbuild -bb --nocheck specs/ermete-ags-config/ermete-ags-config.spec
       - name: Publish OCI
+        if: steps.check.outputs.skip != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
@@ -1181,7 +1313,23 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-niri-session/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+      - name: Check Idempotency
+        id: check
+        run: |
+          dnf install -y skopeo
+          IMAGE="docker://${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-niri-session:${{ steps.hash.outputs.hash }}"
+          IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+          if skopeo inspect "$IMAGE_LOWER" >/dev/null 2>&1; then
+            echo "Immagine trovata, skip."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
       - name: Build RPM
+        if: steps.check.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools
@@ -1189,6 +1337,7 @@ jobs:
           if [ -d "specs/ermete-niri-session/SOURCES" ]; then cp -a specs/ermete-niri-session/SOURCES/* ~/rpmbuild/SOURCES/ || true; fi
           rpmbuild -bb --nocheck specs/ermete-niri-session/ermete-niri-session.spec
       - name: Publish OCI
+        if: steps.check.outputs.skip != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
@@ -1209,7 +1358,23 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-ide-bootstrap/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+      - name: Check Idempotency
+        id: check
+        run: |
+          dnf install -y skopeo
+          IMAGE="docker://${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-ide-bootstrap:${{ steps.hash.outputs.hash }}"
+          IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+          if skopeo inspect "$IMAGE_LOWER" >/dev/null 2>&1; then
+            echo "Immagine trovata, skip."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
       - name: Build RPM
+        if: steps.check.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools
@@ -1217,6 +1382,7 @@ jobs:
           if [ -d "specs/ermete-ide-bootstrap/SOURCES" ]; then cp -a specs/ermete-ide-bootstrap/SOURCES/* ~/rpmbuild/SOURCES/ || true; fi
           rpmbuild -bb --nocheck specs/ermete-ide-bootstrap/ermete-ide-bootstrap.spec
       - name: Publish OCI
+        if: steps.check.outputs.skip != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
@@ -1237,7 +1403,23 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-system-services/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+      - name: Check Idempotency
+        id: check
+        run: |
+          dnf install -y skopeo
+          IMAGE="docker://${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-system-services:${{ steps.hash.outputs.hash }}"
+          IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+          if skopeo inspect "$IMAGE_LOWER" >/dev/null 2>&1; then
+            echo "Immagine trovata, skip."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
       - name: Build RPM
+        if: steps.check.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools
@@ -1245,6 +1427,7 @@ jobs:
           if [ -d "specs/ermete-system-services/SOURCES" ]; then cp -a specs/ermete-system-services/SOURCES/* ~/rpmbuild/SOURCES/ || true; fi
           rpmbuild -bb --nocheck specs/ermete-system-services/ermete-system-services.spec
       - name: Publish OCI
+        if: steps.check.outputs.skip != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
@@ -1265,7 +1448,23 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-nix-support/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+      - name: Check Idempotency
+        id: check
+        run: |
+          dnf install -y skopeo
+          IMAGE="docker://${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-nix-support:${{ steps.hash.outputs.hash }}"
+          IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+          if skopeo inspect "$IMAGE_LOWER" >/dev/null 2>&1; then
+            echo "Immagine trovata, skip."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
       - name: Build RPM
+        if: steps.check.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools
@@ -1273,6 +1472,7 @@ jobs:
           if [ -d "specs/ermete-nix-support/SOURCES" ]; then cp -a specs/ermete-nix-support/SOURCES/* ~/rpmbuild/SOURCES/ || true; fi
           rpmbuild -bb --nocheck specs/ermete-nix-support/ermete-nix-support.spec
       - name: Publish OCI
+        if: steps.check.outputs.skip != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
@@ -1293,7 +1493,23 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-system-config/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+      - name: Check Idempotency
+        id: check
+        run: |
+          dnf install -y skopeo
+          IMAGE="docker://${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-system-config:${{ steps.hash.outputs.hash }}"
+          IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+          if skopeo inspect "$IMAGE_LOWER" >/dev/null 2>&1; then
+            echo "Immagine trovata, skip."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
       - name: Build RPM
+        if: steps.check.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools
@@ -1301,6 +1517,7 @@ jobs:
           if [ -d "specs/ermete-system-config/SOURCES" ]; then cp -a specs/ermete-system-config/SOURCES/* ~/rpmbuild/SOURCES/ || true; fi
           rpmbuild -bb --nocheck specs/ermete-system-config/ermete-system-config.spec
       - name: Publish OCI
+        if: steps.check.outputs.skip != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
@@ -1321,7 +1538,23 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v4
+      - name: Calculate Hash
+        id: hash
+        run: echo "hash=${{ hashFiles('specs/ermete-system-tweaks/**', 'config/rpmmacros') }}" >> $GITHUB_OUTPUT
+      - name: Check Idempotency
+        id: check
+        run: |
+          dnf install -y skopeo
+          IMAGE="docker://${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-system-tweaks:${{ steps.hash.outputs.hash }}"
+          IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+          if skopeo inspect "$IMAGE_LOWER" >/dev/null 2>&1; then
+            echo "Immagine trovata, skip."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
       - name: Build RPM
+        if: steps.check.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools
@@ -1329,6 +1562,7 @@ jobs:
           if [ -d "specs/ermete-system-tweaks/SOURCES" ]; then cp -a specs/ermete-system-tweaks/SOURCES/* ~/rpmbuild/SOURCES/ || true; fi
           rpmbuild -bb --nocheck specs/ermete-system-tweaks/ermete-system-tweaks.spec
       - name: Publish OCI
+        if: steps.check.outputs.skip != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
