@@ -72,15 +72,8 @@ jobs:
           else
             echo "skip=false" >> $GITHUB_OUTPUT
           fi
-      - name: Cache RPMs
-        id: cache
-        if: steps.check.outputs.skip != 'true'
-        uses: actions/cache@v4
-        with:
-          path: /github/home/rpmbuild/RPMS/
-          key: rpm-${{ matrix.package }}-${{ steps.hash.outputs.hash }}
       - name: Install Dependencies and Build
-        if: steps.cache.outputs['cache-hit'] != 'true' && steps.check.outputs.skip != 'true'
+        if: steps.check.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel checkpolicy policycoreutils spdlog-devel systemd-devel nlohmann-json-devel fmt-devel which autoconf automake libtool cargo-rpm-macros
@@ -488,15 +481,7 @@ jobs:
         id: hash
         run: echo "hash=${{ hashFiles('config/rpmmacros') }}" >> $GITHUB_OUTPUT
         
-      - name: Cache RPMs
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: /github/home/rpmbuild/RPMS/
-          key: rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-${{ github.run_id }}
-          restore-keys: |
-            rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-
-            rpm-rolling-${{ matrix.package }}-
+
       - name: Check Idempotency (Content Hash)
         id: check_idempotency
         run: |
@@ -590,15 +575,7 @@ jobs:
         id: hash
         run: echo "hash=${{ hashFiles('config/rpmmacros') }}" >> $GITHUB_OUTPUT
         
-      - name: Cache RPMs
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: /github/home/rpmbuild/RPMS/
-          key: rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-${{ github.run_id }}
-          restore-keys: |
-            rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-
-            rpm-rolling-${{ matrix.package }}-
+
       - name: Check Idempotency (Content Hash)
         id: check_idempotency
         run: |
@@ -692,15 +669,7 @@ jobs:
         id: hash
         run: echo "hash=${{ hashFiles('config/rpmmacros') }}" >> $GITHUB_OUTPUT
         
-      - name: Cache RPMs
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: /github/home/rpmbuild/RPMS/
-          key: rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-${{ github.run_id }}
-          restore-keys: |
-            rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-
-            rpm-rolling-${{ matrix.package }}-
+
       - name: Check Idempotency (Content Hash)
         id: check_idempotency
         run: |
@@ -795,15 +764,7 @@ jobs:
         id: hash
         run: echo "hash=${{ hashFiles('config/rpmmacros') }}" >> $GITHUB_OUTPUT
         
-      - name: Cache RPMs
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: /github/home/rpmbuild/RPMS/
-          key: rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-${{ github.run_id }}
-          restore-keys: |
-            rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-
-            rpm-rolling-${{ matrix.package }}-
+
       - name: Check Idempotency (Content Hash)
         id: check_idempotency
         run: |
