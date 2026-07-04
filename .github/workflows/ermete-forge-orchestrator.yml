@@ -396,6 +396,8 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           dnf install -y akmods akmod-nvidia gcc gcc-c++ make elfutils-libelf-devel openssl-devel rpm-build rpmdevtools clang lld llvm
+          mkdir -p /lib/modules/${{ steps.kernel.outputs.kernel_ver }}
+          ln -sf /usr/src/kernels/${{ steps.kernel.outputs.kernel_ver }} /lib/modules/${{ steps.kernel.outputs.kernel_ver }}/build
           
           # Removed fake LLVM symlinks because the kernel is built natively with GCC and GCOV.          
           cp scripts/akmods /usr/sbin/akmods
