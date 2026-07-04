@@ -486,7 +486,7 @@ jobs:
         id: check_idempotency
         run: |
           python3 scripts/idempotency_checker.py --package ${{ matrix.package }} --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} > idemp.out
-          source idemp.out
+          source ./idemp.out
           if [ "$CACHE_HIT" = "true" ]; then
             echo "cache_hit=true" >> $GITHUB_OUTPUT
           else
@@ -588,7 +588,7 @@ jobs:
         id: check_idempotency
         run: |
           python3 scripts/idempotency_checker.py --package ${{ matrix.package }} --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} > idemp.out
-          source idemp.out
+          source ./idemp.out
           if [ "$CACHE_HIT" = "true" ]; then
             echo "cache_hit=true" >> $GITHUB_OUTPUT
           else
@@ -690,7 +690,7 @@ jobs:
         id: check_idempotency
         run: |
           python3 scripts/idempotency_checker.py --package ${{ matrix.package }} --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} > idemp.out
-          source idemp.out
+          source ./idemp.out
           if [ "$CACHE_HIT" = "true" ]; then
             echo "cache_hit=true" >> $GITHUB_OUTPUT
           else
@@ -793,7 +793,7 @@ jobs:
         id: check_idempotency
         run: |
           python3 scripts/idempotency_checker.py --package ${{ matrix.package }} --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} > idemp.out
-          source idemp.out
+          source ./idemp.out
           if [ "$CACHE_HIT" = "true" ]; then
             echo "cache_hit=true" >> $GITHUB_OUTPUT
           else
