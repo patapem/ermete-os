@@ -37,18 +37,16 @@ def hash_directory(directory: Path) -> str:
 def hash_upstream(orchestrator_path: Path, package_name: str) -> str:
     """
     Calculates a deterministic hash for upstream packages that lack specs.
-    Hashes the orchestrator YAML file and the package name itself.
+    Hashes the package name and a cache seed, ignoring the orchestrator YAML.
     """
     hasher = hashlib.sha256()
     
     # Hash the package name
     hasher.update(package_name.encode('utf-8'))
     
-    # Hash the orchestrator configuration
-    if orchestrator_path.is_file():
-        with open(orchestrator_path, 'rb') as f:
-            while chunk := f.read(8192):
-                hasher.update(chunk)
+    # Hash a static cache seed (bump this to force rebuild all upstream packages)
+    cache_seed = "upstream-cache-v1"
+    hasher.update(cache_seed.encode('utf-8'))
     
     return hasher.hexdigest()
 
