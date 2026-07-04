@@ -444,7 +444,7 @@ jobs:
           echo "${{ secrets.MOK_PRIVATE_KEY }}" | base64 -d > /etc/pki/akmods/private/private_key.priv
           echo "${{ secrets.MOK_PUBLIC_DER }}" | base64 -d > /etc/pki/akmods/certs/public_key.der
           cp config/rpmmacros ~/.rpmmacros
-          chmod 0600 /etc/pki/akmods/private/private_key.priv
+          chmod 0644 /etc/pki/akmods/private/private_key.priv
 
           # [GCC 15 WORKAROUND] NVIDIA 610.43 causes warnings that GCC 15 treats as errors.
           export IGNORE_CC_MISMATCH=1
