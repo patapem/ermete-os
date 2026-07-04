@@ -65,7 +65,7 @@ jobs:
           path: /github/home/rpmbuild/RPMS/
           key: rpm-${{ matrix.package }}-${{ steps.hash.outputs.hash }}
       - name: Install Dependencies and Build
-        if: steps.cache.outputs.cache_hit != 'true' && steps.check.outputs.skip != 'true'
+        if: steps.cache.outputs['cache-hit'] != 'true' && steps.check.outputs.skip != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build rpmdevtools gcc gcc-c++ cargo rust cmake mold tar xz curl pkgconf-pkg-config zlib-devel openssl-devel checkpolicy policycoreutils spdlog-devel systemd-devel nlohmann-json-devel fmt-devel which autoconf automake libtool cargo-rpm-macros
@@ -381,9 +381,9 @@ jobs:
 
 
   build-nvidia:
-    needs: build-builder
+    needs: [build-builder, build-kernel]
     name: 🎮 Build NVIDIA KMOD
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: read
       packages: write
@@ -414,7 +414,7 @@ jobs:
           path: /var/cache/akmods/nvidia/
           key: rpm-nvidia-${{ steps.kernel.outputs.kernel_ver }}
       - name: Install Dependencies and Build
-        if: steps.cache.outputs.cache_hit != 'true'
+        if: steps.cache.outputs['cache-hit'] != 'true'
         run: |
           dnf install -y akmods akmod-nvidia gcc gcc-c++ make elfutils-libelf-devel openssl-devel rpm-build rpmdevtools clang lld llvm
           REAL_KERNEL_VER=$(ls /usr/src/kernels/ | head -n 1)
@@ -483,7 +483,7 @@ jobs:
             rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-
             rpm-rolling-${{ matrix.package }}-
       - name: Check Idempotency (Content Hash)
-        id: cache
+        id: check_idempotency
         run: |
           python3 scripts/idempotency_checker.py --package ${{ matrix.package }} --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} > idemp.out
           source idemp.out
@@ -495,7 +495,7 @@ jobs:
           echo "content_hash=$CONTENT_HASH" >> $GITHUB_OUTPUT
           
       - name: Fetch, Patch and Build ${{ matrix.package }}
-        if: steps.cache.outputs.cache_hit != 'true'
+        if: steps.check_idempotency.outputs.cache_hit != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++ which autoconf automake libtool
@@ -535,7 +535,7 @@ jobs:
           mkdir -p /github/home/RPMS
           cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
       - name: Publish Micro-Container OCI
-        if: steps.cache.outputs.cache_hit != 'true'
+        if: steps.check_idempotency.outputs.cache_hit != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs
@@ -545,9 +545,9 @@ jobs:
           buildah copy $ctr /github/home/RPMS/*.rpm /
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER:latest
-          buildah tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.cache.outputs.content_hash }}
+          buildah tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.check_idempotency.outputs.content_hash }}
           buildah push $IMAGE_LOWER:latest
-          buildah push $IMAGE_LOWER:${{ steps.cache.outputs.content_hash }}
+          buildah push $IMAGE_LOWER:${{ steps.check_idempotency.outputs.content_hash }}
 
 
   upstream-desktop:
@@ -585,7 +585,7 @@ jobs:
             rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-
             rpm-rolling-${{ matrix.package }}-
       - name: Check Idempotency (Content Hash)
-        id: cache
+        id: check_idempotency
         run: |
           python3 scripts/idempotency_checker.py --package ${{ matrix.package }} --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} > idemp.out
           source idemp.out
@@ -597,7 +597,7 @@ jobs:
           echo "content_hash=$CONTENT_HASH" >> $GITHUB_OUTPUT
           
       - name: Fetch, Patch and Build ${{ matrix.package }}
-        if: steps.cache.outputs.cache_hit != 'true'
+        if: steps.check_idempotency.outputs.cache_hit != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++ which autoconf automake libtool
@@ -637,7 +637,7 @@ jobs:
           mkdir -p /github/home/RPMS
           cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
       - name: Publish Micro-Container OCI
-        if: steps.cache.outputs.cache_hit != 'true'
+        if: steps.check_idempotency.outputs.cache_hit != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs
@@ -647,9 +647,9 @@ jobs:
           buildah copy $ctr /github/home/RPMS/*.rpm /
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER:latest
-          buildah tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.cache.outputs.content_hash }}
+          buildah tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.check_idempotency.outputs.content_hash }}
           buildah push $IMAGE_LOWER:latest
-          buildah push $IMAGE_LOWER:${{ steps.cache.outputs.content_hash }}
+          buildah push $IMAGE_LOWER:${{ steps.check_idempotency.outputs.content_hash }}
 
 
   upstream-media:
@@ -687,7 +687,7 @@ jobs:
             rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-
             rpm-rolling-${{ matrix.package }}-
       - name: Check Idempotency (Content Hash)
-        id: cache
+        id: check_idempotency
         run: |
           python3 scripts/idempotency_checker.py --package ${{ matrix.package }} --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} > idemp.out
           source idemp.out
@@ -699,7 +699,7 @@ jobs:
           echo "content_hash=$CONTENT_HASH" >> $GITHUB_OUTPUT
           
       - name: Fetch, Patch and Build ${{ matrix.package }}
-        if: steps.cache.outputs.cache_hit != 'true'
+        if: steps.check_idempotency.outputs.cache_hit != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++ which autoconf automake libtool
@@ -739,7 +739,7 @@ jobs:
           mkdir -p /github/home/RPMS
           cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
       - name: Publish Micro-Container OCI
-        if: steps.cache.outputs.cache_hit != 'true'
+        if: steps.check_idempotency.outputs.cache_hit != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs
@@ -749,9 +749,9 @@ jobs:
           buildah copy $ctr /github/home/RPMS/*.rpm /
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER:latest
-          buildah tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.cache.outputs.content_hash }}
+          buildah tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.check_idempotency.outputs.content_hash }}
           buildah push $IMAGE_LOWER:latest
-          buildah push $IMAGE_LOWER:${{ steps.cache.outputs.content_hash }}
+          buildah push $IMAGE_LOWER:${{ steps.check_idempotency.outputs.content_hash }}
 
 
 
@@ -790,7 +790,7 @@ jobs:
             rpm-rolling-${{ matrix.package }}-${{ steps.hash.outputs.hash }}-
             rpm-rolling-${{ matrix.package }}-
       - name: Check Idempotency (Content Hash)
-        id: cache
+        id: check_idempotency
         run: |
           python3 scripts/idempotency_checker.py --package ${{ matrix.package }} --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} > idemp.out
           source idemp.out
@@ -802,7 +802,7 @@ jobs:
           echo "content_hash=$CONTENT_HASH" >> $GITHUB_OUTPUT
           
       - name: Fetch, Patch and Build ${{ matrix.package }}
-        if: steps.cache.outputs.cache_hit != 'true'
+        if: steps.check_idempotency.outputs.cache_hit != 'true'
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
           dnf install -y rpm-build dnf-plugins-core rpmdevtools mold gcc-c++ which autoconf automake libtool
@@ -842,7 +842,7 @@ jobs:
           mkdir -p /github/home/RPMS
           cp ~/rpmbuild/RPMS/*/*.rpm /github/home/RPMS/
       - name: Publish Micro-Container OCI
-        if: steps.cache.outputs.cache_hit != 'true'
+        if: steps.check_idempotency.outputs.cache_hit != 'true'
         run: |
           dnf install -y buildah
           export STORAGE_DRIVER=vfs
@@ -852,9 +852,9 @@ jobs:
           buildah copy $ctr /github/home/RPMS/*.rpm /
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER:latest
-          buildah tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.cache.outputs.content_hash }}
+          buildah tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.check_idempotency.outputs.content_hash }}
           buildah push $IMAGE_LOWER:latest
-          buildah push $IMAGE_LOWER:${{ steps.cache.outputs.content_hash }}
+          buildah push $IMAGE_LOWER:${{ steps.check_idempotency.outputs.content_hash }}
 
   build-repo:
     name: 📦 Build Repository
