@@ -396,8 +396,10 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           dnf install -y akmods akmod-nvidia gcc gcc-c++ make elfutils-libelf-devel openssl-devel rpm-build rpmdevtools clang lld llvm
-          mkdir -p /lib/modules/${{ steps.kernel.outputs.kernel_ver }}
-          ln -sf /usr/src/kernels/${{ steps.kernel.outputs.kernel_ver }} /lib/modules/${{ steps.kernel.outputs.kernel_ver }}/build
+          REAL_KERNEL_VER=$(ls /usr/src/kernels/ | head -n 1)
+          echo "Real kernel version is $REAL_KERNEL_VER"
+          mkdir -p /lib/modules/$REAL_KERNEL_VER
+          ln -sf /usr/src/kernels/$REAL_KERNEL_VER /lib/modules/$REAL_KERNEL_VER/build
           
           # Removed fake LLVM symlinks because the kernel is built natively with GCC and GCOV.          
           cp scripts/akmods /usr/sbin/akmods
@@ -410,9 +412,8 @@ jobs:
           echo "${{ secrets.MOK_PUBLIC_DER }}" | base64 -d > /etc/pki/akmods/certs/public_key.der
           cp config/rpmmacros ~/.rpmmacros
           chmod 0600 /etc/pki/akmods/private/private_key.priv
-          mkdir -p /lib/modules/${{ steps.kernel.outputs.kernel_ver }}
-          ln -sf /usr/src/kernels/${{ steps.kernel.outputs.kernel_ver }} /lib/modules/${{ steps.kernel.outputs.kernel_ver }}/build
-          akmods --force --kernels "${{ steps.kernel.outputs.kernel_ver }}"
+
+          akmods --force --kernels $REAL_KERNEL_VER
       - name: Publish Micro-Container OCI
         run: |
           dnf install -y buildah
