@@ -10,6 +10,7 @@ on:
 env:
   REGISTRY: ghcr.io
   FEDORA_VERSION: 43
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build-builder:

@@ -81,8 +81,16 @@ def main():
     cache_hit = "false"
     
     try:
+        cmd = ["skopeo", "inspect"]
+        
+        token = os.environ.get("GITHUB_TOKEN")
+        if token:
+            cmd.extend(["--creds", f"{args.owner}:{token}"])
+            
+        cmd.append(image_url)
+        
         subprocess.run(
-            ["skopeo", "inspect", image_url],
+            cmd,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             check=True
