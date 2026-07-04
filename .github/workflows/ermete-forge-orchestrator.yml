@@ -511,6 +511,18 @@ jobs:
           cd ~/rpmbuild/SRPMS
           
           echo "--- Abilitazione RPM Fusion ---"
+          cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
+          [rpmfusion-free-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Free
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          [rpmfusion-nonfree-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Nonfree
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          REPO
           dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm || true
           
           echo "--- Downloading Source RPM per ${{ matrix.package }} ---"
@@ -644,6 +656,18 @@ jobs:
           cd ~/rpmbuild/SRPMS
           
           echo "--- Abilitazione RPM Fusion ---"
+          cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
+          [rpmfusion-free-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Free
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          [rpmfusion-nonfree-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Nonfree
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          REPO
           dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm || true
           
           echo "--- Downloading Source RPM per ${{ matrix.package }} ---"
@@ -777,6 +801,18 @@ jobs:
           cd ~/rpmbuild/SRPMS
           
           echo "--- Abilitazione RPM Fusion ---"
+          cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
+          [rpmfusion-free-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Free
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          [rpmfusion-nonfree-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Nonfree
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          REPO
           dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm || true
           
           echo "--- Downloading Source RPM per ${{ matrix.package }} ---"
@@ -911,6 +947,18 @@ jobs:
           cd ~/rpmbuild/SRPMS
           
           echo "--- Abilitazione RPM Fusion ---"
+          cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
+          [rpmfusion-free-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Free
+          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          [rpmfusion-nonfree-rawhide]
+          name=RPM Fusion for Fedora Rawhide - Nonfree
+          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
+          enabled=1
+          gpgcheck=0
+          REPO
           dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm || true
           
           echo "--- Downloading Source RPM per ${{ matrix.package }} ---"
