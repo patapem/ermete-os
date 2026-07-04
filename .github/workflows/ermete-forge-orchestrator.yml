@@ -12,7 +12,23 @@ env:
   FEDORA_VERSION: 43
 
 jobs:
+  build-builder:
+    name: 🏗️ Build Base Builder
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and Publish Builder
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          IMAGE_LOWER=$(echo "ghcr.io/${{ github.repository_owner }}/ermete-builder:latest" | tr '[:upper:]' '[:lower:]')
+          docker build -t $IMAGE_LOWER -f builder/Containerfile builder/
+          docker push $IMAGE_LOWER
+
   custom-packages:
+    needs: build-builder
     name: 📦 Custom Packages
     runs-on: ubuntu-latest
     strategy:
@@ -23,7 +39,7 @@ jobs:
       contents: read
       packages: write
     container:
-      image: registry.fedoraproject.org/fedora:43
+      image: ghcr.io/${{ github.repository_owner }}/ermete-builder:latest
       options: --privileged
     steps:
       - uses: actions/checkout@v4
@@ -99,13 +115,14 @@ jobs:
           buildah push $IMAGE_LOWER:${{ steps.hash.outputs.hash }}
 
   ags-ecosystem:
+    needs: build-builder
     name: 🖥️ Build AGS Ecosystem
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     container:
-      image: registry.fedoraproject.org/fedora:43
+      image: ghcr.io/${{ github.repository_owner }}/ermete-builder:latest
       options: --privileged
     steps:
       - uses: actions/checkout@v4
@@ -160,6 +177,7 @@ jobs:
           done
 
   cachyos-addons:
+    needs: build-builder
     name: ⚙️ Build CachyOS Addons
     runs-on: ubuntu-latest
     strategy:
@@ -170,7 +188,7 @@ jobs:
       contents: read
       packages: write
     container:
-      image: registry.fedoraproject.org/fedora:43
+      image: ghcr.io/${{ github.repository_owner }}/ermete-builder:latest
       options: --privileged
     steps:
       - name: Fetch and Package
@@ -189,13 +207,14 @@ jobs:
           buildah commit $ctr $IMAGE && buildah push $IMAGE
 
   build-kernel:
+    needs: build-builder
     name: 🧠 Build Chimera Kernel (CachyOS + Clear + Gentoo)
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: read
       packages: write
     container:
-      image: registry.fedoraproject.org/fedora:43
+      image: ghcr.io/${{ github.repository_owner }}/ermete-builder:latest
       options: --privileged --security-opt label=disable
     steps:
       - uses: actions/checkout@v4
@@ -220,6 +239,7 @@ jobs:
       - name: Fetch Base Kernel and Patches
         run: |
           bash specs/ermete-kernel/prepare-chimera.sh
+          python3 scripts/forge-kernel-matrix.py --kernel-dir linux --patches-dir patches
 
       - name: Bedrock Idempotency Check
         id: idempotency
@@ -361,13 +381,14 @@ jobs:
 
 
   build-nvidia:
+    needs: build-builder
     name: 🎮 Build NVIDIA KMOD
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     container:
-      image: registry.fedoraproject.org/fedora:43
+      image: ghcr.io/${{ github.repository_owner }}/ermete-builder:latest
       options: --privileged
     steps:
       - uses: actions/checkout@v4
@@ -428,6 +449,7 @@ jobs:
 
 
   upstream-core:
+    needs: build-builder
     name: 📦 Upstream Core
 
     runs-on: ubuntu-latest
@@ -442,7 +464,7 @@ jobs:
       REGISTRY: ghcr.io
       FEDORA_VERSION: 43
     container:
-      image: registry.fedoraproject.org/fedora:43
+      image: ghcr.io/${{ github.repository_owner }}/ermete-builder:latest
       options: --privileged
     steps:
       - uses: actions/checkout@v4
@@ -465,19 +487,6 @@ jobs:
         id: check_idempotency
         run: |
           dnf install -y dnf5 skopeo jq
-                    cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
-          [rpmfusion-free-rawhide]
-          name=RPM Fusion for Fedora Rawhide - Free
-          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/$basearch/os/
-          enabled=1
-          gpgcheck=0
-          
-          [rpmfusion-nonfree-rawhide]
-          name=RPM Fusion for Fedora Rawhide - Nonfree
-          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/$basearch/os/
-          enabled=1
-          gpgcheck=0
-          REPO
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}:latest" | tr '[:upper:]' '[:lower:]')
           
           # Trova versione upstream su Fedora (inclusi RPM Fusion)
@@ -509,21 +518,6 @@ jobs:
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
           cd ~/rpmbuild/SRPMS
-          
-          echo "--- Abilitazione RPM Fusion ---"
-          cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
-          [rpmfusion-free-rawhide]
-          name=RPM Fusion for Fedora Rawhide - Free
-          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
-          enabled=1
-          gpgcheck=0
-          [rpmfusion-nonfree-rawhide]
-          name=RPM Fusion for Fedora Rawhide - Nonfree
-          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
-          enabled=1
-          gpgcheck=0
-          REPO
-          dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm || true
           
           echo "--- Downloading Source RPM per ${{ matrix.package }} ---"
           dnf download --source ${{ matrix.package }} || dnf download --source --disablerepo="rpmfusion*" ${{ matrix.package }}
@@ -573,6 +567,7 @@ jobs:
 
 
   upstream-desktop:
+    needs: build-builder
     name: 📦 Upstream Desktop
 
     runs-on: ubuntu-latest
@@ -587,7 +582,7 @@ jobs:
       REGISTRY: ghcr.io
       FEDORA_VERSION: 43
     container:
-      image: registry.fedoraproject.org/fedora:43
+      image: ghcr.io/${{ github.repository_owner }}/ermete-builder:latest
       options: --privileged
     steps:
       - uses: actions/checkout@v4
@@ -610,19 +605,6 @@ jobs:
         id: check_idempotency
         run: |
           dnf install -y dnf5 skopeo jq
-                    cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
-          [rpmfusion-free-rawhide]
-          name=RPM Fusion for Fedora Rawhide - Free
-          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/$basearch/os/
-          enabled=1
-          gpgcheck=0
-          
-          [rpmfusion-nonfree-rawhide]
-          name=RPM Fusion for Fedora Rawhide - Nonfree
-          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/$basearch/os/
-          enabled=1
-          gpgcheck=0
-          REPO
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}:latest" | tr '[:upper:]' '[:lower:]')
           
           # Trova versione upstream su Fedora (inclusi RPM Fusion)
@@ -654,21 +636,6 @@ jobs:
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
           cd ~/rpmbuild/SRPMS
-          
-          echo "--- Abilitazione RPM Fusion ---"
-          cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
-          [rpmfusion-free-rawhide]
-          name=RPM Fusion for Fedora Rawhide - Free
-          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
-          enabled=1
-          gpgcheck=0
-          [rpmfusion-nonfree-rawhide]
-          name=RPM Fusion for Fedora Rawhide - Nonfree
-          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
-          enabled=1
-          gpgcheck=0
-          REPO
-          dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm || true
           
           echo "--- Downloading Source RPM per ${{ matrix.package }} ---"
           dnf download --source ${{ matrix.package }} || dnf download --source --disablerepo="rpmfusion*" ${{ matrix.package }}
@@ -718,6 +685,7 @@ jobs:
 
 
   upstream-media:
+    needs: build-builder
     name: 📦 Upstream Media
 
     runs-on: ubuntu-latest
@@ -732,7 +700,7 @@ jobs:
       REGISTRY: ghcr.io
       FEDORA_VERSION: 43
     container:
-      image: registry.fedoraproject.org/fedora:43
+      image: ghcr.io/${{ github.repository_owner }}/ermete-builder:latest
       options: --privileged
     steps:
       - uses: actions/checkout@v4
@@ -755,19 +723,6 @@ jobs:
         id: check_idempotency
         run: |
           dnf install -y dnf5 skopeo jq
-                    cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
-          [rpmfusion-free-rawhide]
-          name=RPM Fusion for Fedora Rawhide - Free
-          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/$basearch/os/
-          enabled=1
-          gpgcheck=0
-          
-          [rpmfusion-nonfree-rawhide]
-          name=RPM Fusion for Fedora Rawhide - Nonfree
-          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/$basearch/os/
-          enabled=1
-          gpgcheck=0
-          REPO
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}:latest" | tr '[:upper:]' '[:lower:]')
           
           # Trova versione upstream su Fedora (inclusi RPM Fusion)
@@ -799,21 +754,6 @@ jobs:
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
           cd ~/rpmbuild/SRPMS
-          
-          echo "--- Abilitazione RPM Fusion ---"
-          cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
-          [rpmfusion-free-rawhide]
-          name=RPM Fusion for Fedora Rawhide - Free
-          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
-          enabled=1
-          gpgcheck=0
-          [rpmfusion-nonfree-rawhide]
-          name=RPM Fusion for Fedora Rawhide - Nonfree
-          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
-          enabled=1
-          gpgcheck=0
-          REPO
-          dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm || true
           
           echo "--- Downloading Source RPM per ${{ matrix.package }} ---"
           dnf download --source ${{ matrix.package }} || dnf download --source --disablerepo="rpmfusion*" ${{ matrix.package }}
@@ -864,6 +804,7 @@ jobs:
 
 
   upstream-cli:
+    needs: build-builder
     name: 📦 Upstream Cli
 
     runs-on: ubuntu-latest
@@ -878,7 +819,7 @@ jobs:
       REGISTRY: ghcr.io
       FEDORA_VERSION: 43
     container:
-      image: registry.fedoraproject.org/fedora:43
+      image: ghcr.io/${{ github.repository_owner }}/ermete-builder:latest
       options: --privileged
     steps:
       - uses: actions/checkout@v4
@@ -901,19 +842,6 @@ jobs:
         id: check_idempotency
         run: |
           dnf install -y dnf5 skopeo jq
-                    cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
-          [rpmfusion-free-rawhide]
-          name=RPM Fusion for Fedora Rawhide - Free
-          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/$basearch/os/
-          enabled=1
-          gpgcheck=0
-          
-          [rpmfusion-nonfree-rawhide]
-          name=RPM Fusion for Fedora Rawhide - Nonfree
-          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/$basearch/os/
-          enabled=1
-          gpgcheck=0
-          REPO
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}:latest" | tr '[:upper:]' '[:lower:]')
           
           # Trova versione upstream su Fedora (inclusi RPM Fusion)
@@ -945,21 +873,6 @@ jobs:
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
           cd ~/rpmbuild/SRPMS
-          
-          echo "--- Abilitazione RPM Fusion ---"
-          cat << 'REPO' > /etc/yum.repos.d/rpmfusion-rawhide.repo
-          [rpmfusion-free-rawhide]
-          name=RPM Fusion for Fedora Rawhide - Free
-          baseurl=http://mirrors.rpmfusion.org/free/fedora/development/rawhide/Everything/$basearch/os/
-          enabled=1
-          gpgcheck=0
-          [rpmfusion-nonfree-rawhide]
-          name=RPM Fusion for Fedora Rawhide - Nonfree
-          baseurl=http://mirrors.rpmfusion.org/nonfree/fedora/development/rawhide/Everything/$basearch/os/
-          enabled=1
-          gpgcheck=0
-          REPO
-          dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm || true
           
           echo "--- Downloading Source RPM per ${{ matrix.package }} ---"
           dnf download --source ${{ matrix.package }} || dnf download --source --disablerepo="rpmfusion*" ${{ matrix.package }}
@@ -1004,6 +917,38 @@ jobs:
           buildah config --label org.opencontainers.image.version="${{ steps.check_idempotency.outputs.version }}" $ctr
           buildah copy $ctr /github/home/RPMS/*.rpm /
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-rolling-${{ matrix.package }}:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+
+  build-repo:
+    name: 📦 Build Repository
+    needs: [custom-packages, ags-ecosystem, cachyos-addons, build-kernel, build-nvidia, upstream-core, upstream-desktop, upstream-media, upstream-cli]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: ghcr.io/${{ github.repository_owner }}/ermete-builder:latest
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download all RPM artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: /github/home/repo
+      - name: Create Repo and Push OCI
+        run: |
+          dnf install -y createrepo_c buildah skopeo
+          cd /github/home/repo
+          find . -name "*.rpm" -exec mv {} . \;
+          createrepo_c .
+          
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+          ctr=$(buildah from scratch)
+          buildah copy $ctr /github/home/repo /
+          IMAGE_LOWER=$(echo "ghcr.io/${{ github.repository_owner }}/ermete-forge-repo:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
 
