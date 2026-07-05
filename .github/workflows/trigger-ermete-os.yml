@@ -2,7 +2,11 @@ name: Trigger Downstream Ermete OS
 on:
   workflow_run:
     workflows:
+      - "Ermete Custom CLI"
+      - "Ermete Custom Core"
       - "Ermete Custom Desktop"
+      - "Ermete Custom Hardware"
+      - "Ermete Forge OCI Kernel Assembly"
       - "Ermete System Components"
       - "Ermete Upstream CLI"
       - "Ermete Upstream Core"
