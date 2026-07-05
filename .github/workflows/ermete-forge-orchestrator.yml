@@ -366,9 +366,9 @@ jobs:
           echo "Compilazione del Kernel Ottimizzato (Cristallizzazione)..."
           export PATH="/usr/lib64/ccache:/usr/lib/ccache:$PATH"
           export CCACHE_DIR=~/.cache/ccache
-          echo 'KCFLAGS := $(filter-out -fprofile-use=% -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize, $(KCFLAGS))' >> drivers/firmware/efi/libstub/Makefile
-          echo 'KCFLAGS := $(filter-out -fprofile-use=% -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize, $(KCFLAGS))' >> arch/x86/boot/Makefile
-          echo 'KCFLAGS := $(filter-out -fprofile-use=% -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize, $(KCFLAGS))' >> arch/x86/boot/compressed/Makefile
+          echo 'KBUILD_CFLAGS := $(filter-out -fprofile-use=% -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize, $(KBUILD_CFLAGS))' >> drivers/firmware/efi/libstub/Makefile
+          echo 'KBUILD_CFLAGS := $(filter-out -fprofile-use=% -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize, $(KBUILD_CFLAGS))' >> arch/x86/boot/Makefile
+          echo 'KBUILD_CFLAGS := $(filter-out -fprofile-use=% -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize, $(KBUILD_CFLAGS))' >> arch/x86/boot/compressed/Makefile
           export KCFLAGS="-march=x86-64-v3 -pipe -Wno-error -fprofile-use=/tmp/host_gcov -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize"
           export KCPPFLAGS="-march=x86-64-v3 -pipe -Wno-error"
           make -j$(nproc) binrpm-pkg
