@@ -25,7 +25,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python3 scripts/idempotency_checker.py --package builder --registry ghcr.io --owner ${{ github.repository_owner }} --image-name ermete-builder > idemp.out
+          bash scripts/check_idempotency.sh --package builder --registry ghcr.io --owner ${{ github.repository_owner }} --image-name ermete-builder > idemp.out
           source ./idemp.out
           if [ "$CACHE_HIT" = "true" ]; then
             echo "cache_hit=true" >> $GITHUB_OUTPUT
@@ -241,7 +241,6 @@ jobs:
       - name: Fetch Base Kernel and Patches
         run: |
           bash specs/ermete-kernel/prepare-chimera.sh
-          python3 scripts/forge-kernel-matrix.py --kernel-dir linux --patches-dir patches
 
       - name: Bedrock Idempotency Check
         id: idempotency
@@ -437,11 +436,7 @@ jobs:
           ln -sf /usr/src/kernels/$REAL_KERNEL_VER /lib/modules/$REAL_KERNEL_VER/build
           
           # Removed fake LLVM symlinks because the kernel is built natively with GCC and GCOV.          
-          cp scripts/akmods /usr/sbin/akmods
-          cp scripts/kmodtool /usr/bin/kmodtool
-          
           # No PATH export needed for gcc          
-          chmod +x /usr/sbin/akmods /usr/bin/kmodtool
           mkdir -p /etc/pki/akmods/certs /etc/pki/akmods/private
           echo "${{ secrets.MOK_PRIVATE_KEY }}" | base64 -d > /etc/pki/akmods/private/private_key.priv
           echo "${{ secrets.MOK_PUBLIC_DER }}" | base64 -d > /etc/pki/akmods/certs/public_key.der
@@ -507,7 +502,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python3 scripts/idempotency_checker.py --package ${{ matrix.package }} --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} --image-name ermete-forge-rolling-${{ matrix.package }} > idemp.out
+          bash scripts/check_idempotency.sh --package ${{ matrix.package }} --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} --image-name ermete-forge-rolling-${{ matrix.package }} > idemp.out
           source ./idemp.out
           if [ "$CACHE_HIT" = "true" ]; then
             echo "cache_hit=true" >> $GITHUB_OUTPUT
@@ -603,7 +598,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python3 scripts/idempotency_checker.py --package ${{ matrix.package }} --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} --image-name ermete-forge-rolling-${{ matrix.package }} > idemp.out
+          bash scripts/check_idempotency.sh --package ${{ matrix.package }} --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} --image-name ermete-forge-rolling-${{ matrix.package }} > idemp.out
           source ./idemp.out
           if [ "$CACHE_HIT" = "true" ]; then
             echo "cache_hit=true" >> $GITHUB_OUTPUT
@@ -699,7 +694,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python3 scripts/idempotency_checker.py --package ${{ matrix.package }} --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} --image-name ermete-forge-rolling-${{ matrix.package }} > idemp.out
+          bash scripts/check_idempotency.sh --package ${{ matrix.package }} --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} --image-name ermete-forge-rolling-${{ matrix.package }} > idemp.out
           source ./idemp.out
           if [ "$CACHE_HIT" = "true" ]; then
             echo "cache_hit=true" >> $GITHUB_OUTPUT
@@ -796,7 +791,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python3 scripts/idempotency_checker.py --package ${{ matrix.package }} --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} --image-name ermete-forge-rolling-${{ matrix.package }} > idemp.out
+          bash scripts/check_idempotency.sh --package ${{ matrix.package }} --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} --image-name ermete-forge-rolling-${{ matrix.package }} > idemp.out
           source ./idemp.out
           if [ "$CACHE_HIT" = "true" ]; then
             echo "cache_hit=true" >> $GITHUB_OUTPUT
