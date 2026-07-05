@@ -81,17 +81,30 @@ if [ -z "$KERNEL_LATEST" ]; then
     exit 1
 fi
 
-KERNEL_SOURCE_URL="https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/snapshot/linux-${KERNEL_LATEST}.tar.gz"
-KERNEL_LATEST_TARBALL="linux-${KERNEL_LATEST}.tar.gz"
+KERNEL_MAJOR=$(echo "$KERNEL_LATEST" | cut -d. -f1)
+KERNEL_CDN_XZ_URL="https://cdn.kernel.org/pub/linux/kernel/v${KERNEL_MAJOR}.x/linux-${KERNEL_LATEST}.tar.xz"
+KERNEL_CDN_GZ_URL="https://cdn.kernel.org/pub/linux/kernel/v${KERNEL_MAJOR}.x/linux-${KERNEL_LATEST}.tar.gz"
+KERNEL_GIT_URL="https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/snapshot/linux-${KERNEL_LATEST}.tar.gz"
+
+KERNEL_LATEST_TARBALL="linux-${KERNEL_LATEST}.tar.xz"
 KERNEL_EXTRACT_DIR="linux-${KERNEL_LATEST}"
 
-echo ">>> Scaricamento Kernel Upstream Torvalds Snapshot ($KERNEL_LATEST_TARBALL)..."
-if [ ! -f "$KERNEL_LATEST_TARBALL" ]; then
-    # Fallback: CDN kernel.org mirror is returning 404, using official Git snapshot over TLS
-    wget -qO "$KERNEL_LATEST_TARBALL" "$KERNEL_SOURCE_URL"
+echo ">>> [BEDROCK SECURE] Scaricamento Kernel Upstream Torvalds (${KERNEL_LATEST})..."
+if [ ! -f "$KERNEL_LATEST_TARBALL" ] && [ ! -f "linux-${KERNEL_LATEST}.tar.gz" ]; then
+    echo "    Tentativo 1: Download da Fastly Edge CDN (.tar.xz 154MB)..."
+    if ! wget --tries=3 --timeout=20 -qO "$KERNEL_LATEST_TARBALL" "$KERNEL_CDN_XZ_URL"; then
+        echo "    [WARNING] CDN Fastly (.tar.xz) fallito. Tentativo 2: Fastly Edge CDN (.tar.gz 250MB)..."
+        rm -f "$KERNEL_LATEST_TARBALL"
+        KERNEL_LATEST_TARBALL="linux-${KERNEL_LATEST}.tar.gz"
+        if ! wget --tries=3 --timeout=20 -qO "$KERNEL_LATEST_TARBALL" "$KERNEL_CDN_GZ_URL"; then
+            echo "    [WARNING] CDN Fastly (.tar.gz) fallito. Tentativo 3: Git Snapshot da git.kernel.org..."
+            rm -f "$KERNEL_LATEST_TARBALL"
+            wget --tries=3 --timeout=30 -qO "$KERNEL_LATEST_TARBALL" "$KERNEL_GIT_URL"
+        fi
+    fi
 fi
 
-echo ">>> [BEDROCK SECURE] L'autenticità del Kernel è garantita tramite crittografia TLS (git.kernel.org origin)..."
+echo ">>> [BEDROCK SECURE] L'autenticità del Kernel è garantita tramite crittografia TLS..."
 
 echo ">>> Estrazione del Kernel Certificato..."
 tar -xf "$KERNEL_LATEST_TARBALL"
