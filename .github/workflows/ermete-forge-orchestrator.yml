@@ -219,7 +219,7 @@ jobs:
   build-kernel:
     needs: build-builder
     name: 🧠 Build Chimera Kernel (CachyOS + Clear + Gentoo)
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
@@ -391,7 +391,7 @@ jobs:
   build-nvidia:
     needs: [build-builder, build-kernel]
     name: 🎮 Build NVIDIA KMOD
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
