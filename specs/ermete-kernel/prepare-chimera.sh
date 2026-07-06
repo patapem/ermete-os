@@ -145,7 +145,8 @@ route_patch() {
         domain="99"
         case "$source" in tkg) priority="1" ;; cachyos) priority="2" ;; xanmod) priority="3" ;; liquorix) priority="4" ;; clear) priority="5" ;; esac
     fi
-    echo "bedrock-${domain}_${priority}_${source}_${patch}"
+    local clean_patch=$(echo "$patch" | sed -E 's/^[0-9]+-//')
+    echo "bedrock-${domain}_${priority}_${source}_${clean_patch}"
 }
 
 echo ">>> Scansione e smistamento delle patch in SOURCES/ con Universal Domain Router..."
@@ -157,9 +158,20 @@ fi
 
 for repo in xanmod liquorix zen garuda tkg; do
     if [ -d "/tmp/${repo}-patches" ]; then
-        find "/tmp/${repo}-patches" -name "*.patch" -type f | while read patch_file; do
-            cp "$patch_file" "SOURCES/$(route_patch "$(basename "$patch_file")" "$repo")"
-        done
+        search_dir="/tmp/${repo}-patches"
+        k_major="${KERNEL_VER%.*}"
+        if [ -n "$(find "$search_dir" -maxdepth 2 -type d -name "*${k_major}*" | head -n 1)" ]; then
+            search_dirs=$(find "$search_dir" -maxdepth 2 -type d -name "*${k_major}*")
+            for s_dir in $search_dirs; do
+                find "$s_dir" -name "*.patch" -type f | while read patch_file; do
+                    cp -f "$patch_file" "SOURCES/$(route_patch "$(basename "$patch_file")" "$repo")"
+                done
+            done
+        else
+            find "$search_dir" -name "*.patch" -type f | while read patch_file; do
+                cp -f "$patch_file" "SOURCES/$(route_patch "$(basename "$patch_file")" "$repo")"
+            done
+        fi
     fi
 done
 
@@ -250,8 +262,8 @@ for patch in %{_sourcedir}/bedrock-*.patch; do
             AST_FAILED=0
             for c_file in $MODIFIED_C_FILES; do
                 if [ -f "$c_file" ]; then
-                    target_s="${c_file%.c}.s"
-                    if ! make LD=ld.bfd "$target_s" </dev/null >/dev/null 2>&1; then
+                    target_o="${c_file%.c}.o"
+                    if ! make LD=ld.bfd "$target_o" </dev/null >/dev/null 2>&1; then
                         AST_FAILED=1
                         echo "   [AST FATAL] Kbuild ha fallito la compilazione AST di $c_file!"
                         break
