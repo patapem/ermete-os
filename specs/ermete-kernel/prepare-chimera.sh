@@ -209,22 +209,37 @@ make LD=ld.bfd prepare
 
 for patch in %{_sourcedir}/bedrock-*.patch; do
     if [ ! -f "$patch" ]; then continue; fi
-    echo "-> Test di compatibilità per $(basename "$patch")..."
+    patch_name=$(basename "$patch")
+    echo "-> Test di compatibilità per $patch_name..."
     
-    if patch -p1 -F 2 --force --dry-run --silent < "$patch"; then
+    APPLIED=0
+    FUZZ_VAL=0
+    if patch -p1 -F 0 --force --dry-run --silent < "$patch"; then
+        patch -p1 -F 0 --force < "$patch" > /dev/null || true
+        APPLIED=1
+        FUZZ_VAL=0
+    elif patch -p1 -F 2 --force --dry-run --silent < "$patch"; then
         patch -p1 -F 2 --force < "$patch" > /dev/null || true
-        make LD=ld.bfd olddefconfig </dev/null >/dev/null 2>&1 || true
-        echo "   [SUCCESS] Patch applicata a Fuzz 2."
+        APPLIED=1
+        FUZZ_VAL=2
     else
-        echo "   [WARNING] Fallito Fuzz 2. Tento Fuzz 3..."
         NON_C_FILES=$(grep -E '^\+\+\+ b/' "$patch" | awk '{print $2}' | sed 's/^b\///' | grep -v '\.c$' || true)
         if [ -n "$NON_C_FILES" ]; then
-             echo "   [SKIP] La patch tocca file non-C. Impossibile validare con AST. Fuzz 3 vietato. Scartata."
+             echo "   [SKIP] La patch richiede Fuzz 3 e tocca file non-C. Impossibile validare con AST. Scartata."
         elif patch -p1 -F 3 --force --dry-run --silent < "$patch"; then
             patch -p1 -F 3 --force < "$patch" > /dev/null || true
+            APPLIED=1
+            FUZZ_VAL=3
+        else
+            echo "   [SKIP] Conflitto strutturale (Fallito Fuzz 3). Patch scartata."
+        fi
+    fi
+
+    if [ $APPLIED -eq 1 ]; then
+        MODIFIED_C_FILES=$(grep -E '^\+\+\+ b/' "$patch" | awk '{print $2}' | sed 's/^b\///' | grep '\.c$' || true)
+        if [ -n "$MODIFIED_C_FILES" ]; then
             make LD=ld.bfd olddefconfig </dev/null >/dev/null 2>&1 || true
-            echo "   [AST VALIDATION] Controllo purezza albero sintattico tramite Kbuild Assembly..."
-            MODIFIED_C_FILES=$(grep -E '^\+\+\+ b/' "$patch" | awk '{print $2}' | sed 's/^b\///' | grep '\.c$' || true)
+            echo "   [AST VALIDATION (Fuzz $FUZZ_VAL)] Controllo purezza albero sintattico per $patch_name..."
             AST_FAILED=0
             for c_file in $MODIFIED_C_FILES; do
                 if [ -f "$c_file" ]; then
@@ -237,13 +252,14 @@ for patch in %{_sourcedir}/bedrock-*.patch; do
                 fi
             done
             if [ $AST_FAILED -eq 1 ]; then
-                echo "   [ROLLBACK] Conflitto sintattico rilevato! Scarto la patch."
-                patch -p1 -R -F 3 --force < "$patch" > /dev/null || true
+                echo "   [ROLLBACK] Conflitto sintattico rilevato in $patch_name! Revert e scarto della patch."
+                patch -p1 -R -F $FUZZ_VAL --force < "$patch" > /dev/null || true
             else
-                echo "   [SUCCESS] Patch fusa e validata nativamente tramite AST Kbuild."
+                echo "   [SUCCESS] Patch fusa (Fuzz $FUZZ_VAL) e validata nativamente tramite AST Kbuild: $patch_name"
             fi
         else
-            echo "   [SKIP] Conflitto strutturale (Fallito Fuzz 3). Patch scartata."
+            make LD=ld.bfd olddefconfig </dev/null >/dev/null 2>&1 || true
+            echo "   [SUCCESS] Patch fusa (Fuzz $FUZZ_VAL - file non-C/header): $patch_name"
         fi
     fi
 done
