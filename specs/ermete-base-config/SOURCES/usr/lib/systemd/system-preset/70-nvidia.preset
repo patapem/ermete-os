@@ -5,3 +5,4 @@ enable nvidia-hibernate.service
 enable nvidia-suspend-then-hibernate.service
 enable nvidia-resume.service
 enable nvidia-suspend.service
+enable nvidia-persistenced.service

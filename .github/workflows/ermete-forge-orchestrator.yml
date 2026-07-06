@@ -455,6 +455,18 @@ jobs:
 
           akmods --force --kernels $REAL_KERNEL_VER || true
           
+          # [BEDROCK UNIFICATION] Download userspace NVIDIA drivers, Wayland EGL, persistenced, and container toolkit
+          # into the micro-container so they are encapsulated natively without remote DNF calls during OSTree build.
+          dnf download -y --destdir=/var/cache/akmods/nvidia/ \
+            nvidia-driver \
+            nvidia-driver-libs \
+            nvidia-driver-cuda \
+            nvidia-driver-cuda-libs \
+            nvidia-persistenced \
+            nvidia-settings \
+            egl-wayland \
+            golang-github-nvidia-container-toolkit || true
+
           # [BEDROCK CHECK] Se l'RPM non esiste, facciamo fallire esplicitamente lo step 
           # per evitare che GitHub Actions salvi una cache vuota "corrotta".
           ls /var/cache/akmods/nvidia/*.rpm || { 

@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           ermete-base-config
 Version:        1.0.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Ermete OS Base Configuration (NVIDIA, Systemd, Branding, GPG)
 
 License:        MIT
@@ -48,5 +48,8 @@ cp -a %{_sourcedir}/* %{buildroot}/
 /usr/lib/systemd/system/bootc-fetch-apply-updates.service.d/override.conf
 
 %changelog
+* Mon Jul 06 2026 Ermete Forge <forge@ermete.os> - 1.0.0-2
+- Add enable nvidia-persistenced.service to systemd preset for deterministic GPU node creation
+
 * Wed Jul 01 2026 Ermete Forge <forge@ermete.os> - 1.0.0-1
 - Initial encapsulation of raw files into RPM for Bedrock logic
