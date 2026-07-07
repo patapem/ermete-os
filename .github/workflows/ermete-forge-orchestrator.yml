@@ -51,7 +51,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        package: [starship, bat, selinux, ananicy, base-config, ags-config, niri-session, ide-bootstrap, system-services, nix-support, system-config, system-tweaks, matugen, bibata]
+        package: [starship, bat, selinux, ananicy, base-config, desktop-ui, ide-bootstrap, system-services, nix-support, system-config, system-tweaks, matugen, bibata]
     permissions:
       contents: read
       packages: write
