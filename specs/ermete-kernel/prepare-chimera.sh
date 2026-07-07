@@ -208,8 +208,8 @@ echo ">>> Scrittura script di applicazione e validazione AST/Kbuild in /tmp/patc
 > /tmp/patch_apply.txt
 cat << 'EOF' >> /tmp/patch_apply.txt
 echo ">>> [BEDROCK] Inizio applicazione matrice universale Kbuild/AST per le patch..."
-export LD=ld.bfd
-export MAKEFLAGS="LD=ld.bfd"
+export LLVM=1
+export MAKEFLAGS="LLVM=1 LLVM_IAS=1"
 CONF_FILE=$(ls %{_sourcedir}/kernel-x86_64*.config 2>/dev/null | head -n 1 || ls /root/rpmbuild/SOURCES/kernel-x86_64*.config 2>/dev/null | head -n 1 || ls configs/kernel-x86_64*.config 2>/dev/null | head -n 1)
 if [ -n "$CONF_FILE" ] && [ -f "$CONF_FILE" ]; then
     cp "$CONF_FILE" .config
@@ -217,8 +217,8 @@ else
     echo "ERRORE CRITICO: File di configurazione kernel-x86_64*.config non trovato!"
     exit 1
 fi
-make LD=ld.bfd olddefconfig
-make LD=ld.bfd prepare
+make LLVM=1 LLVM_IAS=1 olddefconfig
+make LLVM=1 LLVM_IAS=1 prepare
 
 for patch in %{_sourcedir}/bedrock-*.patch; do
     if [ ! -f "$patch" ]; then continue; fi
@@ -258,14 +258,14 @@ for patch in %{_sourcedir}/bedrock-*.patch; do
     if [ $APPLIED -eq 1 ]; then
         MODIFIED_C_FILES=$(grep -E '^\+\+\+ b/' "$patch" | awk '{print $2}' | sed 's/^b\///' | grep '\.c$' || true)
         if [ -n "$MODIFIED_C_FILES" ]; then
-            make LD=ld.bfd olddefconfig </dev/null >/dev/null 2>&1 || true
+            make LLVM=1 LLVM_IAS=1 olddefconfig </dev/null >/dev/null 2>&1 || true
             echo "   [AST VALIDATION (Fuzz $FUZZ_VAL)] Controllo purezza albero sintattico per $patch_name..."
             AST_FAILED=0
             for c_file in $MODIFIED_C_FILES; do
                 if [ -f "$c_file" ]; then
                     target_o="${c_file%.c}.o"
                     # Estrazione dinamica dei flag di compilazione (AST Surgery)
-                    COMPILE_CMD=$(make LD=ld.bfd --dry-run "$target_o" </dev/null 2>/dev/null | grep -E '\b(gcc|clang)\b' | grep "$c_file" | head -n 1 || true)
+                    COMPILE_CMD=$(make LLVM=1 LLVM_IAS=1 --dry-run "$target_o" </dev/null 2>/dev/null | grep -E '\b(gcc|clang)\b' | grep "$c_file" | head -n 1 || true)
                     if [ -n "$COMPILE_CMD" ]; then
                         # Sostituisce il compilatore con clang -fsyntax-only e rimuove l'output file (-o ...)
                         CLANG_CMD=$(echo "$COMPILE_CMD" | sed -E 's/^(.*)\b(gcc|clang)\b(.*)-o[[:space:]]+[^[:space:]]+(.*)$/clang -fsyntax-only \3\4/')
@@ -276,7 +276,7 @@ for patch in %{_sourcedir}/bedrock-*.patch; do
                         fi
                     else
                         # Fallback se non riusciamo a estrarre i flag
-                        if ! make LD=ld.bfd "$target_o" </dev/null >/dev/null 2>&1; then
+                        if ! make LLVM=1 LLVM_IAS=1 "$target_o" </dev/null >/dev/null 2>&1; then
                             AST_FAILED=1
                             echo "   [AST FATAL] Kbuild ha fallito la compilazione AST (fallback) di $c_file!"
                             break
@@ -305,7 +305,7 @@ for patch in %{_sourcedir}/bedrock-*.patch; do
     fi
 done
 
-make LD=ld.bfd olddefconfig </dev/null >/dev/null 2>&1 || true
+make LLVM=1 LLVM_IAS=1 olddefconfig </dev/null >/dev/null 2>&1 || true
 
 echo ">>> [BEDROCK PGO FIX] Filtering PGO flags from EFI libstub and boot Makefiles..."
 echo 'KBUILD_CFLAGS := $(filter-out -fprofile-use=% -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize, $(KBUILD_CFLAGS))' >> drivers/firmware/efi/libstub/Makefile
@@ -347,7 +347,9 @@ CONFIG_LRU_GEN_ENABLED=y
 
 CONFIG_GENERIC_CPU=y
 CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3=y
-# CONFIG_LTO_CLANG_THIN is not set
+CONFIG_LTO_CLANG_THIN=y
+CONFIG_LTO_CLANG=y
+CONFIG_LTO=y
 
 CONFIG_DEBUG_INFO=n
 CONFIG_DEBUG_INFO_NONE=y
@@ -421,11 +423,11 @@ fi
 cat << 'EOF' >> ~/.rpmmacros
 %_with_vanilla 1
 %buildid .chimera
-%toolchain gcc
-%_ld ld.bfd
-%_ldflags -Wl,-O2 -Wl,--as-needed -Wl,--sort-common -Wl,-z,now -Wl,-z,relro -fuse-ld=bfd
-%optflags %{__global_compiler_flags} -march=x86-64-v3 -pipe -Wno-error -fuse-ld=bfd
-%kcflags -march=x86-64-v3 -pipe -Wno-error -fuse-ld=bfd
+%toolchain clang
+%_ld ld.lld
+%_ldflags -Wl,-O2 -Wl,--as-needed -Wl,--sort-common -Wl,-z,now -Wl,-z,relro -fuse-ld=lld
+%optflags %{__global_compiler_flags} -march=x86-64-v3 -pipe -Wno-error -fuse-ld=lld
+%kcflags -march=x86-64-v3 -pipe -Wno-error -fuse-ld=lld
 
 %_without_selftests 1
 %_without_tools 1
@@ -446,8 +448,8 @@ echo "========================================================="
 echo ">>> Esecuzione rpmbuild -bp per scompattare, applicare patch e validare l'albero..."
 spectool -g -R SPECS/kernel.spec
 dnf builddep -y SPECS/kernel.spec
-export LD=ld.bfd
-export MAKEFLAGS="LD=ld.bfd"
+export LLVM=1
+export MAKEFLAGS="LLVM=1 LLVM_IAS=1"
 rpmbuild -bp SPECS/kernel.spec --target x86_64
 
 echo ">>> Rilevamento della directory di build del kernel preparata..."

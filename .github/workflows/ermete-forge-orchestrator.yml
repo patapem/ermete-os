@@ -278,9 +278,9 @@ jobs:
           
           ./scripts/config --enable GCOV_KERNEL
           ./scripts/config --enable GCOV_PROFILE_ALL
-          export LD=ld.bfd
-          export MAKEFLAGS="LD=ld.bfd"
-          make LD=ld.bfd olddefconfig
+          export LLVM=1
+          export MAKEFLAGS="LLVM=1 LLVM_IAS=1"
+          make LLVM=1 LLVM_IAS=1 olddefconfig
           
           export PATH="/usr/lib64/ccache:/usr/lib/ccache:$PATH"
           export CCACHE_DIR=~/.cache/ccache
@@ -289,7 +289,7 @@ jobs:
           mkdir -p ~/.cache/ccache
           ccache -z
           echo "Avvio compilazione micro-kernel (bzImage) per profilazione..."
-          make -j$(nproc) LD=ld.bfd bzImage
+          make -j$(nproc) LLVM=1 LLVM_IAS=1 bzImage
           ccache -s
 
       - name: Fase 2 - Stress Test Agnostico QEMU (Estrazione Termica)
@@ -359,10 +359,11 @@ jobs:
         run: |
           echo "Iniezione mappa termica PGO nelle macros RPM..."
           cat << 'MACRO' >> ~/.rpmmacros
-          %_ld ld.bfd
-          %_ldflags -Wl,-O2 -Wl,--as-needed -Wl,--sort-common -Wl,-z,now -Wl,-z,relro -fuse-ld=bfd
-          %optflags %{__global_compiler_flags} -march=x86-64-v3 -pipe -Wno-error -fuse-ld=bfd -fprofile-use=/tmp/host_gcov -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize
-          %kcflags -march=x86-64-v3 -pipe -Wno-error -fuse-ld=bfd -fprofile-use=/tmp/host_gcov -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize
+          %toolchain clang
+          %_ld ld.lld
+          %_ldflags -Wl,-O2 -Wl,--as-needed -Wl,--sort-common -Wl,-z,now -Wl,-z,relro -fuse-ld=lld
+          %optflags %{__global_compiler_flags} -march=x86-64-v3 -pipe -Wno-error -fuse-ld=lld -fprofile-use=/tmp/host_gcov -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize
+          %kcflags -march=x86-64-v3 -pipe -Wno-error -fuse-ld=lld -fprofile-use=/tmp/host_gcov -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize
           MACRO
           
           echo "Pulizia build precedente..."
@@ -371,8 +372,8 @@ jobs:
           echo "Compilazione del Kernel Ottimizzato via Fedora Spec (Cristallizzazione)..."
           export PATH="/usr/lib64/ccache:/usr/lib/ccache:$PATH"
           export CCACHE_DIR=~/.cache/ccache
-          export LD=ld.bfd
-          export MAKEFLAGS="LD=ld.bfd"
+          export LLVM=1
+          export MAKEFLAGS="LLVM=1 LLVM_IAS=1"
           rpmbuild -bb ~/rpmbuild/SPECS/kernel.spec --target x86_64
           ccache -s
           
@@ -450,8 +451,8 @@ jobs:
           export IGNORE_CC_MISMATCH=1
           export KCFLAGS="-Wno-error"
           export CFLAGS="-Wno-error"
-          export LD=ld.bfd
-          export MAKEFLAGS="LD=ld.bfd"
+          export LLVM=1
+          export MAKEFLAGS="LLVM=1 LLVM_IAS=1"
 
           akmods --force --kernels $REAL_KERNEL_VER || true
           
