@@ -125,7 +125,7 @@ export function execSync(cmd: string): string {
 }
 
 // --- MODAL MANAGEMENT (EXCLUSIVE OPEN) ---
-export const allModals = ["wifi-modal", "bt-modal", "audio-modal", "quick-settings", "sys-monitor", "media-player", "calendar", "launcher", "powermenu", "spotlight"]
+export const allModals = ["wifi-modal", "bt-modal", "audio-modal", "quick-settings", "sys-monitor", "media-player", "calendar", "launcher", "powermenu", "spotlight", "clipboard"]
 export let lastFocusLoss = 0
 
 export function toggleExclusiveModal(name: string) {

@@ -10,7 +10,6 @@ papirus-icon-theme
 qt5-qtwayland
 qt6-qtwayland
 rsms-inter-fonts
-swaybg
 swaylock
 thunar
 thunar-archive-plugin

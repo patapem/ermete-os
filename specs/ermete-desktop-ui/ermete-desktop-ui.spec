@@ -13,7 +13,6 @@ Provides:       ermete-niri-session = 1.0.0-3
 Obsoletes:      ermete-niri-session < 1.0.0-3
 
 Requires:       aylurs-gtk-shell2
-Requires:       polkit-gnome
 Requires:       cliphist
 Requires:       swayidle
 Requires:       ddcutil
@@ -40,6 +39,9 @@ cp -p %{_sourcedir}/etc/skel/.config/ags/modals.ts %{buildroot}/etc/skel/.config
 cp -p %{_sourcedir}/etc/skel/.config/ags/notifications.ts %{buildroot}/etc/skel/.config/ags/
 cp -p %{_sourcedir}/etc/skel/.config/ags/state.ts %{buildroot}/etc/skel/.config/ags/
 cp -p %{_sourcedir}/etc/skel/.config/ags/style.css %{buildroot}/etc/skel/.config/ags/
+cp -p %{_sourcedir}/etc/skel/.config/ags/wallpaper.ts %{buildroot}/etc/skel/.config/ags/
+cp -p %{_sourcedir}/etc/skel/.config/ags/clipboard.ts %{buildroot}/etc/skel/.config/ags/
+cp -p %{_sourcedir}/etc/skel/.config/ags/polkit.ts %{buildroot}/etc/skel/.config/ags/
 
 # Copy only relevant Niri files
 cp -p %{_sourcedir}/etc/skel/.config/niri/config.kdl %{buildroot}/etc/skel/.config/niri/
@@ -53,6 +55,9 @@ cp -p %{_sourcedir}/etc/udev/rules.d/99-ddcutil-i2c.rules %{buildroot}/etc/udev/
 /etc/skel/.config/ags/notifications.ts
 /etc/skel/.config/ags/state.ts
 /etc/skel/.config/ags/style.css
+/etc/skel/.config/ags/wallpaper.ts
+/etc/skel/.config/ags/clipboard.ts
+/etc/skel/.config/ags/polkit.ts
 /etc/skel/.config/niri/config.kdl
 /etc/udev/rules.d/99-ddcutil-i2c.rules
 

@@ -167,6 +167,7 @@ binds {
     Mod+V      { spawn "ags" "toggle" "calendar"; }
     Mod+Shift+E { spawn "ags" "toggle" "powermenu"; }
     Mod+P      { spawn "ags" "toggle" "powermenu"; }
+    Mod+Shift+V { spawn "ags" "toggle" "clipboard"; }
     
     // Screenshots
     Print { spawn "sh" "-c" "grim -g \"$(slurp)\" - | wl-copy"; }

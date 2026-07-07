@@ -30,7 +30,6 @@ cp -a %{_sourcedir}/usr/lib/systemd/user-preset/* %{buildroot}/usr/lib/systemd/u
 /usr/lib/systemd/user/niri-session.target
 /usr/lib/systemd/user/ermete-skel-sync.service
 /usr/lib/systemd/user/ermete-ags.service
-/usr/lib/systemd/user/ermete-wallpaper.service
 /usr/lib/systemd/user-preset/99-ermete-desktop.preset
 
 %changelog
