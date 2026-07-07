@@ -12,6 +12,7 @@ on:
       - "Ermete Upstream Core"
       - "Ermete Upstream Desktop"
       - "Ermete Upstream Media"
+      - "🌋 Ermete Forge Orchestrator"
     types:
       - completed
 
