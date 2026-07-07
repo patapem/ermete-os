@@ -264,10 +264,23 @@ for patch in %{_sourcedir}/bedrock-*.patch; do
             for c_file in $MODIFIED_C_FILES; do
                 if [ -f "$c_file" ]; then
                     target_o="${c_file%.c}.o"
-                    if ! make LD=ld.bfd "$target_o" </dev/null >/dev/null 2>&1; then
-                        AST_FAILED=1
-                        echo "   [AST FATAL] Kbuild ha fallito la compilazione AST di $c_file!"
-                        break
+                    # Estrazione dinamica dei flag di compilazione (AST Surgery)
+                    COMPILE_CMD=$(make LD=ld.bfd --dry-run "$target_o" </dev/null 2>/dev/null | grep -E '\b(gcc|clang)\b' | grep "$c_file" | head -n 1 || true)
+                    if [ -n "$COMPILE_CMD" ]; then
+                        # Sostituisce il compilatore con clang -fsyntax-only e rimuove l'output file (-o ...)
+                        CLANG_CMD=$(echo "$COMPILE_CMD" | sed -E 's/^(.*)\b(gcc|clang)\b(.*)-o[[:space:]]+[^[:space:]]+(.*)$/clang -fsyntax-only \3\4/')
+                        if ! eval "$CLANG_CMD" >/dev/null 2>&1; then
+                            AST_FAILED=1
+                            echo "   [AST FATAL] Clang ha fallito la validazione sintattica pura di $c_file!"
+                            break
+                        fi
+                    else
+                        # Fallback se non riusciamo a estrarre i flag
+                        if ! make LD=ld.bfd "$target_o" </dev/null >/dev/null 2>&1; then
+                            AST_FAILED=1
+                            echo "   [AST FATAL] Kbuild ha fallito la compilazione AST (fallback) di $c_file!"
+                            break
+                        fi
                     fi
                 fi
             done
