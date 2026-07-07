@@ -489,6 +489,78 @@ jobs:
           buildah commit $ctr $IMAGE_LOWER
           buildah push $IMAGE_LOWER
 
+  build-initramfs:
+    needs: [build-builder, build-kernel, build-nvidia]
+    name: 🧠 Build Pre-Forged Initramfs
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: ghcr.io/${{ github.repository_owner }}/ermete-builder:latest
+      options: --privileged
+    steps:
+      - name: Build Initramfs RPM
+        run: |
+          dnf install -y buildah rpm-build dracut kmod curl
+          export STORAGE_DRIVER=vfs
+          export BUILDAH_ISOLATION=chroot
+          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+          
+          echo "Estrazione Kernel..."
+          ctr_k=$(buildah from ghcr.io/${{ github.repository_owner }}/ermete-forge-kernel:latest)
+          mnt_k=$(buildah mount $ctr_k)
+          rpm -Uvh --oldpackage --replacepkgs --force --nodeps $mnt_k/*.rpm
+          buildah umount $ctr_k
+          
+          echo "Estrazione NVIDIA..."
+          ctr_nv=$(buildah from ghcr.io/${{ github.repository_owner }}/ermete-forge-nvidia:latest)
+          mnt_nv=$(buildah mount $ctr_nv)
+          rpm -Uvh --oldpackage --replacepkgs --force --nodeps $mnt_nv/*.rpm
+          buildah umount $ctr_nv
+          
+          QUALIFIED_KERNEL=$(ls /lib/modules/ | head -n 1)
+          echo "Generazione Initramfs per $QUALIFIED_KERNEL..."
+          depmod "$QUALIFIED_KERNEL"
+          mkdir -p /var/roothome
+          
+          mkdir -p /tmp/initramfs-build
+          /usr/bin/dracut --no-hostonly --kver "$QUALIFIED_KERNEL" --reproducible --zstd -v \
+              --add ostree --add fido2 --force-drivers "nvidia nvidia_modeset nvidia_uvm nvidia_drm" \
+              --install "/etc/group /etc/passwd" \
+              -f /tmp/initramfs-build/initramfs.img
+              
+          echo "Costruzione RPM Dinamica..."
+          mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+          cat << 'EOF' > ~/rpmbuild/SPECS/ermete-initramfs.spec
+          Name:           ermete-initramfs
+          Version:        1.0
+          Release:        1%{?dist}
+          Summary:        Pre-forged Chimera Kernel Initramfs
+          License:        GPLv3
+          BuildArch:      x86_64
+          %description
+          Pre-forged Initramfs for Ermete OS.
+          %prep
+          %build
+          %install
+          mkdir -p %{buildroot}/usr/lib/modules/QUALIFIED_KERNEL/
+          cp /tmp/initramfs-build/initramfs.img %{buildroot}/usr/lib/modules/QUALIFIED_KERNEL/
+          chmod 0600 %{buildroot}/usr/lib/modules/QUALIFIED_KERNEL/initramfs.img
+          %files
+          /usr/lib/modules/QUALIFIED_KERNEL/initramfs.img
+          EOF
+          sed -i "s/QUALIFIED_KERNEL/$QUALIFIED_KERNEL/g" ~/rpmbuild/SPECS/ermete-initramfs.spec
+          
+          rpmbuild -bb ~/rpmbuild/SPECS/ermete-initramfs.spec
+          
+          echo "Creazione micro-container..."
+          ctr=$(buildah from scratch)
+          buildah copy $ctr ~/rpmbuild/RPMS/x86_64/*.rpm /
+          IMAGE_LOWER=$(echo "ghcr.io/${{ github.repository_owner }}/ermete-forge-initramfs:latest" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER
+          buildah push $IMAGE_LOWER
+
 
   upstream-core:
     needs: build-builder
@@ -877,7 +949,7 @@ jobs:
   build-repo:
     name: 📦 Build Repository
     if: always() && !cancelled()
-    needs: [custom-packages, ags-ecosystem, cachyos-addons, build-kernel, build-nvidia, upstream-core, upstream-desktop, upstream-media, upstream-cli]
+    needs: [custom-packages, ags-ecosystem, cachyos-addons, build-kernel, build-nvidia, build-initramfs, upstream-core, upstream-desktop, upstream-media, upstream-cli]
     runs-on: ubuntu-latest
     permissions:
       contents: read

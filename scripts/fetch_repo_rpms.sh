@@ -10,6 +10,7 @@ OWNER="${1}"
 IMAGES=(
   "ermete-forge-kernel"
   "ermete-forge-nvidia"
+  "ermete-forge-initramfs"
 )
 
 # Custom Packages
