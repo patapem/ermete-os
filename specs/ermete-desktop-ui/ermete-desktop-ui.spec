@@ -1,0 +1,64 @@
+%global debug_package %{nil}
+Name:           ermete-desktop-ui
+Version:        1.0.0
+Release:        1%{?dist}
+Summary:        Ermete OS Desktop UI configurations
+License:        MIT
+URL:            https://github.com/patapem/ermete-forge
+BuildArch:      noarch
+
+Provides:       ermete-ags-config = 1.0.1-3
+Obsoletes:      ermete-ags-config < 1.0.1-3
+Provides:       ermete-niri-session = 1.0.0-3
+Obsoletes:      ermete-niri-session < 1.0.0-3
+
+Requires:       aylurs-gtk-shell2
+Requires:       polkit-gnome
+Requires:       cliphist
+Requires:       swayidle
+Requires:       ddcutil
+
+%description
+Provides the unified Desktop UI (AGS and Niri) configuration for Ermete OS.
+Includes dependencies for Wayland (polkit-gnome, cliphist, swayidle, ddcutil)
+and configures UDEV for i2c access.
+
+%prep
+# Nothing to prep
+
+%build
+# Nothing to build
+
+%install
+mkdir -p %{buildroot}/etc/skel/.config/ags
+mkdir -p %{buildroot}/etc/skel/.config/niri
+mkdir -p %{buildroot}/etc/udev/rules.d
+
+# Copy only relevant AGS files (skip .bak)
+cp -p %{_sourcedir}/etc/skel/.config/ags/app.ts %{buildroot}/etc/skel/.config/ags/
+cp -p %{_sourcedir}/etc/skel/.config/ags/modals.ts %{buildroot}/etc/skel/.config/ags/
+cp -p %{_sourcedir}/etc/skel/.config/ags/notifications.ts %{buildroot}/etc/skel/.config/ags/
+cp -p %{_sourcedir}/etc/skel/.config/ags/state.ts %{buildroot}/etc/skel/.config/ags/
+cp -p %{_sourcedir}/etc/skel/.config/ags/style.css %{buildroot}/etc/skel/.config/ags/
+
+# Copy only relevant Niri files
+cp -p %{_sourcedir}/etc/skel/.config/niri/config.kdl %{buildroot}/etc/skel/.config/niri/
+
+# Copy UDEV rules
+cp -p %{_sourcedir}/etc/udev/rules.d/99-ddcutil-i2c.rules %{buildroot}/etc/udev/rules.d/
+
+%files
+/etc/skel/.config/ags/app.ts
+/etc/skel/.config/ags/modals.ts
+/etc/skel/.config/ags/notifications.ts
+/etc/skel/.config/ags/state.ts
+/etc/skel/.config/ags/style.css
+/etc/skel/.config/niri/config.kdl
+/etc/udev/rules.d/99-ddcutil-i2c.rules
+
+%changelog
+* Tue Jul 07 2026 Ermete Forge <forge@ermete.os> - 1.0.0-1
+- Unified AGS and Niri configs into ermete-desktop-ui.
+- Integrated smembrated AGS app.ts into state, modals, notifications.
+- Added essential Wayland deps: polkit-gnome, cliphist, swayidle, ddcutil.
+- Added UDEV rules for ddcutil i2c.

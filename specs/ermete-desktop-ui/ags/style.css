@@ -1,0 +1,1089 @@
+/* ❖ Ermete OS • Diamond UI - Astal (AGS v3) GTK4 Style Masterclass */
+/* Ultra-Slim Razor-Sharp Bar • Zero Drop-Shadows • Pure Flat Acrylic Mica & macOS Sonoma Proportions */
+
+* {
+    all: unset;
+    font-family: 'Inter Display', 'Inter', 'Adwaita Sans', 'Cantarell', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+}
+
+/* --- GTK4 LAYER SHELL TRANSPARENCY RESET --- */
+window,
+window.background,
+window > box {
+    background: transparent;
+    background-color: transparent;
+}
+
+/* --- TOP PANEL (ULTRA-SLIM FLAT ACRYLIC PILLS) --- */
+.top-bar {
+    background-color: transparent;
+    padding: 2px 12px;
+}
+
+.bar-pill {
+    background-color: rgba(22, 22, 32, 0.88);
+    padding: 2px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow: none;
+    font-size: 0.88em;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bar-pill:hover {
+    border-color: rgba(137, 180, 250, 0.55);
+    background-color: rgba(30, 30, 46, 0.98);
+    box-shadow: none;
+}
+
+.os-logo-btn {
+    background: linear-gradient(135deg, #89b4fa, #cba6f7);
+    color: #11111b;
+    font-weight: 800;
+    padding: 2px 12px;
+    border-radius: 10px;
+    border: none;
+    box-shadow: none;
+    transition: all 0.18s ease;
+}
+
+.os-logo-btn:hover {
+    opacity: 0.95;
+    transform: scale(1.03);
+    box-shadow: none;
+}
+
+.workspace-indicator {
+    color: #a6adc8;
+    font-size: 0.90em;
+    font-weight: 700;
+    margin-left: 6px;
+}
+
+.caffeine-indicator {
+    color: #f9e2af;
+    font-size: 0.86em;
+    font-weight: 800;
+    margin-left: 4px;
+    background-color: rgba(249, 226, 175, 0.15);
+    padding: 1px 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(249, 226, 175, 0.3);
+    box-shadow: none;
+}
+
+.sysmon-pill-btn {
+    color: #89dceb;
+    font-size: 0.88em;
+    font-weight: 700;
+    transition: all 0.18s ease;
+}
+
+.sysmon-pill-btn:hover {
+    color: #cba6f7;
+}
+
+.media-pill-btn {
+    color: #cdd6f4;
+    font-size: 0.90em;
+    font-weight: 700;
+    transition: all 0.18s ease;
+}
+
+.media-pill-btn:hover {
+    color: #89b4fa;
+}
+
+.clock-btn {
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 0.95em;
+    transition: all 0.18s ease;
+}
+
+.clock-btn:hover {
+    color: #89b4fa;
+}
+
+.dongle-trigger-btn, .status-pill-btn {
+    padding: 2px 8px;
+    border-radius: 10px;
+    transition: all 0.18s ease;
+    color: #cdd6f4;
+}
+
+.dongle-trigger-btn:hover, .status-pill-btn:hover {
+    background-color: rgba(137, 180, 250, 0.18);
+    color: #ffffff;
+}
+
+.focused-modal-box {
+    min-width: 380px;
+    background-color: rgba(22, 22, 32, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: none;
+}
+
+.status-icon {
+    font-size: 0.90em;
+    font-weight: 700;
+}
+
+.status-icon.wifi { color: #89dceb; }
+.status-icon.bt { color: #89b4fa; }
+.status-icon.vol { color: #f9e2af; }
+.status-icon.batt { color: #a6e3a1; }
+.status-icon.gear { color: #cba6f7; font-size: 1.0em; margin-left: 2px; }
+
+.power-btn {
+    background-color: #f38ba8;
+    color: #11111b;
+    font-weight: 800;
+    padding: 2px 10px;
+    border-radius: 10px;
+    border: none;
+    box-shadow: none;
+    transition: all 0.18s ease;
+}
+
+.power-btn:hover {
+    background-color: #eba0ac;
+    transform: scale(1.04);
+    box-shadow: none;
+}
+
+/* --- DONGLE MODALS BASE (PURE FLAT ACRYLIC • ZERO SHADOWS) --- */
+.modal-box {
+    background-color: rgba(22, 22, 32, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 22px;
+    box-shadow: none;
+    padding: 22px;
+}
+
+/* --- USER PROFILE BENTO CARD --- */
+.profile-card {
+    background: linear-gradient(135deg, rgba(30, 30, 46, 0.90), rgba(49, 50, 68, 0.75));
+    border: 1px solid rgba(137, 180, 250, 0.30);
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: none;
+}
+
+.profile-avatar {
+    font-size: 2.0em;
+    background-color: rgba(137, 180, 250, 0.18);
+    padding: 6px 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(137, 180, 250, 0.35);
+}
+
+.profile-name {
+    color: #ffffff;
+    font-size: 1.15em;
+    font-weight: 800;
+}
+
+.profile-sub {
+    color: #a6adc8;
+    font-size: 0.85em;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+.uptime-badge {
+    background-color: rgba(166, 227, 161, 0.15);
+    color: #a6e3a1;
+    font-size: 0.80em;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(166, 227, 161, 0.35);
+}
+
+/* --- 1. CONTROL CENTER (BENTO GRID DASHBOARD) --- */
+.dongle-box {
+    min-width: 440px;
+}
+
+.dongle-header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dongle-title {
+    color: #cba6f7;
+    font-size: 1.18em;
+    font-weight: 800;
+}
+
+.dongle-close-btn {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #a6adc8;
+    padding: 4px 12px;
+    border-radius: 10px;
+    box-shadow: none;
+    transition: all 0.18s ease;
+}
+
+.dongle-close-btn:hover {
+    background-color: #f38ba8;
+    color: #11111b;
+}
+
+/* BENTO TOGGLE CARDS & EXPANDABLE LISTS */
+.quick-toggle-btn {
+    background-color: rgba(30, 30, 46, 0.75);
+    padding: 14px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    color: #cdd6f4;
+    font-size: 0.90em;
+    font-weight: 700;
+    box-shadow: none;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.quick-toggle-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: none;
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.quick-toggle-btn.active {
+    background: linear-gradient(135deg, rgba(137, 180, 250, 0.25), rgba(203, 166, 247, 0.20));
+    border-color: rgba(137, 180, 250, 0.55);
+    color: #ffffff;
+    box-shadow: none;
+}
+
+.expand-arrow-btn {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #a6adc8;
+    padding: 14px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    font-weight: 800;
+    box-shadow: none;
+    transition: all 0.18s ease;
+}
+
+.expand-arrow-btn:hover {
+    background-color: rgba(137, 180, 250, 0.20);
+    color: #ffffff;
+    border-color: #89b4fa;
+}
+
+.sub-list-box {
+    background-color: rgba(18, 18, 26, 0.90);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 10px;
+    margin-top: 6px;
+}
+
+.sub-list-row {
+    padding: 8px 12px;
+    border-radius: 10px;
+    transition: all 0.15s ease;
+}
+
+.sub-list-row:hover {
+    background-color: rgba(137, 180, 250, 0.15);
+}
+
+.sub-list-label {
+    color: #ffffff;
+    font-size: 0.90em;
+    font-weight: 700;
+}
+
+.connect-btn {
+    background-color: rgba(137, 180, 250, 0.20);
+    color: #89b4fa;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 0.85em;
+    font-weight: 700;
+    border: 1px solid rgba(137, 180, 250, 0.4);
+    transition: all 0.15s ease;
+}
+
+.connect-btn:hover {
+    background-color: #89b4fa;
+    color: #11111b;
+}
+
+.connect-btn.active {
+    background-color: rgba(166, 227, 161, 0.25);
+    color: #a6e3a1;
+    border-color: #a6e3a1;
+}
+
+/* --- THE MASTER AUDIO HUB (DEVICE ROUTING & APP MIXER) --- */
+.audio-hub-box {
+    background: linear-gradient(135deg, rgba(30, 30, 46, 0.85), rgba(24, 24, 36, 0.85));
+    border: 1px solid rgba(203, 166, 247, 0.35);
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: none;
+}
+
+.audio-hub-header {
+    color: #cba6f7;
+    font-size: 1.05em;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.audio-device-selector {
+    background-color: rgba(255, 255, 255, 0.06);
+    padding: 8px 14px;
+    border-radius: 12px;
+    font-size: 0.88em;
+    color: #cdd6f4;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    transition: all 0.18s ease;
+}
+
+.audio-device-selector:hover {
+    background-color: rgba(203, 166, 247, 0.20);
+    border-color: #cba6f7;
+    color: #ffffff;
+}
+
+.app-mixer-section {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.app-mixer-row {
+    background-color: rgba(255, 255, 255, 0.03);
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 6px;
+}
+
+.app-mixer-title {
+    color: #ffffff;
+    font-size: 0.88em;
+    font-weight: 700;
+}
+
+.app-mixer-mute-btn {
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.82em;
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #a6adc8;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.app-mixer-mute-btn:hover {
+    background-color: rgba(243, 139, 168, 0.25);
+    color: #ffffff;
+    border-color: #f38ba8;
+}
+
+.app-mixer-mute-btn.muted {
+    background-color: #f38ba8;
+    color: #11111b;
+    font-weight: 800;
+}
+
+/* SLIDERS SECTION */
+.dongle-slider-section {
+    background-color: rgba(30, 30, 46, 0.65);
+    padding: 16px 18px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.slider-label {
+    color: #cdd6f4;
+    font-size: 0.92em;
+    font-weight: 700;
+}
+
+.slider-val {
+    color: #89b4fa;
+    font-size: 0.88em;
+    font-weight: 800;
+}
+
+.matshell-slider {
+    margin-top: 6px;
+}
+
+.matshell-slider trough {
+    background-color: rgba(255, 255, 255, 0.10);
+    border-radius: 8px;
+    min-height: 8px;
+}
+
+.matshell-slider highlight {
+    background: linear-gradient(90deg, #89b4fa, #cba6f7);
+    border-radius: 8px;
+    min-height: 8px;
+}
+
+.matshell-slider slider {
+    background-color: #ffffff;
+    border-radius: 50%;
+    min-width: 18px;
+    min-height: 18px;
+    box-shadow: none;
+    transition: transform 0.15s ease;
+}
+
+.matshell-slider slider:hover {
+    transform: scale(1.15);
+}
+
+.action-pill-btn {
+    background-color: rgba(255, 255, 255, 0.06);
+    padding: 10px 14px;
+    border-radius: 14px;
+    color: #cdd6f4;
+    font-size: 0.90em;
+    font-weight: 700;
+    box-shadow: none;
+    transition: all 0.18s ease;
+}
+
+.action-pill-btn:hover {
+    background: linear-gradient(135deg, rgba(137, 180, 250, 0.3), rgba(203, 166, 247, 0.25));
+    border: 1px solid rgba(137, 180, 250, 0.45);
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: none;
+}
+
+/* --- 2. MEDIA PLAYER MODAL --- */
+.media-modal-box {
+    min-width: 380px;
+    background: linear-gradient(135deg, rgba(30, 30, 46, 0.96), rgba(22, 22, 32, 0.96));
+}
+
+.media-modal-title {
+    color: #cba6f7;
+    font-size: 1.15em;
+    font-weight: 800;
+}
+
+.media-track-title {
+    color: #ffffff;
+    font-size: 1.15em;
+    font-weight: 800;
+}
+
+.media-track-artist {
+    color: #a6adc8;
+    font-size: 0.92em;
+    font-weight: 600;
+}
+
+.media-action-btn {
+    background-color: rgba(255, 255, 255, 0.08);
+    padding: 12px 24px;
+    border-radius: 16px;
+    color: #cdd6f4;
+    font-size: 1.10em;
+    font-weight: 800;
+    box-shadow: none;
+    transition: all 0.18s ease;
+}
+
+.media-action-btn:hover {
+    background-color: rgba(137, 180, 250, 0.35);
+    color: #ffffff;
+    transform: scale(1.05);
+    box-shadow: none;
+}
+
+/* --- 3. HARDWARE TELEMETRY MODAL --- */
+.sysmon-modal-box {
+    min-width: 360px;
+}
+
+.sysmon-card {
+    background-color: rgba(30, 30, 46, 0.75);
+    padding: 14px 18px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sysmon-label {
+    font-size: 0.95em;
+    font-weight: 800;
+}
+
+.sysmon-val {
+    font-size: 0.90em;
+    font-weight: 700;
+}
+
+.sysmon-label.cpu { color: #89dceb; }
+.sysmon-label.ram { color: #cba6f7; }
+.sysmon-label.disk { color: #f9e2af; }
+.sysmon-label.batt { color: #a6e3a1; }
+
+/* --- 4. APPLICATION LAUNCHER --- */
+.launcher-box {
+    min-width: 620px;
+}
+
+.launcher-layout {
+    /* Container for sidebar and apps */
+}
+
+.launcher-sidebar {
+    min-width: 150px;
+    padding-right: 14px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.launcher-cat-btn {
+    background-color: transparent;
+    color: #a6adc8;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 1em;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.launcher-cat-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+}
+
+.launcher-cat-btn.active {
+    background-color: rgba(137, 180, 250, 0.15);
+    color: #89b4fa;
+}
+
+.launcher-scroll {
+    min-width: 440px;
+    min-height: 480px;
+}
+
+/* --- 4b. SPOTLIGHT MODAL --- */
+.spotlight-box {
+    min-width: 680px;
+    padding: 16px;
+    background-color: rgba(30, 30, 46, 0.96);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.spotlight-header {
+    padding: 12px 18px;
+    background-color: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.spotlight-entry {
+    color: #ffffff;
+    font-size: 1.4em;
+    font-weight: 600;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.spotlight-entry:focus {
+    box-shadow: none;
+}
+
+.spotlight-scroll {
+    min-width: 640px;
+    min-height: 400px;
+}
+
+.spotlight-card {
+    padding: 14px 20px;
+    border-radius: 16px;
+}
+
+.spotlight-name {
+    font-size: 1.15em;
+    font-weight: 800;
+}
+
+.spotlight-desc {
+    font-size: 0.95em;
+    color: #a6adc8;
+}
+
+.launcher-header {
+    background-color: rgba(30, 30, 46, 0.92);
+    padding: 14px 20px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.18s ease;
+}
+
+.launcher-header:focus-within {
+    border-color: #89b4fa;
+    box-shadow: none;
+}
+
+.launcher-entry {
+    color: #ffffff;
+    font-size: 1.15em;
+    font-weight: 700;
+}
+
+.app-card {
+    background-color: rgba(255, 255, 255, 0.02);
+    padding: 12px 18px;
+    border-radius: 16px;
+    border: 1px solid transparent;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.app-card:hover {
+    background: linear-gradient(90deg, rgba(137, 180, 250, 0.22), rgba(203, 166, 247, 0.18));
+    border-color: rgba(137, 180, 250, 0.50);
+    transform: translateX(6px);
+}
+
+.app-name {
+    color: #ffffff;
+    font-size: 1.08em;
+    font-weight: 800;
+}
+
+.app-desc {
+    color: #a6adc8;
+    font-size: 0.88em;
+    font-weight: 500;
+}
+
+.launcher-empty {
+    color: #f38ba8;
+    padding: 32px 0;
+    font-size: 1.08em;
+    font-weight: 700;
+}
+
+/* --- 5. SESSION POWER MENU --- */
+.powermenu-overlay {
+    min-width: 580px;
+    border-color: rgba(243, 139, 168, 0.50);
+}
+
+.powermenu-title {
+    color: #f38ba8;
+    font-size: 1.55em;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.power-action-btn {
+    padding: 18px 24px;
+    border-radius: 18px;
+    font-size: 1.10em;
+    font-weight: 800;
+    border: none;
+    color: #11111b;
+    box-shadow: none;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.power-action-btn:hover {
+    transform: scale(1.06) translateY(-2px);
+    box-shadow: none;
+}
+
+.power-action-btn.lock { background-color: #89b4fa; }
+.power-action-btn.suspend { background-color: #f9e2af; }
+.power-action-btn.reboot { background-color: #fab387; }
+.power-action-btn.shutdown { background-color: #f38ba8; }
+
+.power-cancel-btn {
+    background-color: rgba(255, 255, 255, 0.10);
+    color: #ffffff;
+    padding: 12px 24px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-weight: 700;
+    margin-top: 14px;
+    box-shadow: none;
+    transition: all 0.18s ease;
+}
+
+.power-cancel-btn:hover {
+    background-color: #f38ba8;
+    color: #11111b;
+    border-color: #f38ba8;
+    box-shadow: none;
+}
+
+/* --- 6. CALENDAR & EVENTS --- */
+.matshell-calendar {
+    background-color: rgba(30, 30, 46, 0.90);
+    border-radius: 18px;
+    padding: 16px;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.matshell-calendar:selected {
+    background-color: #89b4fa;
+    color: #11111b;
+    font-weight: 800;
+    border-radius: 12px;
+}
+
+/* --- 7. ERMETE OS SYSTEM SETTINGS HUB ("settings-modal") --- */
+.settings-modal-box {
+    min-width: 500px;
+    padding: 22px;
+}
+
+.settings-header-title {
+    font-size: 1.25em;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.settings-header-sub {
+    font-size: 0.88em;
+    color: #a6adc8;
+    margin-bottom: 4px;
+}
+
+.settings-hub-list {
+    padding-right: 6px;
+}
+
+.settings-row-card {
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 14px 16px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.settings-row-card:hover {
+    background-color: rgba(255, 255, 255, 0.07);
+    border-color: rgba(137, 180, 250, 0.3);
+}
+
+.settings-row-icon {
+    font-size: 1.5em;
+}
+
+.settings-row-title {
+    font-size: 1.0em;
+    font-weight: 700;
+    color: #cdd6f4;
+}
+
+.settings-row-desc {
+    font-size: 0.82em;
+    color: #9399b2;
+    line-height: 1.35;
+}
+
+.settings-action-btn {
+    background-color: rgba(137, 180, 250, 0.15);
+    color: #89b4fa;
+    font-weight: 700;
+    font-size: 0.85em;
+    padding: 6px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(137, 180, 250, 0.3);
+    transition: all 0.2s ease;
+}
+
+.settings-action-btn:hover {
+    background-color: #89b4fa;
+    color: #11111b;
+}
+
+.modal-bg-barrier {
+    background-color: rgba(0, 0, 0, 0.01);
+}
+
+.workspace-container {
+    padding: 2px 4px;
+}
+
+.workspace-btn {
+    min-width: 24px;
+    min-height: 24px;
+    border-radius: 12px;
+    padding: 0;
+    margin: 0 2px;
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 800;
+    font-size: 0.9em;
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.workspace-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.workspace-btn.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+
+.workspace-btn.focused {
+    background-color: #89b4fa;
+    color: #11111b;
+    box-shadow: 0 2px 5px rgba(137, 180, 250, 0.3);
+}
+
+/* --- WINDOWS 11 STYLE SETTINGS APP --- */
+.win-settings-window {
+    background-color: rgba(30, 30, 46, 0.85); /* Macchiato Base with transparency */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    min-width: 900px;
+    min-height: 600px;
+    margin: 40px; /* Safe area from edges */
+}
+
+.win-sidebar {
+    min-width: 280px;
+    padding: 24px 16px;
+    background-color: transparent;
+}
+
+.win-profile-area {
+    padding: 12px;
+    margin-bottom: 12px;
+}
+
+.win-avatar {
+    font-size: 32px;
+    color: #89b4fa;
+    background-color: rgba(137, 180, 250, 0.15);
+    border-radius: 30px;
+    min-width: 60px;
+    min-height: 60px;
+    padding: 14px;
+    margin-right: 8px;
+}
+
+.win-profile-name {
+    font-size: 1.3em;
+    font-weight: 800;
+    color: #cdd6f4;
+}
+
+.win-profile-sub {
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #a6adc8;
+}
+
+.win-sidebar-divider {
+    min-height: 1px;
+    background-color: rgba(255, 255, 255, 0.08);
+    margin: 12px 16px 24px 16px;
+}
+
+.win-nav-btn {
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin: 2px 8px;
+    background-color: transparent;
+    color: #a6adc8;
+    border: 1px solid transparent;
+    border-left: 4px solid transparent;
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.win-nav-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #cdd6f4;
+}
+
+.win-nav-btn.active {
+    background-color: rgba(137, 180, 250, 0.15);
+    color: #89b4fa;
+    font-weight: 700;
+    border-left: 4px solid #89b4fa;
+}
+
+.win-nav-icon {
+    font-size: 1.2em;
+    margin-right: 4px;
+}
+
+.win-nav-label {
+    font-size: 1em;
+}
+
+.win-settings-content {
+    background-color: rgba(17, 17, 27, 0.5); /* Mantle with transparency */
+    border-radius: 0 20px 20px 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 40px 60px;
+}
+
+.win-page-title {
+    font-size: 2.2em;
+    font-weight: 800;
+    color: #cdd6f4;
+    margin-bottom: 32px;
+}
+
+/* --- WINDOWS 11 SETTINGS PRO STYLES --- */
+.win-setting-group-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    margin-bottom: 24px;
+}
+
+.win-group-title {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #cdd6f4;
+    margin-bottom: 8px;
+    margin-left: 4px;
+}
+
+.win-setting-row {
+    padding: 16px 20px;
+}
+
+.win-row-icon {
+    font-size: 1.6em;
+    margin-right: 8px;
+    color: #89b4fa;
+}
+
+.win-row-title {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #cdd6f4;
+}
+
+.win-row-desc {
+    font-size: 0.9em;
+    color: #a6adc8;
+    margin-top: 4px;
+}
+
+.win-row-divider {
+    min-height: 1px;
+    background-color: rgba(255, 255, 255, 0.05);
+    margin: 0 20px;
+}
+
+.win-action-btn {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom-width: 2px;
+    border-radius: 6px;
+    padding: 6px 16px;
+    color: #cdd6f4;
+    font-weight: 600;
+    transition: all 0.1s ease;
+}
+
+.win-action-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.win-action-btn:active {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-bottom-width: 1px;
+    margin-top: 1px;
+}
+
+.win-search-box {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin: 8px 16px;
+    border-bottom: 2px solid #89b4fa;
+}
+
+.win-search-icon {
+    color: #a6adc8;
+}
+
+.win-search-placeholder {
+    color: rgba(166, 173, 200, 0.6);
+}
+
+.win-about-card {
+    background: linear-gradient(135deg, rgba(137, 180, 250, 0.15) 0%, rgba(203, 166, 247, 0.15) 100%);
+    border: 1px solid rgba(137, 180, 250, 0.3);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.win-about-logo {
+    font-size: 48px;
+    color: #89b4fa;
+}
+
+.win-about-title {
+    font-size: 1.8em;
+    font-weight: 800;
+    color: #cdd6f4;
+}
+
+.win-about-sub {
+    font-size: 1em;
+    color: #a6adc8;
+}
+.systray-box {
+    padding: 0 8px;
+}
+.tray-item-btn {
+    min-height: 20px;
+    min-width: 20px;
+    border-radius: 5px;
+    padding: 4px;
+    background: transparent;
+    transition: all 0.2s ease-in-out;
+}
+.tray-item-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Notifications */
+.notification-box {
+    background: rgba(30, 30, 46, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+}
+.notification-summary {
+    font-weight: 700;
+    font-size: 14px;
+    color: #cdd6f4;
+}
+.notification-body {
+    font-size: 13px;
+    color: #a6adc8;
+    margin-top: 4px;
+}
+.notification-icon {
+    border-radius: 8px;
+}
