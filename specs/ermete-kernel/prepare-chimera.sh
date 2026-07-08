@@ -311,6 +311,12 @@ echo ">>> [BEDROCK PGO FIX] Filtering PGO flags from EFI libstub and boot Makefi
 echo 'KBUILD_CFLAGS := $(filter-out -fprofile-use=% -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize, $(KBUILD_CFLAGS))' >> drivers/firmware/efi/libstub/Makefile
 echo 'KBUILD_CFLAGS := $(filter-out -fprofile-use=% -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize, $(KBUILD_CFLAGS))' >> arch/x86/boot/Makefile
 echo 'KBUILD_CFLAGS := $(filter-out -fprofile-use=% -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize, $(KBUILD_CFLAGS))' >> arch/x86/boot/compressed/Makefile
+echo ">>> [BEDROCK LTO/BSS FIX] Disabling stack-protector and LTO for early boot to prevent .bss absolute relocations..."
+echo 'CFLAGS_head64.o += -fno-stack-protector $(DISABLE_LTO)' >> arch/x86/kernel/Makefile
+echo 'CFLAGS_head32.o += -fno-stack-protector $(DISABLE_LTO)' >> arch/x86/kernel/Makefile
+echo 'CFLAGS_ebda.o += -fno-stack-protector $(DISABLE_LTO)' >> arch/x86/kernel/Makefile
+echo 'CFLAGS_platform-quirks.o += -fno-stack-protector $(DISABLE_LTO)' >> arch/x86/kernel/Makefile
+
 echo ">>> [BEDROCK WERROR SHIELD] Disabling -Werror globally across all kernel subsystems..."
 echo 'KBUILD_CFLAGS += -Wno-error' >> Makefile
 find drivers arch fs kernel mm net -name "Makefile" -exec sed -i 's/-Werror/-Wno-error/g' {} + 2>/dev/null || true
