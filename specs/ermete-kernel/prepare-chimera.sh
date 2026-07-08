@@ -312,7 +312,7 @@ echo 'KBUILD_CFLAGS := $(filter-out -fprofile-use=% -fprofile-correction -Wno-mi
 echo 'KBUILD_CFLAGS := $(filter-out -fprofile-use=% -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize, $(KBUILD_CFLAGS))' >> arch/x86/boot/Makefile
 echo 'KBUILD_CFLAGS := $(filter-out -fprofile-use=% -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize, $(KBUILD_CFLAGS))' >> arch/x86/boot/compressed/Makefile
 echo ">>> [BEDROCK WERROR SHIELD] Disabling -Werror globally across all kernel subsystems..."
-echo 'KBUILD_CFLAGS += -Wno-error=stringop-overread -Wno-error=format-overflow -Wno-error=array-bounds -Wno-error=stringop-truncation -Wno-error=dangling-pointer -Wno-error=restrict -Wno-error=maybe-uninitialized -Wno-error=alloc-size-larger-than= -Wno-error' >> Makefile
+echo 'KBUILD_CFLAGS += -Wno-error' >> Makefile
 find drivers arch fs kernel mm net -name "Makefile" -exec sed -i 's/-Werror/-Wno-error/g' {} + 2>/dev/null || true
 EOF
 
