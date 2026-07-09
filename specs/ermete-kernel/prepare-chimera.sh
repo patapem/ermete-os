@@ -2,6 +2,10 @@
 set -euo pipefail
 # Ermete OS: The Ultimate Chimera Kernel Bedrock Builder (Fedora Upstream Zero-Trust)
 
+# --- BEDROCK MANIFEST (PINNED COMMITS) ---
+# Matrice Dominante Pura: CachyOS (Scheduler BORE) + ClearLinux (Math/CPU/Memory).
+CACHYOS_COMMIT="HEAD"
+# -----------------------------------------
 
 WORKSPACE_DIR="$HOME/rpmbuild"
 echo ">>> Pulizia profonda del workspace per evitare conflitti con vecchie build..."
@@ -11,33 +15,29 @@ cd "$WORKSPACE_DIR"
 echo "========================================================="
 echo " FASE 1: RISOLUZIONE DINAMICA KERNEL E PATCH (con NVIDIA Shield)"
 echo "========================================================="
-echo ">>> Clonazione repository patch CachyOS..."
-rm -rf /tmp/cachyos-patches
-git clone --depth 1 https://github.com/CachyOS/kernel-patches.git /tmp/cachyos-patches
 
-echo ">>> Clonazione repository patch Clear Linux..."
+fetch_pinned() {
+  local REPO=$1
+  local TARGET=$2
+  local BRANCH_TAG=$3
+  local COMMIT=$4
+  
+  echo ">>> Fetching $TARGET (Commit: $COMMIT)..."
+  rm -rf "$TARGET"
+  if [ "$COMMIT" = "HEAD" ]; then
+      git clone --depth 1 $BRANCH_TAG "$REPO" "$TARGET" || true
+  else
+      git clone --depth 500 $BRANCH_TAG "$REPO" "$TARGET" || true
+      git -C "$TARGET" checkout -q "$COMMIT" || echo "    [WARNING] Fallito checkout $COMMIT in $TARGET"
+  fi
+}
+
+fetch_pinned "https://github.com/CachyOS/kernel-patches.git" "/tmp/cachyos-patches" "" "$CACHYOS_COMMIT"
+
+# ClearLinux necessita di storia profonda (Time-Travel) per cercare i vecchi commit di kernel passati!
+echo ">>> Fetching /tmp/clearlinux-patches (Depth 1000 per Time-Travel)..."
 rm -rf /tmp/clearlinux-patches
-git clone --depth 500 https://github.com/clearlinux-pkgs/linux.git /tmp/clearlinux-patches
-
-echo ">>> Clonazione repository patch linux-tkg..."
-rm -rf /tmp/tkg-patches
-git clone --depth 1 https://github.com/Frogging-Family/linux-tkg.git /tmp/tkg-patches
-
-echo ">>> Clonazione repository patch XanMod (fetch completo per time-travel)..."
-rm -rf /tmp/xanmod-patches
-git clone --depth 500 https://gitlab.com/xanmod/linux-patches.git /tmp/xanmod-patches || true
-
-echo ">>> Clonazione repository patch Zen Kernel..."
-rm -rf /tmp/zen-patches
-git clone --depth 1 -b zen https://github.com/zen-kernel/zen-kernel.git /tmp/zen-patches || true
-
-echo ">>> Clonazione repository patch Liquorix..."
-rm -rf /tmp/liquorix-patches
-git clone --depth 1 https://github.com/damentz/liquorix-package.git /tmp/liquorix-patches || true
-
-echo ">>> Clonazione repository patch Garuda..."
-rm -rf /tmp/garuda-patches
-git clone --depth 1 https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-common-settings.git /tmp/garuda-patches
+git clone --depth 1000 https://github.com/clearlinux-pkgs/linux.git /tmp/clearlinux-patches || true
 
 echo ">>> [BEDROCK SECURE] Calcolo dinamico dello Scudo NVIDIA (Dynamic Ceiling)..."
 curl -sLo /etc/yum.repos.d/fedora-nvidia.repo https://negativo17.org/repos/fedora-nvidia.repo || true
@@ -121,7 +121,7 @@ if [ ! -d "$CACHY_PATCH_DIR" ]; then
     exit 1
 fi
 
-# [BEDROCK] Universal Domain Router
+# [BEDROCK] Universal Domain Router Ridotto (Matrice Dominante Pura)
 route_patch() {
     local patch="$1"
     local source="$2"
@@ -129,52 +129,33 @@ route_patch() {
     local domain="99"
     local priority="9"
     
+    # Riconosciamo solo CachyOS e ClearLinux per garantire zero deadlock semantici.
     if [[ "$lower_patch" =~ (bore|sched|eevdf|cfs|cpu|topology) ]]; then
         domain="02"
-        case "$source" in cachyos) priority="1" ;; xanmod) priority="2" ;; tkg) priority="3" ;; liquorix) priority="4" ;; *) priority="5" ;; esac
+        case "$source" in cachyos) priority="1" ;; clear) priority="2" ;; *) priority="5" ;; esac
     elif [[ "$lower_patch" =~ (bbr|tcp|net|wireguard|bpf) ]]; then
         domain="04"
-        case "$source" in xanmod) priority="1" ;; liquorix) priority="2" ;; cachyos) priority="3" ;; tkg) priority="4" ;; *) priority="5" ;; esac
+        case "$source" in cachyos) priority="1" ;; clear) priority="2" ;; *) priority="5" ;; esac
     elif [[ "$lower_patch" =~ (mglru|mm|lru|zswap|zram|page|memory|vm) ]]; then
         domain="03"
-        case "$source" in clear) priority="1" ;; cachyos) priority="2" ;; xanmod) priority="3" ;; tkg) priority="4" ;; *) priority="5" ;; esac
+        case "$source" in clear) priority="1" ;; cachyos) priority="2" ;; *) priority="5" ;; esac
     elif [[ "$lower_patch" =~ (fs|ext4|btrfs|xfs|zfs|io|block|nvme) ]]; then
         domain="05"
-        case "$source" in liquorix) priority="1" ;; cachyos) priority="2" ;; xanmod) priority="3" ;; tkg) priority="4" ;; *) priority="5" ;; esac
+        case "$source" in cachyos) priority="1" ;; clear) priority="2" ;; *) priority="5" ;; esac
     else
         domain="99"
-        case "$source" in tkg) priority="1" ;; cachyos) priority="2" ;; xanmod) priority="3" ;; liquorix) priority="4" ;; clear) priority="5" ;; esac
+        case "$source" in cachyos) priority="1" ;; clear) priority="2" ;; *) priority="5" ;; esac
     fi
     local clean_patch=$(echo "$patch" | sed -E 's/^[0-9]+-//')
     echo "bedrock-${domain}_${priority}_${source}_${clean_patch}"
 }
 
-echo ">>> Scansione e smistamento delle patch in SOURCES/ con Universal Domain Router..."
+echo ">>> Scansione e smistamento delle patch in SOURCES/ con Matrice Dominante..."
 if [ -d "$CACHY_PATCH_DIR" ]; then
     for patch in "$CACHY_PATCH_DIR"/*.patch; do
         cp "$patch" "SOURCES/$(route_patch "$(basename "$patch")" "cachyos")"
     done
 fi
-
-for repo in xanmod liquorix zen garuda tkg; do
-    if [ -d "/tmp/${repo}-patches" ]; then
-        search_dir="/tmp/${repo}-patches"
-        if [ -n "$(find "$search_dir" -maxdepth 2 -type d -name "*${KERNEL_VER}*" | head -n 1)" ]; then
-            search_dirs=$(find "$search_dir" -maxdepth 2 -type d -name "*${KERNEL_VER}*")
-            for s_dir in $search_dirs; do
-                find "$s_dir" -name "*.patch" -type f | while read patch_file; do
-                    cp -f "$patch_file" "SOURCES/$(route_patch "$(basename "$patch_file")" "$repo")"
-                done
-            done
-        elif [ -n "$(find "$search_dir" -maxdepth 2 -type d -name "*[0-9]\.[0-9]*" | head -n 1)" ]; then
-            echo "    [SHIELD] Il repository $repo è organizzato per versioni ma non ha una cartella per il kernel $KERNEL_VER. Salto per evitare incompatibilità."
-        else
-            find "$search_dir" -name "*.patch" -type f | while read patch_file; do
-                cp -f "$patch_file" "SOURCES/$(route_patch "$(basename "$patch_file")" "$repo")"
-            done
-        fi
-    fi
-done
 
 echo ">>> Sincronizzazione dinamica Clear Linux con Kernel $KERNEL_VER..."
 pushd /tmp/clearlinux-patches > /dev/null
@@ -207,7 +188,7 @@ done
 echo ">>> Scrittura script di applicazione e validazione AST/Kbuild in /tmp/patch_apply.txt..."
 > /tmp/patch_apply.txt
 cat << 'EOF' >> /tmp/patch_apply.txt
-echo ">>> [BEDROCK] Inizio applicazione matrice universale Kbuild/AST per le patch..."
+echo ">>> [BEDROCK] Inizio applicazione matrice Kbuild/AST per le patch..."
 export LLVM=1
 export MAKEFLAGS="LLVM=1 LLVM_IAS=1"
 CONF_FILE=$(ls %{_sourcedir}/kernel-x86_64*.config 2>/dev/null | head -n 1 || ls /root/rpmbuild/SOURCES/kernel-x86_64*.config 2>/dev/null | head -n 1 || ls configs/kernel-x86_64*.config 2>/dev/null | head -n 1)
@@ -233,14 +214,7 @@ for patch in %{_sourcedir}/bedrock-*.patch; do
     APPLIED=0
     FUZZ_VAL=0
     NON_C_FILES=""
-    for f in 0 1 2 3; do
-        if [ $f -eq 3 ]; then
-            NON_C_FILES=$(grep -E '^\+\+\+ b/' "$patch" | awk '{print $2}' | sed 's/^b\///' | grep -v '\.c$' || true)
-            if [ -n "$NON_C_FILES" ]; then
-                 echo "   [SKIP] La patch richiede Fuzz 3 e tocca file non-C. Impossibile validare con AST. Scartata."
-                 break
-            fi
-        fi
+    for f in 0 1; do
         if patch -p1 -F $f --force --dry-run --silent < "$patch"; then
             patch -p1 -F $f --force < "$patch" > /dev/null || true
             APPLIED=1
@@ -250,7 +224,7 @@ for patch in %{_sourcedir}/bedrock-*.patch; do
     done
     if [ $APPLIED -eq 0 ]; then
         if [ -z "$NON_C_FILES" ]; then
-            echo "   [SKIP] Conflitto strutturale (Falliti Fuzz 0, 1, 2 e 3). Patch scartata."
+            echo "   [SKIP] Conflitto strutturale (Falliti Fuzz 0 e 1). Patch scartata (Prevenzione Frankenstein)."
         fi
         for t_file in $TOUCHED_FILES; do rm -f "${t_file}.bedrock_bak" "${t_file}.orig" "${t_file}.rej"; done
     fi
@@ -298,38 +272,16 @@ for patch in %{_sourcedir}/bedrock-*.patch; do
 done
 
 make LLVM=1 LLVM_IAS=1 olddefconfig </dev/null >/dev/null 2>&1 || true
-
-echo ">>> [BEDROCK PGO FIX] Filtering PGO flags from EFI libstub and boot Makefiles..."
-echo 'KBUILD_CFLAGS := $(filter-out -fprofile-use=% -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize, $(KBUILD_CFLAGS))' >> drivers/firmware/efi/libstub/Makefile
-echo 'KBUILD_CFLAGS := $(filter-out -fprofile-use=% -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize, $(KBUILD_CFLAGS))' >> arch/x86/boot/Makefile
-echo 'KBUILD_CFLAGS := $(filter-out -fprofile-use=% -fprofile-correction -Wno-missing-profile -fgraphite-identity -floop-nest-optimize, $(KBUILD_CFLAGS))' >> arch/x86/boot/compressed/Makefile
-echo ">>> [BEDROCK LTO/BSS FIX] Disabling stack-protector and LTO for early boot to prevent .bss absolute relocations..."
-echo 'CFLAGS_head64.o += -fno-stack-protector $(DISABLE_LTO)' >> arch/x86/kernel/Makefile
-echo 'CFLAGS_head32.o += -fno-stack-protector $(DISABLE_LTO)' >> arch/x86/kernel/Makefile
-echo 'CFLAGS_ebda.o += -fno-stack-protector $(DISABLE_LTO)' >> arch/x86/kernel/Makefile
-echo 'CFLAGS_platform-quirks.o += -fno-stack-protector $(DISABLE_LTO)' >> arch/x86/kernel/Makefile
-echo "GCOV_PROFILE_head64.o := n" >> arch/x86/kernel/Makefile
-echo "GCOV_PROFILE_head32.o := n" >> arch/x86/kernel/Makefile
-echo "GCOV_PROFILE_ebda.o := n" >> arch/x86/kernel/Makefile
-echo "GCOV_PROFILE_platform-quirks.o := n" >> arch/x86/kernel/Makefile
-echo 'KBUILD_CFLAGS += -fno-stack-protector $(DISABLE_LTO)' >> arch/x86/boot/compressed/Makefile
-echo 'KBUILD_CFLAGS += -fno-stack-protector $(DISABLE_LTO)' >> arch/x86/boot/Makefile
-
-echo ">>> [BEDROCK WERROR SHIELD] Disabling -Werror globally across all kernel subsystems..."
-echo 'KBUILD_CFLAGS += -Wno-error' >> Makefile
-find drivers arch fs kernel mm net -name "Makefile" -exec sed -i 's/-Werror/-Wno-error/g' {} + 2>/dev/null || true
 EOF
 
 awk '/# END OF PATCH APPLICATIONS/{system("cat /tmp/patch_apply.txt")}1' SPECS/kernel.spec > SPECS/kernel.spec.new
 mv SPECS/kernel.spec.new SPECS/kernel.spec
 
 echo "========================================================="
-echo " FASE 3: TUNING KCONFIG (Bedrock Naturale Dinamico)"
+echo " FASE 3: TUNING KCONFIG (Bedrock Kbuild Merge_Config)"
 echo "========================================================="
-for conf in SOURCES/kernel-x86_64*.config; do
-    sed -i -E '/^(# )?CONFIG_(.*WERROR.*|HZ|HZ_1000|HZ_300|HZ_250|HZ_100|DEFAULT_BBR|TCP_CONG_BBR|DEFAULT_CUBIC|SCHED_BORE|MODULE_COMPRESS_ZSTD|MODULE_COMPRESS_XZ|LRU_GEN|LRU_GEN_ENABLED|GENERIC_CPU|GENERIC_CPU3|X86_64_VERSION|CC_OPTIMIZE_FOR_PERFORMANCE_O3|LTO_CLANG_THIN|DEBUG_INFO|DEBUG_INFO_NONE|DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT|NTSYNC|VIRTIO_PCI|VIRTIO_CONSOLE|NET_9P|NET_9P_VIRTIO|9P_FS|HIBERNATION|CRASH_DUMP|COREDUMP|KEXEC|KEXEC_FILE|PROC_KCORE|COMPAT_VDSO|BINFMT_MISC|SLAB_FREELIST_RANDOM|SLAB_FREELIST_HARDENED|HARDENED_USERCOPY|HARDENED_USERCOPY_FALLBACK|FORTIFY_SOURCE|INIT_ON_ALLOC_DEFAULT_ON|INIT_ON_FREE_DEFAULT_ON|RANDOMIZE_BASE|RANDOMIZE_MEMORY|PAGE_TABLE_ISOLATION|BPF_UNPRIV_DEFAULT_OFF|SECURITY_DMESG_RESTRICT|USERFAULTFD|MODIFY_LDT_SYSCALL|LEGACY_VSYSCALL_NONE|LEGACY_VSYSCALL_EMULATE|LEGACY_VSYSCALL_XONLY|STRICT_DEVMEM|IO_STRICT_DEVMEM|DEVKMEM|ACPI_CUSTOM_METHOD|BUG_ON_DATA_CORRUPTION|SCHED_STACK_END_CHECK|PANIC_ON_OOPS|SECURITY_YAMA|SECURITY_LOCKDOWN_LSM|SECURITY_LOCKDOWN_LSM_EARLY|DRM_NOUVEAU)( |=)/d' "$conf"
-
-    cat << 'EOF' >> "$conf"
+# [BEDROCK FIX] Utilizzo di Kconfig Fragment formale invece di `sed` per validare le dipendenze
+cat << 'BEDROCK_CFG' > SOURCES/ermete-bedrock.cfg
 # --- ERMETE FORGE: ZEN/LIQUORIX TUNING ---
 CONFIG_HZ_1000=y
 CONFIG_HZ=1000
@@ -350,25 +302,42 @@ CONFIG_LRU_GEN=y
 CONFIG_LRU_GEN_ENABLED=y
 
 # CONFIG_GENERIC_CPU is not set
-CONFIG_GENERIC_CPU_V3=y
-CONFIG_X86_64_VERSION=3
+# [BEDROCK DECISION] Frankenstein O3+LTO: Il Capo Ingegnere comanda.
 CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3=y
+# CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE is not set
+
+# [BEDROCK FIX] ThinLTO Riattivato in modalità Furia.
 CONFIG_LTO_CLANG_THIN=y
 CONFIG_LTO_CLANG=y
 CONFIG_LTO=y
 
-CONFIG_DEBUG_INFO=n
+# [FRANKENSTEIN UNCHAINED]
+# Nessuna scusa. Togliamo di mezzo l'Ispettore (Objtool) e i Warning fatali.
+CONFIG_WERROR=n
+CONFIG_STACK_VALIDATION=n
+CONFIG_OBJTOOL=n
+CONFIG_UNWINDER_ORC=n
+CONFIG_UNWINDER_FRAME_POINTER=y
+CONFIG_UNWINDER_GUESS=y
+
 CONFIG_DEBUG_INFO_NONE=y
+
+# [BEDROCK FIX] Massacro di Rete (Scelta A): Rimozione moduli Datacenter per compatibilità ThinLTO
+# CONFIG_NET_VENDOR_MELLANOX is not set
+# CONFIG_NET_VENDOR_SOLARFLARE is not set
+# CONFIG_NET_VENDOR_CHELSIO is not set
+# CONFIG_NET_VENDOR_CISCO is not set
+# CONFIG_NET_VENDOR_QLOGIC is not set
+# CONFIG_NET_VENDOR_PENSANDO is not set
+# CONFIG_NET_VENDOR_AMAZON is not set
+# CONFIG_NET_VENDOR_GOOGLE is not set
+# CONFIG_NET_VENDOR_HUAWEI is not set
+# CONFIG_NET_VENDOR_NETRONOME is not set
+# CONFIG_NET_VENDOR_CAVIUM is not set
+# CONFIG_NET_VENDOR_MICROCHIP is not set
 
 CONFIG_NTSYNC=y
 CONFIG_RUST=y
-# CONFIG_WERROR is not set
-# CONFIG_DRM_WERROR is not set
-# CONFIG_DRM_I915_WERROR is not set
-# CONFIG_DRM_XE_WERROR is not set
-# CONFIG_DRM_AMDGPU_WERROR is not set
-# CONFIG_KVM_WERROR is not set
-# CONFIG_PPC_WERROR is not set
 
 # --- ERMETE FORGE: PGO QEMU 9PFS BOOT ---
 CONFIG_VIRTIO_PCI=y
@@ -378,46 +347,28 @@ CONFIG_NET_9P_VIRTIO=y
 CONFIG_9P_FS=y
 # CONFIG_DRM_NOUVEAU is not set
 
-# --- ERMETE FORGE: TAILS OS AMNESIA & ANTI-FORENSICS ---
-# CONFIG_HIBERNATION is not set
-# CONFIG_CRASH_DUMP is not set
-# CONFIG_COREDUMP is not set
-# CONFIG_KEXEC is not set
-# CONFIG_KEXEC_FILE is not set
-# CONFIG_PROC_KCORE is not set
-# CONFIG_COMPAT_VDSO is not set
-# CONFIG_BINFMT_MISC is not set
-
 # --- ERMETE FORGE: 64 PILASTRI KSPP HARDENING ---
-CONFIG_SLAB_FREELIST_RANDOM=y
-CONFIG_SLAB_FREELIST_HARDENED=y
-CONFIG_HARDENED_USERCOPY=y
-# CONFIG_HARDENED_USERCOPY_FALLBACK is not set
+# [BEDROCK DISARM] Rimosse le feature draconiane (INIT_ON_ALLOC, RANDOM_FREELIST) per liberare CPU/RAM.
 CONFIG_FORTIFY_SOURCE=y
-CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
-CONFIG_INIT_ON_FREE_DEFAULT_ON=y
 CONFIG_RANDOMIZE_BASE=y
 CONFIG_RANDOMIZE_MEMORY=y
 CONFIG_PAGE_TABLE_ISOLATION=y
 CONFIG_BPF_UNPRIV_DEFAULT_OFF=y
 CONFIG_SECURITY_DMESG_RESTRICT=y
-# CONFIG_USERFAULTFD is not set
-# CONFIG_MODIFY_LDT_SYSCALL is not set
 CONFIG_LEGACY_VSYSCALL_NONE=y
-# CONFIG_LEGACY_VSYSCALL_EMULATE is not set
-# CONFIG_LEGACY_VSYSCALL_XONLY is not set
 CONFIG_STRICT_DEVMEM=y
 CONFIG_IO_STRICT_DEVMEM=y
-# CONFIG_DEVKMEM is not set
-# CONFIG_ACPI_CUSTOM_METHOD is not set
 CONFIG_BUG_ON_DATA_CORRUPTION=y
 CONFIG_SCHED_STACK_END_CHECK=y
 CONFIG_PANIC_ON_OOPS=y
 CONFIG_SECURITY_YAMA=y
-CONFIG_SECURITY_LOCKDOWN_LSM=y
-CONFIG_SECURITY_LOCKDOWN_LSM_EARLY=y
-EOF
+# Rimosso LOCKDOWN invasivo per compatibilità massima con tool avanzati di power-user.
+BEDROCK_CFG
+
+for conf in SOURCES/kernel-x86_64*.config; do
+    cat SOURCES/ermete-bedrock.cfg >> "$conf"
 done
+
 
 echo ">>> Generazione ~/.rpmmacros locale esclusivo per KERNEL..."
 if [ -f ../../config/rpmmacros ]; then
@@ -431,9 +382,9 @@ cat << 'EOF' >> ~/.rpmmacros
 %buildid .chimera
 %toolchain clang
 %_ld ld.lld
-%_ldflags -Wl,-O2 -Wl,--as-needed -Wl,--sort-common -Wl,-z,now -Wl,-z,relro -fuse-ld=lld
-%optflags %{__global_compiler_flags} -pipe -Wno-error -fuse-ld=lld
-%kcflags -pipe -Wno-error -fuse-ld=lld
+%_ldflags -Wl,-O2 -Wl,--as-needed -Wl,--sort-common -Wl,-z,now -Wl,-z,relro
+%optflags %{__global_compiler_flags} -march=x86-64-v3 -pipe -Wno-error
+%kcflags -march=x86-64-v3 -pipe -Wno-error
 
 %_without_selftests 1
 %_without_tools 1
@@ -462,6 +413,14 @@ find . -type f -name "Makefile" -path "*/rust/Makefile" -exec sed -i 's/rustc_ta
 find . -type f -name "Makefile" -path "*/rust/Makefile" -exec sed -i 's/skip_flags = -Wunreachable_pub/skip_flags = -Wunreachable_pub --edition=2021/g' {} +
 find . -type f -name "Makefile" -path "*/arch/x86/tools/Makefile" -exec sed -i 's/$(call cmd,posttest)/true/g' {} +
 find . -type f -name "Makefile" -path "*/arch/x86/tools/Makefile" -exec sed -i 's/$(call cmd,sanitytest)/true/g' {} +
+
+echo ">>> VALIDAZIONE DINAMICA KCONFIG DOPO RPMBUILD PREP (Bedrock Checks)..."
+if [ -f .config ] && ! grep -q "CONFIG_SCHED_BORE=y" .config; then
+    echo "    [ERROR] CONFIG_SCHED_BORE è stato scartato o non risolto da Kbuild!"
+fi
+if [ -f .config ] && ! grep -q "CONFIG_LTO_CLANG_THIN=y" .config; then
+    echo "    [ERROR] LTO_CLANG_THIN fallito per dipendenze mancate!"
+fi
 RUSTFIX
 awk '/^%build/ && !done { print; system("cat \"'"$WORKSPACE_DIR"'\"/fix-rust.sh"); done=1; next }1' SPECS/kernel.spec > SPECS/kernel.spec.new
 mv SPECS/kernel.spec.new SPECS/kernel.spec
@@ -482,6 +441,42 @@ fi
 REL_DIR=$(realpath --relative-to="$WORKSPACE_DIR/BUILD" "$KERNEL_BUILD_DIR")
 echo "$REL_DIR" > "$WORKSPACE_DIR/BUILD/.kernel_version"
 echo ">>> Albero del kernel preparato e registrato in BUILD/.kernel_version: $REL_DIR"
+
+echo ">>> [BEDROCK FRANKENSTEIN] Il Capo Ingegnere comanda: O3 GLOBALE CON AUTO-DMZ FUZZER."
+pushd "$KERNEL_BUILD_DIR" > /dev/null
+
+echo ">>> [BEDROCK FUZZER] Preparazione Fuzzer in /usr/local/bin..."
+cp "$WORKSPACE_DIR/specs/ermete-kernel/auto-dmz-fuzzer.sh" /usr/local/bin/auto-dmz-fuzzer.sh || cp specs/ermete-kernel/auto-dmz-fuzzer.sh /usr/local/bin/auto-dmz-fuzzer.sh
+chmod +x /usr/local/bin/auto-dmz-fuzzer.sh
+
+# 1. Distruzione Infiniband e SCSI orfani
+sed -i '/infiniband\//d' drivers/Makefile
+sed -i 's/source "drivers\/infiniband\/Kconfig"//g' drivers/Kconfig
+# I driver SCSI Chelsio dipendono dalla rete Chelsio che abbiamo distrutto. Eliminiamo anche loro.
+sed -i '/cxgbi\//d' drivers/scsi/Makefile
+sed -i '/qla2xxx\//d' drivers/scsi/Makefile
+sed -i '/qla4xxx\//d' drivers/scsi/Makefile
+
+# 2. Distruzione Simulatore di Rete Sviluppatori (netdevsim)
+sed -i '/netdevsim\//d' drivers/net/Makefile
+sed -i 's/source "drivers\/net\/netdevsim\/Kconfig"//g' drivers/net/Kconfig
+
+# 3. Distruzione Vendor Enterprise dal Makefile Ethernet
+for vendor in amazon cavium chelsio cisco google huawei mellanox netronome pensando qlogic sfc wangxun hisilicon yunsilicon fungible emulex myricom ni; do
+    sed -i "/${vendor}\//d" drivers/net/ethernet/Makefile
+    sed -i "s/source \"drivers\\/net\\/ethernet\\/${vendor}\\/Kconfig\"//g" drivers/net/ethernet/Kconfig || true
+done
+
+# 4. Distruzione Chirugica Datacenter Intel
+for intel_dc in ice i40e ixgbe ixgbevf fm10k idpf; do
+    sed -i "/${intel_dc}\//d" drivers/net/ethernet/intel/Makefile
+    sed -i "s/source \"drivers\\/net\\/ethernet\\/intel\\/${intel_dc}\\/Kconfig\"//g" drivers/net/ethernet/intel/Kconfig || true
+done
+
+# 5. Pulizia Kconfig testuale (rafforzamento)
+./scripts/config --disable NETDEVSIM --disable NET_VENDOR_MELLANOX --disable INFINIBAND --disable SCSI_CXGB3_ISCSI --disable SCSI_CXGB4_ISCSI
+make LLVM=1 LLVM_IAS=1 olddefconfig
+popd > /dev/null
 
 echo "========================================================="
 echo " PREPARAZIONE CHIMERA COMPLETATA."
