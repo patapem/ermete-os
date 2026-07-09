@@ -158,7 +158,7 @@ route_patch() {
 
 echo ">>> Scansione e smistamento delle patch in SOURCES/ con Matrice Dominante..."
 if [ -d "$CACHY_PATCH_DIR" ]; then
-    for patch in "$CACHY_PATCH_DIR"/*.patch; do
+    find "$CACHY_PATCH_DIR" -type f -name "*.patch" | while read -r patch; do
         cp "$patch" "SOURCES/$(route_patch "$(basename "$patch")" "cachyos")"
     done
 fi
