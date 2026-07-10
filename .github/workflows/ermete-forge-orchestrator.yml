@@ -470,13 +470,13 @@ jobs:
         id: idemp
         run: |
           dnf install -y skopeo jq
-          K_HASH=$(skopeo inspect docker://ghcr.io/${{ github.repository_owner }}/ermete-forge-kernel:latest | jq -r '.Digest' || echo "k_miss")
-          NV_HASH=$(skopeo inspect docker://ghcr.io/${{ github.repository_owner }}/ermete-forge-nvidia:latest | jq -r '.Digest' || echo "nv_miss")
+          K_HASH=$(skopeo inspect --creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} docker://ghcr.io/${{ github.repository_owner }}/ermete-forge-kernel:latest | jq -r '.Digest' || echo "k_miss")
+          NV_HASH=$(skopeo inspect --creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} docker://ghcr.io/${{ github.repository_owner }}/ermete-forge-nvidia:latest | jq -r '.Digest' || echo "nv_miss")
           I_HASH=$(echo "$K_HASH $NV_HASH" | sha256sum | awk '{print $1}')
           echo "hash=$I_HASH" >> $GITHUB_OUTPUT
           
           IMAGE="ghcr.io/${{ github.repository_owner }}/ermete-forge-initramfs:$I_HASH"
-          if skopeo inspect "docker://$IMAGE" >/dev/null 2>&1; then
+          if skopeo inspect --creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} "docker://$IMAGE" >/dev/null 2>&1; then
             echo "Initramfs cache hit."
             echo "rebuilt=false" >> $GITHUB_OUTPUT
           else
@@ -542,10 +542,10 @@ jobs:
           echo "Creazione micro-container..."
           ctr=$(buildah from scratch)
           buildah copy $ctr ~/rpmbuild/RPMS/x86_64/*.rpm /
-          IMAGE_LOWER=$(echo "ghcr.io/${{ github.repository_owner }}/ermete-forge-initramfs:latest" | tr '[:upper:]' '[:lower:]')
-          buildah commit $ctr $IMAGE_LOWER
-          buildah tag $IMAGE_LOWER $IMAGE_LOWER:${{ steps.idemp.outputs.hash }}
-          buildah push $IMAGE_LOWER
+          IMAGE_LOWER=$(echo "ghcr.io/${{ github.repository_owner }}/ermete-forge-initramfs" | tr '[:upper:]' '[:lower:]')
+          buildah commit $ctr $IMAGE_LOWER:latest
+          buildah tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.idemp.outputs.hash }}
+          buildah push $IMAGE_LOWER:latest
           buildah push $IMAGE_LOWER:${{ steps.idemp.outputs.hash }}
 
 
