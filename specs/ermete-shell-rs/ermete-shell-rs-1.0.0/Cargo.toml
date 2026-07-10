@@ -1,0 +1,13 @@
+[package]
+name = "ermete-shell-rs"
+version = "1.0.0"
+edition = "2021"
+authors = ["Ermete Forge <forge@ermete.os>"]
+description = "Pure Rust native shell for Ermete OS"
+
+[dependencies]
+gtk4 = "0.7"
+gtk4-layer-shell = "0.2"
+glib = "0.18"
+chrono = "0.4"
+tokio = { version = "1.35", features = ["full"] }
