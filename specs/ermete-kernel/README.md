@@ -20,55 +20,45 @@ Al posto di ricompilare ciecamente il kernel vanilla, Ermete usa il kernel base 
 
 ### Clear Linux (Ottimizzazioni Branch/Scheduler)
 * **Branch Hints basati su gcov**: Patch chirurgiche per aggiungere `likely/unlikely` hints in chiamate di sistema critiche e core dello scheduler, ottimizzando le predizioni di salto della CPU.
-* *(Nota Storica)*: Inizialmente avevamo previsto patch su P-State e fastboot, ma per mantenere la purezza della codebase (Fuzz 0) ci siamo concentrati solo su hint dello scheduler.
 
 ---
 
-## 3. Gestione Difensiva delle Patch (Bedrock Patching)
+## 3. Gestione Difensiva delle Patch e Hashing Chirurgico (Bedrock Patching)
 Le patch vengono applicate tramite lo script `prepare-chimera.sh` con una logica draconiana.
-* **Strict Fuzz 0**: Non sono ammesse patch fuzzy (che si applicano a offset sballati rischiando di corrompere l'AST C inserendo frammenti di codice all'interno di commenti, causando errori `Error: expected identifier`).
-* **Dry-run Evaluation**: Ogni patch di Clear Linux o CachyOS viene prima validata con `patch --dry-run`. Se non matcha perfettamente la versione del kernel, viene ignorata per non compromettere la build. (Attualmente, per via di `Fuzz 0`, una larga percentuale di patch CachyOS e 4 su 5 patch di Clear Linux vengono scartate).
-* *Roadmap Futura (Il Santo Graal)*: Verrà implementato il "Fuzzing con Validazione Sintattica AST", dove si tenta l'applicazione fuzzy, si genera un check sintattico con `clang -fsyntax-only` e se l'Albero Sintattico C risulta puro e inviolato, la patch viene consolidata.
+* **Hashing Dinamico del Testo**: Per evitare false positive rebuilds, l'orchestratore non calcola più l'hash dell'intero commit upstream di CachyOS, ma esegue l'hashing esclusivamente sul contenuto testuale fisico delle singole patch iniettate (es. `0001-sched-migrate.patch`). Se la patch è invariata, si ottiene un CACHE_HIT immediato (riducendo i tempi CI da 7 minuti a pochi secondi).
+* **Strict Fuzz 0**: Non sono ammesse patch fuzzy con offset sballati. Ogni patch viene prima validata con `patch --dry-run`.
 
 ---
 
-## 4. Toolchain Estrema e Kernel PGO (Profile-Guided Optimization)
-Per estrarre il 100% delle prestazioni, il kernel non viene più compilato con LLVM/Clang come in passato, bensì forgiato su **GCC 15.2+** sfruttando un'ottimizzazione PGO (Profile-Guided Optimization) a 3 fasi:
+## 4. Il Santo Graal: LLVM/Clang e l'Auto-DMZ Fuzzer
+Per estrarre il 100% delle prestazioni, abbiamo abbandonato definitivamente GCC e il vecchio manifesto PGO. Il kernel è ora **interamente forgiato su toolchain LLVM/Clang** sfruttando l'Architettura Darwiniana del Fuzzer Sintattico:
 
-1. **Fase Strumentata (GCOV)**: Il kernel viene compilato abilitando i sensori di calcolo in ogni branch (`GCOV_KERNEL` e `GCOV_PROFILE_ALL`).
-2. **Stress Test QEMU (Estrazione Termica)**: Questa immagine "spia" viene avviata in una VM QEMU su protocollo 9pfs isolato. PID 1 lancia `stress-ng` e `iperf3` per "infiammare" lo stack TCP/IP, il VFS e lo Scheduler. I dati (`.gcda`) vengono estratti.
-3. **Cristallizzazione**: I sensori vengono disattivati. Il kernel definitivo è ricompilato nativamente (`make binrpm-pkg`) istruendo GCC a usare la mappa termica (`-fprofile-use`).
-* **Architettura `-march=x86-64-v3`**: Non supportiamo hardware obsoleto. L'intera suite di binari utilizza istruzioni AVX/AVX2 native per architetture moderne come Ryzen 5800X3D.
+1. **Toolchain Pura LLVM**: Compilazione con `%toolchain clang`, linker `lld` e attivazione di **ThinLTO** (`CONFIG_LTO_CLANG_THIN=y`).
+2. **Auto-DMZ Fuzzer (`auto-dmz-fuzzer.sh`)**: Invece di abbassare le ottimizzazioni globalmente per evitare Kernel Panic, forziamo il kernel in compilazione brutale (`-O3` e `-flto=auto`). 
+3. **Isolamento Dinamico AST**: Se Clang si schianta (rottura dell'AST C o errore `-Werror` su codice sporco), l'Auto-DMZ Fuzzer intercetta l'errore, individua la directory del modulo fallato, gli inietta al volo uno "Scudo O2" (`-O2 -fno-lto`) nei Makefile/Kbuild, e rilancia la compilazione. Il kernel risultante è estremo (-O3) dove possibile, e mitigato (-O2) solo dove necessario.
+
+* **Architettura `-march=x86-64-v3`**: Non supportiamo hardware obsoleto. AVX/AVX2 native per architetture moderne come Ryzen 5800X3D.
 
 ---
 
 ## 5. Decisioni di Esclusione e Ablazione Moduli (Debloat)
-Per garantire stabilità "Bedrock" e dimezzare i tempi di build (da 3 ore a pochi minuti su hardware locale tramite GitHub Runner), intere sezioni del kernel sono state piallate:
+Per garantire stabilità "Bedrock" e dimezzare i tempi di build, intere sezioni del kernel sono state piallate:
 
 ### 5.1 Rimozione di Rust (`CONFIG_RUST is not set`)
-* **Problema Causa Reale**: Tentando di fondere il toolchain LLVM nativo con il supporto Rust nel kernel, `rustc` andava in crash per l'assenza del supporto alla flag `-Z no-jump-tables` (necessaria al compilatore del kernel) sulla toolchain stabile di Fedora.
-* **Scelta Bedrock**: Non si applicano fix alla cieca. Per Ermete OS, l'implementazione Rust nel kernel attualmente è considerata acerba (nessun modulo essenziale vi si affida). Rimuoverla ha annichilito i tempi di compilazione e reso l'albero di build titanicamente più stabile.
+* Per Ermete OS, l'implementazione Rust nel kernel attualmente è acerba. Rimuoverla ha annichilito i tempi di compilazione e reso l'albero LLVM titanicamente più stabile.
 
 ### 5.2 Estirpazione Tools e Documentazione
-Le seguenti macro sono state iniettate in RPM per evitare di scaricare montagne di dipendenze user-space (come `asciidoc` o `python-sphinx`) e disattivare la compilazione di moduli non necessari al boot del sistema operativo:
-* `%_without_tools 1`
-* `%_without_perf 1` e `%_without_libperf 1`
-* `%_without_ynl 1` e `%_without_bpftool 1`
-* `%_without_selftests 1`
-* **L'effetto**: Questo spegne la fase `install_doc` di Make che in precedenza schiantava l'intera pipeline richiedendo parser XML arcaici per costruire le pagine di manuale.
+* Iniezioni RPM: `%_without_tools 1`, `%_without_perf 1`, `%_without_selftests 1`. Spegne la fase `install_doc` di Make che in precedenza schiantava l'intera pipeline.
 
 ### 5.3 Azzeramento Debug
-* `%_without_debug 1`, `%_without_debuginfo 1`, `CONFIG_DEBUG_INFO_NONE=y`
-* Il kernel DWARF debug bloat può pesare fino a svariati Gigabyte. Trattandosi di un'immagine Desktop OS/Gaming prodotta via OCI, ogni forma di simbolo di debug è stata letteralmente bruciata via per comprimere la grandezza finale del file `.rpm`.
+* `%_without_debug 1`, `%_without_debuginfo 1`, `CONFIG_DEBUG_INFO_NONE=y`. Il kernel DWARF debug bloat è bruciato via per comprimere la grandezza finale.
 
 ---
 
 ## 6. Il Lifecycle RPM
-Nel nostro `kernel.spec`, anche la fase di packaging è stata hackerata per scopi prestazionali.
-Dovendo inserire gli RPM dentro un micro-container Docker, impiegare tempo CPU (Single-Thread spesso) per comprimere il file RPM con XZ o ZSTD era stupido e ridondante, visto che il demone OCI (Docker/Podman) effettua già una sua compressione layer gzip. Per questo motivo l'RPM payload è impostato al volo su `w0.gzdio` (nessuna compressione RPM reale).
+Il payload RPM è impostato al volo su `w0.gzdio` (nessuna compressione reale) per evitare di consumare CPU inutilmente, dato che l'OCI (Docker/Podman) comprime già i layer in gzip.
 
-## 7. Mantenimento Futuro
-Se una build del kernel dovesse fallire al rilascio di un nuovo Fedora Branch:
-1. Controlla prima il log dei task in `prepare-chimera.sh` (fallimento patch).
-2. Usa l'ecoscandaglio: Se un modulo fallisce (es. uno script in python o ruby, in `tools/`), individua la flag `%_without_[nome]` corrispondente nel file `.spec` e spegnila dal nostro script bash aggiungendola al file `~/.rpmmacros`.
-3. Non compromettere l'integrità del kernel con workaround locali. La soluzione giusta è sempre a livello di configurazione (Bedrock), mai applicando "cerotti" applicativi.
+## 7. Mantenimento Futuro (DIRETTIVE SEVERE)
+* **MAI applicare "cerotti" applicativi (Workaround) per fixare la build**.
+* Se la toolchain LLVM si schianta, lascia lavorare l'**Auto-DMZ Fuzzer**. Se l'errore è fatale (DMZ Propagation raggiunge la radice), il problema è strutturale.
+* L'unica soluzione accettabile per un fallimento di modulo in `/tools` o sottosistemi inutili è aggiungere la corrispondente flag `%_without_[nome]` in `.rpmmacros`. Sradicare alla radice.

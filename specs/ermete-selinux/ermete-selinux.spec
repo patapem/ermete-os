@@ -38,10 +38,9 @@ install -m 644 ermete_scx.pp %{buildroot}/usr/share/selinux/packages/
 /usr/share/selinux/packages/ermete_scx.pp
 
 %changelog
-* Sun Jun 28 2026 Ermete Forge <forge@ermete.os> - 1.0-1
-- Initial release migrating SELinux policies from Containerfile to RPM
-
-%changelog
 * Tue Jul 07 2026 Ermete Forge <forge@ermete.os> - 1.0-2
 - Purged dangerous %post scriptlet for OSTree compatibility
 - Removed global allow_execmem 1 security risk
+
+* Sun Jun 28 2026 Ermete Forge <forge@ermete.os> - 1.0-1
+- Initial release migrating SELinux policies from Containerfile to RPM
