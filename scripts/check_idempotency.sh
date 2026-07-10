@@ -48,8 +48,6 @@ if [[ -n "$DIR" && -d "$DIR" ]]; then
 else
   # Pacchetti upstream senza spec locale
   if command -v dnf >/dev/null 2>&1; then
-    # Assicuriamoci che il repository di CachyOS sia disponibile per il repoquery
-    curl -sLo /etc/yum.repos.d/bieszczaders.repo "https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos-addons/repo/fedora-43/bieszczaders-kernel-cachyos-addons-fedora-43.repo" || true
     # Cerchiamo la versione effettiva nei repository abilitati
     UPSTREAM_VER=$(dnf repoquery --qf "%{VERSION}-%{RELEASE}" --arch x86_64,noarch "$PACKAGE" 2>/dev/null | sort -V | tail -n 1 || true)
   else

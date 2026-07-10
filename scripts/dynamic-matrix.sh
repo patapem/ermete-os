@@ -6,7 +6,7 @@ OWNER="${GITHUB_REPOSITORY_OWNER:-patapem}"
 
 # Fetch arrays dynamically from Single Source of Truth
 readarray -t CUSTOM_PKGS < <(jq -r '.custom_packages[]' config/packages.json)
-readarray -t CACHYOS_PKGS < <(jq -r '.cachyos_addons[]' config/packages.json)
+
 readarray -t AGS_PKGS < <(jq -r '.ags_ecosystem[]' config/packages.json)
 readarray -t UPSTREAM_CORE < <(jq -r '.upstream_core[]' config/packages.json)
 readarray -t UPSTREAM_DESKTOP < <(jq -r '.upstream_desktop[]' config/packages.json)
@@ -15,7 +15,6 @@ readarray -t UPSTREAM_CLI < <(jq -r '.upstream_cli[]' config/packages.json)
 
 if ! command -v skopeo >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
   if command -v dnf >/dev/null 2>&1; then
-    curl -sLo /etc/yum.repos.d/bieszczaders.repo "https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos-addons/repo/fedora-43/bieszczaders-kernel-cachyos-addons-fedora-43.repo" || true
     dnf install -y skopeo jq
   else
     sudo apt-get update && sudo apt-get install -y skopeo jq
@@ -78,8 +77,7 @@ process_array() {
 echo "Evaluating custom_packages..." >&2
 J_CUSTOM=$(process_array "" "${CUSTOM_PKGS[@]}")
 
-echo "Evaluating cachyos_addons..." >&2
-J_CACHY=$(process_array "" "${CACHYOS_PKGS[@]}")
+
 
 echo "Evaluating ags_ecosystem..." >&2
 J_AGS=$(process_array "ags-" "${AGS_PKGS[@]}")
@@ -98,13 +96,13 @@ J_U_CLI=$(process_array "rolling-" "${UPSTREAM_CLI[@]}")
 
 # Determine if there are any changes across all packages
 HAS_CHANGES="false"
-if [[ "$J_CUSTOM" != "[]" || "$J_CACHY" != "[]" || "$J_AGS" != "[]" || "$J_U_CORE" != "[]" || "$J_U_DESK" != "[]" || "$J_U_MEDIA" != "[]" || "$J_U_CLI" != "[]" ]]; then
+if [[ "$J_CUSTOM" != "[]" || "$J_AGS" != "[]" || "$J_U_CORE" != "[]" || "$J_U_DESK" != "[]" || "$J_U_MEDIA" != "[]" || "$J_U_CLI" != "[]" ]]; then
   HAS_CHANGES="true"
 fi
 
 if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
   echo "custom_packages=${J_CUSTOM}" >> "$GITHUB_OUTPUT"
-  echo "cachyos_addons=${J_CACHY}" >> "$GITHUB_OUTPUT"
+
   echo "ags_ecosystem=${J_AGS}" >> "$GITHUB_OUTPUT"
   echo "upstream_core=${J_U_CORE}" >> "$GITHUB_OUTPUT"
   echo "upstream_desktop=${J_U_DESK}" >> "$GITHUB_OUTPUT"
@@ -115,7 +113,7 @@ fi
 
 echo "JSON Outputs:"
 echo "custom_packages=${J_CUSTOM}"
-echo "cachyos_addons=${J_CACHY}"
+
 echo "ags_ecosystem=${J_AGS}"
 echo "upstream_core=${J_U_CORE}"
 echo "upstream_desktop=${J_U_DESK}"

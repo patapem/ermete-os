@@ -4,9 +4,7 @@
     "ide-bootstrap", "system-services", "nix-support", "system-config", 
     "system-tweaks", "matugen", "bibata", "dart-sass"
   ],
-  "cachyos_addons": [
-    "bore-sysctl", "scx-scheds", "scx-tools"
-  ],
+  "cachyos_addons": [],
   "ags_ecosystem": [
     "appmenu-glib-translator", "astal-io", "astal", "astal-libs", 
     "astal-gjs", "astal-gtk4", "astal-lua", "aylurs-gtk-shell2", "hyprpanel"

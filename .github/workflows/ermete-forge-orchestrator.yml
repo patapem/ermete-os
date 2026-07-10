@@ -19,7 +19,7 @@ jobs:
       image: fedora:latest
     outputs:
       custom_packages: ${{ steps.brain.outputs.custom_packages }}
-      cachyos_addons: ${{ steps.brain.outputs.cachyos_addons }}
+
       ags_ecosystem: ${{ steps.brain.outputs.ags_ecosystem }}
       upstream_core: ${{ steps.brain.outputs.upstream_core }}
       upstream_desktop: ${{ steps.brain.outputs.upstream_desktop }}
@@ -214,40 +214,7 @@ jobs:
             fi
           done
 
-  cachyos-addons:
-    needs: [build-builder, orchestrator-brain]
-    if: needs.orchestrator-brain.outputs.cachyos_addons != '[]' && needs.orchestrator-brain.outputs.cachyos_addons != ''
-    name: ⚙️ Build CachyOS Addons
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        package: ${{ fromJson(needs.orchestrator-brain.outputs.cachyos_addons) }}
-    permissions:
-      contents: read
-      packages: write
-    container:
-      image: ghcr.io/${{ github.repository_owner }}/ermete-builder:latest
-      options: --privileged
-    steps:
-      - name: Fetch and Package
-        run: |
-          dnf install -y dnf5 curl buildah
-          curl -Lo /etc/yum.repos.d/bieszczaders.repo "https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos-addons/repo/fedora-43/bieszczaders-kernel-cachyos-addons-fedora-43.repo"
-          mkdir -p /github/home/RPMS
-          dnf5 download -y --destdir=/github/home/RPMS ${{ matrix.package }}
-          rm -f /github/home/RPMS/*.src.rpm
-          
-          export STORAGE_DRIVER=vfs BUILDAH_ISOLATION=chroot
-          buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
-          ctr=$(buildah from scratch)
-          buildah copy $ctr /github/home/RPMS/*.rpm /
-          IMAGE=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-${{ matrix.package }}" | tr '[:upper:]' '[:lower:]')
-          HASH=$(echo -n "${{ matrix.package }}upstream-cache-v1" | sha256sum | awk '{print $1}')
-          buildah commit $ctr $IMAGE:latest
-          buildah tag $IMAGE:latest $IMAGE:$HASH
-          buildah push $IMAGE:latest
-          buildah push $IMAGE:$HASH
+
 
   build-kernel:
     needs: build-builder
@@ -944,7 +911,7 @@ jobs:
   build-repo:
     name: 📦 Build Repository
     if: always() && !cancelled() && (needs.orchestrator-brain.outputs.has_changes == 'true' || needs.build-kernel.outputs.rebuilt == 'true' || needs.build-nvidia.outputs.rebuilt == 'true' || needs.build-initramfs.outputs.rebuilt == 'true')
-    needs: [orchestrator-brain, custom-packages, ags-ecosystem, cachyos-addons, build-kernel, build-nvidia, build-initramfs, upstream-core, upstream-desktop, upstream-media, upstream-cli]
+    needs: [orchestrator-brain, custom-packages, ags-ecosystem, build-kernel, build-nvidia, build-initramfs, upstream-core, upstream-desktop, upstream-media, upstream-cli]
     runs-on: ubuntu-latest
     permissions:
       contents: read
