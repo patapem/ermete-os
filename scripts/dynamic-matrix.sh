@@ -89,6 +89,12 @@ J_U_MEDIA=$(process_array "rolling-" "${UPSTREAM_MEDIA[@]}")
 echo "Evaluating upstream_cli..." >&2
 J_U_CLI=$(process_array "rolling-" "${UPSTREAM_CLI[@]}")
 
+# Determine if there are any changes across all packages
+HAS_CHANGES="false"
+if [[ "$J_CUSTOM" != "[]" || "$J_CACHY" != "[]" || "$J_AGS" != "[]" || "$J_U_CORE" != "[]" || "$J_U_DESK" != "[]" || "$J_U_MEDIA" != "[]" || "$J_U_CLI" != "[]" ]]; then
+  HAS_CHANGES="true"
+fi
+
 if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
   echo "custom_packages=${J_CUSTOM}" >> "$GITHUB_OUTPUT"
   echo "cachyos_addons=${J_CACHY}" >> "$GITHUB_OUTPUT"
@@ -97,6 +103,7 @@ if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
   echo "upstream_desktop=${J_U_DESK}" >> "$GITHUB_OUTPUT"
   echo "upstream_media=${J_U_MEDIA}" >> "$GITHUB_OUTPUT"
   echo "upstream_cli=${J_U_CLI}" >> "$GITHUB_OUTPUT"
+  echo "has_changes=${HAS_CHANGES}" >> "$GITHUB_OUTPUT"
 fi
 
 echo "JSON Outputs:"
@@ -107,3 +114,4 @@ echo "upstream_core=${J_U_CORE}"
 echo "upstream_desktop=${J_U_DESK}"
 echo "upstream_media=${J_U_MEDIA}"
 echo "upstream_cli=${J_U_CLI}"
+echo "has_changes=${HAS_CHANGES}"

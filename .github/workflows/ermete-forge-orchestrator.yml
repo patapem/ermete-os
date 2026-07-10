@@ -23,6 +23,7 @@ jobs:
       upstream_desktop: ${{ steps.brain.outputs.upstream_desktop }}
       upstream_media: ${{ steps.brain.outputs.upstream_media }}
       upstream_cli: ${{ steps.brain.outputs.upstream_cli }}
+      has_changes: ${{ steps.brain.outputs.has_changes }}
     steps:
       - uses: actions/checkout@v4
       - name: Compute Dynamic Matrix
@@ -243,6 +244,8 @@ jobs:
   build-kernel:
     needs: build-builder
     name: 🧠 Build Chimera Kernel (CachyOS + Clear)
+    outputs:
+      rebuilt: ${{ steps.idempotency.outputs.rebuilt }}
     runs-on: self-hosted
     permissions:
       contents: read
@@ -280,9 +283,11 @@ jobs:
           if skopeo inspect --creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} docker://$IMAGE_LOWER > /dev/null 2>&1; then
             echo "Il Kernel è identico a una build esistente. Salto la compilazione!"
             echo "skip_build=true" >> $GITHUB_OUTPUT
+            echo "rebuilt=false" >> $GITHUB_OUTPUT
           else
             echo "Nuovo fingerprint rilevato. Procedo alla compilazione."
             echo "skip_build=false" >> $GITHUB_OUTPUT
+            echo "rebuilt=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Cache Compiler Objects (ccache)
@@ -352,6 +357,8 @@ jobs:
   build-nvidia:
     needs: [build-builder, build-kernel]
     name: 🎮 Build NVIDIA KMOD
+    outputs:
+      rebuilt: ${{ steps.cache.outputs['cache-hit'] != 'true' }}
     runs-on: self-hosted
     permissions:
       contents: read
@@ -445,6 +452,8 @@ jobs:
   build-initramfs:
     needs: [build-builder, build-kernel, build-nvidia]
     name: 🧠 Build Pre-Forged Initramfs
+    outputs:
+      rebuilt: ${{ steps.idemp.outputs.rebuilt }}
     runs-on: self-hosted
     permissions:
       contents: read
@@ -453,7 +462,26 @@ jobs:
       image: ghcr.io/${{ github.repository_owner }}/ermete-builder:latest
       options: --privileged
     steps:
+      - name: Compute Initramfs Fingerprint
+        id: idemp
+        run: |
+          dnf install -y skopeo jq
+          K_HASH=$(skopeo inspect docker://ghcr.io/${{ github.repository_owner }}/ermete-forge-kernel:latest | jq -r '.Digest' || echo "k_miss")
+          NV_HASH=$(skopeo inspect docker://ghcr.io/${{ github.repository_owner }}/ermete-forge-nvidia:latest | jq -r '.Digest' || echo "nv_miss")
+          I_HASH=$(echo "$K_HASH $NV_HASH" | sha256sum | awk '{print $1}')
+          echo "hash=$I_HASH" >> $GITHUB_OUTPUT
+          
+          IMAGE="ghcr.io/${{ github.repository_owner }}/ermete-forge-initramfs:$I_HASH"
+          if skopeo inspect "docker://$IMAGE" >/dev/null 2>&1; then
+            echo "Initramfs cache hit."
+            echo "rebuilt=false" >> $GITHUB_OUTPUT
+          else
+            echo "Initramfs cache miss."
+            echo "rebuilt=true" >> $GITHUB_OUTPUT
+          fi
+          
       - name: Build Initramfs RPM
+        if: steps.idemp.outputs.rebuilt == 'true'
         run: |
           dnf install -y buildah rpm-build dracut kmod curl ostree
           export STORAGE_DRIVER=vfs
@@ -512,7 +540,9 @@ jobs:
           buildah copy $ctr ~/rpmbuild/RPMS/x86_64/*.rpm /
           IMAGE_LOWER=$(echo "ghcr.io/${{ github.repository_owner }}/ermete-forge-initramfs:latest" | tr '[:upper:]' '[:lower:]')
           buildah commit $ctr $IMAGE_LOWER
+          buildah tag $IMAGE_LOWER $IMAGE_LOWER:${{ steps.idemp.outputs.hash }}
           buildah push $IMAGE_LOWER
+          buildah push $IMAGE_LOWER:${{ steps.idemp.outputs.hash }}
 
 
   upstream-core:
@@ -905,8 +935,8 @@ jobs:
 
   build-repo:
     name: 📦 Build Repository
-    if: always() && !cancelled()
-    needs: [custom-packages, ags-ecosystem, cachyos-addons, build-kernel, build-nvidia, build-initramfs, upstream-core, upstream-desktop, upstream-media, upstream-cli]
+    if: always() && !cancelled() && (needs.orchestrator-brain.outputs.has_changes == 'true' || needs.build-kernel.outputs.rebuilt == 'true' || needs.build-nvidia.outputs.rebuilt == 'true' || needs.build-initramfs.outputs.rebuilt == 'true')
+    needs: [orchestrator-brain, custom-packages, ags-ecosystem, cachyos-addons, build-kernel, build-nvidia, build-initramfs, upstream-core, upstream-desktop, upstream-media, upstream-cli]
     runs-on: ubuntu-latest
     permissions:
       contents: read
