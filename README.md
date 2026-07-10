@@ -12,60 +12,45 @@ It follows the strict **Micro-Container OCI Architecture** pattern.
 **Every single package, tool, or component MUST have its own fully isolated job in the CI/CD pipeline and MUST produce its own dedicated `scratch` OCI image.**
 
 * **❌ PROHIBITED:** Grouping multiple packages (e.g., all Rust tools) into a single job or pushing them to a single monolithic `ermete-forge:latest` image.
-* **✅ REQUIRED:** Granular jobs (e.g., `build-starship`, `build-matugen`) pushing to granular containers (`ghcr.io/patapem/ermete-forge-starship:latest`).
+* **✅ REQUIRED:** Granular jobs pushing to granular containers (`ghcr.io/patapem/ermete-forge-*`).
 
 **Why?**
-1. **Total Failure Isolation**: If one tool fails to compile due to experimental flags, all other containers are still successfully built, cached, and pushed.
+1. **Total Failure Isolation**: If one tool fails to compile, all other containers are still successfully built, cached, and pushed.
 2. **Individual History**: We maintain a perfect, untangled chronological timeline for every single tool.
-3. **Granular Consumption**: `ermete os` can selectively `COPY --from=...` only the exact dependencies it needs dynamically, discarding the rest.
-4. **Absolute RPM Encapsulation**: All configurations, shell scripts, and UI tweaks MUST be compiled as native RPMs. Zero "raw files" are allowed in the OS filesystem.
+3. **Absolute RPM Encapsulation**: All configurations, shell scripts, and UI tweaks MUST be compiled as native RPMs. Zero "raw files" are allowed in the OS filesystem.
 
-## 🌡️ Kernel PGO (Profile-Guided Optimization) Manifesto
-The Trismegistus Kernel is compiled using an advanced empirical profiling pipeline (PGO).
-1. **Instrumentation**: The kernel is initially compiled with GCOV sensors (`CONFIG_GCOV_KERNEL`).
-2. **QEMU Agnostic Stress**: This "spy" kernel boots in a QEMU virtual machine. To bypass the lack of an initramfs, it uses **9pfs** to natively mount the host container's filesystem (`rootfstype=9p rootflags=trans=virtio`). A stress script (`qemu_init_stress.sh`) running as PID 1 inflames the Scheduler, VFS, and Net Stack using `stress-ng` and `iperf3`.
-3. **Extraction**: The `.gcda` thermal maps are dumped from `/sys/kernel/debug/gcov` via the 9pfs shared folder.
-4. **Crystallization**: GCOV is disabled, and the final kernel is packaged natively (`make binrpm-pkg`) by instructing GCC to use the extracted thermal map (`-fprofile-use`). This produces a binary that is perfectly tailored to real-world extreme loads.
+## 🦅 Il Kernel Agnostico (BORE Nativo)
+Allo stato attuale, l'architettura del Kernel Ermete deve rimanere rigorosamente **agnostica e pulita**. 
+Ogni tentazione di implementare scheduler eBPF in user-space (come `scx`) è stata sradicata e considerata un anti-pattern prestazionale.
+* **BORE Scheduler Integrato**: Ci affidiamo esclusivamente allo scheduler BORE (Burst-Oriented Response Enhancer) integrato nativamente a livello Ring 0, garantendo latenze minime senza sovrastrutture eBPF in user-space. Qualsiasi patch kernel futura (es. CachyOS o TKG) dovrà sottostare alla Matrice di Validazione Universale per preservare l'agnosticismo del sistema base.
 
-## 🧠 Intelligent Cryptographic Caching
+## 🧠 Intelligent Cryptographic Caching (Hashing Dinamico)
 To reach the technical extreme, the pipeline does not compile blindly.
-Before executing `rpmbuild`, each job calculates a SHA-256 hash of its `specs/` directory, `rpmmacros`, or queries the upstream CachyOS kernel version. 
-If the hash matches the previous run, compilation is bypassed entirely, and RPMs are restored from cache. This reduces CI time from minutes to seconds.
+Before executing `rpmbuild`, `dynamic-matrix.sh` interrogates `skopeo` and GitHub Container Registry. 
+* **Patch Text Hashing (Kernel)**: Invece di controllare l'hash globale di un repository upstream (che causa false positive rebuilds), l'orchestratore esegue l'hash *esclusivamente del testo fisico delle patch* (es. `0001-sched-migrate.patch`). Se le patch non cambiano, il kernel restituisce un `CACHE_HIT` immediato, saltando ore di build.
 
 ## 🚀 Extreme Optimizations (The Bedrock)
 All RPMs built here inherit the global `config/rpmmacros`:
 - **C/C++**: `-O3 -march=x86-64-v3 -flto=auto -fuse-ld=mold`
 - **Linker**: `-Wl,--as-needed -Wl,--sort-common -Wl,-O2`
 - **Rust**: `-C target-cpu=x86-64-v3 -C opt-level=3 -C lto=thin`
-- **AGS**: Built dynamically via LLVM/Clang with Polly optimizations (`-mllvm -polly`) and `mimalloc`.
 
-## 📦 Assembly Lines (The Orchestrator)
-Invece di script isolati per ogni pacchetto, la Forgia sfrutta un **Orchestratore Topologico Locale** (`bedrock_forge_local.sh`). Questo script analizza un DAG (Directed Acyclic Graph) delle dipendenze per compilare prima i core (come `astal-io`, `astal-gjs`) e poi i layer superiori (`hyprpanel`, `aylurs-gtk-shell`).
+## 📦 Assembly Lines (GitHub Actions Orchestrator)
+La Forgia sfrutta un Orchestratore Dinamico (`ermete-forge-orchestrator.yml`) che analizza le dipendenze in parallelo (Core, AGS Ecosystem, Desktop, CLI).
+Ogni componente estratto viene trasformato istantaneamente in un'immagine `scratch` su GHCR con nomi atomici.
 
-Ogni componente estratto viene trasformato istantaneamente in un'immagine `scratch` su GHCR con nomi atomici e standardizzati, senza prefissi ridondanti:
-- `ghcr.io/patapem/ermete-forge/astal-*`: Binding nativi per lo sviluppo UI
-- `ghcr.io/patapem/ermete-forge/hyprpanel`: Pannello ultra-reattivo forzato via RPM overriding
-- `ghcr.io/patapem/ermete-forge/ermete-kernel`: Il Kernel Trismegistus PGO
-- `ghcr.io/patapem/ermete-forge/ermete-niri-session`: Configurazione e sessione di Window Management incapsulata in `.spec`
-
-## ⚖️ Le Leggi della Forgia (Project Rules)
-Queste direttive generali garantiscono il mantenimento corretto e pulito dell'ecosistema nel tempo.
+## ⚖️ Le Leggi della Forgia (Project Rules per i Manutentori)
+Queste direttive generali garantiscono il mantenimento corretto dell'ecosistema nel tempo.
 
 ### 🟢 COSA DEVE ESSERE FATTO (The "Musts")
 - **PIPELINE:** Ogni componente o personalizzazione deve essere isolato nel proprio pacchetto RPM nativo e generare un micro-container OCI indipendente.
-- **PIPELINE:** Mantenere un approccio modulare e orizzontale, permettendo al sistema di auto-mantenersi tramite i trigger automatizzati.
-- **USERSPACE:** Rispettare il principio "Absolute RPM Encapsulation". Qualsiasi configurazione o dotfile utente deve derivare da un pacchetto strutturato.
+- **KERNEL:** Se un modulo fallisce, si aggiunge una flag di esclusione `%_without_[nome]` al file `.rpmmacros`. Non si usano patch custom per risolvere conflitti locali del kernel.
+- **FRONTEND UI (La Morte di JavaScript):** Il frontend monolitico JS/AGS è stato completamente eliminato a favore di **ermete-shell-rs**. La UI deve essere sviluppata esclusivamente come applicazione GTK4 Layer Shell in puro **Rust nativo**, garantendo zero overhead, immunità al garbage collection e interazione diretta con Wayland tramite GLib. Systemd-User orchestra l'ecosistema.
 
 ### 🔴 COSA NON DEVE ESSERE MAI FATTO (The "Never Do's")
 - **PIPELINE:** Creare build monolitiche o inserire più progetti non correlati all'interno della stessa pipeline (rompendo la granularità OCI).
 - **PIPELINE:** Affidarsi a repository esterni (es. COPR) o scaricare binari pre-compilati non verificati. La Forgia compila nativamente dal sorgente.
-- **USERSPACE:** Iniettare script bash crudi, file di configurazione non tracciati o scorciatoie (hack) per risolvere problemi complessi. Ogni modifica deve risalire a un `.spec`.
-
-*(Maintainers: Qualsiasi nuova directory aggiunta in `specs/` verrà processata e pushato dinamicamente in base alla priorità dichiarata nel Makefile/Orchestratore).*
+- **USERSPACE / FIXING:** Iniettare script bash crudi, file di configurazione non tracciati o applicare "cerotti" applicativi. Qualsiasi deviazione o crash si risolve alla radice (livello Bedrock), rimuovendo i moduli difettosi, mai mascherandoli.
 
 ## 🔗 Horizontal Rolling Automation (Zero-Maintenance CI/CD)
-Ermete Forge isn't just a compiler; it is the central nervous system of the Ermete Ecosystem.
-Through a series of advanced GitHub Actions (`trigger-base-nvidia.yml`, `trigger-ermete-os.yml`), the Forge dictates the entire OCI lifecycle:
-1. When **Kernel, NVIDIA, or Core** packages finish compiling, the Forge fires a `repository_dispatch` to **Ermete Base NVIDIA**, triggering a Ring 0 rebuild.
-2. When **Desktop, UI, or Upstream CLI** packages finish compiling, the Forge bypasses the base layer and fires a dispatch directly to **Ermete OS**, triggering a Ring 3 rebuild.
-This creates a flawless, unattended rolling release loop. You update a spec, and the entire OS updates itself automatically.
+Tramite repository dispatches in `trigger-ermete-os.yml`, la Forgia orchestra l'intero ciclo di vita OCI in totale automazione (Ring 0 -> Ring 3). Update a spec -> Auto-rebuild OS.
