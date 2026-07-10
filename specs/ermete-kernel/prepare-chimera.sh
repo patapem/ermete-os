@@ -7,10 +7,17 @@ set -euo pipefail
 CACHYOS_COMMIT="HEAD"
 # -----------------------------------------
 
-echo ">>> [BEDROCK FUZZER] Preparazione Fuzzer in /usr/local/bin..."
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." &> /dev/null && pwd)"
-cp "$REPO_ROOT/specs/ermete-kernel/auto-dmz-fuzzer.sh" /usr/local/bin/auto-dmz-fuzzer.sh || cp specs/ermete-kernel/auto-dmz-fuzzer.sh /usr/local/bin/auto-dmz-fuzzer.sh
-chmod +x /usr/local/bin/auto-dmz-fuzzer.sh
+MODE="full"
+if [[ "${1:-}" == "--meta" ]]; then
+  MODE="meta"
+fi
+
+if [[ "$MODE" == "full" ]]; then
+  echo ">>> [BEDROCK FUZZER] Preparazione Fuzzer in /usr/local/bin..."
+  REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." &> /dev/null && pwd)"
+  cp "$REPO_ROOT/specs/ermete-kernel/auto-dmz-fuzzer.sh" /usr/local/bin/auto-dmz-fuzzer.sh || cp specs/ermete-kernel/auto-dmz-fuzzer.sh /usr/local/bin/auto-dmz-fuzzer.sh
+  chmod +x /usr/local/bin/auto-dmz-fuzzer.sh
+fi
 
 
 WORKSPACE_DIR="$HOME/rpmbuild"
@@ -107,8 +114,21 @@ for (( ver=$CURRENT_FVER; ver>=$MIN_FVER; ver-- )); do
 done
 
 if [ -z "$TARGET_RELEASEVER" ]; then
-    echo "ERRORE FATALE: Nessun kernel compatibile trovato incrociando Fedora, NVIDIA Shield, CachyOS e Clear Linux."
+    echo "ERRORE FATALE: Nessun kernel compatibile trovato incrociando Fedora, NVIDIA Shield, CachyOS e Clear Linux." >&2
     exit 1
+fi
+
+pushd /tmp/cachyos-patches > /dev/null
+CACHY_SHA=$(git rev-parse HEAD)
+popd > /dev/null
+
+if [[ "$MODE" == "meta" ]]; then
+    # Output deterministic fingerprint data and exit
+    echo "META_KERNEL_VER=$TARGET_KERNEL_VER"
+    echo "META_RELEASE_VER=$TARGET_RELEASEVER"
+    echo "META_CACHY_SHA=$CACHY_SHA"
+    echo "META_CLEAR_SHA=$CLEAR_COMMIT"
+    exit 0
 fi
 
 echo "========================================================="
