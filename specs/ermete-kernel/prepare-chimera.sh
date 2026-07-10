@@ -118,16 +118,33 @@ if [ -z "$TARGET_RELEASEVER" ]; then
     exit 1
 fi
 
-pushd /tmp/cachyos-patches > /dev/null
-CACHY_SHA=$(git rev-parse HEAD)
-popd > /dev/null
-
 if [[ "$MODE" == "meta" ]]; then
+    # Checkout ClearLinux per hashare i file esatti
+    pushd /tmp/clearlinux-patches > /dev/null
+    git checkout -q "$CLEAR_COMMIT"
+    popd > /dev/null
+
+    # Hashiamo SOLO i file patch che verranno fusi nel kernel
+    CACHY_PATCH_HASH=$(find "/tmp/cachyos-patches/$TARGET_KERNEL_VER/" -type f -name "*.patch" -exec sha256sum {} + | sort | sha256sum | awk '{print $1}')
+    
+    CLEAR_PATCH_HASH=""
+    for patch_name in \
+        "0001-sched-migrate.patch" \
+        "0001-sched-numa-Initialise-numa_migrate_retry.patch" \
+        "0001-mm-memcontrol-add-some-branch-hints-based-on-gcov-an.patch" \
+        "0002-sched-core-add-some-branch-hints-based-on-gcov-analy.patch" \
+        "0170-sched-Add-unlikey-branch-hints-to-several-system-cal.patch"; do
+        if [ -f "/tmp/clearlinux-patches/$patch_name" ]; then
+            CLEAR_PATCH_HASH+=$(sha256sum "/tmp/clearlinux-patches/$patch_name" | awk '{print $1}')
+        fi
+    done
+    CLEAR_PATCH_HASH=$(echo "$CLEAR_PATCH_HASH" | sha256sum | awk '{print $1}')
+
     # Output deterministic fingerprint data and exit
     echo "META_KERNEL_VER=$TARGET_KERNEL_VER"
     echo "META_RELEASE_VER=$TARGET_RELEASEVER"
-    echo "META_CACHY_SHA=$CACHY_SHA"
-    echo "META_CLEAR_SHA=$CLEAR_COMMIT"
+    echo "META_CACHY_PATCHES=$CACHY_PATCH_HASH"
+    echo "META_CLEAR_PATCHES=$CLEAR_PATCH_HASH"
     exit 0
 fi
 
