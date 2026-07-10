@@ -18,6 +18,7 @@ jobs:
     outputs:
       custom_packages: ${{ steps.brain.outputs.custom_packages }}
       cachyos_addons: ${{ steps.brain.outputs.cachyos_addons }}
+      ags_ecosystem: ${{ steps.brain.outputs.ags_ecosystem }}
       upstream_core: ${{ steps.brain.outputs.upstream_core }}
       upstream_desktop: ${{ steps.brain.outputs.upstream_desktop }}
       upstream_media: ${{ steps.brain.outputs.upstream_media }}
@@ -137,7 +138,8 @@ jobs:
           buildah push $IMAGE_LOWER:${{ steps.check.outputs.hash }}
 
   ags-ecosystem:
-    needs: build-builder
+    needs: [build-builder, orchestrator-brain]
+    if: needs.orchestrator-brain.outputs.ags_ecosystem != '[]' && needs.orchestrator-brain.outputs.ags_ecosystem != ''
     name: 🖥️ Build AGS Ecosystem
     runs-on: ubuntu-latest
     permissions:
@@ -151,20 +153,29 @@ jobs:
       - name: Build and Publish AGS Components
         run: |
           sed -i "/tsflags=nodocs/d" /etc/dnf/dnf.conf
-          dnf install -y rpm-build rpmdevtools meson ninja-build gcc gcc-c++ vala pkgconf-pkg-config buildah skopeo which autoconf automake libtool
+          dnf install -y rpm-build rpmdevtools meson ninja-build gcc gcc-c++ vala pkgconf-pkg-config buildah skopeo which autoconf automake libtool jq
           cp config/rpmmacros ~/.rpmmacros
           rpmdev-setuptree
           export STORAGE_DRIVER=vfs
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           
-          for pkg in appmenu-glib-translator astal-io astal astal-libs astal-gjs astal-gtk4 astal-lua aylurs-gtk-shell2 hyprpanel; do
+          # Fetch AGS packages dynamically from Single Source of Truth
+          AGS_PKGS=$(jq -r '.ags_ecosystem[]' config/packages.json)
+          for pkg in $AGS_PKGS; do
             echo "========================================"
             echo "Building $pkg..."
             echo "========================================"
             
-            # Compute Hash
-            hash=$(sha256sum specs/ermete-astal/$pkg/*.spec config/rpmmacros | sha256sum | awk '{print $1}')
+            # Compute Hash matching dynamic-matrix.sh exactly
+            hash=$({
+              find "specs/ermete-astal/$pkg" -type f -name "*.spec" | sort | while read -r f; do
+                cat "$f"
+              done
+              if [[ -f "config/rpmmacros" ]]; then
+                cat "config/rpmmacros"
+              fi
+            } | sha256sum | awk '{print $1}')
             IMAGE="docker://${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-$pkg:$hash"
             IMAGE_LOWER=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
             
