@@ -238,8 +238,12 @@ jobs:
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
           ctr=$(buildah from scratch)
           buildah copy $ctr /github/home/RPMS/*.rpm /
-          IMAGE=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-${{ matrix.package }}:latest" | tr '[:upper:]' '[:lower:]')
-          buildah commit $ctr $IMAGE && buildah push $IMAGE
+          IMAGE=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-${{ matrix.package }}" | tr '[:upper:]' '[:lower:]')
+          HASH=$(echo -n "${{ matrix.package }}upstream-cache-v1" | sha256sum | awk '{print $1}')
+          buildah commit $ctr $IMAGE:latest
+          buildah tag $IMAGE:latest $IMAGE:$HASH
+          buildah push $IMAGE:latest
+          buildah push $IMAGE:$HASH
 
   build-kernel:
     needs: build-builder
