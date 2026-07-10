@@ -259,7 +259,7 @@ jobs:
         id: idempotency
         run: |
           dnf install -y skopeo
-          FINGERPRINT=$( (find ~/rpmbuild/BUILD/ -type f \( -name '*.patch' -o -name '.kernel_version' \) -exec sha256sum {} + ; sha256sum specs/ermete-kernel/prepare-chimera.sh ; sha256sum .github/workflows/ermete-forge-orchestrator.yml) | sort | sha256sum | awk '{print $1}' || echo "new_build")
+          FINGERPRINT=$( (find ~/rpmbuild/BUILD/ -type f \( -name '*.patch' -o -name '.kernel_version' \) -exec sha256sum {} + ; sha256sum specs/ermete-kernel/prepare-chimera.sh ; sha256sum config/rpmmacros) | sort | sha256sum | awk '{print $1}' || echo "new_build")
           echo "FINGERPRINT=$FINGERPRINT" >> $GITHUB_ENV
           
           IMAGE="${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-kernel:$FINGERPRINT"
