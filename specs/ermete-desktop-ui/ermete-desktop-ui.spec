@@ -16,6 +16,7 @@ Requires:       aylurs-gtk-shell2
 Requires:       cliphist
 Requires:       swayidle
 Requires:       ddcutil
+Requires:       dart-sass
 
 %description
 Provides the unified Desktop UI (AGS and Niri) configuration for Ermete OS.
@@ -39,7 +40,7 @@ cp -p %{_sourcedir}/etc/skel/.config/ags/app.ts %{buildroot}/etc/skel/.config/ag
 cp -p %{_sourcedir}/etc/skel/.config/ags/modals.ts %{buildroot}/etc/skel/.config/ags/
 cp -p %{_sourcedir}/etc/skel/.config/ags/notifications.ts %{buildroot}/etc/skel/.config/ags/
 cp -p %{_sourcedir}/etc/skel/.config/ags/state.ts %{buildroot}/etc/skel/.config/ags/
-cp -p %{_sourcedir}/etc/skel/.config/ags/style.css %{buildroot}/etc/skel/.config/ags/
+cp -pr %{_sourcedir}/etc/skel/.config/ags/style %{buildroot}/etc/skel/.config/ags/
 cp -p %{_sourcedir}/etc/skel/.config/ags/wallpaper.ts %{buildroot}/etc/skel/.config/ags/
 cp -p %{_sourcedir}/etc/skel/.config/ags/clipboard.ts %{buildroot}/etc/skel/.config/ags/
 cp -p %{_sourcedir}/etc/skel/.config/ags/polkit.ts %{buildroot}/etc/skel/.config/ags/
@@ -63,7 +64,7 @@ cp -p %{_sourcedir}/etc/udev/rules.d/99-ddcutil-i2c.rules %{buildroot}/etc/udev/
 /etc/skel/.config/ags/modals.ts
 /etc/skel/.config/ags/notifications.ts
 /etc/skel/.config/ags/state.ts
-/etc/skel/.config/ags/style.css
+/etc/skel/.config/ags/style/*
 /etc/skel/.config/ags/wallpaper.ts
 /etc/skel/.config/ags/clipboard.ts
 /etc/skel/.config/ags/polkit.ts

@@ -1,0 +1,425 @@
+@use "../../layouts" as *;
+@use "../../abstracts" as *;
+@use "sass:color";
+
+/* general */
+
+.system-menu {
+  -gtk-icon-size: $font;
+  @include window;
+  background: linear-gradient(
+    135deg,
+    color.adjust($bg, $alpha: -0.15, $lightness: if($darkmode, 8%, -8%)),
+    color.adjust($bg, $alpha: -0.25, $lightness: if($darkmode, 2%, -4%))
+  );
+  border: 1px solid color.adjust($fg, $alpha: -0.75);
+  border-radius: 20px;
+  margin-top: $spacing-md;
+  margin-right: $spacing-md;
+  padding: $spacing-md;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.2),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 color.adjust($fg, $alpha: -0.88);
+  transform: translateZ(0);
+
+  & > box {
+    @include window-box;
+    background: transparent;
+  }
+
+  // Force all direct children to same width
+  > box > * {
+    min-width: 100%;
+  }
+}
+
+/* Glass container for sections */
+.system-menu-section {
+  background: linear-gradient(
+    135deg,
+    color.adjust($bg, $alpha: -0.30, $lightness: if($darkmode, 6%, -6%)),
+    color.adjust($bg, $alpha: -0.40, $lightness: if($darkmode, 3%, -3%))
+  );
+  border: 1px solid color.adjust($fg, $alpha: -0.75);
+  border-radius: 14px;
+  padding: $spacing-sm;
+  margin-bottom: $spacing-sm;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.2),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 color.adjust($fg, $alpha: -0.88);
+}
+
+/* toggles */
+.system-menu .toggle {
+  @extend .system-menu-section;
+  
+  &:not(:last-child) {
+    margin-bottom: $spacing-sm;
+  }
+
+  button {
+    margin-right: $spacing-sm;
+    background: linear-gradient(
+      135deg,
+      color.adjust($fg, $alpha: -0.78),
+      color.adjust($fg, $alpha: -0.85)
+    );
+    border: 1px solid color.adjust($fg, $alpha: -0.75);
+    border-radius: 10px;
+    padding: 8px 12px;
+    transition: all 0.2s ease;
+    box-shadow: 
+      inset 0 1px 1px color.adjust($fg, $alpha: -0.8),
+      inset 0 -1px 1px rgba(0, 0, 0, 0.25);
+
+    &:hover {
+      background: linear-gradient(
+        135deg,
+        color.adjust($primary, $alpha: -0.65),
+        color.adjust($primary, $alpha: -0.75)
+      );
+      border-color: color.adjust($primary, $alpha: -0.6);
+      box-shadow: 
+        inset 0 1px 2px color.adjust($fg, $alpha: -0.75),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+/* power profiles */
+.system-menu .power-profiles {
+  @extend .system-menu-section;
+  
+  .current-profile {
+    padding: $spacing-sm;
+  }
+
+  image,
+  label {
+    margin: $spacing-sm;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+
+  .profile-options {
+    box {
+      padding: $spacing-sm;
+    }
+  }
+}
+
+/* sliders - Volume/Brightness */
+.system-menu .sliders {
+  @extend .system-menu-section;
+  min-height: $spacing-sm;
+  
+  image {
+    margin: $spacing-sm;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+  }
+
+  label {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+
+  trough {
+    margin: $spacing-sm;
+    min-height: $spacing-sm;
+    border-radius: 1.5rem;
+    background: linear-gradient(
+      135deg,
+      color.adjust($fg, $alpha: -0.78),
+      color.adjust($fg, $alpha: -0.85)
+    );
+    border: 1px solid color.adjust($fg, $alpha: -0.75);
+    box-shadow: 
+      inset 0 2px 4px rgba(0, 0, 0, 0.25),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.15);
+  }
+
+  block {
+    min-height: $spacing-sm;
+  }
+
+  block.filled {
+    border-radius: 1.5rem;
+    background: linear-gradient(
+      135deg,
+      color.adjust($primary, $alpha: -0.15),
+      color.adjust($primary, $alpha: -0.25)
+    );
+    box-shadow: 
+      inset 0 1px 2px color.adjust($primary, $alpha: -0.3, $lightness: 15%),
+      inset 0 -1px 1px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Battery Box */
+.system-menu .battery-box {
+  @extend .system-menu-section;
+}
+
+/* Wifi, Bluetooth, Notifications */
+.wifi-menu,
+.bluetooth-menu,
+.notification-center {
+  @extend .system-menu-section;
+}
+
+.arrow-indicator {
+  @include animate;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.arrow-down {
+  @include animate;
+  transform: rotate(90deg);
+}
+
+.system-menu-list {
+  @include window;
+  background: linear-gradient(
+    135deg,
+    color.adjust($bg, $alpha: -0.25, $lightness: if($darkmode, 8%, -8%)),
+    color.adjust($bg, $alpha: -0.35, $lightness: if($darkmode, 2%, -4%))
+  );
+  border: 1px solid color.adjust($fg, $alpha: -0.75);
+  border-radius: 16px;
+  margin: $spacing-sm 0;
+  padding: $spacing-sm;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.2),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 color.adjust($fg, $alpha: -0.88);
+  transform: translateZ(0);
+
+  // Inner bezel for list content
+  > box {
+    background: linear-gradient(
+      135deg,
+      color.adjust($bg, $alpha: -0.35, $lightness: if($darkmode, 4%, -4%)),
+      color.adjust($bg, $alpha: -0.45, $lightness: if($darkmode, 2%, -2%))
+    );
+    border: 1px solid color.adjust($fg, $alpha: -0.8);
+    border-radius: 12px;
+    padding: $spacing-xs;
+  }
+}
+
+.network-item,
+.bluetooth-item {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  margin: $spacing-xs;
+  padding: $spacing-sm;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: linear-gradient(
+      135deg,
+      color.adjust($fg, $alpha: -0.8),
+      color.adjust($fg, $alpha: -0.87)
+    );
+    border-color: color.adjust($fg, $alpha: -0.75);
+    box-shadow: 
+      inset 0 1px 1px color.adjust($fg, $alpha: -0.8),
+      inset 0 -1px 1px rgba(0, 0, 0, 0.25);
+  }
+
+  image {
+    &:first-child {
+      margin-right: $spacing-sm;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+    }
+  }
+
+  label {
+    margin: 0 $spacing-sm;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.network-item-active,
+.bluetooth-item-active {
+  background: linear-gradient(
+    135deg,
+    color.adjust($primary, $alpha: -0.65),
+    color.adjust($primary, $alpha: -0.75)
+  );
+  border: 1px solid color.adjust($primary, $alpha: -0.6);
+  border-radius: 10px;
+  margin: $spacing-xs;
+  padding: $spacing-sm;
+  box-shadow: 
+    inset 0 1px 2px color.adjust($primary, $alpha: -0.5, $lightness: 15%),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.password-dialog {
+  @include window-box;
+  background: linear-gradient(
+    135deg,
+    color.adjust($bg, $alpha: -0.30, $lightness: if($darkmode, 6%, -6%)),
+    color.adjust($bg, $alpha: -0.40, $lightness: if($darkmode, 3%, -3%))
+  );
+  border: 1px solid color.adjust($fg, $alpha: -0.75);
+  border-radius: 12px;
+  margin-bottom: $spacing-md;
+  padding: $spacing-md;
+}
+
+.error-message {
+  color: if($darkmode, $error, color.adjust($error, $lightness: -20%));
+  margin: $spacing-xs 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  font-weight: 600;
+}
+
+.section-label {
+  font-weight: 600;
+  margin: $spacing-sm 0 $spacing-xs 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.refresh-button,
+.disconnect-button,
+.settings-button {
+  background: linear-gradient(
+    135deg,
+    color.adjust($fg, $alpha: -0.78),
+    color.adjust($fg, $alpha: -0.85)
+  );
+  border: 1px solid color.adjust($fg, $alpha: -0.75);
+  border-radius: 10px;
+  margin: $spacing-sm;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+  box-shadow: 
+    inset 0 1px 1px color.adjust($fg, $alpha: -0.8),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.25);
+
+  &:hover {
+    background: linear-gradient(
+      135deg,
+      color.adjust($primary, $alpha: -0.65),
+      color.adjust($primary, $alpha: -0.75)
+    );
+    border-color: color.adjust($primary, $alpha: -0.6);
+    box-shadow: 
+      inset 0 1px 2px color.adjust($fg, $alpha: -0.75),
+      inset 0 -1px 1px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.disconnect-button {
+  padding: 0.58rem 0;
+}
+
+.connect-button,
+.cancel-button,
+.forget-button,
+.pair-button,
+.trust-button {
+  margin: $spacing-sm;
+  background: linear-gradient(
+    135deg,
+    color.adjust($primary, $alpha: -0.60),
+    color.adjust($primary, $alpha: -0.70)
+  );
+  border: 1px solid color.adjust($primary, $alpha: -0.55);
+  border-radius: 10px;
+  padding: 10px 16px;
+  transition: all 0.2s ease;
+  box-shadow: 
+    inset 0 1px 2px color.adjust($primary, $alpha: -0.5, $lightness: 15%),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    background: linear-gradient(
+      135deg,
+      color.adjust($primary, $alpha: -0.50),
+      color.adjust($primary, $alpha: -0.60)
+    );
+    border-color: color.adjust($primary, $alpha: -0.45);
+    box-shadow: 
+      inset 0 1px 3px color.adjust($primary, $alpha: -0.4, $lightness: 20%),
+      inset 0 -1px 2px rgba(0, 0, 0, 0.4);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 
+      inset 0 2px 4px rgba(0, 0, 0, 0.3),
+      inset 0 -1px 1px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.disconnect-button,
+.forget-button,
+.cancel-button {
+  border-radius: calc(#{$round} * 1.6);
+}
+
+image {
+  margin: $spacing-sm;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.password-search {
+  @include window-box;
+  background: linear-gradient(
+    135deg,
+    color.adjust($bg, $alpha: -0.30, $lightness: if($darkmode, 6%, -6%)),
+    color.adjust($bg, $alpha: -0.40, $lightness: if($darkmode, 3%, -3%))
+  );
+  border: 1px solid color.adjust($fg, $alpha: -0.75);
+  border-radius: 10px;
+  padding: $spacing-sm;
+
+  entry {
+    menu {
+      @include menu;
+    }
+  }
+}
+
+.empty-label {
+  margin: $spacing-sm;
+  color: if($darkmode, $error, color.adjust($error, $lightness: -20%));
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.saved-network {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  margin: $spacing-xs;
+  padding: $spacing-sm;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: linear-gradient(
+      135deg,
+      color.adjust($fg, $alpha: -0.8),
+      color.adjust($fg, $alpha: -0.87)
+    );
+    border-color: color.adjust($fg, $alpha: -0.75);
+    box-shadow: 
+      inset 0 1px 1px color.adjust($fg, $alpha: -0.8),
+      inset 0 -1px 1px rgba(0, 0, 0, 0.25);
+  }
+
+  > label {
+    margin-left: $spacing-sm;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.bt-button-container {
+  margin: 0 $spacing-xs $spacing-sm $spacing-sm;
+}

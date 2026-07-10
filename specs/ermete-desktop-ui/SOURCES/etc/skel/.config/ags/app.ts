@@ -19,6 +19,23 @@ App.start({
             return
         }
 
+        const configDir = GLib.get_home_dir() + "/.config/ags"
+        const cssPath = configDir + "/style.css"
+        const scssPath = configDir + "/style/main.scss"
+        const componentsPath = configDir + "/style/components/normal"
+
+        try {
+            const { execSync } = imports.gi.GLib
+            // If the style directory exists, compile the main SCSS file
+            if (GLib.file_test(scssPath, GLib.FileTest.EXISTS)) {
+                console.log(`Compiling SCSS from ${scssPath}`)
+                // Use GLib.spawn_command_line_sync to execute the sass command
+                GLib.spawn_command_line_sync(`sass --load-path="${componentsPath}" "${scssPath}" "${cssPath}"`)
+            }
+        } catch (e) {
+            console.error("Failed to compile SCSS:", e)
+        }
+
         App.get_monitors().forEach((mon, idx) => TopBar(mon, idx))
         NotificationPopups()
         WifiModal()

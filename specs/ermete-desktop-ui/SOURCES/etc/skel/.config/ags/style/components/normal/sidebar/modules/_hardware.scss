@@ -1,0 +1,207 @@
+@use "../../../../layouts" as *;
+@use "../../../../abstracts" as *;
+@use "sass:color";
+
+.hardware-monitor-widget {
+  @include widget-container;
+
+  .hw-header {
+    @include widget-header;
+  }
+
+  separator {
+    @include separator;
+  }
+
+  .hw-nav {
+    margin: $spacing-sm 0;
+
+    .nav-button {
+      @include nav-button;
+      
+      min-width: 0;
+      min-height: 0;
+      padding: $spacing-xs $spacing-sm; // explicit padding, not auto
+      
+      // Ensure inner box doesn't stretch
+      > box {
+        min-width: 0;
+        min-height: 0;
+        
+        .nav-icon,
+        .nav-label {
+          // Prevent labels from requesting extra space
+          min-width: 0;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+
+  .hw-content {
+    padding: $spacing-md 0;
+
+    .hw-scroll {
+      @include scrollbar(vertical);
+    }
+
+    .hw-stack {
+
+      .hw-main-content {
+        padding: 0 $spacing-md;
+      }
+
+      .circular-progress-bar-widget {
+        @include hw-circular-progress-theme(
+          $ramProc,
+          color.adjust($procBg, $alpha: -0.5)
+        );
+      }
+
+      .hw-main-circle {
+        @include animate;
+        min-width: 8rem; // keep for safety
+        min-height: 8rem;
+
+        &:active {
+          transform: scale(0.8);
+        }
+
+        .hw-main-label {
+          font-size: calc(#{$font} * 1.5);
+          font-weight: 700;
+          color: $fg;
+        }
+      }
+
+      .hw-vertical-metric {
+        @include vertical-metric-container;
+
+        .vertical-metric-label {
+          @include metric-label;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .vertical-metric-bar {
+          @include progress-bar(vertical);
+          min-width: 12px;
+        }
+
+        .vertical-metric-detail {
+          @include metric-detail;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .hw-vertical-display {
+        @include vertical-metric-container;
+        // 🔑 Same constraints as metric bar
+
+        .vertical-display-label {
+          @include metric-label;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .vertical-display-icon {
+          @include material-icon(32px);
+          min-height: 6.5rem;
+          color: $fg;
+          opacity: 0.8;
+          margin: $spacing-xs 0;
+          // 🔑 Constrain icon container
+        }
+
+        .vertical-display-detail {
+          @include metric-detail;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .hw-disk-list {
+        margin: 0 $spacing-md;
+        padding: $spacing-sm;
+        border-radius: $round;
+        // 🔑 Constrain disk list width
+
+        .disk-list-title {
+          @include metric-label(0.85);
+          margin-bottom: $spacing-xs;
+          // 🔑 Prevent title from stretching
+        }
+
+        .hw-disk-bar {
+          padding: $spacing-xs;
+          border-radius: calc(#{$round} * 0.75);
+
+          .disk-bar-mount {
+            @include metric-detail(0.8);
+            // 🔑 Allow mount point to ellipsize
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 0 1 auto; // don't expand
+          }
+
+          .disk-bar-detail {
+            @include metric-detail(0.75, 500, $outline);
+            // 🔑 Constrain detail width
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 0 0 auto; // don't expand
+          }
+
+          .disk-bar-level {
+            @include progress-bar(horizontal, $secondary, 0, 0.6rem);
+            border-radius: calc(#{$round} * 0.5);
+            // 🔑 Ensure level bar doesn't cause expansion
+            min-width: 0;
+
+            trough {
+              border-radius: calc(#{$round} * 0.5);
+            }
+
+            block.filled {
+              border-radius: calc(#{$round} * 0.5);
+            }
+          }
+        }
+      }
+
+      // Page-specific themes remain unchanged
+      .hw-page-cpu {
+        @include hw-circular-progress-theme($cpuProc);
+
+        block.filled {
+          background: $cpuProc;
+        }
+      }
+
+      .hw-page-memory {
+        @include hw-circular-progress-theme($ramProc);
+
+        block.filled {
+          background: $ramProc;
+        }
+      }
+
+      .hw-page-gpu {
+        @include hw-circular-progress-theme($primary);
+
+        block.filled {
+          background: $primary;
+        }
+      }
+
+      .hw-page-disk {
+        @include hw-circular-progress-theme($secondary);
+      }
+    }
+  }
+}

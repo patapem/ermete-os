@@ -1,0 +1,228 @@
+@use "../../../../layouts" as *;
+@use "../../../../abstracts" as *;
+@use "sass:color";
+
+.hardware-monitor-widget {
+  @include widget-container;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+  border-radius: $round * 1.2;
+
+  .hw-header {
+    @include widget-header;
+    margin: $spacing-sm auto 0 auto; // top margin + center horizontally
+    padding: $spacing-xs $spacing-xs;
+    font-weight: 700;
+    font-size: calc(#{$font} * 1.1);
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  separator {
+    @include separator;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .hw-nav {
+    margin: $spacing-sm 0;
+
+    .nav-button {
+      @include nav-button;
+      min-width: 0;
+      min-height: 0;
+      padding: $spacing-xs $spacing-sm;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: $round * 0.75;
+      transition: background 0.2s ease, border 0.2s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+
+      > box {
+        min-width: 0;
+        min-height: 0;
+
+        .nav-icon,
+        .nav-label {
+          min-width: 0;
+          color: $fg;
+          opacity: 0.85;
+        }
+      }
+    }
+  }
+
+  .hw-content {
+    padding: $spacing-md 0;
+
+    .hw-scroll {
+      @include scrollbar(vertical);
+    }
+
+    .hw-stack {
+
+      .hw-main-content {
+        padding: 0 $spacing-md;
+      }
+
+      .circular-progress-bar-widget {
+        @include hw-circular-progress-theme(
+          $ramProc,
+          rgba(255, 255, 255, 0.08)
+        );
+      }
+
+      .hw-main-circle {
+        @include animate;
+        min-width: 8rem;
+        min-height: 8rem;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle at 30% 30%,
+          rgba(255, 255, 255, 0.15),
+          rgba(255, 255, 255, 0.05)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.3), inset 0 0 12px rgba(255, 255, 255, 0.08);
+
+        &:active {
+          transform: scale(0.9);
+        }
+
+        .hw-main-label {
+          font-size: calc(#{$font} * 1.5);
+          font-weight: 700;
+          color: rgba(255, 255, 255, 0.9);
+          text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+        }
+      }
+
+      .hw-vertical-metric {
+        @include vertical-metric-container;
+        padding: $spacing-xs;
+
+        .vertical-metric-label {
+          @include metric-label;
+          color: rgba(255, 255, 255, 0.85);
+        }
+
+        .vertical-metric-bar-container {
+          margin: $spacing-xs auto;
+        }
+
+        .vertical-metric-bar {
+          @include progress-bar(vertical, $primary);
+
+          // Filled gradient (unchanged)
+          background: linear-gradient(
+            to top,
+            color.adjust($primary, $lightness: 40%),
+            color.adjust($primary, $lightness: -10%)
+          );
+          border-radius: $round * 0.5;
+          min-width: 12px;
+          box-shadow: 0 0 10px rgba($primary, 0.5);
+
+          // Empty portion: solid grey for better contrast
+          trough {
+            background: rgba(128, 128, 128, 0.4); // adjust opacity if needed
+            border-radius: $round * 0.5;
+          }
+        }
+
+        .vertical-metric-detail {
+          @include metric-detail;
+          color: rgba(255, 255, 255, 0.75);
+        }
+      }
+
+
+      .hw-vertical-display {
+        @include vertical-metric-container;
+        padding: $spacing-xs;
+
+        .vertical-display-label {
+          @include metric-label;
+          color: rgba(255, 255, 255, 0.85);
+        }
+
+        .vertical-display-icon {
+          @include material-icon(32px);
+          color: rgba(255, 255, 255, 0.9);
+          opacity: 0.85;
+          margin: $spacing-xs 0;
+        }
+
+        .vertical-display-detail {
+          @include metric-detail;
+          color: rgba(255, 255, 255, 0.75);
+        }
+      }
+
+      .hw-disk-list {
+        margin: 0 $spacing-md;
+        padding: $spacing-sm;
+        border-radius: $round;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        .disk-list-title {
+          @include metric-label(0.85);
+          color: rgba(255, 255, 255, 0.8);
+        }
+
+        .hw-disk-bar {
+          padding: $spacing-xs;
+          border-radius: calc(#{$round} * 0.75);
+
+          .disk-bar-mount {
+            @include metric-detail(0.8);
+            color: rgba(255, 255, 255, 0.85);
+          }
+
+          .disk-bar-detail {
+            @include metric-detail(0.75, 500, rgba(255, 255, 255, 0.6));
+          }
+
+          .disk-bar-level {
+            @include progress-bar(horizontal, $secondary, 0, 0.6rem);
+            border-radius: calc(#{$round} * 0.5);
+
+            trough {
+              background: rgba(255, 255, 255, 0.08);
+            }
+
+            block.filled {
+              background: linear-gradient(
+                to right,
+                color.adjust($secondary, $lightness: 40%),
+                color.adjust($secondary, $lightness: -10%)
+              );
+              box-shadow: 0 0 8px rgba($secondary, 0.5);
+            }
+          }
+        }
+      }
+
+      // Page-specific themes
+      .hw-page-cpu {
+        @include hw-circular-progress-theme($cpuProc);
+      }
+
+      .hw-page-memory {
+        @include hw-circular-progress-theme($ramProc);
+      }
+
+      .hw-page-gpu {
+        @include hw-circular-progress-theme($primary);
+      }
+
+      .hw-page-disk {
+        @include hw-circular-progress-theme($secondary);
+      }
+    }
+  }
+}
