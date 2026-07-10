@@ -1,0 +1,18 @@
+// Minimal Niri configuration for the AGS graphical greeter
+spawn-at-startup "sh" "-c" "GREETD_SOCK=$GREETD_SOCK ags run /etc/skel/.config/ags"
+
+layout {
+    default-workspace "greeter"
+}
+
+window-rule {
+    match app-id="ags"
+    geometry-corner-radius 0
+    clip-to-geometry true
+}
+
+// Disable all unneeded shortcuts and features to prevent greeter escape
+binds {
+    // Only allow quitting the compositor if something hangs (optional, but useful for debugging)
+    // Mod+Shift+E { quit; }
+}

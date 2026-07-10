@@ -2,6 +2,6 @@
 vt = 1
 
 [default_session]
-# Launch tuigreet with clock, greeting, and remember the last session
-command = "tuigreet --time --greeting 'Welcome to Ermete OS (Ring 3)' --remember --remember-session --cmd niri-session"
+# Launch Niri strictly to host the AGS graphical greeter
+command = "niri -c /usr/share/ermete-system-config/niri-greeter.kdl"
 user = "greeter"

@@ -23,6 +23,7 @@ mkdir -p %{buildroot}/usr/lib/tmpfiles.d
 cp -a %{_sourcedir}/usr/lib/systemd/system-preset/* %{buildroot}/usr/lib/systemd/system-preset/ || true
 cp -a %{_sourcedir}/usr/lib/tmpfiles.d/* %{buildroot}/usr/lib/tmpfiles.d/ || true
 cp -a %{_sourcedir}/usr/share/ermete-system-config/greetd.toml %{buildroot}/usr/share/ermete-system-config/greetd.toml || true
+cp -a %{_sourcedir}/usr/share/ermete-system-config/niri-greeter.kdl %{buildroot}/usr/share/ermete-system-config/niri-greeter.kdl || true
 
 %post
 
@@ -31,6 +32,7 @@ cp -a %{_sourcedir}/usr/share/ermete-system-config/greetd.toml %{buildroot}/usr/
 /usr/lib/systemd/system-preset/99-Ermete.preset
 /usr/lib/tmpfiles.d/10-ermete-greetd.conf
 /usr/share/ermete-system-config/greetd.toml
+/usr/share/ermete-system-config/niri-greeter.kdl
 
 %changelog
 * Wed Jul 01 2026 Ermete Forge <forge@ermete.os> - 1.0.0-1

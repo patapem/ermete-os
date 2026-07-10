@@ -34,6 +34,20 @@ function NotificationWidget(notif: AstalNotifd.Notification) {
                         xalign: 0,
                         wrap: true,
                         max_width_chars: 40
+                    }),
+                    Widget.Box({
+                        orientation: Gtk.Orientation.HORIZONTAL,
+                        spacing: 8,
+                        margin_top: 8,
+                        children: notif.get_actions().map(a => Widget.Button({
+                            label: a.label,
+                            hexpand: true,
+                            css_classes: ["notification-action-btn"],
+                            onClicked: () => {
+                                notif.invoke(a.id)
+                                notif.dismiss()
+                            }
+                        }))
                     })
                 ]
             })

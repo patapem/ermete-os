@@ -7,6 +7,8 @@ import AstalTray from "gi://AstalTray"
 import AstalWp from "gi://AstalWp"
 import AstalMpris from "gi://AstalMpris"
 import { PopupWindow, timeState, dateState, uptimeState, cpuUsage, ramUsage, caffeineState, wifiState, btState, isPlaying, mediaTrack, niriWorkspaces, volState, volVal, micVal, brightVal, battState, mediaArtist, diskUsage, wifiExpanded, btExpanded, wifiList, btList, audioSinks, audioSources, appStreams, decoder, execSync, allModals, lastFocusLoss, toggleExclusiveModal, scanWifi, scanBt, updateAudioHub, audioTimer, appsService, queryVar, activeCategory, listbox, CATEGORY_MAP, updateAppList, SysTray } from "./state"
+import { FirewallToggle } from "./firewall"
+import { UpdaterButton } from "./updater"
 
 // --- 1. TOP BAR COMPONENT ---
 export function NiriWorkspaces(connector: string) {
@@ -637,11 +639,24 @@ export function QuickSettingsModal() {
                         Widget.Button({
                             css_classes: ["quick-toggle-btn", "shot"],
                             hexpand: true,
-                            label: "  Cattura Schermo",
+                            label: "  Cattura",
                             onClicked: () => {
                                 toggleExclusiveModal("quick-settings")
                                 execAsync(["sh", "-c", "sleep 0.5 && grim -g \"$(slurp)\" ~/Pictures/screenshot_$(date +%s).png"]).catch(() => {})
                             }
+                        }),
+                        FirewallToggle()
+                    ]
+                }),
+                Widget.Box({
+                    spacing: 12,
+                    children: [
+                        UpdaterButton(),
+                        Widget.Button({
+                            css_classes: ["quick-toggle-btn", "clipboard"],
+                            hexpand: true,
+                            label: "📋 Appunti",
+                            onClicked: () => toggleExclusiveModal("clipboard")
                         })
                     ]
                 }),

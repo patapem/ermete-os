@@ -3,18 +3,23 @@ import { GLib } from "astal"
 import { PopupWindow, timeState, dateState, uptimeState, cpuUsage, ramUsage, caffeineState, wifiState, btState, isPlaying, mediaTrack, niriWorkspaces, volState, volVal, micVal, brightVal, battState, mediaArtist, diskUsage, wifiExpanded, btExpanded, wifiList, btList, audioSinks, audioSources, appStreams, decoder, execSync, allModals, lastFocusLoss, toggleExclusiveModal, scanWifi, scanBt, updateAudioHub, audioTimer, appsService, queryVar, activeCategory, listbox, CATEGORY_MAP, updateAppList, SysTray } from "./state"
 import { NiriWorkspaces, TopBar, WifiModal, BtModal, AudioModal, QuickSettingsModal, ErmeteSettingsModal, MediaPlayerDongle, SysMonitorDongle, LauncherModal, evaluateMath, updateSpotlightList, SpotlightModal, PowerMenuModal, CalendarModal } from "./modals"
 import { NotificationPopups } from "./notifications"
-import Wallpaper from "./wallpaper"
-import { ClipboardModal, loadClipboard } from "./clipboard"
 import { PolkitAgent, PolkitModal } from "./polkit"
+import { UDisksMonitor } from "./udisks"
+import { ClipboardModal } from "./clipboard"
+import { GeoclueModal, initGeoclueAgent } from "./geoclue"
+import { Greeter } from "./greeter"
+import GLib from "gi://GLib"
 
 // --- APP INITIALIZATION ---
 App.start({
     css: `${GLib.get_home_dir()}/.config/ags/style.css`,
     main() {
-        App.get_monitors().forEach((mon, idx) => {
-            TopBar(mon, idx)
-            Wallpaper(mon)
-        })
+        if (GLib.getenv("GREETD_SOCK")) {
+            Greeter()
+            return
+        }
+
+        App.get_monitors().forEach((mon, idx) => TopBar(mon, idx))
         NotificationPopups()
         WifiModal()
         BtModal()
@@ -27,11 +32,12 @@ App.start({
         SpotlightModal()
         PowerMenuModal()
         CalendarModal()
-        ClipboardModal()
         PolkitModal()
-        
-        // Start Polkit listener
         PolkitAgent()
+        UDisksMonitor()
+        ClipboardModal()
+        GeoclueModal()
+        initGeoclueAgent()
 
         allModals.forEach(name => {
             const win = App.get_window(name)
@@ -59,9 +65,6 @@ App.start({
         if (cmd === "toggle") {
             const target = args[1] || "quick-settings"
             const actual = target === "control-center" ? "quick-settings" : target
-            if (actual === "clipboard") {
-                loadClipboard()
-            }
             toggleExclusiveModal(actual)
             res(`Toggled ${actual}`)
         } else {

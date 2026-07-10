@@ -1,45 +1,74 @@
-import { App, Astal, Gtk, Gdk } from "astal/gtk4"
+import { App, Astal, Gtk, Gdk, Widget } from "astal/gtk4"
 import { Variable, bind } from "astal"
 import Auth from "gi://AstalAuth"
 import { PopupWindow } from "./state"
 
-export function PolkitAgent() {
-    const auth = Auth.Polkit.get_default()
-
-    auth.connect("request", (agent, id, msg, icon) => {
-        const win = App.get_window("polkit")
-        if (win) {
-            // Update UI with the prompt message
-            currentPrompt.set(msg)
-            currentAuthId.set(id)
-            win.visible = true
-        }
-    })
-    
-    // We would need to handle authentication via auth.reply(id, password)
-}
-
 const currentPrompt = Variable("")
 const currentAuthId = Variable("")
+
+export function PolkitAgent() {
+    try {
+        const auth = Auth.Polkit.get_default()
+        auth.connect("request", (agent, id, msg, icon) => {
+            const win = App.get_window("polkit")
+            if (win) {
+                currentPrompt.set(msg)
+                currentAuthId.set(id)
+                win.visible = true
+            }
+        })
+    } catch (e) {
+        console.error("No Polkit Authentication Agent backend available in AstalAuth: ", e)
+    }
+}
 
 export function PolkitModal() {
     return PopupWindow({
         name: "polkit",
-        child: <box vertical={true} cssClasses={["modal-container"]} css="min-width: 300px; padding: 20px;">
-            <label label="Authentication Required" cssClasses={["title"]} css="font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem;" />
-            <label label={bind(currentPrompt)} css="margin-bottom: 1rem;" wrap={true} />
-            <entry 
-                visibility={false}
-                placeholderText="Password"
-                onActivate={(self) => {
-                    const id = currentAuthId.get()
-                    if (id) {
-                        Auth.Polkit.get_default().reply(id, self.text)
+        namespace: "polkit",
+        application: App,
+        anchor: Astal.WindowAnchor.NONE,
+        exclusivity: Astal.Exclusivity.IGNORE,
+        keymode: Astal.Keymode.EXCLUSIVE,
+        visible: false,
+        child: Widget.Box({
+            orientation: Gtk.Orientation.VERTICAL,
+            css_classes: ["polkit-modal-container"],
+            children: [
+                Widget.Label({ 
+                    label: "🔒 Autenticazione Richiesta", 
+                    css_classes: ["polkit-title"] 
+                }),
+                Widget.Label({ 
+                    label: bind(currentPrompt), 
+                    css_classes: ["polkit-msg"], 
+                    wrap: true 
+                }),
+                Widget.Entry({
+                    visibility: false,
+                    placeholder_text: "Password",
+                    onActivate: (self) => {
+                        const id = currentAuthId.get()
+                        if (id) {
+                            Auth.Polkit.get_default().reply(id, self.text)
+                        }
+                        self.text = ""
+                        App.get_window("polkit")!.visible = false
                     }
-                    self.text = ""
-                    App.get_window("polkit")?.hide()
-                }}
-            />
-        </box>
+                }),
+                Widget.Button({
+                    label: "Annulla",
+                    css: "margin-top: 1rem;",
+                    onClicked: () => {
+                        const id = currentAuthId.get()
+                        if (id) {
+                            // Empty string o null triggera cancellazione
+                            Auth.Polkit.get_default().reply(id, "")
+                        }
+                        App.get_window("polkit")!.visible = false
+                    }
+                })
+            ]
+        })
     })
 }

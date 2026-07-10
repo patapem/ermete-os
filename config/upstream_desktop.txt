@@ -14,7 +14,7 @@ swaylock
 thunar
 thunar-archive-plugin
 thunar-volman
-tuigreet
+
 wayland-utils
 xdg-desktop-portal-gnome
 xdg-desktop-portal-gtk

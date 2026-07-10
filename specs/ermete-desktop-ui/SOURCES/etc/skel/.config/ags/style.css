@@ -1087,3 +1087,126 @@ window > box {
 .notification-icon {
     border-radius: 8px;
 }
+
+/* --- CLIPBOARD MODAL --- */
+.clipboard-modal-container {
+    min-width: 450px;
+    min-height: 500px;
+    padding: 24px;
+    background-color: rgba(30, 30, 46, 0.95);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.clipboard-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.clipboard-wipe-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    background-color: rgba(243, 139, 168, 0.2);
+    color: #f38ba8;
+}
+
+.clipboard-wipe-btn:hover {
+    background-color: rgba(243, 139, 168, 0.4);
+}
+
+.clipboard-empty-msg {
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 20px;
+}
+
+.clipboard-item-btn {
+    padding: 12px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.clipboard-item-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* --- POLKIT MODAL --- */
+.polkit-modal-container {
+    min-width: 300px;
+    padding: 20px;
+    background-color: rgba(30, 30, 46, 0.95);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.polkit-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.polkit-msg {
+    margin-bottom: 1rem;
+}
+
+.polkit-input {
+    margin-top: 1rem;
+}
+
+/* --- GEOCLUE MODAL --- */
+.geoclue-btn-deny {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background-color: rgba(243, 139, 168, 0.2);
+    color: #f38ba8;
+}
+
+.geoclue-btn-allow {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background-color: rgba(166, 227, 161, 0.2);
+    color: #a6e3a1;
+}
+
+/* --- GREETER --- */
+.greeter-bg {
+    background-color: #1e1e2e;
+}
+
+.greeter-box {
+    background-color: rgba(30, 30, 46, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 40px;
+    min-width: 350px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.greeter-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #cdd6f4;
+    margin-bottom: 20px;
+}
+
+.greeter-user {
+    font-size: 1.2rem;
+    color: #a6adc8;
+    margin-bottom: 20px;
+}
+
+.greeter-error {
+    color: #f38ba8;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+.greeter-login-btn {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #89b4fa;
+    color: #1e1e2e;
+    font-weight: bold;
+}

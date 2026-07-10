@@ -31,7 +31,7 @@ done
 # Upstream Packages
 UPSTREAM=(
   brightnessctl btrfs-progs dbus-tools dbus-x11 distribution-gpg-keys drm_info file-roller firewalld fuse fwupd gnome-keyring gnome-keyring-pam greenboot greenboot-default-health-checks gvfs libnotify libxcrypt-compat lm_sensors mokutil nftables openssl qemu-kvm sbsigntools squashfuse sysstat upower virt-manager
-  niri adw-gtk3-theme fontawesome-fonts-all foot greetd gtk4-layer-shell gtk-layer-shell jetbrains-mono-fonts papirus-icon-theme qt5-qtwayland qt6-qtwayland rsms-inter-fonts swaybg swaylock thunar thunar-archive-plugin thunar-volman tuigreet wayland-utils xdg-desktop-portal-gnome xdg-desktop-portal-gtk xdg-user-dirs xdg-user-dirs-gtk xorg-x11-server-Xwayland
+  niri adw-gtk3-theme fontawesome-fonts-all foot greetd gtk4-layer-shell gtk-layer-shell jetbrains-mono-fonts papirus-icon-theme qt5-qtwayland qt6-qtwayland rsms-inter-fonts swaybg swaylock thunar thunar-archive-plugin thunar-volman wayland-utils xdg-desktop-portal-gnome xdg-desktop-portal-gtk xdg-user-dirs xdg-user-dirs-gtk xorg-x11-server-Xwayland
   pipewire nodejs npm ffmpeg mpv wireplumber x264 libva-nvidia-driver libva-utils imv mesa-dri-drivers mesa-vulkan-drivers
   btop eza fd-find git inotify-tools just nushell parallel playerctl ripgrep rsync sqlite unzip wl-clipboard wl-mirror wlr-randr
 )
