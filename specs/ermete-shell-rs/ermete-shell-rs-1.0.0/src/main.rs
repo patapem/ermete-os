@@ -1,7 +1,7 @@
 use gtk4::prelude::*;
 use gtk4::{Application, ApplicationWindow, Label, Box, Orientation, Align};
 use gtk4_layer_shell::{Edge, Layer, LayerShell};
-use chrono::Local;
+use chrono::{Local, Timelike};
 
 const APP_ID: &str = "os.ermete.Shell";
 
@@ -48,11 +48,22 @@ fn build_ui(app: &Application) {
     hbox.append(&time_label);
     window.set_child(Some(&hbox));
     
-    // Auto-update clock every second
-    glib::timeout_add_seconds_local(1, glib::clone!(@weak time_label => @default-return glib::ControlFlow::Break, move || {
-        time_label.set_label(&current_time_string());
-        glib::ControlFlow::Continue
-    }));
+    // Sync clock with the system minute boundary
+    let seconds_to_next_minute = 60 - Local::now().second();
+    glib::timeout_add_seconds_local_once(
+        seconds_to_next_minute,
+        glib::clone!(@weak time_label => move || {
+            time_label.set_label(&current_time_string());
+            // Then update exactly every 60 seconds
+            glib::timeout_add_seconds_local(
+                60,
+                glib::clone!(@weak time_label => @default-return glib::ControlFlow::Break, move || {
+                    time_label.set_label(&current_time_string());
+                    glib::ControlFlow::Continue
+                }),
+            );
+        }),
+    );
 
     window.present();
 }
