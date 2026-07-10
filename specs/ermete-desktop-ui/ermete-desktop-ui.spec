@@ -12,15 +12,15 @@ Obsoletes:      ermete-ags-config < 1.0.1-3
 Provides:       ermete-niri-session = 1.0.0-3
 Obsoletes:      ermete-niri-session < 1.0.0-3
 
-Requires:       aylurs-gtk-shell2
-Requires:       cliphist
+Requires:       ags
+Requires:       lxpolkit
 Requires:       swayidle
 Requires:       ddcutil
 Requires:       dart-sass
 
 %description
 Provides the unified Desktop UI (AGS and Niri) configuration for Ermete OS.
-Includes dependencies for Wayland (polkit-gnome, cliphist, swayidle, ddcutil)
+Includes dependencies for Wayland (lxpolkit, swayidle, ddcutil)
 and configures UDEV for i2c access.
 
 %prep
@@ -81,5 +81,5 @@ cp -p %{_sourcedir}/etc/udev/rules.d/99-ddcutil-i2c.rules %{buildroot}/etc/udev/
 * Tue Jul 07 2026 Ermete Forge <forge@ermete.os> - 1.0.0-1
 - Unified AGS and Niri configs into ermete-desktop-ui.
 - Integrated smembrated AGS app.ts into state, modals, notifications.
-- Added essential Wayland deps: polkit-gnome, cliphist, swayidle, ddcutil.
+- Added essential Wayland deps: lxpolkit, swayidle, ddcutil.
 - Added UDEV rules for ddcutil i2c.
