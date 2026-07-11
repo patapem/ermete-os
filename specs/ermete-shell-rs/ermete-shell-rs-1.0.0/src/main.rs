@@ -8,7 +8,6 @@ use gtk4::{
     Entry, Label, Orientation, PasswordEntry, ProgressBar, Scale, ScrolledWindow, Switch,
 };
 use gtk4_layer_shell::{Edge, KeyboardMode, Layer, LayerShell};
-use std::env;
 use std::process::Command;
 
 const APP_ID: &str = "os.ermete.Shell";
@@ -351,19 +350,37 @@ fn load_css() {
 }
 
 thread_local! {
-    static ACTIVE_POPUP: std::cell::RefCell<Option<glib::WeakRef<ApplicationWindow>>> = std::cell::RefCell::new(None);
+    static ACTIVE_POPUP: std::cell::RefCell<Option<(String, glib::WeakRef<ApplicationWindow>)>> = std::cell::RefCell::new(None);
 }
 
-fn setup_popup_autoclose(pop: &ApplicationWindow, _exclusive_kbd: bool) {
+fn toggle_or_open_popup(tag: &str, open_fn: impl FnOnce()) {
+    let mut already_open = false;
     ACTIVE_POPUP.with(|p| {
-        if let Some(old_weak) = p.borrow().as_ref() {
+        if let Some((old_tag, old_weak)) = p.borrow().as_ref() {
+            if let Some(old_win) = old_weak.upgrade() {
+                old_win.close();
+                if old_tag == tag {
+                    already_open = true;
+                }
+            }
+        }
+        *p.borrow_mut() = None;
+    });
+    if !already_open {
+        open_fn();
+    }
+}
+
+fn setup_popup_autoclose(pop: &ApplicationWindow, tag: &str) {
+    ACTIVE_POPUP.with(|p| {
+        if let Some((_, old_weak)) = p.borrow().as_ref() {
             if let Some(old_win) = old_weak.upgrade() {
                 if old_win != *pop {
                     old_win.close();
                 }
             }
         }
-        *p.borrow_mut() = Some(pop.downgrade());
+        *p.borrow_mut() = Some((tag.to_string(), pop.downgrade()));
     });
 
     pop.set_keyboard_mode(KeyboardMode::OnDemand);
@@ -426,7 +443,7 @@ fn show_spotlight_modal(app: &Application) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
-    setup_popup_autoclose(&pop, true);
+    setup_popup_autoclose(&pop, "spotlight");
     pop.set_margin(Edge::Top, 140);
 
     let card = GtkBox::builder()
@@ -596,7 +613,7 @@ fn show_system_monitor_modal(app: &Application) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
-    setup_popup_autoclose(&pop, false);
+    setup_popup_autoclose(&pop, "sys-monitor");
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Right, true);
     pop.set_margin(Edge::Top, 34);
@@ -711,7 +728,7 @@ fn show_wifi_password_modal(app: &Application, ssid: &str) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
-    setup_popup_autoclose(&pop, true);
+    setup_popup_autoclose(&pop, "wifi-password");
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Right, true);
     pop.set_margin(Edge::Top, 60);
@@ -834,7 +851,7 @@ fn show_wifi_details_modal(app: &Application, ssid: &str, active: bool) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
-    setup_popup_autoclose(&pop, true);
+    setup_popup_autoclose(&pop, "wifi-details");
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Right, true);
     pop.set_margin(Edge::Top, 50);
@@ -1138,7 +1155,7 @@ fn show_wifi_popover(app: &Application) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
-    setup_popup_autoclose(&pop, false);
+    setup_popup_autoclose(&pop, "wifi");
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Right, true);
     pop.set_margin(Edge::Top, 34);
@@ -1212,7 +1229,7 @@ fn show_bluetooth_popover(app: &Application) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
-    setup_popup_autoclose(&pop, false);
+    setup_popup_autoclose(&pop, "bluetooth");
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Right, true);
     pop.set_margin(Edge::Top, 34);
@@ -1318,7 +1335,7 @@ fn show_audio_mixer_popover(app: &Application) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
-    setup_popup_autoclose(&pop, false);
+    setup_popup_autoclose(&pop, "media-player");
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Right, true);
     pop.set_margin(Edge::Top, 34);
@@ -1432,7 +1449,7 @@ fn show_control_center_popover(app: &Application) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
-    setup_popup_autoclose(&pop, false);
+    setup_popup_autoclose(&pop, "control-center");
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Right, true);
     pop.set_margin(Edge::Top, 34);
@@ -1651,7 +1668,7 @@ fn show_start_menu_popover(app: &Application) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
-    setup_popup_autoclose(&pop, false);
+    setup_popup_autoclose(&pop, "launcher");
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Left, true);
     pop.set_margin(Edge::Top, 32);
@@ -1762,7 +1779,7 @@ fn show_calendar_popover(app: &Application) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
-    setup_popup_autoclose(&pop, false);
+    setup_popup_autoclose(&pop, "calendar");
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Right, true);
     pop.set_margin(Edge::Top, 32);
@@ -1984,15 +2001,49 @@ fn build_ui(app: &Application) {
     );
 
     window.present();
+}
 
-    let args: Vec<String> = env::args().collect();
-    if args.iter().any(|arg| arg == "spotlight") {
-        show_spotlight_modal(app);
+static UI_BUILT: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
+fn handle_command(app: &Application, arg: &str) {
+    match arg {
+        "spotlight" | "launcher" => toggle_or_open_popup("spotlight", || show_spotlight_modal(app)),
+        "control-center" => toggle_or_open_popup("control-center", || show_control_center_popover(app)),
+        "sys-monitor" | "monitor" => toggle_or_open_popup("sys-monitor", || show_system_monitor_modal(app)),
+        "calendar" => toggle_or_open_popup("calendar", || show_calendar_popover(app)),
+        "media-player" | "mixer" | "audio" => toggle_or_open_popup("media-player", || show_audio_mixer_popover(app)),
+        "wifi" => toggle_or_open_popup("wifi", || show_wifi_popover(app)),
+        "bluetooth" => toggle_or_open_popup("bluetooth", || show_bluetooth_popover(app)),
+        "start-menu" | "menu" => toggle_or_open_popup("launcher", || show_start_menu_popover(app)),
+        _ => {}
     }
 }
 
 fn main() -> glib::ExitCode {
-    let app = Application::builder().application_id(APP_ID).build();
-    app.connect_activate(build_ui);
+    let app = Application::builder()
+        .application_id(APP_ID)
+        .flags(gtk4::gio::ApplicationFlags::HANDLES_COMMAND_LINE)
+        .build();
+
+    app.connect_activate(|app| {
+        if !UI_BUILT.swap(true, std::sync::atomic::Ordering::Relaxed) {
+            build_ui(app);
+        }
+    });
+
+    app.connect_command_line(|app, cmdline| {
+        if !UI_BUILT.swap(true, std::sync::atomic::Ordering::Relaxed) {
+            build_ui(app);
+        }
+
+        let args = cmdline.arguments();
+        for arg_os in args.into_iter().skip(1) {
+            let arg = arg_os.to_string_lossy();
+            handle_command(app, &arg);
+        }
+
+        0
+    });
+
     app.run()
 }
