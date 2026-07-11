@@ -771,6 +771,310 @@ fn show_wifi_password_modal(app: &Application, ssid: &str) {
     pwd_entry.grab_focus();
 }
 
+fn show_wifi_details_modal(app: &Application, ssid: &str, active: bool) {
+    let pop = ApplicationWindow::builder()
+        .application(app)
+        .title(format!("Configurazione Rete: {}", ssid))
+        .css_classes(["popup-window"])
+        .default_width(420)
+        .build();
+
+    pop.init_layer_shell();
+    pop.set_layer(Layer::Overlay);
+    pop.set_keyboard_mode(KeyboardMode::Exclusive);
+    pop.set_anchor(Edge::Top, true);
+    pop.set_anchor(Edge::Right, true);
+    pop.set_margin(Edge::Top, 50);
+    pop.set_margin(Edge::Right, 60);
+
+    let card = GtkBox::builder()
+        .orientation(Orientation::Vertical)
+        .spacing(14)
+        .css_classes(["cc-card"])
+        .build();
+
+    let header_card = GtkBox::builder()
+        .orientation(Orientation::Horizontal)
+        .spacing(12)
+        .css_classes(["applet-header-card"])
+        .valign(Align::Center)
+        .build();
+    let header_icon = Label::builder().label("").css_classes(["cc-circle-blue"]).build();
+    let texts_box = GtkBox::builder().orientation(Orientation::Vertical).spacing(2).hexpand(true).build();
+    let title_lbl = Label::builder().label(ssid).css_classes(["cc-label-main"]).halign(Align::Start).build();
+    let sub_lbl = Label::builder()
+        .label(if active { "Connesso — Rete Salvata" } else { "Profilo Memorizzato" })
+        .css_classes(["cc-label-sub"])
+        .halign(Align::Start)
+        .build();
+    texts_box.append(&title_lbl);
+    texts_box.append(&sub_lbl);
+    header_card.append(&header_icon);
+    header_card.append(&texts_box);
+
+    let mut cur_method = "auto".to_string();
+    let mut cur_ip = "".to_string();
+    let mut cur_gw = "".to_string();
+    let mut cur_dns = "".to_string();
+    let mut cur_auto = true;
+
+    if let Ok(output) = Command::new("nmcli")
+        .args(["-g", "ipv4.method,ipv4.addresses,ipv4.gateway,ipv4.dns,connection.autoconnect", "connection", "show", ssid])
+        .output()
+    {
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        let lines: Vec<&str> = stdout.lines().collect();
+        if lines.len() >= 5 {
+            cur_method = lines[0].trim().to_string();
+            cur_ip = lines[1].trim().to_string();
+            cur_gw = lines[2].trim().to_string();
+            cur_dns = lines[3].trim().to_string();
+            cur_auto = lines[4].trim() != "no";
+        }
+    }
+
+    let ip_section = GtkBox::builder().orientation(Orientation::Vertical).spacing(8).build();
+    let ip_header = Label::builder().label("CONFIGURAZIONE IP (IPv4)").css_classes(["cc-label-sub"]).halign(Align::Start).build();
+    let dhcp_row = GtkBox::builder().orientation(Orientation::Horizontal).spacing(10).build();
+    let dhcp_lbl = Label::builder().label("IP Automatico (DHCP)").css_classes(["cc-label-main"]).hexpand(true).halign(Align::Start).build();
+    let dhcp_sw = Switch::builder().active(cur_method == "auto").valign(Align::Center).build();
+    dhcp_row.append(&dhcp_lbl);
+    dhcp_row.append(&dhcp_sw);
+
+    let ip_entry = Entry::builder()
+        .placeholder_text("Indirizzo IP/Subnet (es. 192.168.1.50/24)")
+        .text(&cur_ip)
+        .sensitive(cur_method != "auto")
+        .build();
+    let gw_entry = Entry::builder()
+        .placeholder_text("Gateway Router (es. 192.168.1.1)")
+        .text(&cur_gw)
+        .sensitive(cur_method != "auto")
+        .build();
+
+    let ip_e_clone = ip_entry.clone();
+    let gw_e_clone = gw_entry.clone();
+    dhcp_sw.connect_state_set(move |_, is_dhcp| {
+        ip_e_clone.set_sensitive(!is_dhcp);
+        gw_e_clone.set_sensitive(!is_dhcp);
+        glib::Propagation::Proceed
+    });
+
+    ip_section.append(&ip_header);
+    ip_section.append(&dhcp_row);
+    ip_section.append(&ip_entry);
+    ip_section.append(&gw_entry);
+
+    let dns_section = GtkBox::builder().orientation(Orientation::Vertical).spacing(8).build();
+    let dns_header = Label::builder().label("SERVER DNS").css_classes(["cc-label-sub"]).halign(Align::Start).build();
+    let dns_entry = Entry::builder()
+        .placeholder_text("DNS Personalizzati (es. 1.1.1.1, 8.8.8.8)")
+        .text(&cur_dns)
+        .build();
+    dns_section.append(&dns_header);
+    dns_section.append(&dns_entry);
+
+    let auto_row = GtkBox::builder().orientation(Orientation::Horizontal).spacing(10).build();
+    let auto_lbl = Label::builder().label("Riconnetti automaticamente").css_classes(["cc-label-main"]).hexpand(true).halign(Align::Start).build();
+    let auto_sw = Switch::builder().active(cur_auto).valign(Align::Center).build();
+    auto_row.append(&auto_lbl);
+    auto_row.append(&auto_sw);
+
+    let btn_box = GtkBox::builder().orientation(Orientation::Horizontal).spacing(8).build();
+
+    let forget_btn = Button::builder().label("Dimentica").css_classes(["cc-quick-btn"]).build();
+    let ssid_f = ssid.to_string();
+    let pop_f = pop.clone();
+    forget_btn.connect_clicked(move |_| {
+        let _ = Command::new("nmcli").args(["connection", "delete", &ssid_f]).spawn();
+        pop_f.close();
+    });
+
+    let disc_btn = Button::builder().label("Disconnetti").css_classes(["cc-quick-btn"]).build();
+    let ssid_d = ssid.to_string();
+    let pop_d = pop.clone();
+    disc_btn.connect_clicked(move |_| {
+        let _ = Command::new("nmcli").args(["connection", "down", &ssid_d]).spawn();
+        pop_d.close();
+    });
+
+    let save_btn = Button::builder().label("Salva e Applica").css_classes(["cc-quick-btn"]).hexpand(true).build();
+    let ssid_s = ssid.to_string();
+    let dhcp_sw_clone = dhcp_sw.clone();
+    let ip_e_s = ip_entry.clone();
+    let gw_e_s = gw_entry.clone();
+    let dns_e_s = dns_entry.clone();
+    let auto_sw_s = auto_sw.clone();
+    let pop_s = pop.clone();
+    save_btn.connect_clicked(move |_| {
+        if dhcp_sw_clone.is_active() {
+            let _ = Command::new("nmcli").args(["connection", "modify", &ssid_s, "ipv4.method", "auto"]).output();
+        } else {
+            let ip_val = ip_e_s.text().to_string();
+            let gw_val = gw_e_s.text().to_string();
+            if !ip_val.is_empty() {
+                let _ = Command::new("nmcli").args(["connection", "modify", &ssid_s, "ipv4.method", "manual", "ipv4.addresses", &ip_val]).output();
+                if !gw_val.is_empty() {
+                    let _ = Command::new("nmcli").args(["connection", "modify", &ssid_s, "ipv4.gateway", &gw_val]).output();
+                }
+            }
+        }
+        let dns_val = dns_e_s.text().to_string();
+        if dns_val.trim().is_empty() {
+            let _ = Command::new("nmcli").args(["connection", "modify", &ssid_s, "ipv4.ignore-auto-dns", "no", "ipv4.dns", ""]).output();
+        } else {
+            let _ = Command::new("nmcli").args(["connection", "modify", &ssid_s, "ipv4.ignore-auto-dns", "yes", "ipv4.dns", &dns_val]).output();
+        }
+        let auto_val = if auto_sw_s.is_active() { "yes" } else { "no" };
+        let _ = Command::new("nmcli").args(["connection", "modify", &ssid_s, "connection.autoconnect", auto_val]).output();
+        let _ = Command::new("nmcli").args(["connection", "up", &ssid_s]).output();
+        pop_s.close();
+    });
+
+    btn_box.append(&forget_btn);
+    if active {
+        btn_box.append(&disc_btn);
+    }
+    btn_box.append(&save_btn);
+
+    card.append(&header_card);
+    card.append(&ip_section);
+    card.append(&dns_section);
+    card.append(&auto_row);
+    card.append(&btn_box);
+
+    pop.set_child(Some(&card));
+    pop.present();
+}
+
+fn populate_wifi_list(list_box: &GtkBox, app: &Application, pop: &ApplicationWindow, wifi_enabled: bool) {
+    while let Some(child) = list_box.first_child() {
+        list_box.remove(&child);
+    }
+
+    if !wifi_enabled {
+        let disabled_card = GtkBox::builder()
+            .orientation(Orientation::Vertical)
+            .spacing(6)
+            .css_classes(["pro-applet-card"])
+            .build();
+        let lbl1 = Label::builder().label("󰖪  Rete Wi-Fi disattivata").css_classes(["cc-label-main"]).halign(Align::Start).build();
+        let lbl2 = Label::builder().label("Attiva l'interruttore in alto per cercare e visualizzare le reti Wi-Fi vicine.").css_classes(["cc-label-sub"]).wrap(true).halign(Align::Start).build();
+        disabled_card.append(&lbl1);
+        disabled_card.append(&lbl2);
+        list_box.append(&disabled_card);
+        return;
+    }
+
+    let mut known_ssids = std::collections::HashSet::new();
+    if let Ok(saved_out) = Command::new("nmcli").args(["-t", "-f", "NAME", "connection", "show"]).output() {
+        for line in String::from_utf8_lossy(&saved_out.stdout).lines() {
+            if !line.is_empty() {
+                known_ssids.insert(line.trim().to_string());
+            }
+        }
+    }
+
+    if let Ok(output) = Command::new("nmcli")
+        .args(["-t", "-f", "IN-USE,SSID,SIGNAL", "device", "wifi", "list"])
+        .output()
+    {
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        let mut count = 0;
+        let mut seen = std::collections::HashSet::new();
+        for line in stdout.lines() {
+            let parts: Vec<&str> = line.split(':').collect();
+            if parts.len() >= 3 && !parts[1].is_empty() && count < 8 {
+                let ssid = parts[1];
+                if seen.contains(ssid) {
+                    continue;
+                }
+                seen.insert(ssid.to_string());
+
+                let active = parts[0] == "*";
+                let saved = known_ssids.contains(ssid);
+                let sig = parts[2].parse::<i32>().unwrap_or(50);
+                let icon = if sig > 75 {
+                    "󰤨"
+                } else if sig > 40 {
+                    "󰤥"
+                } else {
+                    "󰤢"
+                };
+
+                let item_row = Button::builder()
+                    .css_classes(["pro-applet-card-btn"])
+                    .build();
+
+                let inner_box = GtkBox::builder()
+                    .orientation(Orientation::Horizontal)
+                    .spacing(10)
+                    .build();
+
+                let icon_lbl = Label::builder().label(icon).build();
+                let texts = GtkBox::builder().orientation(Orientation::Vertical).hexpand(true).build();
+                let ssid_lbl = Label::builder()
+                    .label(ssid)
+                    .css_classes(["cc-label-main"])
+                    .halign(Align::Start)
+                    .build();
+                let status_text = if active {
+                    "Connesso — Attiva"
+                } else if saved {
+                    "Salvato — Clicca per impostazioni"
+                } else {
+                    "Disponibile — Clicca per connetterti"
+                };
+                let status_lbl = Label::builder()
+                    .label(status_text)
+                    .css_classes(["cc-label-sub"])
+                    .halign(Align::Start)
+                    .build();
+                texts.append(&ssid_lbl);
+                texts.append(&status_lbl);
+
+                inner_box.append(&icon_lbl);
+                inner_box.append(&texts);
+
+                if active {
+                    let check_lbl = Label::builder().label("✓").css_classes(["cc-label-main"]).build();
+                    inner_box.append(&check_lbl);
+                }
+
+                item_row.set_child(Some(&inner_box));
+
+                let app_clone = app.clone();
+                let pop_clone = pop.clone();
+                let ssid_str = ssid.to_string();
+                item_row.connect_clicked(move |_| {
+                    pop_clone.close();
+                    if active || saved {
+                        show_wifi_details_modal(&app_clone, &ssid_str, active);
+                    } else {
+                        show_wifi_password_modal(&app_clone, &ssid_str);
+                    }
+                });
+
+                list_box.append(&item_row);
+                count += 1;
+            }
+        }
+        if count == 0 {
+            let no_wifi = Label::builder()
+                .label("Nessuna rete Wi-Fi rilevata")
+                .css_classes(["cc-label-sub"])
+                .build();
+            list_box.append(&no_wifi);
+        }
+    } else {
+        let err_lbl = Label::builder()
+            .label("Impossibile interrogare NetworkManager")
+            .css_classes(["cc-label-sub"])
+            .build();
+        list_box.append(&err_lbl);
+    }
+}
+
 fn show_wifi_popover(app: &Application) {
     let pop = ApplicationWindow::builder()
         .application(app)
@@ -806,11 +1110,6 @@ fn show_wifi_popover(app: &Application) {
         true
     };
     let wifi_sw = Switch::builder().active(wifi_enabled).valign(Align::Center).build();
-    wifi_sw.connect_state_set(move |_, state| {
-        let cmd = if state { "on" } else { "off" };
-        let _ = Command::new("nmcli").args(["radio", "wifi", cmd]).spawn();
-        glib::Propagation::Proceed
-    });
     header_card.append(&header_icon);
     header_card.append(&header_lbl);
     header_card.append(&wifi_sw);
@@ -820,96 +1119,25 @@ fn show_wifi_popover(app: &Application) {
         .spacing(8)
         .build();
 
-    if let Ok(output) = Command::new("nmcli")
-        .args(["-t", "-f", "IN-USE,SSID,SIGNAL", "device", "wifi", "list"])
-        .output()
-    {
-        let stdout = String::from_utf8_lossy(&output.stdout);
-        let mut count = 0;
-        for line in stdout.lines() {
-            let parts: Vec<&str> = line.split(':').collect();
-            if parts.len() >= 3 && !parts[1].is_empty() && count < 8 {
-                let active = parts[0] == "*";
-                let ssid = parts[1];
-                let sig = parts[2].parse::<i32>().unwrap_or(50);
-                let icon = if sig > 75 {
-                    "󰤨"
-                } else if sig > 40 {
-                    "󰤥"
-                } else {
-                    "󰤢"
-                };
+    populate_wifi_list(&list_box, app, &pop, wifi_enabled);
 
-                let item_row = Button::builder()
-                    .css_classes(["pro-applet-card-btn"])
-                    .build();
-
-                let inner_box = GtkBox::builder()
-                    .orientation(Orientation::Horizontal)
-                    .spacing(10)
-                    .build();
-
-                let icon_lbl = Label::builder().label(icon).build();
-                let texts = GtkBox::builder().orientation(Orientation::Vertical).hexpand(true).build();
-                let ssid_lbl = Label::builder()
-                    .label(ssid)
-                    .css_classes(["cc-label-main"])
-                    .halign(Align::Start)
-                    .build();
-                let status_lbl = Label::builder()
-                    .label(if active { "Connesso — Sicuro" } else { "Clicca per connetterti" })
-                    .css_classes(["cc-label-sub"])
-                    .halign(Align::Start)
-                    .build();
-                texts.append(&ssid_lbl);
-                texts.append(&status_lbl);
-
-                inner_box.append(&icon_lbl);
-                inner_box.append(&texts);
-
-                if active {
-                    let check_lbl = Label::builder().label("✓").css_classes(["cc-label-main"]).build();
-                    inner_box.append(&check_lbl);
-                }
-
-                item_row.set_child(Some(&inner_box));
-
-                let app_clone = app.clone();
-                let pop_clone = pop.clone();
-                let ssid_str = ssid.to_string();
-                item_row.connect_clicked(move |_| {
-                    if !active {
-                        pop_clone.close();
-                        show_wifi_password_modal(&app_clone, &ssid_str);
-                    }
-                });
-
-                list_box.append(&item_row);
-                count += 1;
-            }
-        }
-        if count == 0 {
-            let no_wifi = Label::builder()
-                .label("Nessuna rete Wi-Fi rilevata")
-                .css_classes(["cc-label-sub"])
-                .build();
-            list_box.append(&no_wifi);
-        }
-    } else {
-        let err_lbl = Label::builder()
-            .label("Impossibile interrogare NetworkManager")
-            .css_classes(["cc-label-sub"])
-            .build();
-        list_box.append(&err_lbl);
-    }
+    let list_clone = list_box.clone();
+    let app_clone = app.clone();
+    let pop_clone = pop.clone();
+    wifi_sw.connect_state_set(move |_, state| {
+        let cmd = if state { "on" } else { "off" };
+        let _ = Command::new("nmcli").args(["radio", "wifi", cmd]).spawn();
+        populate_wifi_list(&list_clone, &app_clone, &pop_clone, state);
+        glib::Propagation::Proceed
+    });
 
     let close_btn = Button::builder()
         .label("Fine")
         .css_classes(["cc-quick-btn"])
         .build();
-    let pop_clone = pop.clone();
+    let pop_clone2 = pop.clone();
     close_btn.connect_clicked(move |_| {
-        pop_clone.close();
+        pop_clone2.close();
     });
 
     card.append(&header_card);
