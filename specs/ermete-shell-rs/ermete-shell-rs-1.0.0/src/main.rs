@@ -7,7 +7,7 @@ use gtk4::{
     Align, Application, ApplicationWindow, Box as GtkBox, Button, Calendar, CenterBox, CssProvider,
     Entry, Label, Orientation, PasswordEntry, ProgressBar, Scale, ScrolledWindow, Switch,
 };
-use gtk4_layer_shell::{Edge, Layer, LayerShell};
+use gtk4_layer_shell::{Edge, KeyboardMode, Layer, LayerShell};
 use std::env;
 use std::process::Command;
 
@@ -362,6 +362,7 @@ fn show_spotlight_modal(app: &Application) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
+    pop.set_keyboard_mode(KeyboardMode::Exclusive);
     pop.set_margin(Edge::Top, 140);
 
     let card = GtkBox::builder()
@@ -657,6 +658,7 @@ fn show_wifi_password_modal(app: &Application, ssid: &str) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
+    pop.set_keyboard_mode(KeyboardMode::Exclusive);
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Right, true);
     pop.set_margin(Edge::Top, 60);
@@ -766,6 +768,7 @@ fn show_wifi_password_modal(app: &Application, ssid: &str) {
 
     pop.set_child(Some(&card));
     pop.present();
+    pwd_entry.grab_focus();
 }
 
 fn show_wifi_popover(app: &Application) {
