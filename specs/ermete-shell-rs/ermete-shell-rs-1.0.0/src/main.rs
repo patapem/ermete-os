@@ -456,19 +456,35 @@ fn show_control_center_popover(app: &Application) {
         .hexpand(true)
         .build();
 
-    let wifi_btn = build_cc_row("cc-circle-blue", "", "Wi-Fi", "Connesso");
+    let wifi_btn = build_cc_row("cc-circle-blue", "", "Rete Wi-Fi", "Gestione Rete");
     wifi_btn.connect_clicked(move |_| {
-        let _ = Command::new("nm-connection-editor").spawn();
+        let _ = Command::new("foot")
+            .args([
+                "--title",
+                "Gestione Rete Wi-Fi",
+                "-e",
+                "sh",
+                "-c",
+                "nmcli device status && echo '' && nmcli connection show && echo '' && read -p 'Premi Invio per chiudere...'",
+            ])
+            .spawn();
     });
-    let bt_btn = build_cc_row("cc-circle-blue", "", "Bluetooth", "Attivo");
+    let bt_btn = build_cc_row("cc-circle-blue", "", "Bluetooth", "Dispositivi");
     bt_btn.connect_clicked(move |_| {
-        let _ = Command::new("blueman-manager").spawn();
+        let _ = Command::new("foot")
+            .args(["--title", "Gestione Bluetooth", "-e", "bluetoothctl"])
+            .spawn();
     });
-    let air_btn = build_cc_row("cc-circle-blue", "󰀻", "Condivisione", "Tutti");
+    let sys_btn = build_cc_row("cc-circle-blue", "⚙", "Risorse", "Monitor btop");
+    sys_btn.connect_clicked(move |_| {
+        let _ = Command::new("foot")
+            .args(["--title", "Ermete System Monitor", "-e", "btop"])
+            .spawn();
+    });
 
     conn_box.append(&wifi_btn);
     conn_box.append(&bt_btn);
-    conn_box.append(&air_btn);
+    conn_box.append(&sys_btn);
 
     // Colonna Destra (2 Card verticali)
     let right_col = GtkBox::builder()
@@ -478,11 +494,24 @@ fn show_control_center_popover(app: &Application) {
         .hexpand(true)
         .build();
 
-    let focus_tile = build_cc_compact_tile("cc-circle-indigo", "🌙", "Focus");
-    let screen_tile = build_cc_compact_tile("cc-circle-blue", "🖥", "Schermo");
+    let screenshot_tile = build_cc_compact_tile("cc-circle-indigo", "📷", "Screenshot");
+    let pop_shot = pop.clone();
+    screenshot_tile.connect_clicked(move |_| {
+        pop_shot.close();
+        let _ = Command::new("niri")
+            .args(["msg", "action", "screenshot"])
+            .spawn();
+    });
 
-    right_col.append(&focus_tile);
-    right_col.append(&screen_tile);
+    let lock_tile = build_cc_compact_tile("cc-circle-blue", "🔒", "Blocca");
+    let pop_lock = pop.clone();
+    lock_tile.connect_clicked(move |_| {
+        pop_lock.close();
+        let _ = Command::new("swaylock").spawn();
+    });
+
+    right_col.append(&screenshot_tile);
+    right_col.append(&lock_tile);
 
     top_grid.append(&conn_box);
     top_grid.append(&right_col);
@@ -499,6 +528,12 @@ fn show_control_center_popover(app: &Application) {
     let bright_slider = Scale::with_range(Orientation::Horizontal, 0.0, 100.0, 1.0);
     bright_slider.set_value(75.0);
     bright_slider.set_hexpand(true);
+    bright_slider.connect_value_changed(move |s| {
+        let val = s.value() as i32;
+        let _ = Command::new("brightnessctl")
+            .args(["set", &format!("{}%", val)])
+            .spawn();
+    });
     bright_card.append(&bright_icon);
     bright_card.append(&bright_slider);
 
@@ -535,26 +570,53 @@ fn show_control_center_popover(app: &Application) {
         .label("☾   Scuro")
         .css_classes(["cc-quick-btn"])
         .build();
-    let night_btn = Button::builder()
-        .label("☀   Night Shift")
+    dark_btn.connect_clicked(move |_| {
+        let _ = Command::new("gsettings")
+            .args([
+                "set",
+                "org.gnome.desktop.interface",
+                "color-scheme",
+                "prefer-dark",
+            ])
+            .spawn();
+    });
+
+    let standby_btn = Button::builder()
+        .label("🖥   Standby")
         .css_classes(["cc-quick-btn"])
         .build();
-    let energy_btn = Button::builder()
-        .label("⚡   Energia")
-        .css_classes(["cc-quick-btn"])
-        .build();
+    let pop_std = pop.clone();
+    standby_btn.connect_clicked(move |_| {
+        pop_std.close();
+        let _ = Command::new("niri")
+            .args(["msg", "action", "power-off-monitors"])
+            .spawn();
+    });
+
     let mixer_btn = Button::builder()
         .label("🎚️   Mixer")
         .css_classes(["cc-quick-btn"])
         .build();
     mixer_btn.connect_clicked(move |_| {
-        let _ = Command::new("pavucontrol").spawn();
+        let _ = Command::new("foot")
+            .args(["--title", "PipeWire Audio Top", "-e", "pw-top"])
+            .spawn();
+    });
+
+    let term_btn = Button::builder()
+        .label(">_   Shell")
+        .css_classes(["cc-quick-btn"])
+        .build();
+    let pop_term = pop.clone();
+    term_btn.connect_clicked(move |_| {
+        pop_term.close();
+        let _ = Command::new("foot").spawn();
     });
 
     bottom_grid.append(&dark_btn);
-    bottom_grid.append(&night_btn);
-    bottom_grid.append(&energy_btn);
+    bottom_grid.append(&standby_btn);
     bottom_grid.append(&mixer_btn);
+    bottom_grid.append(&term_btn);
 
     card.append(&top_grid);
     card.append(&bright_card);
