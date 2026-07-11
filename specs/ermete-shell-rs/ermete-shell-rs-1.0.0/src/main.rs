@@ -5,7 +5,7 @@ use gtk4::gio::AppInfo;
 use gtk4::prelude::*;
 use gtk4::{
     Align, Application, ApplicationWindow, Box as GtkBox, Button, Calendar, CenterBox, CssProvider,
-    Entry, Label, Orientation, PasswordEntry, ProgressBar, Scale, ScrolledWindow, Switch,
+    Entry, Image, Label, Orientation, PasswordEntry, ProgressBar, Scale, ScrolledWindow, Switch,
 };
 use gtk4_layer_shell::{Edge, KeyboardMode, Layer, LayerShell};
 use std::process::Command;
@@ -461,6 +461,45 @@ fn setup_popup_autoclose(pop: &ApplicationWindow, tag: &str) {
     pop.add_controller(key_ctrl);
 }
 
+fn populate_app_list(list_box: &GtkBox, filter_text: &str, pop: &ApplicationWindow) {
+    while let Some(child) = list_box.first_child() {
+        list_box.remove(&child);
+    }
+    let filter_lower = filter_text.to_lowercase();
+    let mut apps: Vec<AppInfo> = AppInfo::all().into_iter().filter(|a| a.should_show()).collect();
+    apps.sort_by(|a, b| a.display_name().to_lowercase().cmp(&b.display_name().to_lowercase()));
+    for app_info in apps {
+        let name = app_info.display_name();
+        let desc = app_info.description().unwrap_or_default();
+        if !filter_lower.is_empty() && !name.to_lowercase().contains(&filter_lower) && !desc.to_lowercase().contains(&filter_lower) {
+            continue;
+        }
+        let row = Button::builder().css_classes(["spotlight-item"]).build();
+        let hbox = GtkBox::builder().orientation(Orientation::Horizontal).spacing(12).build();
+        if let Some(icon) = app_info.icon() {
+            let img = Image::from_gicon(&icon);
+            img.set_pixel_size(32);
+            hbox.append(&img);
+        }
+        let vbox = GtkBox::builder().orientation(Orientation::Vertical).valign(Align::Center).build();
+        let name_lbl = Label::builder().label(name.as_str()).halign(Align::Start).css_classes(["cc-label-main"]).build();
+        vbox.append(&name_lbl);
+        if !desc.is_empty() {
+            let desc_lbl = Label::builder().label(desc.as_str()).halign(Align::Start).css_classes(["cc-label-sub"]).ellipsize(gtk4::pango::EllipsizeMode::End).build();
+            vbox.append(&desc_lbl);
+        }
+        hbox.append(&vbox);
+        row.set_child(Some(&hbox));
+        let app_clone = app_info.clone();
+        let pop_clone = pop.clone();
+        row.connect_clicked(move |_| {
+            let _ = app_clone.launch(&[], gtk4::gio::AppLaunchContext::NONE);
+            pop_clone.close();
+        });
+        list_box.append(&row);
+    }
+}
+
 // macOS Spotlight Modal (Win+D / Clic su 🔍)
 fn show_spotlight_modal(app: &Application) {
     let pop = ApplicationWindow::builder()
@@ -498,22 +537,13 @@ fn show_spotlight_modal(app: &Application) {
         .spacing(4)
         .build();
 
-    for app_info in AppInfo::all() {
-        if app_info.should_show() {
-            let name = app_info.display_name();
-            let btn = Button::builder()
-                .label(name.as_str())
-                .css_classes(["spotlight-item"])
-                .build();
-            let app_clone = app_info.clone();
-            let pop_clone = pop.clone();
-            btn.connect_clicked(move |_| {
-                let _ = app_clone.launch(&[], gtk4::gio::AppLaunchContext::NONE);
-                pop_clone.close();
-            });
-            list_box.append(&btn);
-        }
-    }
+    populate_app_list(&list_box, "", &pop);
+
+    let list_clone = list_box.clone();
+    let pop_clone2 = pop.clone();
+    entry.connect_changed(move |e| {
+        populate_app_list(&list_clone, &e.text(), &pop_clone2);
+    });
 
     scroll.set_child(Some(&list_box));
     card.append(&entry);
@@ -1731,22 +1761,13 @@ fn show_start_menu_popover(app: &Application) {
         .spacing(4)
         .build();
 
-    for app_info in AppInfo::all() {
-        if app_info.should_show() {
-            let name = app_info.display_name();
-            let btn = Button::builder()
-                .label(name.as_str())
-                .css_classes(["spotlight-item"])
-                .build();
-            let app_clone = app_info.clone();
-            let pop_clone = pop.clone();
-            btn.connect_clicked(move |_| {
-                let _ = app_clone.launch(&[], gtk4::gio::AppLaunchContext::NONE);
-                pop_clone.close();
-            });
-            list_box.append(&btn);
-        }
-    }
+    populate_app_list(&list_box, "", &pop);
+
+    let list_clone = list_box.clone();
+    let pop_clone2 = pop.clone();
+    search.connect_changed(move |e| {
+        populate_app_list(&list_clone, &e.text(), &pop_clone2);
+    });
 
     scroll.set_child(Some(&list_box));
 
