@@ -461,16 +461,88 @@ fn setup_popup_autoclose(pop: &ApplicationWindow, tag: &str) {
     pop.add_controller(key_ctrl);
 }
 
-fn populate_app_list(list_box: &GtkBox, filter_text: &str, pop: &ApplicationWindow) {
+fn populate_launcher_list(list_box: &GtkBox, filter_text: &str, category_filter: &str, is_spotlight: bool, pop: &ApplicationWindow) {
     while let Some(child) = list_box.first_child() {
         list_box.remove(&child);
     }
     let filter_lower = filter_text.to_lowercase();
+
+    if is_spotlight && filter_lower.starts_with('=') {
+        let expr = filter_lower.trim_start_matches('=').trim();
+        if let Ok(output) = std::process::Command::new("bc").arg("-l").arg("-e").arg(expr).arg("-e").arg("quit").output() {
+            let res = String::from_utf8_lossy(&output.stdout).trim().to_string();
+            if !res.is_empty() {
+                let row = Button::builder().css_classes(["spotlight-item"]).build();
+                let hbox = GtkBox::builder().orientation(Orientation::Horizontal).spacing(12).build();
+                let img = Image::builder().icon_name("accessories-calculator").pixel_size(32).build();
+                hbox.append(&img);
+                let vbox = GtkBox::builder().orientation(Orientation::Vertical).valign(Align::Center).build();
+                let name_lbl = Label::builder().label(&format!("= {}", res)).halign(Align::Start).css_classes(["cc-label-main"]).build();
+                vbox.append(&name_lbl);
+                let desc_lbl = Label::builder().label("Risultato calcolatrice (clicca per copiare e chiudere)").halign(Align::Start).css_classes(["cc-label-sub"]).build();
+                vbox.append(&desc_lbl);
+                hbox.append(&vbox);
+                row.set_child(Some(&hbox));
+                let pop_clone = pop.clone();
+                row.connect_clicked(move |_| {
+                    let clipboard = pop_clone.clipboard();
+                    clipboard.set_text(&res);
+                    pop_clone.close();
+                });
+                list_box.append(&row);
+            }
+        }
+        return;
+    }
+
+    if is_spotlight && filter_lower.starts_with('>') {
+        let cmd = filter_text.trim_start_matches('>').trim();
+        let row = Button::builder().css_classes(["spotlight-item"]).build();
+        let hbox = GtkBox::builder().orientation(Orientation::Horizontal).spacing(12).build();
+        let img = Image::builder().icon_name("utilities-terminal").pixel_size(32).build();
+        hbox.append(&img);
+        let vbox = GtkBox::builder().orientation(Orientation::Vertical).valign(Align::Center).build();
+        let name_lbl = Label::builder().label(&format!("Esegui: {}", cmd)).halign(Align::Start).css_classes(["cc-label-main"]).build();
+        vbox.append(&name_lbl);
+        let desc_lbl = Label::builder().label("Lancia comando nel terminale").halign(Align::Start).css_classes(["cc-label-sub"]).build();
+        vbox.append(&desc_lbl);
+        hbox.append(&vbox);
+        row.set_child(Some(&hbox));
+        let pop_clone = pop.clone();
+        let cmd_clone = cmd.to_string();
+        row.connect_clicked(move |_| {
+            let _ = std::process::Command::new("foot").arg("-e").arg("sh").arg("-c").arg(&format!("{}; read -p '\nPremi Invio per chiudere...'", cmd_clone)).spawn();
+            pop_clone.close();
+        });
+        list_box.append(&row);
+        return;
+    }
+
     let mut apps: Vec<AppInfo> = AppInfo::all().into_iter().filter(|a| a.should_show()).collect();
     apps.sort_by(|a, b| a.display_name().to_lowercase().cmp(&b.display_name().to_lowercase()));
+    let mut count = 0;
     for app_info in apps {
         let name = app_info.display_name();
         let desc = app_info.description().unwrap_or_default();
+        let mut app_cats = String::new();
+        if let Some(desktop_app) = app_info.downcast_ref::<gtk4::gio::DesktopAppInfo>() {
+            if let Some(cats) = desktop_app.categories() {
+                app_cats = cats.to_string().to_lowercase();
+            }
+        }
+        if category_filter != "Tutte" && !category_filter.is_empty() {
+            let match_found = match category_filter {
+                "Internet" => app_cats.contains("network") || app_cats.contains("webbrowser"),
+                "Ufficio" => app_cats.contains("office") || app_cats.contains("wordprocessor"),
+                "Grafica" => app_cats.contains("graphics") || app_cats.contains("photography"),
+                "Multimedia" => app_cats.contains("audiovideo") || app_cats.contains("audio") || app_cats.contains("video"),
+                "Sviluppo" => app_cats.contains("development"),
+                "Sistema" => app_cats.contains("system") || app_cats.contains("utility") || app_cats.contains("settings"),
+                "Giochi" => app_cats.contains("game"),
+                _ => false,
+            };
+            if !match_found { continue; }
+        }
         if !filter_lower.is_empty() && !name.to_lowercase().contains(&filter_lower) && !desc.to_lowercase().contains(&filter_lower) {
             continue;
         }
@@ -497,6 +569,11 @@ fn populate_app_list(list_box: &GtkBox, filter_text: &str, pop: &ApplicationWind
             pop_clone.close();
         });
         list_box.append(&row);
+        count += 1;
+    }
+    if count == 0 {
+        let no_res = Label::builder().label("Nessun risultato.").css_classes(["cc-label-sub"]).margin_top(20).build();
+        list_box.append(&no_res);
     }
 }
 
@@ -537,12 +614,12 @@ fn show_spotlight_modal(app: &Application) {
         .spacing(4)
         .build();
 
-    populate_app_list(&list_box, "", &pop);
+    populate_launcher_list(&list_box, "", "", true, &pop);
 
     let list_clone = list_box.clone();
     let pop_clone2 = pop.clone();
     entry.connect_changed(move |e| {
-        populate_app_list(&list_clone, &e.text(), &pop_clone2);
+        populate_launcher_list(&list_clone, &e.text(), "", true, &pop_clone2);
     });
 
     scroll.set_child(Some(&list_box));
@@ -1722,7 +1799,7 @@ fn show_start_menu_popover(app: &Application) {
         .application(app)
         .title("Start Menu")
         .css_classes(["popup-window"])
-        .default_width(360)
+        .default_width(560)
         .default_height(480)
         .build();
 
@@ -1734,20 +1811,63 @@ fn show_start_menu_popover(app: &Application) {
     pop.set_margin(Edge::Top, 32);
     pop.set_margin(Edge::Left, 8);
 
-    let card = GtkBox::builder()
-        .orientation(Orientation::Vertical)
-        .spacing(10)
+    let main_hbox = GtkBox::builder()
+        .orientation(Orientation::Horizontal)
+        .spacing(0)
         .css_classes(["cc-card"])
         .build();
 
-    let title = Label::builder()
-        .label("◈  MENU APPLICAZIONI ERMETE OS")
-        .css_classes(["cc-title"])
+    let sidebar = GtkBox::builder()
+        .orientation(Orientation::Vertical)
+        .spacing(4)
+        .build();
+    sidebar.set_margin_top(14);
+    sidebar.set_margin_bottom(14);
+    sidebar.set_margin_start(14);
+    sidebar.set_margin_end(14);
+
+    let cats_lbl = Label::builder().label("CATEGORIE").css_classes(["cc-label-sub"]).halign(Align::Start).margin_bottom(6).build();
+    sidebar.append(&cats_lbl);
+
+    let list_box = GtkBox::builder()
+        .orientation(Orientation::Vertical)
+        .spacing(4)
         .build();
 
     let search = Entry::builder()
         .placeholder_text("Cerca nel menu...")
         .css_classes(["spotlight-input"])
+        .build();
+
+    let current_category = std::rc::Rc::new(std::cell::RefCell::new("Tutte".to_string()));
+    let cats = ["Tutte", "Internet", "Ufficio", "Grafica", "Multimedia", "Sviluppo", "Sistema", "Giochi"];
+    
+    for cat in cats {
+        let btn = Button::builder().label(cat).css_classes(["spotlight-item"]).halign(Align::Fill).build();
+        let cat_str = cat.to_string();
+        let list_clone = list_box.clone();
+        let entry_clone = search.clone();
+        let pop_clone = pop.clone();
+        let curr_cat = current_category.clone();
+        btn.connect_clicked(move |_| {
+            *curr_cat.borrow_mut() = cat_str.clone();
+            populate_launcher_list(&list_clone, &entry_clone.text(), &cat_str, false, &pop_clone);
+        });
+        sidebar.append(&btn);
+    }
+
+    let card = GtkBox::builder()
+        .orientation(Orientation::Vertical)
+        .spacing(10)
+        .hexpand(true)
+        .build();
+    card.set_margin_top(14);
+    card.set_margin_bottom(14);
+    card.set_margin_end(14);
+
+    let title = Label::builder()
+        .label("◈  MENU APPLICAZIONI ERMETE OS")
+        .css_classes(["cc-title"])
         .build();
 
     let scroll = ScrolledWindow::builder()
@@ -1756,22 +1876,17 @@ fn show_start_menu_popover(app: &Application) {
         .min_content_height(310)
         .build();
 
-    let list_box = GtkBox::builder()
-        .orientation(Orientation::Vertical)
-        .spacing(4)
-        .build();
+    populate_launcher_list(&list_box, "", "Tutte", false, &pop);
 
-    populate_app_list(&list_box, "", &pop);
-
-    let list_clone = list_box.clone();
+    let list_clone2 = list_box.clone();
     let pop_clone2 = pop.clone();
+    let curr_cat2 = current_category.clone();
     search.connect_changed(move |e| {
-        populate_app_list(&list_clone, &e.text(), &pop_clone2);
+        populate_launcher_list(&list_clone2, &e.text(), &curr_cat2.borrow(), false, &pop_clone2);
     });
 
     scroll.set_child(Some(&list_box));
 
-    // Footer con i pulsanti di sessione in basso stile Windows / KDE
     let footer = GtkBox::builder()
         .orientation(Orientation::Horizontal)
         .spacing(6)
@@ -1803,6 +1918,15 @@ fn show_start_menu_popover(app: &Application) {
     card.append(&scroll);
     card.append(&footer);
 
+    main_hbox.append(&sidebar);
+    
+    let sep = gtk4::Separator::new(Orientation::Vertical);
+    sep.set_margin_start(4);
+    sep.set_margin_end(10);
+    main_hbox.append(&sep);
+    
+    main_hbox.append(&card);
+
     let key_ctrl = gtk4::EventControllerKey::new();
     let pop_esc = pop.clone();
     key_ctrl.connect_key_pressed(move |_, keyval, _, _| {
@@ -1815,7 +1939,7 @@ fn show_start_menu_popover(app: &Application) {
     });
     pop.add_controller(key_ctrl);
 
-    pop.set_child(Some(&card));
+    pop.set_child(Some(&main_hbox));
     pop.present();
     search.grab_focus();
 }
