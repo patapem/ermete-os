@@ -354,7 +354,7 @@ thread_local! {
     static ACTIVE_POPUP: std::cell::RefCell<Option<glib::WeakRef<ApplicationWindow>>> = std::cell::RefCell::new(None);
 }
 
-fn setup_popup_autoclose(pop: &ApplicationWindow, exclusive_kbd: bool) {
+fn setup_popup_autoclose(pop: &ApplicationWindow, _exclusive_kbd: bool) {
     ACTIVE_POPUP.with(|p| {
         if let Some(old_weak) = p.borrow().as_ref() {
             if let Some(old_win) = old_weak.upgrade() {
@@ -366,12 +366,7 @@ fn setup_popup_autoclose(pop: &ApplicationWindow, exclusive_kbd: bool) {
         *p.borrow_mut() = Some(pop.downgrade());
     });
 
-    let kbd_mode = if exclusive_kbd {
-        KeyboardMode::Exclusive
-    } else {
-        KeyboardMode::OnDemand
-    };
-    pop.set_keyboard_mode(kbd_mode);
+    pop.set_keyboard_mode(KeyboardMode::OnDemand);
 
     let active_seen = std::rc::Rc::new(std::cell::Cell::new(false));
     let seen_clone = active_seen.clone();
@@ -382,6 +377,20 @@ fn setup_popup_autoclose(pop: &ApplicationWindow, exclusive_kbd: bool) {
             win.close();
         }
     });
+
+    let focus_ctrl = gtk4::EventControllerFocus::new();
+    let seen_enter = active_seen.clone();
+    focus_ctrl.connect_enter(move |_| {
+        seen_enter.set(true);
+    });
+    let seen_leave = active_seen.clone();
+    let pop_leave = pop.clone();
+    focus_ctrl.connect_leave(move |_| {
+        if seen_leave.get() {
+            pop_leave.close();
+        }
+    });
+    pop.add_controller(focus_ctrl);
 
     let win_weak = pop.downgrade();
     let seen_clone2 = active_seen.clone();
