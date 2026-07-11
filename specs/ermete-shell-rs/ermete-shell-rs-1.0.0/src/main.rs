@@ -358,9 +358,11 @@ fn toggle_or_open_popup(tag: &str, open_fn: impl FnOnce()) {
     ACTIVE_POPUP.with(|p| {
         if let Some((old_tag, old_weak)) = p.borrow().as_ref() {
             if let Some(old_win) = old_weak.upgrade() {
-                old_win.close();
-                if old_tag == tag {
-                    already_open = true;
+                if old_win.is_visible() {
+                    old_win.close();
+                    if old_tag == tag {
+                        already_open = true;
+                    }
                 }
             }
         }
@@ -375,12 +377,25 @@ fn setup_popup_autoclose(pop: &ApplicationWindow, tag: &str) {
     ACTIVE_POPUP.with(|p| {
         if let Some((_, old_weak)) = p.borrow().as_ref() {
             if let Some(old_win) = old_weak.upgrade() {
-                if old_win != *pop {
+                if old_win != *pop && old_win.is_visible() {
                     old_win.close();
                 }
             }
         }
         *p.borrow_mut() = Some((tag.to_string(), pop.downgrade()));
+    });
+
+    pop.connect_close_request(move |win| {
+        ACTIVE_POPUP.with(|p| {
+            if let Some((_, old_weak)) = p.borrow().as_ref() {
+                if let Some(old_win) = old_weak.upgrade() {
+                    if old_win == *win {
+                        *p.borrow_mut() = None;
+                    }
+                }
+            }
+        });
+        glib::Propagation::Proceed
     });
 
     pop.set_keyboard_mode(KeyboardMode::OnDemand);
