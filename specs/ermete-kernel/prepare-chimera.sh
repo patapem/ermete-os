@@ -272,8 +272,7 @@ for patch in %{_sourcedir}/bedrock-*.patch; do
     
     APPLIED=0
     FUZZ_VAL=0
-    NON_C_FILES=""
-    for f in 0 1; do
+    for f in 0 3; do
         if patch -p1 -F $f --force --dry-run --silent < "$patch"; then
             patch -p1 -F $f --force < "$patch" > /dev/null || true
             APPLIED=1
@@ -283,7 +282,7 @@ for patch in %{_sourcedir}/bedrock-*.patch; do
     done
     if [ $APPLIED -eq 0 ]; then
         if [ -z "$NON_C_FILES" ]; then
-            echo "   [SKIP] Conflitto strutturale (Falliti Fuzz 0 e 1). Patch scartata (Prevenzione Frankenstein)."
+            echo "   [SKIP] Conflitto strutturale (Falliti Fuzz 0 e 3). Patch scartata (Prevenzione Frankenstein)."
         fi
         for t_file in $TOUCHED_FILES; do rm -f "${t_file}.bedrock_bak" "${t_file}.orig" "${t_file}.rej"; done
     fi
@@ -353,6 +352,8 @@ CONFIG_TCP_CONG_BBR=y
 # CONFIG_DEFAULT_CUBIC is not set
 
 CONFIG_SCHED_BORE=y
+CONFIG_IKCONFIG=y
+CONFIG_IKCONFIG_PROC=y
 
 CONFIG_MODULE_COMPRESS_ZSTD=y
 # CONFIG_MODULE_COMPRESS_XZ is not set
@@ -504,8 +505,9 @@ for intel_dc in ice i40e ixgbe ixgbevf fm10k idpf; do
     sed -i "s/source \"drivers\\/net\\/ethernet\\/intel\\/${intel_dc}\\/Kconfig\"//g" drivers/net/ethernet/intel/Kconfig || true
 done
 
-# 5. Pulizia Kconfig testuale (rafforzamento)
+# 5. Pulizia Kconfig testuale (rafforzamento e attivazione SCHED_BORE / IKCONFIG)
 ./scripts/config --disable NETDEVSIM --disable NET_VENDOR_MELLANOX --disable INFINIBAND --disable SCSI_CXGB3_ISCSI --disable SCSI_CXGB4_ISCSI
+./scripts/config --enable SCHED_BORE --enable IKCONFIG --enable IKCONFIG_PROC
 make LLVM=1 LLVM_IAS=1 olddefconfig
 popd > /dev/null
 
