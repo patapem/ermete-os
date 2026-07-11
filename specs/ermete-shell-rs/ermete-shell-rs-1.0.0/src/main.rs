@@ -350,6 +350,61 @@ fn load_css() {
     }
 }
 
+thread_local! {
+    static ACTIVE_POPUP: std::cell::RefCell<Option<glib::WeakRef<ApplicationWindow>>> = std::cell::RefCell::new(None);
+}
+
+fn setup_popup_autoclose(pop: &ApplicationWindow, exclusive_kbd: bool) {
+    ACTIVE_POPUP.with(|p| {
+        if let Some(old_weak) = p.borrow().as_ref() {
+            if let Some(old_win) = old_weak.upgrade() {
+                if old_win != *pop {
+                    old_win.close();
+                }
+            }
+        }
+        *p.borrow_mut() = Some(pop.downgrade());
+    });
+
+    let kbd_mode = if exclusive_kbd {
+        KeyboardMode::Exclusive
+    } else {
+        KeyboardMode::OnDemand
+    };
+    pop.set_keyboard_mode(kbd_mode);
+
+    let active_seen = std::rc::Rc::new(std::cell::Cell::new(false));
+    let seen_clone = active_seen.clone();
+    pop.connect_is_active_notify(move |win| {
+        if win.is_active() {
+            seen_clone.set(true);
+        } else if seen_clone.get() {
+            win.close();
+        }
+    });
+
+    let win_weak = pop.downgrade();
+    let seen_clone2 = active_seen.clone();
+    glib::timeout_add_local(std::time::Duration::from_millis(250), move || {
+        if let Some(_) = win_weak.upgrade() {
+            seen_clone2.set(true);
+        }
+        glib::ControlFlow::Break
+    });
+
+    let key_ctrl = gtk4::EventControllerKey::new();
+    let pop_esc = pop.clone();
+    key_ctrl.connect_key_pressed(move |_, keyval, _, _| {
+        if keyval == gtk4::gdk::Key::Escape {
+            pop_esc.close();
+            glib::Propagation::Stop
+        } else {
+            glib::Propagation::Proceed
+        }
+    });
+    pop.add_controller(key_ctrl);
+}
+
 // macOS Spotlight Modal (Win+D / Clic su 🔍)
 fn show_spotlight_modal(app: &Application) {
     let pop = ApplicationWindow::builder()
@@ -362,7 +417,7 @@ fn show_spotlight_modal(app: &Application) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
-    pop.set_keyboard_mode(KeyboardMode::Exclusive);
+    setup_popup_autoclose(&pop, true);
     pop.set_margin(Edge::Top, 140);
 
     let card = GtkBox::builder()
@@ -407,18 +462,6 @@ fn show_spotlight_modal(app: &Application) {
     scroll.set_child(Some(&list_box));
     card.append(&entry);
     card.append(&scroll);
-
-    let key_ctrl = gtk4::EventControllerKey::new();
-    let pop_esc = pop.clone();
-    key_ctrl.connect_key_pressed(move |_, keyval, _, _| {
-        if keyval == gtk4::gdk::Key::Escape {
-            pop_esc.close();
-            glib::Propagation::Stop
-        } else {
-            glib::Propagation::Proceed
-        }
-    });
-    pop.add_controller(key_ctrl);
 
     pop.set_child(Some(&card));
     pop.present();
@@ -544,6 +587,7 @@ fn show_system_monitor_modal(app: &Application) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
+    setup_popup_autoclose(&pop, false);
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Right, true);
     pop.set_margin(Edge::Top, 34);
@@ -658,7 +702,7 @@ fn show_wifi_password_modal(app: &Application, ssid: &str) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
-    pop.set_keyboard_mode(KeyboardMode::Exclusive);
+    setup_popup_autoclose(&pop, true);
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Right, true);
     pop.set_margin(Edge::Top, 60);
@@ -781,7 +825,7 @@ fn show_wifi_details_modal(app: &Application, ssid: &str, active: bool) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
-    pop.set_keyboard_mode(KeyboardMode::Exclusive);
+    setup_popup_autoclose(&pop, true);
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Right, true);
     pop.set_margin(Edge::Top, 50);
@@ -1085,6 +1129,7 @@ fn show_wifi_popover(app: &Application) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
+    setup_popup_autoclose(&pop, false);
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Right, true);
     pop.set_margin(Edge::Top, 34);
@@ -1158,6 +1203,7 @@ fn show_bluetooth_popover(app: &Application) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
+    setup_popup_autoclose(&pop, false);
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Right, true);
     pop.set_margin(Edge::Top, 34);
@@ -1263,6 +1309,7 @@ fn show_audio_mixer_popover(app: &Application) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
+    setup_popup_autoclose(&pop, false);
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Right, true);
     pop.set_margin(Edge::Top, 34);
@@ -1376,6 +1423,7 @@ fn show_control_center_popover(app: &Application) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
+    setup_popup_autoclose(&pop, false);
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Right, true);
     pop.set_margin(Edge::Top, 34);
@@ -1594,6 +1642,7 @@ fn show_start_menu_popover(app: &Application) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
+    setup_popup_autoclose(&pop, false);
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Left, true);
     pop.set_margin(Edge::Top, 32);
@@ -1704,6 +1753,7 @@ fn show_calendar_popover(app: &Application) {
 
     pop.init_layer_shell();
     pop.set_layer(Layer::Overlay);
+    setup_popup_autoclose(&pop, false);
     pop.set_anchor(Edge::Top, true);
     pop.set_anchor(Edge::Right, true);
     pop.set_margin(Edge::Top, 32);
