@@ -2,6 +2,10 @@
 // Inspired by top community dotfiles (Neurarian/matshell, sodiboo, YaLTeR, saatvik333, nfoert)
 // Architecture: OCI Bedrock • Wayland Layer Shell • Catppuccin Mocha Aesthetics
 
+hotkey-overlay {
+    skip-at-startup
+}
+
 input {
     keyboard {
         xkb {
@@ -167,6 +171,7 @@ binds {
     Mod+V      { spawn "ags" "toggle" "calendar"; }
     Mod+Shift+E { spawn "ags" "toggle" "powermenu"; }
     Mod+P      { spawn "ags" "toggle" "powermenu"; }
+    Mod+Shift+V { spawn "ags" "toggle" "clipboard"; }
     
     // Screenshots (Clipboard)
     Mod+Shift+S { spawn "sh" "-c" "grim -g \"$(slurp)\" - | wl-copy"; }

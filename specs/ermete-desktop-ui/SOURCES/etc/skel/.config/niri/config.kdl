@@ -2,6 +2,10 @@
 // Inspired by top community dotfiles (Neurarian/matshell, sodiboo, YaLTeR, saatvik333, nfoert)
 // Architecture: OCI Bedrock • Wayland Layer Shell • Catppuccin Mocha Aesthetics
 
+hotkey-overlay {
+    skip-at-startup
+}
+
 input {
     keyboard {
         xkb {

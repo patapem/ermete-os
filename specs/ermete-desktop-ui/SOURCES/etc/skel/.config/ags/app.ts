@@ -10,11 +10,13 @@ import { GeoclueModal, initGeoclueAgent } from "./geoclue"
 import { Greeter } from "./greeter"
 import GLib from "gi://GLib"
 
-// --- APP INITIALIZATION ---
+const isGreeter = !!GLib.getenv("GREETD_SOCK")
+const defaultCss = isGreeter ? "/etc/skel/.config/ags/style/main.css" : `${GLib.get_home_dir()}/.config/ags/style.css`
+
 App.start({
-    css: `${GLib.get_home_dir()}/.config/ags/style.css`,
+    css: defaultCss,
     main() {
-        if (GLib.getenv("GREETD_SOCK")) {
+        if (isGreeter) {
             Greeter()
             return
         }

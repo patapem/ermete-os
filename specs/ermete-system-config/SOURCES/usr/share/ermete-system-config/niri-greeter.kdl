@@ -1,18 +1,35 @@
-// Minimal Niri configuration for the AGS graphical greeter
-spawn-at-startup "sh" "-c" "GREETD_SOCK=$GREETD_SOCK ags run /etc/skel/.config/ags"
-
-layout {
-    default-workspace "greeter"
+// Enterprise Niri configuration for the AGS graphical greeter (Ermete OS)
+hotkey-overlay {
+    skip-at-startup
 }
 
+// Ultra-fast static bundle execution with explicit GREETD_SOCK export and log capture
+spawn-at-startup "sh" "-c" "mkdir -p /tmp/greeter-cache /var/lib/greetd/.cache && chmod 1777 /tmp/greeter-cache 2>/dev/null || true; if [ -f /usr/share/ermete-system-config/greeter-bundle.js ]; then XDG_CACHE_HOME=/tmp/greeter-cache GREETD_SOCK=$GREETD_SOCK exec gjs -m /usr/share/ermete-system-config/greeter-bundle.js > /tmp/greeter-ags.log 2>&1; elif [ -f /etc/greetd/greeter-bundle.js ]; then XDG_CACHE_HOME=/tmp/greeter-cache GREETD_SOCK=$GREETD_SOCK exec gjs -m /etc/greetd/greeter-bundle.js > /tmp/greeter-ags.log 2>&1; else XDG_CACHE_HOME=/tmp/greeter-cache GREETD_SOCK=$GREETD_SOCK exec ags run /etc/skel/.config/ags > /tmp/greeter-ags.log 2>&1; fi"
+
+// Ensure any window opened in the greeter session is full-screen and maximized
 window-rule {
-    match app-id="ags"
+    open-fullscreen true
+    open-maximized true
     geometry-corner-radius 0
     clip-to-geometry true
 }
 
-// Disable all unneeded shortcuts and features to prevent greeter escape
+layout {
+    default-column-width { proportion 1.0; }
+    focus-ring {
+        off
+    }
+    border {
+        off
+    }
+}
+
+animations {
+    window-open {
+        off
+    }
+}
+
 binds {
-    // Only allow quitting the compositor if something hangs (optional, but useful for debugging)
-    // Mod+Shift+E { quit; }
+    // Disable all shortcuts to prevent greeter escape
 }
