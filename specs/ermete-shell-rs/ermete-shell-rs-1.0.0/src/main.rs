@@ -354,12 +354,13 @@ thread_local! {
 }
 
 fn toggle_or_open_popup(tag: &str, open_fn: impl FnOnce()) {
+    let mut to_close = None;
     let mut already_open = false;
     ACTIVE_POPUP.with(|p| {
         if let Some((old_tag, old_weak)) = p.borrow().as_ref() {
             if let Some(old_win) = old_weak.upgrade() {
                 if old_win.is_visible() {
-                    old_win.close();
+                    to_close = Some(old_win);
                     if old_tag == tag {
                         already_open = true;
                     }
@@ -368,31 +369,45 @@ fn toggle_or_open_popup(tag: &str, open_fn: impl FnOnce()) {
         }
         *p.borrow_mut() = None;
     });
+
+    if let Some(win) = to_close {
+        win.close();
+    }
+
     if !already_open {
         open_fn();
     }
 }
 
 fn setup_popup_autoclose(pop: &ApplicationWindow, tag: &str) {
+    let mut to_close = None;
     ACTIVE_POPUP.with(|p| {
         if let Some((_, old_weak)) = p.borrow().as_ref() {
             if let Some(old_win) = old_weak.upgrade() {
                 if old_win != *pop && old_win.is_visible() {
-                    old_win.close();
+                    to_close = Some(old_win);
                 }
             }
         }
         *p.borrow_mut() = Some((tag.to_string(), pop.downgrade()));
     });
 
+    if let Some(win) = to_close {
+        win.close();
+    }
+
     pop.connect_close_request(move |win| {
         ACTIVE_POPUP.with(|p| {
+            let mut clear = false;
             if let Some((_, old_weak)) = p.borrow().as_ref() {
                 if let Some(old_win) = old_weak.upgrade() {
                     if old_win == *win {
-                        *p.borrow_mut() = None;
+                        clear = true;
                     }
                 }
+            }
+            if clear {
+                *p.borrow_mut() = None;
             }
         });
         glib::Propagation::Proceed
