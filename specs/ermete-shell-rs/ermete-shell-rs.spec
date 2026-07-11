@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           ermete-shell-rs
 Version:        1.0.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Ermete OS Native Rust GTK4 Shell
 
 License:        MIT
@@ -27,5 +27,8 @@ install -m 0755 target/release/ermete-shell-rs %{buildroot}%{_bindir}/ermete-she
 %{_bindir}/ermete-shell-rs
 
 %changelog
+* Sat Jul 11 2026 Ermete Forge <forge@ermete.os> - 1.0.0-2
+- Implement Full Rust GTK4 Layer Shell Top Bar with 3-zone layout and native styling
+
 * Fri Jul 10 2026 Ermete Forge <forge@ermete.os> - 1.0.0-1
 - Initial Rust Shell encapsulation

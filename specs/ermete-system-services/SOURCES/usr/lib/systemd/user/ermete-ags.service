@@ -1,5 +1,5 @@
 [Unit]
-Description=Ermete OS Desktop Panel (Astal/AGS)
+Description=Ermete OS Desktop Panel (Pure Rust Native Shell)
 Documentation=https://github.com/patapem/ermete-forge
 BindsTo=graphical-session.target
 After=graphical-session.target ermete-skel-sync.service
@@ -8,8 +8,7 @@ PartOf=graphical-session.target
 [Service]
 Type=simple
 Slice=session.slice
-Environment="LD_PRELOAD=/usr/lib64/libgtk4-layer-shell.so"
-ExecStart=/usr/bin/bash -c 'if [ -f "$HOME/.config/ags/app.ts" ] || [ -f "$HOME/.config/ags/app.js" ]; then exec /usr/bin/ags run "$HOME/.config/ags"; else exec /usr/bin/ags run /etc/skel/.config/ags; fi'
+ExecStart=/usr/bin/ermete-shell-rs
 Restart=on-failure
 RestartSec=2s
 

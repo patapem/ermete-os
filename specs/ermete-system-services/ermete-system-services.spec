@@ -1,13 +1,13 @@
 %global debug_package %{nil}
 Name:           ermete-system-services
 Version:        1.0.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Ermete OS ermete-system-services
 License:        MIT
 URL:            https://github.com/patapem/ermete-forge
 BuildArch:      noarch
 Requires:       systemd
-Requires:       aylurs-gtk-shell2
+Requires:       ermete-shell-rs
 
 %description
 Provides core systemd user targets, desktop panel lifecycle services, and skeleton synchronization for Ermete OS.
@@ -33,6 +33,9 @@ cp -a %{_sourcedir}/usr/lib/systemd/user-preset/* %{buildroot}/usr/lib/systemd/u
 /usr/lib/systemd/user-preset/99-ermete-desktop.preset
 
 %changelog
+* Sat Jul 11 2026 Ermete Forge <forge@ermete.os> - 1.0.1-4
+- Switch ermete-ags.service to run pure Rust ermete-shell-rs native binary instead of GJS/JS
+
 * Tue Jul 07 2026 Ermete Forge <forge@ermete.os> - 1.0.1-3
 - Refactored ermete-skel-sync to copy all missing dotfiles (Niri, Matugen, etc) securely without overwriting
 
