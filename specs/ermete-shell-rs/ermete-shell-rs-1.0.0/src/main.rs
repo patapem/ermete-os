@@ -192,6 +192,10 @@ window.topbar-window {
     background-color: transparent;
 }
 
+window.bg-overlay-window {
+    background-color: rgba(0, 0, 0, 0.01);
+}
+
 .topbar-container {
     background: @shell_bg;
     border-bottom: 1px solid @shell_border;
@@ -622,11 +626,10 @@ fn setup_popup_autoclose(pop: &ApplicationWindow, tag: &str) {
     if let Some(app) = pop.application() {
         let bg_win = ApplicationWindow::builder()
             .application(&app)
-            .css_classes(["popup-window"]) // Trasparente
+            .css_classes(["bg-overlay-window"])
             .build();
             
         bg_win.init_layer_shell();
-        // Layer::Top is strictly below Layer::Overlay (which pop uses)
         bg_win.set_layer(Layer::Top);
         bg_win.set_anchor(Edge::Top, true);
         bg_win.set_anchor(Edge::Bottom, true);
@@ -635,13 +638,19 @@ fn setup_popup_autoclose(pop: &ApplicationWindow, tag: &str) {
         bg_win.set_exclusive_zone(-1);
         bg_win.set_keyboard_mode(KeyboardMode::None);
         
+        let empty_box = gtk4::Box::builder()
+            .hexpand(true)
+            .vexpand(true)
+            .build();
+        bg_win.set_child(Some(&empty_box));
+        
         let click = gtk4::GestureClick::new();
         click.set_button(0); // Tutti i bottoni
         let pop_close_clone = pop.clone();
         click.connect_pressed(move |_, _, _, _| {
             pop_close_clone.close();
         });
-        bg_win.add_controller(click);
+        empty_box.add_controller(click);
         
         let bg_clone = bg_win.clone();
         pop.connect_close_request(move |win| {
