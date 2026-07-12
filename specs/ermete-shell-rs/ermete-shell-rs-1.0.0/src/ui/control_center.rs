@@ -14,8 +14,12 @@ pub(crate) fn build_cc_row(badge_class: &str, icon_glyph: &str, title: &str, sub
     let btn = Button::builder().css_classes(["cc-tile-row"]).build();
     let row_box = GtkBox::builder()
         .orientation(Orientation::Horizontal)
-        .spacing(10)
+        .spacing(14)
         .valign(Align::Center)
+        .margin_top(6)
+        .margin_bottom(6)
+        .margin_start(8)
+        .margin_end(8)
         .build();
 
     let badge = Label::builder()
@@ -55,8 +59,12 @@ pub(crate) fn build_cc_compact_tile(badge_class: &str, icon_glyph: &str, title: 
     let btn = Button::builder().css_classes(["cc-tile"]).hexpand(true).build();
     let row_box = GtkBox::builder()
         .orientation(Orientation::Horizontal)
-        .spacing(10)
+        .spacing(12)
         .valign(Align::Center)
+        .margin_top(8)
+        .margin_bottom(8)
+        .margin_start(10)
+        .margin_end(10)
         .build();
 
     let badge = Label::builder()
@@ -78,6 +86,13 @@ pub(crate) fn build_cc_compact_tile(badge_class: &str, icon_glyph: &str, title: 
     btn
 }
 
+fn build_quick_toggle_content(icon: &str, text: &str) -> GtkBox {
+    let box_ = GtkBox::builder().orientation(Orientation::Horizontal).spacing(6).halign(Align::Center).build();
+    box_.append(&Label::builder().label(icon).build());
+    box_.append(&Label::builder().label(text).build());
+    box_
+}
+
 pub fn show_system_monitor_modal(app: &Application) {
     let pop = ApplicationWindow::builder()
         .application(app)
@@ -96,7 +111,11 @@ pub fn show_system_monitor_modal(app: &Application) {
 
     let card = GtkBox::builder()
         .orientation(Orientation::Vertical)
-        .spacing(14)
+        .spacing(16)
+        .margin_top(16)
+        .margin_bottom(16)
+        .margin_start(16)
+        .margin_end(16)
         .css_classes(["cc-card"])
         .build();
 
@@ -638,7 +657,11 @@ pub fn show_wifi_popover(app: &Application) {
 
     let card = GtkBox::builder()
         .orientation(Orientation::Vertical)
-        .spacing(14)
+        .spacing(16)
+        .margin_top(16)
+        .margin_bottom(16)
+        .margin_start(16)
+        .margin_end(16)
         .css_classes(["cc-card"])
         .build();
 
@@ -712,7 +735,11 @@ pub fn show_bluetooth_popover(app: &Application) {
 
     let card = GtkBox::builder()
         .orientation(Orientation::Vertical)
-        .spacing(14)
+        .spacing(16)
+        .margin_top(16)
+        .margin_bottom(16)
+        .margin_start(16)
+        .margin_end(16)
         .css_classes(["cc-card"])
         .build();
 
@@ -818,7 +845,11 @@ pub fn show_audio_mixer_popover(app: &Application) {
 
     let card = GtkBox::builder()
         .orientation(Orientation::Vertical)
-        .spacing(14)
+        .spacing(16)
+        .margin_top(16)
+        .margin_bottom(16)
+        .margin_start(16)
+        .margin_end(16)
         .css_classes(["cc-card"])
         .build();
 
@@ -855,6 +886,7 @@ pub fn show_audio_mixer_popover(app: &Application) {
     let out_slider = Scale::with_range(Orientation::Horizontal, 0.0, 100.0, 1.0);
     out_slider.set_value(80.0);
     out_slider.set_hexpand(true);
+    out_slider.set_valign(Align::Center);
     out_slider.connect_value_changed(move |s| {
         let val = s.value() as i32;
         let _ = Command::new("wpctl")
@@ -884,6 +916,7 @@ pub fn show_audio_mixer_popover(app: &Application) {
     let in_slider = Scale::with_range(Orientation::Horizontal, 0.0, 100.0, 1.0);
     in_slider.set_value(75.0);
     in_slider.set_hexpand(true);
+    in_slider.set_valign(Align::Center);
     in_slider.connect_value_changed(move |s| {
         let val = s.value() as i32;
         let _ = Command::new("wpctl")
@@ -931,7 +964,11 @@ pub fn show_control_center_popover(app: &Application) {
 
     let card = GtkBox::builder()
         .orientation(Orientation::Vertical)
-        .spacing(10)
+        .spacing(16)
+        .margin_top(16)
+        .margin_bottom(16)
+        .margin_start(16)
+        .margin_end(16)
         .css_classes(["cc-card"])
         .build();
 
@@ -1018,6 +1055,7 @@ pub fn show_control_center_popover(app: &Application) {
     let bright_slider = Scale::with_range(Orientation::Horizontal, 0.0, 100.0, 1.0);
     bright_slider.set_value(75.0);
     bright_slider.set_hexpand(true);
+    bright_slider.set_valign(Align::Center);
     bright_slider.connect_value_changed(move |s| {
         let val = s.value() as i32;
         let _ = Command::new("brightnessctl")
@@ -1038,6 +1076,7 @@ pub fn show_control_center_popover(app: &Application) {
     let audio_slider = Scale::with_range(Orientation::Horizontal, 0.0, 100.0, 1.0);
     audio_slider.set_value(80.0);
     audio_slider.set_hexpand(true);
+    audio_slider.set_valign(Align::Center);
     audio_slider.connect_value_changed(move |s| {
         let val = s.value() as i32;
         let _ = Command::new("wpctl")
@@ -1057,9 +1096,10 @@ pub fn show_control_center_popover(app: &Application) {
         .build();
 
     let dark_btn = Button::builder()
-        .label("☾   Scuro")
         .css_classes(["cc-quick-btn"])
         .build();
+    dark_btn.set_child(Some(&build_quick_toggle_content("☾", "Scuro")));
+
     dark_btn.connect_clicked(move |_| {
         let _ = Command::new("gsettings")
             .args([
@@ -1072,9 +1112,10 @@ pub fn show_control_center_popover(app: &Application) {
     });
 
     let standby_btn = Button::builder()
-        .label("🖥   Standby")
         .css_classes(["cc-quick-btn"])
         .build();
+    standby_btn.set_child(Some(&build_quick_toggle_content("🖥", "Standby")));
+
     let pop_std = pop.clone();
     standby_btn.connect_clicked(move |_| {
         pop_std.close();
@@ -1084,9 +1125,10 @@ pub fn show_control_center_popover(app: &Application) {
     });
 
     let mixer_btn = Button::builder()
-        .label("🎚️   Mixer")
         .css_classes(["cc-quick-btn"])
         .build();
+    mixer_btn.set_child(Some(&build_quick_toggle_content("🎚️", "Mixer")));
+
     let app_mixer = app.clone();
     let pop_mixer = pop.clone();
     mixer_btn.connect_clicked(move |_| {
@@ -1095,9 +1137,10 @@ pub fn show_control_center_popover(app: &Application) {
     });
 
     let term_btn = Button::builder()
-        .label(">_   Shell")
         .css_classes(["cc-quick-btn"])
         .build();
+    term_btn.set_child(Some(&build_quick_toggle_content("", "Shell")));
+
     let pop_term = pop.clone();
     term_btn.connect_clicked(move |_| {
         pop_term.close();
