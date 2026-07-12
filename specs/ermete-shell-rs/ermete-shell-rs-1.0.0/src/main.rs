@@ -33,5 +33,5 @@ fn main() -> glib::ExitCode {
         }
     });
     
-    app.run()
+    app.run_with_args(&Vec::<String>::new())
 }
