@@ -12,6 +12,7 @@ use serde::Deserialize;
 use std::io::BufRead;
 use std::process::Command;
 use zbus::interface;
+use notify::{Watcher, RecursiveMode};
 
 #[derive(Deserialize, Debug, Clone)]
 struct NiriWorkspace {
@@ -64,6 +65,7 @@ struct NotificationData {
 
 thread_local! {
     static NOTIFICATIONS: std::cell::RefCell<Vec<NotificationData>> = std::cell::RefCell::new(Vec::new());
+    static CSS_PROVIDER: std::cell::RefCell<Option<CssProvider>> = std::cell::RefCell::new(None);
 }
 
 struct NotificationServer {
@@ -186,39 +188,34 @@ fn spawn_notification_daemon(app: &Application) {
 const APP_ID: &str = "os.ermete.Shell";
 
 const TOPBAR_CSS: &str = r#"
-/* ==========================================
-   ERMETE OS - AUTHENTIC macOS MENU BAR 1:1
-   ========================================== */
-
 window.topbar-window {
     background-color: transparent;
 }
 
 .topbar-container {
-    background: rgba(22, 22, 25, 0.88);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    color: #f5f5f7;
+    background: @shell_bg;
+    border-bottom: 1px solid @shell_border;
+    color: @shell_fg;
     font-family: -apple-system, 'SF Pro Text', 'Inter', sans-serif;
     font-size: 13px;
     font-weight: 500;
     padding: 0 10px;
 }
 
-/* Authentic macOS Menu Bar Button Hover Style (Flat, rounded 5px rect on hover) */
 .macos-menu-item {
     background: transparent;
     border: none;
     border-radius: 5px;
     padding: 2px 9px;
-    color: #f5f5f7;
+    color: @shell_fg;
     font-size: 13px;
     font-weight: 500;
     transition: background 100ms ease;
 }
 
 .macos-menu-item:hover {
-    background: rgba(255, 255, 255, 0.14);
-    color: #ffffff;
+    background: @shell_hover;
+    color: @shell_primary;
 }
 
 .macos-apple-logo {
@@ -229,24 +226,23 @@ window.topbar-window {
 
 .macos-app-title {
     font-weight: 700;
-    color: #ffffff;
+    color: @shell_primary;
     padding: 2px 10px;
 }
 
-/* macOS Status Items (Right side) */
 .macos-status-item {
     background: transparent;
     border: none;
     border-radius: 5px;
     padding: 2px 8px;
-    color: #e2e8f0;
+    color: @shell_fg;
     font-size: 13px;
     transition: background 100ms ease;
 }
 
 .macos-status-item:hover {
-    background: rgba(255, 255, 255, 0.14);
-    color: #ffffff;
+    background: @shell_hover;
+    color: @shell_primary;
 }
 
 .macos-clock {
@@ -262,11 +258,6 @@ window.spotlight-window {
 }
 
 .spotlight-card {
-    background: rgba(28, 28, 32, 0.96);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 12px;
-    padding: 14px;
-    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.80);
 }
 
 .spotlight-input {
@@ -511,15 +502,72 @@ fn macos_clock_string() -> String {
 }
 
 fn load_css() {
-    let provider = CssProvider::new();
-    provider.load_from_data(TOPBAR_CSS);
-    if let Some(display) = Display::default() {
+    let home = std::env::var("HOME").unwrap();
+    let colors_path = format!("{}/.config/ermete-shell/colors.css", home);
+    let colors_css = std::fs::read_to_string(&colors_path).unwrap_or_default();
+    
+    // In caso il file di matugen non definisca nulla o sia vuoto, diamo dei fallback di sicurezza.
+    let fallback = if colors_css.is_empty() {
+        r#"
+        @define-color shell_bg rgba(22, 22, 25, 0.88);
+        @define-color shell_fg #f5f5f7;
+        @define-color shell_border rgba(255, 255, 255, 0.08);
+        @define-color shell_hover rgba(255, 255, 255, 0.14);
+        @define-color shell_primary #ffffff;
+        @define-color popup_bg rgba(30, 30, 30, 0.95);
+        @define-color popup_border rgba(255, 255, 255, 0.1);
+        @define-color btn_bg rgba(50, 50, 50, 0.8);
+        @define-color btn_fg #ffffff;
+        @define-color btn_hover rgba(70, 70, 70, 0.9);
+        "#
+    } else {
+        ""
+    };
+
+    let full_css = format!("{}\n{}\n{}", colors_css, fallback, TOPBAR_CSS);
+
+    CSS_PROVIDER.with(|p| {
+        let mut provider_opt = p.borrow_mut();
+        let display = gtk4::gdk::Display::default().unwrap();
+        
+        if let Some(old_provider) = provider_opt.as_ref() {
+            gtk4::style_context_remove_provider_for_display(&display, old_provider);
+        }
+        
+        let new_provider = CssProvider::new();
+        new_provider.load_from_data(&full_css);
         gtk4::style_context_add_provider_for_display(
             &display,
-            &provider,
+            &new_provider,
             gtk4::STYLE_PROVIDER_PRIORITY_APPLICATION,
         );
-    }
+        *provider_opt = Some(new_provider);
+    });
+}
+
+fn spawn_css_watcher() {
+    use notify::{Watcher, RecursiveMode};
+    let (sender, receiver) = glib::MainContext::channel::<()>(glib::Priority::DEFAULT);
+    
+    std::thread::spawn(move || {
+        let (tx, rx) = std::sync::mpsc::channel();
+        let mut watcher = notify::recommended_watcher(tx).unwrap();
+        let path = std::path::PathBuf::from(std::env::var("HOME").unwrap()).join(".config/ermete-shell");
+        let _ = watcher.watch(&path, RecursiveMode::NonRecursive);
+        
+        while let Ok(event) = rx.recv() {
+            if let Ok(ev) = event {
+                if ev.kind.is_modify() {
+                    let _ = sender.send(());
+                }
+            }
+        }
+    });
+
+    receiver.attach(None, move |_| {
+        load_css();
+        glib::ControlFlow::Continue
+    });
 }
 
 thread_local! {
@@ -2391,6 +2439,7 @@ fn build_right_island(app: &Application, clock_label: &Label) -> (GtkBox, Button
 
 fn build_ui(app: &Application) {
     load_css();
+    spawn_css_watcher();
     spawn_notification_daemon(app);
 
     let window = ApplicationWindow::builder()
