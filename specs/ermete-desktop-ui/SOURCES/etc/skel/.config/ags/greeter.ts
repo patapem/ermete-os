@@ -13,11 +13,22 @@ GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, 15, () => {
     return GLib.SOURCE_REMOVE
 })
 
+// Clock variables
+const timeState = Variable("00:00").poll(1000, () => {
+    const d = new Date()
+    return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+})
+const dateState = Variable("").poll(1000, () => {
+    const d = new Date()
+    return d.toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" })
+})
+
 function doLogin(entry?: any) {
     if (isAuthenticating.get()) return
     const pass = password.get()
     if (!pass) {
         errorMessage.set("Inserisci la password")
+        triggerShake()
         return
     }
 
@@ -35,6 +46,7 @@ function doLogin(entry?: any) {
         const w = entry || entryWidget
         if (w) w.text = ""
         errorMessage.set(msg)
+        triggerShake()
     }
 
     try {
@@ -87,6 +99,58 @@ function doLogin(entry?: any) {
     }
 }
 
+// Simple shake animation trigger using CSS classes
+let shakeTimeout: any = null
+function triggerShake() {
+    if (entryWidget) {
+        entryWidget.add_css_class("shake-animation")
+        if (shakeTimeout) clearTimeout(shakeTimeout)
+        shakeTimeout = setTimeout(() => {
+            if (entryWidget) entryWidget.remove_css_class("shake-animation")
+        }, 500)
+    }
+}
+
+function PowerMenu() {
+    return Widget.Box({
+        css_classes: ["power-menu-greeter"],
+        halign: Gtk.Align.END,
+        valign: Gtk.Align.END,
+        spacing: 16,
+        children: [
+            Widget.Button({
+                css_classes: ["power-btn"],
+                onClicked: () => execAsync(["systemctl", "reboot"]),
+                child: Widget.Image({ icon_name: "system-reboot-symbolic", pixel_size: 24 })
+            }),
+            Widget.Button({
+                css_classes: ["power-btn"],
+                onClicked: () => execAsync(["systemctl", "poweroff"]),
+                child: Widget.Image({ icon_name: "system-shutdown-symbolic", pixel_size: 24 })
+            })
+        ]
+    })
+}
+
+function Clock() {
+    return Widget.Box({
+        orientation: Gtk.Orientation.VERTICAL,
+        halign: Gtk.Align.CENTER,
+        valign: Gtk.Align.START,
+        css_classes: ["greeter-clock-box"],
+        children: [
+            Widget.Label({
+                label: bind(timeState),
+                css_classes: ["greeter-time"]
+            }),
+            Widget.Label({
+                label: bind(dateState),
+                css_classes: ["greeter-date"]
+            })
+        ]
+    })
+}
+
 export function Greeter() {
     return Widget.Window({
         name: "greeter",
@@ -96,46 +160,71 @@ export function Greeter() {
         keymode: Astal.Keymode.EXCLUSIVE,
         visible: true,
         layer: Astal.Layer.OVERLAY,
-        css_classes: ["greeter-bg"],
-        child: Widget.CenterBox({
-            centerWidget: Widget.Box({
-                orientation: Gtk.Orientation.VERTICAL,
-                css_classes: ["greeter-box"],
-                valign: Gtk.Align.CENTER,
-                halign: Gtk.Align.CENTER,
-                children: [
-                    Widget.Label({
-                        label: "Ermete OS",
-                        css_classes: ["greeter-title"]
-                    }),
-                    Widget.Label({
-                        label: "Ermete",
-                        css_classes: ["greeter-user"]
-                    }),
-                    Widget.Entry({
-                        placeholder_text: "Password di accesso...",
-                        visibility: false,
-                        onChanged: (self) => password.set(self.text),
-                        onActivate: (self) => doLogin(self),
-                        sensitive: bind(isAuthenticating).as(a => !a),
-                        setup: (self) => {
-                            entryWidget = self
-                            self.grab_focus()
-                        }
-                    }),
-                    Widget.Label({
-                        label: bind(errorMessage),
-                        css_classes: ["greeter-error"],
-                        visible: bind(errorMessage).as(e => e.length > 0)
-                    }),
-                    Widget.Button({
-                        label: bind(isAuthenticating).as(a => a ? "Autenticazione in corso..." : "Accedi"),
-                        onClicked: doLogin,
-                        css_classes: ["greeter-login-btn"],
-                        sensitive: bind(isAuthenticating).as(a => !a)
+        css_classes: ["greeter-bg-blur"],
+        child: Widget.Overlay({
+            child: Widget.Box({
+                expand: true,
+                css_classes: ["greeter-container"]
+            }),
+            overlays: [
+                Clock(),
+                Widget.CenterBox({
+                    centerWidget: Widget.Box({
+                        orientation: Gtk.Orientation.VERTICAL,
+                        css_classes: ["greeter-login-box"],
+                        valign: Gtk.Align.CENTER,
+                        halign: Gtk.Align.CENTER,
+                        spacing: 24,
+                        children: [
+                            Widget.Box({
+                                css_classes: ["greeter-avatar-box"],
+                                halign: Gtk.Align.CENTER,
+                                child: Widget.Image({
+                                    icon_name: "avatar-default-symbolic",
+                                    pixel_size: 48,
+                                    css_classes: ["greeter-avatar"]
+                                })
+                            }),
+                            Widget.Label({
+                                label: "Ermete",
+                                css_classes: ["greeter-user"]
+                            }),
+                            Widget.Box({
+                                orientation: Gtk.Orientation.VERTICAL,
+                                spacing: 8,
+                                children: [
+                                    Widget.Entry({
+                                        placeholder_text: "Password...",
+                                        visibility: false,
+                                        css_classes: ["greeter-entry"],
+                                        onChanged: (self) => password.set(self.text),
+                                        onActivate: (self) => doLogin(self),
+                                        sensitive: bind(isAuthenticating).as(a => !a),
+                                        setup: (self) => {
+                                            entryWidget = self
+                                            // Wait for window map to grab focus
+                                            setTimeout(() => self.grab_focus(), 100)
+                                        }
+                                    }),
+                                    Widget.Label({
+                                        label: bind(errorMessage),
+                                        css_classes: ["greeter-error"],
+                                        visible: bind(errorMessage).as(e => e.length > 0)
+                                    })
+                                ]
+                            }),
+                            Widget.Button({
+                                child: Widget.Image({ icon_name: "go-next-symbolic", pixel_size: 24 }),
+                                css_classes: ["greeter-submit-btn"],
+                                halign: Gtk.Align.CENTER,
+                                onClicked: doLogin,
+                                sensitive: bind(isAuthenticating).as(a => !a)
+                            })
+                        ]
                     })
-                ]
-            })
+                }),
+                PowerMenu()
+            ]
         })
     })
 }
