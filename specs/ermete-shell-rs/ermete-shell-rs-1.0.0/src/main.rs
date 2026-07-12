@@ -2078,10 +2078,16 @@ fn build_center_island(_app: &Application) -> GtkBox {
             workspace_box_clone.remove(&child);
         }
 
-        let mut sorted_ws = workspaces.clone();
-        sorted_ws.sort_by_key(|w| w.idx);
+        let active_output = workspaces.iter()
+            .find(|w| w.is_focused)
+            .or_else(|| workspaces.iter().find(|w| w.is_active))
+            .map(|w| w.output.clone())
+            .unwrap_or_default();
 
-        for ws in sorted_ws {
+        let mut filtered_ws: Vec<_> = workspaces.into_iter().filter(|w| w.output == active_output).collect();
+        filtered_ws.sort_by_key(|w| w.idx);
+
+        for ws in filtered_ws {
             let label = if ws.is_active { "●" } else { "○" };
             let ws_btn = Button::builder()
                 .label(label)
