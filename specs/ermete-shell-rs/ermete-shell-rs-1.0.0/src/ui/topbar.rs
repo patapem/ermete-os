@@ -25,7 +25,7 @@ window.bg-overlay-window {
     background: @shell_bg;
     border-bottom: 1px solid @shell_border;
     color: @shell_fg;
-    font-family: -apple-system, 'SF Pro Text', 'Inter', sans-serif;
+    font-family: 'Inter', 'SF Pro Text', 'Roboto', sans-serif;
     font-size: 13px;
     font-weight: 500;
     padding: 0 10px;
@@ -39,7 +39,7 @@ window.bg-overlay-window {
     color: @shell_fg;
     font-size: 13px;
     font-weight: 500;
-    transition: background 100ms ease;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .macos-menu-item:hover {
@@ -66,7 +66,7 @@ window.bg-overlay-window {
     padding: 2px 8px;
     color: @shell_fg;
     font-size: 13px;
-    transition: background 100ms ease;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .macos-status-item:hover {
@@ -87,19 +87,25 @@ window.spotlight-window {
 }
 
 .spotlight-card {
+    background: rgba(30, 30, 32, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
 }
 
 .spotlight-input {
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
     color: #ffffff;
     font-size: 18px;
     padding: 10px 14px;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .spotlight-input:focus {
-    border-color: #38bdf8;
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .spotlight-item {
@@ -109,10 +115,11 @@ window.spotlight-window {
     padding: 8px 12px;
     color: #f5f5f7;
     font-size: 14px;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .spotlight-item:hover {
-    background: rgba(10, 132, 255, 0.70);
+    background: rgba(255, 255, 255, 0.1);
     color: #ffffff;
 }
 
@@ -124,24 +131,24 @@ window.popup-window {
 }
 
 .cc-card {
-    background: rgba(28, 28, 32, 0.94);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 18px;
+    background: rgba(30, 30, 32, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
     padding: 14px;
     color: #f8fafc;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
 }
 
 .cc-tile {
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 14px;
     padding: 10px;
-    transition: background 120ms ease;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .cc-tile:hover {
-    background: rgba(255, 255, 255, 0.11);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .cc-tile-row {
@@ -150,7 +157,7 @@ window.popup-window {
     border-radius: 10px;
     padding: 6px 8px;
     color: #f5f5f7;
-    transition: background 100ms ease;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .cc-tile-row:hover {
@@ -176,31 +183,35 @@ window.popup-window {
 }
 
 .cc-circle-gray {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.15);
     border-radius: 999px;
     min-width: 28px;
     min-height: 28px;
     color: #ffffff;
     font-weight: 700;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .cc-label-main {
+    font-family: 'Inter', 'SF Pro Text', 'Roboto', sans-serif;
     font-size: 13px;
     font-weight: 600;
     color: #ffffff;
 }
 
 .cc-label-sub {
+    font-family: 'Inter', 'SF Pro Text', 'Roboto', sans-serif;
     font-size: 11px;
     font-weight: 500;
     color: #94a3b8;
 }
 
 .cc-tile-slider {
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 14px;
     padding: 10px 14px;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .cc-slider-icon {
@@ -209,51 +220,53 @@ window.popup-window {
 }
 
 .cc-quick-btn {
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
     padding: 10px 6px;
     color: #f5f5f7;
     font-size: 12px;
     font-weight: 500;
-    transition: background 120ms ease;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .cc-quick-btn:hover {
-    background: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.1);
     color: #ffffff;
 }
 
 .cc-btn {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
     padding: 8px 12px;
     color: #e2e8f0;
     font-weight: 500;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .cc-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.1);
     color: #ffffff;
 }
 
 .cc-btn-danger {
-    background: rgba(255, 69, 58, 0.25);
-    border: 1px solid rgba(255, 69, 58, 0.45);
+    background: rgba(255, 69, 58, 0.15);
+    border: 1px solid rgba(255, 69, 58, 0.3);
     border-radius: 8px;
     padding: 8px 12px;
     color: #ff8a80;
     font-weight: 600;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .cc-btn-danger:hover {
-    background: rgba(255, 69, 58, 0.45);
+    background: rgba(255, 69, 58, 0.25);
     color: #ffffff;
 }
 
 progressbar.cc-progress-blue trough {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 6px;
     min-height: 8px;
 }
@@ -263,7 +276,7 @@ progressbar.cc-progress-blue progress {
     min-height: 8px;
 }
 progressbar.cc-progress-indigo trough {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 6px;
     min-height: 8px;
 }
@@ -278,50 +291,59 @@ progressbar.cc-progress-indigo progress {
     border-radius: 10px;
     padding: 8px 12px;
     color: #f8fafc;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .metric-card {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 14px;
     padding: 14px 16px;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .metric-value {
+    font-family: 'Inter', 'SF Pro Text', 'Roboto', sans-serif;
     font-size: 26px;
     font-weight: 800;
     color: #ffffff;
 }
 .pro-applet-card {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
     padding: 10px 14px;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .applet-header-card {
-    background: rgba(255, 255, 255, 0.09);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 14px;
     padding: 12px 16px;
 }
 .pro-applet-card-btn {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
     padding: 10px 14px;
     color: #ffffff;
-    transition: all 0.15s ease;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .pro-applet-card-btn:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.20);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.15);
 }
 .wifi-pwd-entry {
-    background: rgba(0, 0, 0, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 10px;
     padding: 8px 12px;
     color: #ffffff;
     min-height: 38px;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.wifi-pwd-entry:focus {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.4);
 }
 "#;
 
@@ -333,16 +355,16 @@ fn load_css() {
     // In caso il file di matugen non definisca nulla o sia vuoto, diamo dei fallback di sicurezza.
     let fallback = if colors_css.is_empty() {
         r#"
-        @define-color shell_bg rgba(22, 22, 25, 0.88);
+        @define-color shell_bg rgba(28, 28, 30, 0.65);
         @define-color shell_fg #f5f5f7;
         @define-color shell_border rgba(255, 255, 255, 0.08);
-        @define-color shell_hover rgba(255, 255, 255, 0.14);
+        @define-color shell_hover rgba(255, 255, 255, 0.1);
         @define-color shell_primary #ffffff;
-        @define-color popup_bg rgba(30, 30, 30, 0.95);
-        @define-color popup_border rgba(255, 255, 255, 0.1);
-        @define-color btn_bg rgba(50, 50, 50, 0.8);
+        @define-color popup_bg rgba(30, 30, 32, 0.75);
+        @define-color popup_border rgba(255, 255, 255, 0.08);
+        @define-color btn_bg rgba(255, 255, 255, 0.05);
         @define-color btn_fg #ffffff;
-        @define-color btn_hover rgba(70, 70, 70, 0.9);
+        @define-color btn_hover rgba(255, 255, 255, 0.1);
         "#
     } else {
         ""
