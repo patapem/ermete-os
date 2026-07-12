@@ -636,38 +636,9 @@ fn setup_popup_autoclose(pop: &ApplicationWindow, tag: &str) {
 
     pop.set_keyboard_mode(KeyboardMode::OnDemand);
 
-    let active_seen = std::rc::Rc::new(std::cell::Cell::new(false));
-    let seen_clone = active_seen.clone();
-    pop.connect_is_active_notify(move |win| {
-        if win.is_active() {
-            seen_clone.set(true);
-        } else if seen_clone.get() {
-            win.close();
-        }
-    });
-
-    let focus_ctrl = gtk4::EventControllerFocus::new();
-    let seen_enter = active_seen.clone();
-    focus_ctrl.connect_enter(move |_| {
-        seen_enter.set(true);
-    });
-    let seen_leave = active_seen.clone();
-    let pop_leave = pop.clone();
-    focus_ctrl.connect_leave(move |_| {
-        if seen_leave.get() {
-            pop_leave.close();
-        }
-    });
-    pop.add_controller(focus_ctrl);
-
-    let win_weak = pop.downgrade();
-    let seen_clone2 = active_seen.clone();
-    glib::timeout_add_local(std::time::Duration::from_millis(250), move || {
-        if let Some(_) = win_weak.upgrade() {
-            seen_clone2.set(true);
-        }
-        glib::ControlFlow::Break
-    });
+    // Removed aggressive auto-close triggers (is_active_notify and EventControllerFocus)
+    // because Niri's "focus follows mouse" causes popups to close instantly when the mouse
+    // leaves the popup area. Popups will now close via ESC or toggling the topbar button.
 
     let key_ctrl = gtk4::EventControllerKey::new();
     let pop_esc = pop.clone();
