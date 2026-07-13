@@ -87,6 +87,22 @@ pub async fn update_system() -> Result<String> {
     }
 }
 
+pub async fn update_apps() -> Result<String> {
+    let output = Command::new("flatpak")
+        .arg("update")
+        .arg("-y")
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .output()
+        .await?;
+        
+    if output.status.success() {
+        Ok(String::from_utf8_lossy(&output.stdout).to_string())
+    } else {
+        Err(anyhow::anyhow!("App update failed: {}", String::from_utf8_lossy(&output.stderr)))
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

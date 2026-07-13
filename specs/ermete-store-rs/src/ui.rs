@@ -1,3 +1,5 @@
+use std::rc::Rc;
+use std::cell::Cell;
 use gtk4::prelude::*;
 use gtk4::{glib, Application, ApplicationWindow, Box, Button, HeaderBar, Label, ListBox, Orientation, ScrolledWindow, SearchEntry, Stack, StackSidebar};
 use crate::backend;
@@ -39,8 +41,15 @@ fn create_app_row(app: &backend::AppInfo) -> Box {
         btn.set_sensitive(false);
         btn.set_label("Installando...");
         glib::spawn_future_local(async move {
-            let _ = backend::install_app(&app_id_clone).await;
-            btn.set_label("Fatto");
+            match backend::install_app(&app_id_clone).await {
+                Ok(_) => {
+                    btn.set_label("Fatto");
+                }
+                Err(_) => {
+                    btn.set_label("Errore");
+                    btn.set_sensitive(true);
+                }
+            }
         });
     });
 
@@ -100,24 +109,89 @@ pub fn build_ui(app: &Application) {
     featured_scroll.set_child(Some(&featured_box));
     stack.add_titled(&featured_scroll, Some("featured"), "Primo Piano");
 
-    let (tx, rx) = async_channel::unbounded();
     let featured_list_clone = featured_list.clone();
     
     glib::spawn_future_local(async move {
-        if let Ok(apps) = backend::get_featured_apps().await {
-            let _ = tx.send(apps).await;
-        }
-    });
-
-    let rx_clone = rx.clone();
-    glib::spawn_future_local(async move {
-        while let Ok(apps) = rx_clone.recv().await {
-            for app in apps {
-                let row = create_app_row(&app);
-                featured_list_clone.append(&row);
+        match backend::get_featured_apps().await {
+            Ok(apps) if !apps.is_empty() => {
+                for app in apps {
+                    let row = create_app_row(&app);
+                    featured_list_clone.append(&row);
+                }
+            }
+            _ => {
+                let error_label = Label::new(Some("Nessun risultato"));
+                featured_list_clone.append(&error_label);
             }
         }
     });
+
+    // Categories
+    let categories_box = Box::new(Orientation::Vertical, 12);
+    categories_box.set_margin_top(24);
+    categories_box.set_margin_bottom(24);
+    categories_box.set_margin_start(24);
+    categories_box.set_margin_end(24);
+    
+    let categories_title = Label::builder()
+        .label("Categorie")
+        .halign(gtk4::Align::Start)
+        .css_classes(vec!["title-1"])
+        .build();
+    categories_box.append(&categories_title);
+
+    let categories_btn_box = Box::new(Orientation::Horizontal, 12);
+    categories_box.append(&categories_btn_box);
+    
+    let categories_list = ListBox::new();
+    categories_list.set_selection_mode(gtk4::SelectionMode::None);
+    
+    let categories_scroll = ScrolledWindow::new();
+    categories_scroll.set_vexpand(true);
+    categories_scroll.set_child(Some(&categories_list));
+    categories_box.append(&categories_scroll);
+
+    let cats = vec![
+        ("Sviluppo", "development"),
+        ("Giochi", "games"),
+        ("Grafica", "graphics"),
+        ("Ufficio", "office"),
+    ];
+
+    for (label_str, query_str) in cats {
+        let btn = Button::with_label(label_str);
+        let query = query_str.to_string();
+        let cat_list = categories_list.clone();
+        
+        btn.connect_clicked(move |_| {
+            let q = query.clone();
+            let lst = cat_list.clone();
+            glib::spawn_future_local(async move {
+                while let Some(child) = lst.first_child() {
+                    lst.remove(&child);
+                }
+                let loading = Label::new(Some("Caricamento..."));
+                lst.append(&loading);
+                
+                if let Ok(apps) = backend::search_apps(&q).await {
+                    lst.remove(&loading);
+                    if apps.is_empty() {
+                        lst.append(&Label::new(Some("Nessun risultato")));
+                    } else {
+                        for app in apps {
+                            lst.append(&create_app_row(&app));
+                        }
+                    }
+                } else {
+                    lst.remove(&loading);
+                    lst.append(&Label::new(Some("Errore di ricerca")));
+                }
+            });
+        });
+        categories_btn_box.append(&btn);
+    }
+
+    stack.add_titled(&categories_box, Some("categories_tab"), "Categorie");
 
     // Categories / Search
     let search_box = Box::new(Orientation::Vertical, 12);
@@ -139,20 +213,34 @@ pub fn build_ui(app: &Application) {
     stack.add_titled(&search_box, Some("categories"), "Cerca");
 
     let search_list_clone = search_list.clone();
+    let search_generation = Rc::new(Cell::new(0u32));
     search_entry.connect_search_changed(move |entry| {
         let query = entry.text().to_string();
         let search_list = search_list_clone.clone();
+        
+        let current_gen = search_generation.get() + 1;
+        search_generation.set(current_gen);
+        let gen_clone = search_generation.clone();
+
         if query.len() < 3 { return; }
         
         glib::spawn_future_local(async move {
             if let Ok(apps) = backend::search_apps(&query).await {
+                if gen_clone.get() != current_gen {
+                    return;
+                }
+                
                 while let Some(child) = search_list.first_child() {
                     search_list.remove(&child);
                 }
                 
-                for app in apps {
-                    let row = create_app_row(&app);
-                    search_list.append(&row);
+                if apps.is_empty() {
+                    search_list.append(&Label::new(Some("Nessun risultato")));
+                } else {
+                    for app in apps {
+                        let row = create_app_row(&app);
+                        search_list.append(&row);
+                    }
                 }
             }
         });
@@ -172,6 +260,12 @@ pub fn build_ui(app: &Application) {
         .build();
     updates_box.append(&update_title);
     
+    let app_update_btn = Button::builder()
+        .label("Aggiorna App (flatpak)")
+        .css_classes(vec!["suggested-action"])
+        .halign(gtk4::Align::Center)
+        .build();
+
     let sys_update_btn = Button::builder()
         .label("Aggiorna Sistema (rpm-ostree)")
         .css_classes(vec!["suggested-action"])
@@ -181,16 +275,34 @@ pub fn build_ui(app: &Application) {
     let update_status = Label::new(Some("Sistema pronto."));
     update_status.set_wrap(true);
     
+    updates_box.append(&app_update_btn);
     updates_box.append(&sys_update_btn);
     updates_box.append(&update_status);
     
-    let status_clone = update_status.clone();
+    let status_clone1 = update_status.clone();
+    let app_update_btn_clone = app_update_btn.clone();
+    app_update_btn.connect_clicked(move |_| {
+        let status = status_clone1.clone();
+        let btn = app_update_btn_clone.clone();
+        btn.set_sensitive(false);
+        status.set_label("Aggiornamento app in corso...");
+        
+        glib::spawn_future_local(async move {
+            match backend::update_apps().await {
+                Ok(out) => status.set_label(&format!("Aggiornamento app completato:\n{}", out)),
+                Err(e) => status.set_label(&format!("Errore durante l'aggiornamento app:\n{}", e)),
+            }
+            btn.set_sensitive(true);
+        });
+    });
+
+    let status_clone2 = update_status.clone();
     let sys_update_btn_clone = sys_update_btn.clone();
     sys_update_btn.connect_clicked(move |_| {
-        let status = status_clone.clone();
+        let status = status_clone2.clone();
         let btn = sys_update_btn_clone.clone();
         btn.set_sensitive(false);
-        status.set_label("Aggiornamento in corso. L'operazione potrebbe richiedere alcuni minuti...");
+        status.set_label("Aggiornamento sistema in corso. L'operazione potrebbe richiedere alcuni minuti...");
         
         glib::spawn_future_local(async move {
             match backend::update_system().await {
