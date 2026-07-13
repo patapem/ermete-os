@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           ermete-system-config
 Version:        1.0.0
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Ermete OS ermete-system-config
 License:        MIT
 URL:            https://github.com/patapem/ermete-forge
@@ -28,10 +28,12 @@ cp -a %{_sourcedir}/etc %{buildroot}/ 2>/dev/null || true
 /usr/share/ermete-system-config/greetd.toml
 /usr/share/ermete-system-config/niri-greeter.kdl
 /usr/share/ermete-system-config/greeter-bundle.js
-%config(noreplace) /etc/greetd/config.toml
 
 
 %changelog
+* Mon Jul 13 2026 Ermete Forge <forge@ermete.os> - 1.0.0-8
+- Remove direct /etc/greetd/config.toml to eliminate RPM transaction file conflict with greetd package (using tmpfiles L+ symlink override)
+
 * Mon Jul 13 2026 Ermete Forge <forge@ermete.os> - 1.0.0-7
 - Configure default_session command for cage Wayland kiosk executing ermete-shell-rs --greeter
 
