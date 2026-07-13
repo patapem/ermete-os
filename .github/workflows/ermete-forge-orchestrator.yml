@@ -100,6 +100,15 @@ jobs:
             cp -a specs/ermete-${{ matrix.package }}/SOURCES/* ~/rpmbuild/SOURCES/ || true
           fi
           
+          # Auto-pack any source directory into tarball for RPM Source0
+          for dir in specs/ermete-${{ matrix.package }}/*-*/ ; do
+            if [ -d "$dir" ]; then
+              pkg_dir=$(basename "$dir")
+              echo "Packing $pkg_dir into ~/rpmbuild/SOURCES/${pkg_dir}.tar.gz..."
+              tar -czf ~/rpmbuild/SOURCES/${pkg_dir}.tar.gz -C "specs/ermete-${{ matrix.package }}" "$pkg_dir"
+            fi
+          done
+          
           dnf builddep -y specs/ermete-${{ matrix.package }}/*.spec || true
           spectool -g -R specs/ermete-${{ matrix.package }}/*.spec || true
           
