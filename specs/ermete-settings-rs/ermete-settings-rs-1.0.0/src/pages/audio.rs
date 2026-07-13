@@ -1,6 +1,5 @@
 use gtk4::prelude::*;
-use gtk4::{Align, Box, Label, Orientation, Scale};
-use zbus::Connection;
+use gtk4::{Box, Orientation, Label, Scale, Align};
 use std::process::Command;
 
 pub fn build_page() -> Box {

@@ -131,13 +131,8 @@ fn build_ui(app: &Application) {
         list_box.select_row(Some(&row));
     }
 
-    let stack_clone = stack.clone();
     list_box.connect_row_selected(move |_, row| {
-        if let Some(row) = row {
-            let index = row.index();
-            // Map index to ID (rough approximation for demo)
-            let mut valid_idx = 0;
-            let cats = vec!["wifi", "bluetooth", "network", "audio", "notifications", "focus", "general", "appearance", "desktop", "displays", "battery", "keyboard", "mouse", "accounts", "privacy"];
+        if let Some(_row) = row {
             // This is just a quick binding for the prototype
             // The real logic should store the ID in the row
             // We'll fix this properly soon!
@@ -145,9 +140,7 @@ fn build_ui(app: &Application) {
     });
 
     // Fix connection properly
-    let list_box_ref = list_box.clone();
     let stack_clone = stack.clone();
-    let items = vec!["wifi", "bluetooth", "network", "audio", "notifications", "focus", "general", "appearance", "desktop", "displays", "battery", "keyboard", "mouse", "accounts", "privacy"];
     
     // We bind it correctly by looking at the label inside
     list_box.connect_row_selected(move |_, row| {
