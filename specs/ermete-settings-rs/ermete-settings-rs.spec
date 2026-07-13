@@ -1,6 +1,6 @@
 Name:           ermete-settings-rs
 Version:        1.0.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Pure Rust native System Settings for Ermete OS
 
 License:        GPLv3+
@@ -17,7 +17,7 @@ Ermete Settings is the native control panel for Ermete OS, written in pure Rust 
 %autosetup
 
 %build
-cargo build --release --offline
+cargo build --release
 
 %install
 rm -rf $RPM_BUILD_ROOT

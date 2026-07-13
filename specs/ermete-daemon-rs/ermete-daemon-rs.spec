@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           ermete-daemon-rs
 Version:        0.1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Ermete OS Native D-Bus Bedrock Daemon
 
 License:        MIT
@@ -17,7 +17,7 @@ Pure Rust native D-Bus IPC service for Ermete OS audio and system bedrock manage
 %autosetup
 
 %build
-cargo build --release --locked
+cargo build --release
 
 %install
 mkdir -p %{buildroot}%{_bindir}
