@@ -116,13 +116,13 @@ window.background {
 fn format_italian_date(now: &chrono::DateTime<chrono::Local>) -> String {
     use chrono::Datelike;
     let weekday = match now.weekday() {
-        chrono::Weekday::Mon => "lunedì",
-        chrono::Weekday::Tue => "martedì",
-        chrono::Weekday::Wed => "mercoledì",
-        chrono::Weekday::Thu => "giovedì",
-        chrono::Weekday::Fri => "venerdì",
-        chrono::Weekday::Sat => "sabato",
-        chrono::Weekday::Sun => "domenica",
+        chrono::Weekday::Mon => "Lunedì",
+        chrono::Weekday::Tue => "Martedì",
+        chrono::Weekday::Wed => "Mercoledì",
+        chrono::Weekday::Thu => "Giovedì",
+        chrono::Weekday::Fri => "Venerdì",
+        chrono::Weekday::Sat => "Sabato",
+        chrono::Weekday::Sun => "Domenica",
     };
     let month = match now.month() {
         1 => "gennaio",
@@ -158,16 +158,28 @@ fn send_request(stream: &mut UnixStream, req: &Request) -> Result<Response, Stri
     serde_json::from_slice(&reply_buf).map_err(|e| e.to_string())
 }
 
+fn resolve_target_username() -> String {
+    let env_user = std::env::var("USER").unwrap_or_default();
+    if env_user == "greeter" || env_user.is_empty() {
+        std::env::var("ERMETE_LOGIN_USER").unwrap_or_else(|_| "ermete".to_string())
+    } else {
+        env_user
+    }
+}
+
+fn capitalize_first(s: &str) -> String {
+    let mut chars = s.chars();
+    match chars.next() {
+        None => String::new(),
+        Some(first) => first.to_uppercase().collect::<String>() + chars.as_str(),
+    }
+}
+
 fn authenticate(password: &str) -> Result<(), String> {
     let path = std::env::var("GREETD_SOCK").unwrap_or_else(|_| "/run/greetd.sock".to_string());
     let mut stream = UnixStream::connect(path).map_err(|e| e.to_string())?;
 
-    let env_user = std::env::var("USER").unwrap_or_default();
-    let username = if env_user == "greeter" || env_user.is_empty() {
-        std::env::var("ERMETE_LOGIN_USER").unwrap_or_else(|_| "ermete".to_string())
-    } else {
-        env_user
-    };
+    let username = resolve_target_username();
 
     let session_cmd = if std::path::Path::new("/etc/greetd/ermete-session").exists() {
         "/etc/greetd/ermete-session".to_string()
@@ -327,8 +339,9 @@ pub fn build_ui(app: &Application) {
         .css_classes(["greeter-avatar"])
         .build();
 
+    let display_user = capitalize_first(&resolve_target_username());
     let user_label = Label::builder()
-        .label("Ermete")
+        .label(&display_user)
         .halign(Align::Center)
         .css_classes(["greeter-user-name"])
         .build();
@@ -412,7 +425,9 @@ pub fn build_ui(app: &Application) {
         .css_classes(["greeter-power-btn"])
         .build();
     suspend_btn.connect_clicked(|_| {
-        let _ = std::process::Command::new("systemctl").arg("suspend").spawn();
+        if let Err(e) = std::process::Command::new("systemctl").arg("suspend").spawn() {
+            eprintln!("Failed to spawn systemctl suspend: {}", e);
+        }
     });
 
     let reboot_btn = Button::builder()
@@ -420,7 +435,9 @@ pub fn build_ui(app: &Application) {
         .css_classes(["greeter-power-btn"])
         .build();
     reboot_btn.connect_clicked(|_| {
-        let _ = std::process::Command::new("systemctl").arg("reboot").spawn();
+        if let Err(e) = std::process::Command::new("systemctl").arg("reboot").spawn() {
+            eprintln!("Failed to spawn systemctl reboot: {}", e);
+        }
     });
 
     let poweroff_btn = Button::builder()
@@ -428,7 +445,9 @@ pub fn build_ui(app: &Application) {
         .css_classes(["greeter-power-btn"])
         .build();
     poweroff_btn.connect_clicked(|_| {
-        let _ = std::process::Command::new("systemctl").arg("poweroff").spawn();
+        if let Err(e) = std::process::Command::new("systemctl").arg("poweroff").spawn() {
+            eprintln!("Failed to spawn systemctl poweroff: {}", e);
+        }
     });
 
     bottom_bar.append(&suspend_btn);
