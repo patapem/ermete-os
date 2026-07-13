@@ -59,8 +59,12 @@ layout {
         inactive-color "#313244"
     }
 
-    border {
-        off
+    shadow {
+        on
+        softness 30
+        spread 2
+        offset x=0 y=4
+        color "#00000070"
     }
     
     struts {
@@ -153,6 +157,21 @@ layer-rule {
     match namespace="^media-player$"
     match namespace="^sys-monitor$"
     match namespace="^calendar$"
+    
+    geometry-corner-radius 14
+    shadow {
+        on
+        softness 30
+        spread 2
+        offset x=0 y=4
+        color "#00000070"
+    }
+}
+
+// --- FLOATING WINDOWS RULE ---
+window-rule {
+    match is-floating=true
+    open-floating true
 }
 
 // --- KEYBINDINGS MATRIX ---
@@ -184,6 +203,7 @@ binds {
     Mod+Shift+F { fullscreen-window; }
     Mod+C      { center-column; }
     Mod+R      { switch-preset-column-width; }
+    Mod+Shift+Space { toggle-window-floating; }
     
     Mod+Minus       { set-column-width "-10%"; }
     Mod+Equal       { set-column-width "+10%"; }
