@@ -158,21 +158,83 @@ fn send_request(stream: &mut UnixStream, req: &Request) -> Result<Response, Stri
     serde_json::from_slice(&reply_buf).map_err(|e| e.to_string())
 }
 
-fn resolve_target_username() -> String {
-    let env_user = std::env::var("USER").unwrap_or_default();
-    if env_user == "greeter" || env_user.is_empty() {
-        std::env::var("ERMETE_LOGIN_USER").unwrap_or_else(|_| "ermete".to_string())
-    } else {
-        env_user
-    }
-}
-
 fn capitalize_first(s: &str) -> String {
     let mut chars = s.chars();
     match chars.next() {
         None => String::new(),
         Some(first) => first.to_uppercase().collect::<String>() + chars.as_str(),
     }
+}
+
+#[allow(dead_code)]
+#[derive(Debug, Clone)]
+pub struct UserInfo {
+    pub username: String,
+    pub real_name: String,
+    pub avatar_path: Option<String>,
+}
+
+#[allow(dead_code)]
+pub fn discover_target_user() -> UserInfo {
+    let env_user = std::env::var("USER").unwrap_or_default();
+    let target_user = if env_user == "greeter" || env_user.is_empty() {
+        std::env::var("ERMETE_LOGIN_USER").unwrap_or_else(|_| {
+            // Scan /etc/passwd for first normal user with UID >= 1000 and valid shell
+            if let Ok(content) = std::fs::read_to_string("/etc/passwd") {
+                for line in content.lines() {
+                    let parts: Vec<&str> = line.split(':').collect();
+                    if parts.len() >= 7 {
+                        if let Ok(uid) = parts[2].parse::<u32>() {
+                            if uid >= 1000 && uid < 65534 && (parts[6].ends_with("bash") || parts[6].ends_with("zsh") || parts[6].ends_with("fish")) {
+                                return parts[0].to_string();
+                            }
+                        }
+                    }
+                }
+            }
+            "ermete".to_string()
+        })
+    } else {
+        env_user
+    };
+
+    // Parse real name from GECOS in /etc/passwd
+    let mut real_name = capitalize_first(&target_user);
+    let mut home_dir = format!("/home/{}", target_user);
+    if let Ok(content) = std::fs::read_to_string("/etc/passwd") {
+        for line in content.lines() {
+            let parts: Vec<&str> = line.split(':').collect();
+            if parts.len() >= 6 && parts[0] == target_user {
+                let gecos = parts[4].split(',').next().unwrap_or(parts[0]);
+                if !gecos.trim().is_empty() {
+                    real_name = gecos.trim().to_string();
+                }
+                home_dir = parts[5].to_string();
+                break;
+            }
+        }
+    }
+
+    // Discover avatar path
+    let face_path = format!("{}/.face", home_dir);
+    let acc_path = format!("/var/lib/AccountsService/icons/{}", target_user);
+    let avatar_path = if std::path::Path::new(&face_path).exists() {
+        Some(face_path)
+    } else if std::path::Path::new(&acc_path).exists() {
+        Some(acc_path)
+    } else {
+        None
+    };
+
+    UserInfo {
+        username: target_user,
+        real_name,
+        avatar_path,
+    }
+}
+
+fn resolve_target_username() -> String {
+    discover_target_user().username
 }
 
 fn authenticate(password: &str) -> Result<(), String> {
@@ -227,6 +289,21 @@ fn authenticate(password: &str) -> Result<(), String> {
         },
         Response::Error { description, .. } => Err(description),
     }
+}
+
+#[allow(dead_code)]
+pub fn authenticate_or_simulate(password: &str) -> Result<(), String> {
+    let path = std::env::var("GREETD_SOCK").unwrap_or_else(|_| "/run/greetd.sock".to_string());
+    if !std::path::Path::new(&path).exists() {
+        // Dry-run mode for previewing greeter UI outside greetd
+        std::thread::sleep(std::time::Duration::from_millis(600));
+        if password.is_empty() {
+            return Err("Inserisci la password di accesso".to_string());
+        }
+        return Ok(());
+    }
+
+    authenticate(password)
 }
 
 pub fn build_ui(app: &Application) {
@@ -339,7 +416,8 @@ pub fn build_ui(app: &Application) {
         .css_classes(["greeter-avatar"])
         .build();
 
-    let display_user = capitalize_first(&resolve_target_username());
+    let user_info = discover_target_user();
+    let display_user = user_info.real_name;
     let user_label = Label::builder()
         .label(&display_user)
         .halign(Align::Center)
@@ -379,7 +457,7 @@ pub fn build_ui(app: &Application) {
         let (sender, receiver) = glib::MainContext::channel::<Result<(), String>>(glib::Priority::DEFAULT);
 
         std::thread::spawn(move || {
-            let res = authenticate(&password);
+            let res = authenticate_or_simulate(&password);
             let _ = sender.send(res);
         });
 
