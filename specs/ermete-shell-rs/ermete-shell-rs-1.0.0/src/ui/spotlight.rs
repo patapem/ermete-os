@@ -62,13 +62,10 @@ pub fn populate_launcher_list(list_box: &GtkBox, filter_text: &str, category_fil
     if is_spotlight && filter_lower.starts_with('/') {
         let query = filter_text.trim_start_matches('/').trim();
         if !query.is_empty() {
-            let home = std::env::var("HOME").unwrap_or_else(|_| "/".to_string());
-            if let Ok(output) = std::process::Command::new("find")
-                .arg(&home)
-                .arg("-maxdepth")
-                .arg("4")
-                .arg("-iname")
-                .arg(&format!("*{}*", query))
+            if let Ok(output) = std::process::Command::new("plocate")
+                .arg("-l")
+                .arg("5")
+                .arg(&query)
                 .output()
             {
                 let stdout = String::from_utf8_lossy(&output.stdout);
