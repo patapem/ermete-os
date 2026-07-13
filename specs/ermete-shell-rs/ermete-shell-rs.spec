@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           ermete-shell-rs
 Version:        1.0.0
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Ermete OS Native Rust GTK4 Shell
 
 License:        MIT
@@ -27,6 +27,9 @@ install -m 0755 target/release/ermete-shell-rs %{buildroot}%{_bindir}/ermete-she
 %{_bindir}/ermete-shell-rs
 
 %changelog
+* Mon Jul 13 2026 Ermete Forge <forge@ermete.os> - 1.0.0-8
+- Integrate cage Wayland kiosk execution and Big Tech Glassmorphism Greeter upgrade
+
 * Mon Jul 13 2026 Ermete Forge <forge@ermete.os> - 1.0.0-7
 - Redesign greeter login UI to BigTech macOS Lock Screen & Glassmorphism style with live clock and power actions
 
