@@ -2,6 +2,18 @@ use crate::core::*;
 use crate::ui::spotlight::*;
 use crate::ui::topbar::setup_popup_autoclose;
 use glib::clone;
+use zbus::proxy;
+use futures_util::StreamExt;
+
+#[proxy(
+    interface = "os.ermete.Bedrock",
+    default_service = "os.ermete.Bedrock",
+    default_path = "/os/ermete/Bedrock"
+)]
+trait Bedrock {
+    #[zbus(property)]
+    fn volume(&self) -> zbus::Result<f64>;
+}
 
 use gtk4::prelude::*;
 use gtk4::{
@@ -1198,22 +1210,38 @@ pub fn show_control_center_popover(app: &Application) {
 
     // LIVE STATE POLLING
     let bright_slider_clone = bright_slider.clone();
-    let audio_slider_clone = audio_slider.clone();
     let mpris_t = mpris_title.clone();
     let mpris_a = mpris_artist.clone();
     let mpris_p = play_btn.clone();
     let wifi_btn_clone = wifi_btn.clone();
     let bt_btn_clone = bt_btn.clone();
     
+    let audio_slider_dbus = audio_slider.clone();
+    glib::MainContext::default().spawn_local(async move {
+        if let Ok(connection) = zbus::Connection::session().await {
+            if let Ok(proxy) = BedrockProxy::new(&connection).await {
+                if let Ok(v) = proxy.volume().await {
+                    audio_slider_dbus.set_value(v * 100.0);
+                }
+                let mut stream = proxy.receive_volume_changed().await;
+                    while let Some(changed) = stream.next().await {
+                        if let Ok(v) = changed.get().await {
+                            if (audio_slider_dbus.value() - (v * 100.0)).abs() > 1.5 {
+                                audio_slider_dbus.set_value(v * 100.0);
+                            }
+                        }
+                    }
+                
+            }
+        }
+    });
+
     glib::timeout_add_local(std::time::Duration::from_millis(1000), clone!(@weak pop => @default-return glib::ControlFlow::Break, move || {
         let live = crate::core::live_state::get_live_state();
         
         // Update sliders only if the difference is > 1.0 (to avoid fighting user input)
         if (bright_slider_clone.value() - live.brightness).abs() > 1.5 {
             bright_slider_clone.set_value(live.brightness);
-        }
-        if (audio_slider_clone.value() - (live.volume * 100.0)).abs() > 1.5 {
-            audio_slider_clone.set_value(live.volume * 100.0);
         }
 
         if let Some(mpris) = crate::core::mpris::get_mpris_state() {
