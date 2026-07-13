@@ -2,6 +2,12 @@ use gtk4::prelude::*;
 use gtk4::{Align, Box as GtkBox, Button, Label, Orientation, ProgressBar};
 use std::process::Command;
 
+fn get_battery_capacity() -> Option<u32> {
+    std::fs::read_to_string("/sys/class/power_supply/BAT0/capacity")
+        .ok()
+        .and_then(|s| s.trim().parse::<u32>().ok())
+}
+
 pub fn build_page() -> GtkBox {
     let container = GtkBox::builder()
         .orientation(Orientation::Vertical)
@@ -20,18 +26,34 @@ pub fn build_page() -> GtkBox {
     title.add_css_class("title-1");
     container.append(&title);
 
+    let (label_text, fraction, progress_text) = match get_battery_capacity() {
+        Some(cap) => {
+            let cap = cap.min(100);
+            (
+                format!("Livello Batteria Attuale: {}%", cap),
+                cap as f64 / 100.0,
+                format!("{}%", cap),
+            )
+        }
+        None => (
+            "Livello Batteria Attuale: N/D (Alimentazione AC)".to_string(),
+            0.0,
+            "N/D".to_string(),
+        ),
+    };
+
     // Battery progress
     let battery_label = Label::builder()
-        .label("Livello Batteria (Simulato)")
+        .label(&label_text)
         .halign(Align::Start)
         .margin_top(12)
         .build();
     container.append(&battery_label);
 
     let progress_bar = ProgressBar::builder()
-        .fraction(0.8) // 80% dummy
+        .fraction(fraction)
         .show_text(true)
-        .text("80%")
+        .text(&progress_text)
         .build();
     container.append(&progress_bar);
 
@@ -50,7 +72,7 @@ pub fn build_page() -> GtkBox {
         .spacing(8)
         .build();
 
-    let btn_performance = Button::with_label("Performance");
+    let btn_performance = Button::with_label("Prestazioni");
     btn_performance.connect_clicked(|_| {
         Command::new("powerprofilesctl")
             .arg("set")
@@ -59,7 +81,7 @@ pub fn build_page() -> GtkBox {
             .ok();
     });
 
-    let btn_balanced = Button::with_label("Balanced");
+    let btn_balanced = Button::with_label("Bilanciato");
     btn_balanced.connect_clicked(|_| {
         Command::new("powerprofilesctl")
             .arg("set")
@@ -68,7 +90,7 @@ pub fn build_page() -> GtkBox {
             .ok();
     });
 
-    let btn_power_saver = Button::with_label("Power Saver");
+    let btn_power_saver = Button::with_label("Risparmio Energetico");
     btn_power_saver.connect_clicked(|_| {
         Command::new("powerprofilesctl")
             .arg("set")
