@@ -722,9 +722,28 @@ pub fn show_wifi_popover(app: &Application) {
         pop_clone2.close();
     });
 
+    let footer_box = GtkBox::builder()
+        .orientation(Orientation::Horizontal)
+        .spacing(8)
+        .build();
+    let settings_wifi_btn = Button::builder()
+        .label("⚙ Impostazioni Wi-Fi")
+        .css_classes(["cc-quick-btn"])
+        .hexpand(true)
+        .build();
+    let pop_wifi_s = pop.clone();
+    settings_wifi_btn.connect_clicked(move |_| {
+        pop_wifi_s.close();
+        let _ = Command::new("ermete-settings-rs")
+            .args(["--page", "wifi"])
+            .spawn();
+    });
+    footer_box.append(&settings_wifi_btn);
+    footer_box.append(&close_btn);
+
     card.append(&header_card);
     card.append(&list_box);
-    card.append(&close_btn);
+    card.append(&footer_box);
 
     pop.set_child(Some(&card));
     pop.present();
@@ -832,9 +851,28 @@ pub fn show_bluetooth_popover(app: &Application) {
         pop_clone.close();
     });
 
+    let footer_box = GtkBox::builder()
+        .orientation(Orientation::Horizontal)
+        .spacing(8)
+        .build();
+    let settings_bt_btn = Button::builder()
+        .label("⚙ Impostazioni Bluetooth")
+        .css_classes(["cc-quick-btn"])
+        .hexpand(true)
+        .build();
+    let pop_bt_s = pop.clone();
+    settings_bt_btn.connect_clicked(move |_| {
+        pop_bt_s.close();
+        let _ = Command::new("ermete-settings-rs")
+            .args(["--page", "bluetooth"])
+            .spawn();
+    });
+    footer_box.append(&settings_bt_btn);
+    footer_box.append(&close_btn);
+
     card.append(&header_card);
     card.append(&list_box);
-    card.append(&close_btn);
+    card.append(&footer_box);
 
     pop.set_child(Some(&card));
     pop.present();
@@ -950,10 +988,29 @@ pub fn show_audio_mixer_popover(app: &Application) {
         pop_clone.close();
     });
 
+    let footer_box = GtkBox::builder()
+        .orientation(Orientation::Horizontal)
+        .spacing(8)
+        .build();
+    let settings_audio_btn = Button::builder()
+        .label("⚙ Impostazioni Audio")
+        .css_classes(["cc-quick-btn"])
+        .hexpand(true)
+        .build();
+    let pop_audio_s = pop.clone();
+    settings_audio_btn.connect_clicked(move |_| {
+        pop_audio_s.close();
+        let _ = Command::new("ermete-settings-rs")
+            .args(["--page", "audio"])
+            .spawn();
+    });
+    footer_box.append(&settings_audio_btn);
+    footer_box.append(&close_btn);
+
     card.append(&header_card);
     card.append(&out_card);
     card.append(&in_card);
-    card.append(&close_btn);
+    card.append(&footer_box);
 
     pop.set_child(Some(&card));
     pop.present();
@@ -985,6 +1042,31 @@ pub fn show_control_center_popover(app: &Application) {
         .css_classes(["cc-card"])
         .build();
 
+    // 0. HEADER BAR (Control Center title + System Settings button)
+    let header_box = GtkBox::builder()
+        .orientation(Orientation::Horizontal)
+        .spacing(10)
+        .valign(Align::Center)
+        .build();
+    let cc_title_lbl = Label::builder()
+        .label("Control Center")
+        .css_classes(["cc-label-main"])
+        .hexpand(true)
+        .halign(Align::Start)
+        .build();
+    let settings_btn = Button::builder()
+        .label("⚙ Impostazioni")
+        .css_classes(["cc-quick-btn"])
+        .tooltip_text("Impostazioni di Sistema")
+        .build();
+    let pop_settings = pop.clone();
+    settings_btn.connect_clicked(move |_| {
+        pop_settings.close();
+        let _ = Command::new("ermete-settings-rs").spawn();
+    });
+    header_box.append(&cc_title_lbl);
+    header_box.append(&settings_btn);
+
     // 1. TOP SECTION (Grid a 2 Colonne)
     let top_grid = GtkBox::builder()
         .orientation(Orientation::Horizontal)
@@ -1001,6 +1083,7 @@ pub fn show_control_center_popover(app: &Application) {
 
     let (net_icon, net_title, net_sub) = get_network_status();
     let wifi_btn = build_cc_row("cc-circle-blue", &net_icon, &net_title, &net_sub);
+    wifi_btn.set_hexpand(true);
     let net_connected = net_sub != "Disattivato" && net_sub != "Non connesso" && net_sub != "Off" && net_sub != "Disconnected";
     if net_connected {
         wifi_btn.add_css_class("cc-btn-active");
@@ -1011,7 +1094,28 @@ pub fn show_control_center_popover(app: &Application) {
         pop_wifi.close();
         show_wifi_popover(&app_wifi);
     });
+    let wifi_row_box = GtkBox::builder()
+        .orientation(Orientation::Horizontal)
+        .spacing(6)
+        .build();
+    let wifi_settings_btn = Button::builder()
+        .label("⚙")
+        .css_classes(["cc-quick-btn"])
+        .valign(Align::Center)
+        .tooltip_text("Impostazioni Wi-Fi")
+        .build();
+    let pop_wifi_s = pop.clone();
+    wifi_settings_btn.connect_clicked(move |_| {
+        pop_wifi_s.close();
+        let _ = Command::new("ermete-settings-rs")
+            .args(["--page", "wifi"])
+            .spawn();
+    });
+    wifi_row_box.append(&wifi_btn);
+    wifi_row_box.append(&wifi_settings_btn);
+
     let bt_btn = build_cc_row("cc-circle-blue", "", "Bluetooth", "Dispositivi");
+    bt_btn.set_hexpand(true);
     let bt_enabled = if let Ok(output) = Command::new("bluetoothctl").arg("show").output() {
         String::from_utf8_lossy(&output.stdout).contains("Powered: yes")
     } else {
@@ -1026,6 +1130,26 @@ pub fn show_control_center_popover(app: &Application) {
         pop_bt.close();
         show_bluetooth_popover(&app_bt);
     });
+    let bt_row_box = GtkBox::builder()
+        .orientation(Orientation::Horizontal)
+        .spacing(6)
+        .build();
+    let bt_settings_btn = Button::builder()
+        .label("⚙")
+        .css_classes(["cc-quick-btn"])
+        .valign(Align::Center)
+        .tooltip_text("Impostazioni Bluetooth")
+        .build();
+    let pop_bt_s = pop.clone();
+    bt_settings_btn.connect_clicked(move |_| {
+        pop_bt_s.close();
+        let _ = Command::new("ermete-settings-rs")
+            .args(["--page", "bluetooth"])
+            .spawn();
+    });
+    bt_row_box.append(&bt_btn);
+    bt_row_box.append(&bt_settings_btn);
+
     let sys_btn = build_cc_row("cc-circle-blue", "⚙", "Risorse", "Monitor Live");
     let app_sys = app.clone();
     let pop_sys = pop.clone();
@@ -1034,8 +1158,8 @@ pub fn show_control_center_popover(app: &Application) {
         show_system_monitor_modal(&app_sys);
     });
 
-    conn_box.append(&wifi_btn);
-    conn_box.append(&bt_btn);
+    conn_box.append(&wifi_row_box);
+    conn_box.append(&bt_row_box);
     conn_box.append(&sys_btn);
 
     // Colonna Destra (2 Card verticali)
@@ -1089,6 +1213,20 @@ pub fn show_control_center_popover(app: &Application) {
     });
     bright_card.append(&bright_icon);
     bright_card.append(&bright_slider);
+    let disp_settings_btn = Button::builder()
+        .label("⚙")
+        .css_classes(["cc-quick-btn"])
+        .valign(Align::Center)
+        .tooltip_text("Impostazioni Schermi")
+        .build();
+    let pop_disp_s = pop.clone();
+    disp_settings_btn.connect_clicked(move |_| {
+        pop_disp_s.close();
+        let _ = Command::new("ermete-settings-rs")
+            .args(["--page", "displays"])
+            .spawn();
+    });
+    bright_card.append(&disp_settings_btn);
 
     // Slider Volume Audio
     let audio_card = GtkBox::builder()
@@ -1112,6 +1250,20 @@ pub fn show_control_center_popover(app: &Application) {
     });
     audio_card.append(&audio_icon);
     audio_card.append(&audio_slider);
+    let audio_settings_btn = Button::builder()
+        .label("⚙")
+        .css_classes(["cc-quick-btn"])
+        .valign(Align::Center)
+        .tooltip_text("Impostazioni Audio")
+        .build();
+    let pop_audio_s = pop.clone();
+    audio_settings_btn.connect_clicked(move |_| {
+        pop_audio_s.close();
+        let _ = Command::new("ermete-settings-rs")
+            .args(["--page", "audio"])
+            .spawn();
+    });
+    audio_card.append(&audio_settings_btn);
 
     // 3. MEDIA CONTROL (MPRIS)
     let mpris_card = GtkBox::builder()
@@ -1202,6 +1354,7 @@ pub fn show_control_center_popover(app: &Application) {
     bottom_grid.append(&mixer_btn);
     bottom_grid.append(&term_btn);
 
+    card.append(&header_box);
     card.append(&top_grid);
     card.append(&bright_card);
     card.append(&audio_card);
