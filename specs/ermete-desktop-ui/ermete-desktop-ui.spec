@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           ermete-desktop-ui
 Version:        1.0.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Ermete OS Desktop UI configurations
 License:        MIT
 URL:            https://github.com/patapem/ermete-forge
@@ -48,6 +48,9 @@ cp -p %{_sourcedir}/etc/udev/rules.d/99-ddcutil-i2c.rules %{buildroot}/etc/udev/
 /etc/udev/rules.d/99-ddcutil-i2c.rules
 
 %changelog
+* Mon Jul 13 2026 Ermete Forge <forge@ermete.os> - 1.0.0-4
+- Shift Niri keyboard shortcuts from ags toggle to native pure Rust ermete-shell-rs and ermete-settings-rs.
+
 * Sat Jul 11 2026 Ermete Forge <forge@ermete.os> - 1.0.0-2
 - Implement instant greeter termination on login success (killall -9 greeter session) and PAM CancelSession retry.
 
