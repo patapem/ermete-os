@@ -56,9 +56,11 @@ fn main() -> glib::ExitCode {
         .build();
 
     app.connect_activate(move |app| {
-        // Resident topbar + OSD + DBus notifications
-        ui::topbar::build_ui(app);
-        crate::ui::osd::spawn_osd(app);
+        static ACTIVATED: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+        if !ACTIVATED.swap(true, std::sync::atomic::Ordering::SeqCst) {
+            ui::topbar::build_ui(app);
+            crate::ui::osd::spawn_osd(app);
+        }
     });
 
     app.connect_command_line(move |app, cmdline| {
