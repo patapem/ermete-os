@@ -1,10 +1,17 @@
 pub mod pages;
 use gtk4::prelude::*;
-use gtk4::{Application, ApplicationWindow, Box as GtkBox, Orientation, Label, Stack, Align, ListBox, ListBoxRow, Image};
+use gtk4::{
+    gio, Application, ApplicationWindow, Box as GtkBox, Orientation, Label, Stack, Align, ListBox,
+    ListBoxRow, Image, SearchEntry,
+};
 use std::cell::RefCell;
+use std::sync::atomic::{AtomicBool, Ordering};
 
 thread_local! {
     pub static DBUS_CONN: RefCell<Option<zbus::Connection>> = RefCell::new(None);
+    pub static MAIN_WINDOW: RefCell<Option<ApplicationWindow>> = RefCell::new(None);
+    pub static MAIN_STACK: RefCell<Option<Stack>> = RefCell::new(None);
+    pub static MAIN_LIST_BOX: RefCell<Option<ListBox>> = RefCell::new(None);
 }
 
 pub async fn get_connection() -> Result<zbus::Connection, zbus::Error> {
@@ -14,6 +21,58 @@ pub async fn get_connection() -> Result<zbus::Connection, zbus::Error> {
     let conn = zbus::Connection::session().await?;
     DBUS_CONN.with(|c| *c.borrow_mut() = Some(conn.clone()));
     Ok(conn)
+}
+
+fn category_matches_query(id: &str, title: &str, query: &str) -> bool {
+    let q = query.to_lowercase();
+    let title_lower = title.to_lowercase();
+    let id_lower = id.to_lowercase();
+    if title_lower.contains(&q) || id_lower.contains(&q) {
+        return true;
+    }
+    let keywords = match id {
+        "wifi" => "wireless internet wlan rete network",
+        "bluetooth" => "auricolari mouse cuffie dispositivi pair",
+        "network" => "ethernet cavo lan proxy dns vpn rete wired",
+        "audio" => "volume suoni microfono altoparlanti cuffie output input sound",
+        "notifications" => "notifiche avvisi disturbare notifications alerts",
+        "focus" => "notte sonno quiete disturbare do not disturb",
+        "general" => "generali sistema info lingua data ora general about",
+        "appearance" => "aspetto tema scuro chiaro colori sfondo wallpaper appearance theme dark",
+        "desktop" => "dock icone barra pannello workspace",
+        "displays" => "schermi monitor display risoluzione scaling",
+        "battery" => "batteria energia risparmio alimentazione battery power",
+        "keyboard" => "tastiera layout lingua scorciatoie keyboard shortcuts input",
+        "mouse" => "mouse trackpad touchpad puntatore velocità scorrimento",
+        "accounts" => "account utente password profilo users login",
+        "privacy" => "privacy sicurezza permessi lock security",
+        _ => "",
+    };
+    keywords.contains(&q)
+}
+
+fn switch_to_page(page_id: &str) {
+    let mut found = false;
+    MAIN_LIST_BOX.with(|lb| {
+        if let Some(list_box) = lb.borrow().as_ref() {
+            let mut i = 0;
+            while let Some(row) = list_box.row_at_index(i) {
+                if row.widget_name() == page_id {
+                    list_box.select_row(Some(&row));
+                    found = true;
+                    break;
+                }
+                i += 1;
+            }
+        }
+    });
+    if found {
+        MAIN_STACK.with(|s| {
+            if let Some(stack) = s.borrow().as_ref() {
+                stack.set_visible_child_name(page_id);
+            }
+        });
+    }
 }
 
 fn build_ui(app: &Application) {
@@ -34,7 +93,14 @@ fn build_ui(app: &Application) {
         .build();
 
     // User profile header
-    let profile_box = GtkBox::builder().orientation(Orientation::Horizontal).spacing(12).margin_top(16).margin_bottom(16).margin_start(16).build();
+    let profile_box = GtkBox::builder()
+        .orientation(Orientation::Horizontal)
+        .spacing(12)
+        .margin_top(16)
+        .margin_bottom(12)
+        .margin_start(16)
+        .margin_end(16)
+        .build();
     let profile_img = Image::builder().icon_name("avatar-default").pixel_size(48).build();
     let profile_vbox = GtkBox::builder().orientation(Orientation::Vertical).valign(Align::Center).build();
     let profile_name = Label::builder().label("Ermete User").css_classes(["profile-name"]).halign(Align::Start).build();
@@ -44,6 +110,16 @@ fn build_ui(app: &Application) {
     profile_box.append(&profile_img);
     profile_box.append(&profile_vbox);
     sidebar_container.append(&profile_box);
+
+    // Spotlight Search Entry
+    let search_entry = SearchEntry::builder()
+        .placeholder_text("Cerca impostazione...")
+        .margin_start(12)
+        .margin_end(12)
+        .margin_bottom(8)
+        .css_classes(["sidebar-search"])
+        .build();
+    sidebar_container.append(&search_entry);
 
     let list_box = ListBox::builder().css_classes(["sidebar-list"]).build();
     list_box.set_selection_mode(gtk4::SelectionMode::Single);
@@ -81,19 +157,29 @@ fn build_ui(app: &Application) {
 
     for (title, icon, id) in categories {
         if title == "SEPARATOR" {
+            let sep_row = ListBoxRow::builder().selectable(false).activatable(false).build();
+            sep_row.set_widget_name("SEPARATOR");
             let sep = GtkBox::builder().height_request(10).build();
-            list_box.append(&sep);
+            sep_row.set_child(Some(&sep));
+            list_box.append(&sep_row);
             continue;
         }
 
         let row = ListBoxRow::builder().build();
-        let hbox = GtkBox::builder().orientation(Orientation::Horizontal).spacing(12).margin_start(12).margin_top(6).margin_bottom(6).build();
+        row.set_widget_name(id);
+        let hbox = GtkBox::builder()
+            .orientation(Orientation::Horizontal)
+            .spacing(12)
+            .margin_start(12)
+            .margin_top(6)
+            .margin_bottom(6)
+            .build();
         let img = Image::builder().icon_name(icon).pixel_size(24).build();
         let lbl = Label::builder().label(title).css_classes(["sidebar-label"]).build();
         hbox.append(&img);
         hbox.append(&lbl);
         row.set_child(Some(&hbox));
-        
+
         list_box.append(&row);
 
         if first_row.is_none() {
@@ -132,52 +218,61 @@ fn build_ui(app: &Application) {
         } else if id == "focus" {
             crate::pages::focus::build_page()
         } else {
-            let p = GtkBox::builder().orientation(Orientation::Vertical).spacing(20).margin_top(40).margin_start(40).build();
+            let p = GtkBox::builder()
+                .orientation(Orientation::Vertical)
+                .spacing(20)
+                .margin_top(40)
+                .margin_start(40)
+                .build();
             p.append(&Label::builder().label(title).css_classes(["title-1"]).halign(Align::Start).build());
             p.append(&Label::builder().label("Opzioni in costruzione...").css_classes(["subtitle"]).halign(Align::Start).build());
             p
         };
         stack.add_named(&page, Some(id));
-
     }
+
+    // Set up live filtering on the sidebar list box
+    let query_cell = std::rc::Rc::new(std::cell::RefCell::new(String::new()));
+    let qc_clone = query_cell.clone();
+    list_box.set_filter_func(move |row| {
+        let q = qc_clone.borrow().to_lowercase();
+        if q.is_empty() {
+            return true;
+        }
+        let widget_name = row.widget_name().to_string();
+        if widget_name == "SEPARATOR" {
+            return false;
+        }
+        if let Some(child) = row.child() {
+            if let Some(hbox) = child.downcast_ref::<GtkBox>() {
+                if let Some(lbl_widget) = hbox.last_child() {
+                    if let Some(lbl) = lbl_widget.downcast_ref::<Label>() {
+                        let title = lbl.label().to_string();
+                        return category_matches_query(&widget_name, &title, &q);
+                    }
+                }
+            }
+        }
+        false
+    });
+
+    let qc = query_cell.clone();
+    let lb = list_box.clone();
+    search_entry.connect_search_changed(move |entry| {
+        *qc.borrow_mut() = entry.text().to_string();
+        lb.invalidate_filter();
+    });
 
     if let Some(row) = first_row {
         list_box.select_row(Some(&row));
     }
 
-    // Fix connection properly
     let stack_clone = stack.clone();
-    
-    // We bind it correctly by looking at the label inside
     list_box.connect_row_selected(move |_, row| {
         if let Some(r) = row {
-            if let Some(child) = r.child() {
-                if let Some(hbox) = child.downcast_ref::<GtkBox>() {
-                    if let Some(lbl_widget) = hbox.last_child() {
-                        if let Some(lbl) = lbl_widget.downcast_ref::<Label>() {
-                            let text = lbl.label().to_string();
-                            let target_id = match text.as_str() {
-                                "Wi-Fi" => "wifi",
-                                "Bluetooth" => "bluetooth",
-                                "Rete" => "network",
-                                "Audio" => "audio",
-                                "Notifiche" => "notifications",
-                                "Focus" => "focus",
-                                "Generali" => "general",
-                                "Aspetto" => "appearance",
-                                "Desktop & Dock" => "desktop",
-                                "Schermi" => "displays",
-                                "Batteria" => "battery",
-                                "Tastiera" => "keyboard",
-                                "Mouse & Trackpad" => "mouse",
-                                "Account" => "accounts",
-                                "Privacy & Sicurezza" => "privacy",
-                                _ => "wifi"
-                            };
-                            stack_clone.set_visible_child_name(target_id);
-                        }
-                    }
-                }
+            let target_id = r.widget_name().to_string();
+            if !target_id.is_empty() && target_id != "SEPARATOR" {
+                stack_clone.set_visible_child_name(&target_id);
             }
         }
     });
@@ -190,12 +285,16 @@ fn build_ui(app: &Application) {
         .build();
 
     sidebar_container.append(&scroll);
-    
+
     main_box.append(&sidebar_container);
     main_box.append(&stack);
 
     window.set_child(Some(&main_box));
-    
+
+    MAIN_WINDOW.with(|w| *w.borrow_mut() = Some(window.clone()));
+    MAIN_STACK.with(|s| *s.borrow_mut() = Some(stack.clone()));
+    MAIN_LIST_BOX.with(|lb| *lb.borrow_mut() = Some(list_box.clone()));
+
     // Apply basic CSS
     let provider = gtk4::CssProvider::new();
     provider.load_from_data("
@@ -207,6 +306,7 @@ fn build_ui(app: &Application) {
         .sidebar-list row { padding: 4px 8px; margin: 2px 10px; border-radius: 8px; }
         .sidebar-list row:selected { background-color: rgba(10, 132, 255, 0.9); color: white; }
         .sidebar-label { font-size: 14px; font-weight: 500; }
+        .sidebar-search { margin: 8px 12px; }
         .profile-name { font-size: 16px; font-weight: bold; }
         .profile-role { font-size: 12px; color: #a6adc8; }
         .stack-container { background-color: #1e1e2e; }
@@ -223,8 +323,58 @@ fn build_ui(app: &Application) {
 fn main() {
     let app = Application::builder()
         .application_id("os.ermete.Settings")
+        .flags(gio::ApplicationFlags::HANDLES_COMMAND_LINE)
         .build();
 
-    app.connect_activate(build_ui);
+    app.connect_activate(|app| {
+        static ACTIVATED: AtomicBool = AtomicBool::new(false);
+        if !ACTIVATED.swap(true, Ordering::SeqCst) {
+            build_ui(app);
+        } else {
+            MAIN_WINDOW.with(|w| {
+                if let Some(win) = w.borrow().as_ref() {
+                    win.present();
+                }
+            });
+            if let Some(win) = app.active_window() {
+                win.present();
+            }
+        }
+    });
+
+    app.connect_command_line(|app, cmdline| {
+        app.activate();
+
+        let args = cmdline.arguments();
+        let mut page_id = None;
+        let mut iter = args.iter().skip(1);
+        while let Some(arg) = iter.next() {
+            let s = arg.to_string_lossy();
+            if let Some(id) = s.strip_prefix("--page=") {
+                page_id = Some(id.to_string());
+            } else if s == "--page" {
+                if let Some(next_arg) = iter.next() {
+                    page_id = Some(next_arg.to_string_lossy().to_string());
+                }
+            }
+        }
+
+        if let Some(id) = page_id {
+            switch_to_page(&id);
+        }
+
+        MAIN_WINDOW.with(|w| {
+            if let Some(win) = w.borrow().as_ref() {
+                win.present();
+            }
+        });
+        if let Some(win) = app.active_window() {
+            win.present();
+        }
+
+        0
+    });
+
     app.run();
 }
+
