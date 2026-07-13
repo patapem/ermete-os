@@ -7,95 +7,131 @@ use greetd_ipc::{Request, Response};
 
 const GREETER_CSS: &str = r#"
 window.background {
-    background-color: rgba(10, 12, 16, 0.45);
+    background-color: rgba(10, 12, 18, 0.72);
+}
+
+.greeter-backdrop {
+    background-color: rgba(10, 12, 18, 0.65);
 }
 
 .greeter-topbar-title {
     font-size: 13px;
     font-weight: 800;
     letter-spacing: 3px;
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 0.80);
 }
 
 .greeter-status-pill {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.90);
     background-color: rgba(255, 255, 255, 0.12);
     padding: 6px 14px;
     border-radius: 999px;
 }
 
 .greeter-clock-time {
-    font-size: 68px;
-    font-weight: 300;
+    font-size: 72px;
+    font-weight: 200;
     color: #ffffff;
-    letter-spacing: -1px;
+    letter-spacing: -2px;
 }
 
 .greeter-clock-date {
     font-size: 18px;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.80);
-    margin-bottom: 12px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 16px;
 }
 
 .greeter-card {
-    background-color: rgba(22, 25, 33, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 28px;
-    padding: 36px 48px;
-    min-width: 360px;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+    background-color: rgba(24, 27, 36, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 32px;
+    padding: 38px 48px;
+    min-width: 380px;
+    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.75);
 }
 
-.greeter-avatar {
+.greeter-avatar-frame {
+    border: 2px solid rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+    min-width: 88px;
+    min-height: 88px;
+    background-color: rgba(255, 255, 255, 0.14);
     font-size: 36px;
     color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.12);
-    border: 2px solid rgba(255, 255, 255, 0.25);
-    border-radius: 999px;
-    min-width: 76px;
-    min-height: 76px;
 }
 
 .greeter-user-name {
     font-size: 24px;
     font-weight: 700;
     color: #ffffff;
-    margin-top: 12px;
+    margin-top: 14px;
 }
 
 .greeter-badge {
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 2px;
-    color: rgba(255, 255, 255, 0.50);
+    color: rgba(255, 255, 255, 0.55);
     margin-top: 4px;
     margin-bottom: 18px;
 }
 
-.greeter-entry {
+.greeter-caps-pill {
+    font-size: 11px;
+    font-weight: 700;
+    color: #ffd166;
+    background-color: rgba(255, 209, 102, 0.16);
+    border: 1px solid rgba(255, 209, 102, 0.35);
+    border-radius: 999px;
+    padding: 4px 12px;
+    margin-bottom: 10px;
+}
+
+.greeter-entry-box {
     background-color: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 14px;
+    border-radius: 16px;
+    padding: 4px 8px;
+}
+
+.greeter-entry {
+    background: transparent;
+    border: none;
     color: #ffffff;
     caret-color: #6ea8fe;
     font-size: 15px;
-    padding: 12px 16px;
-    min-height: 44px;
+    min-height: 40px;
 }
 
-.greeter-entry:focus {
-    border-color: #6ea8fe;
-    background-color: rgba(255, 255, 255, 0.12);
+.greeter-icon-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.70);
+    font-size: 16px;
+    padding: 6px 10px;
+    border-radius: 10px;
+}
+
+.greeter-icon-btn:hover {
+    background-color: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
 }
 
 .greeter-error {
     color: #ff6b6b;
     font-size: 13px;
     font-weight: 600;
-    margin-top: 8px;
+    margin-top: 10px;
+}
+
+.greeter-status-msg {
+    color: #6ea8fe;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 10px;
 }
 
 .greeter-power-btn {
@@ -105,11 +141,11 @@ window.background {
     color: #ffffff;
     font-size: 13px;
     font-weight: 600;
-    padding: 8px 20px;
+    padding: 10px 22px;
 }
 
 .greeter-power-btn:hover {
-    background-color: rgba(255, 255, 255, 0.18);
+    background-color: rgba(255, 255, 255, 0.20);
 }
 "#;
 
@@ -333,6 +369,7 @@ pub fn build_ui(app: &Application) {
 
     let root_vbox = Box::builder()
         .orientation(Orientation::Vertical)
+        .css_classes(["greeter-backdrop"])
         .hexpand(true)
         .vexpand(true)
         .build();
@@ -410,16 +447,27 @@ pub fn build_ui(app: &Application) {
         .css_classes(["greeter-card"])
         .build();
 
-    let avatar_label = Label::builder()
-        .label("")
-        .halign(Align::Center)
-        .css_classes(["greeter-avatar"])
-        .build();
-
     let user_info = discover_target_user();
-    let display_user = user_info.real_name;
+
+    // Avatar rendering
+    let avatar_widget: gtk4::Widget = if let Some(path) = &user_info.avatar_path {
+        let picture = gtk4::Picture::for_filename(path);
+        picture.set_can_shrink(true);
+        picture.set_size_request(88, 88);
+        picture.add_css_class("greeter-avatar-frame");
+        picture.upcast()
+    } else {
+        let lbl = Label::builder()
+            .label("")
+            .css_classes(["greeter-avatar-frame"])
+            .halign(Align::Center)
+            .build();
+        lbl.upcast()
+    };
+    avatar_widget.set_halign(Align::Center);
+
     let user_label = Label::builder()
-        .label(&display_user)
+        .label(&user_info.real_name)
         .halign(Align::Center)
         .css_classes(["greeter-user-name"])
         .build();
@@ -430,11 +478,58 @@ pub fn build_ui(app: &Application) {
         .css_classes(["greeter-badge"])
         .build();
 
+    let caps_label = Label::builder()
+        .label("󰪛 MAIUSC ATTIVO")
+        .halign(Align::Center)
+        .css_classes(["greeter-caps-pill"])
+        .visible(false)
+        .build();
+
+    // Password Entry Row
+    let entry_row = Box::builder()
+        .orientation(Orientation::Horizontal)
+        .css_classes(["greeter-entry-box"])
+        .hexpand(true)
+        .build();
+
     let password_entry = Entry::builder()
         .placeholder_text("Password di accesso...")
         .visibility(false)
+        .hexpand(true)
         .css_classes(["greeter-entry"])
         .build();
+
+    let reveal_btn = Button::builder()
+        .label("󰈈")
+        .css_classes(["greeter-icon-btn"])
+        .build();
+
+    let entry_reveal_clone = password_entry.clone();
+    let reveal_btn_clone = reveal_btn.clone();
+    reveal_btn.connect_clicked(move |_| {
+        let vis = gtk4::prelude::EntryExt::is_visible(&entry_reveal_clone);
+        entry_reveal_clone.set_visibility(!vis);
+        reveal_btn_clone.set_label(if !vis { "󰈉" } else { "󰈈" });
+    });
+
+    let submit_btn = Button::builder()
+        .label("➔")
+        .css_classes(["greeter-icon-btn"])
+        .build();
+
+    entry_row.append(&password_entry);
+    entry_row.append(&reveal_btn);
+    entry_row.append(&submit_btn);
+
+    // Caps Lock detection on key presses
+    let key_ctrl = gtk4::EventControllerKey::new();
+    let caps_clone = caps_label.clone();
+    key_ctrl.connect_key_pressed(move |_, _keyval, _keycode, state| {
+        let is_caps = state.contains(gtk4::gdk::ModifierType::LOCK_MASK);
+        caps_clone.set_visible(is_caps);
+        glib::Propagation::Proceed
+    });
+    password_entry.add_controller(key_ctrl);
 
     let error_label = Label::builder()
         .label("")
@@ -443,49 +538,74 @@ pub fn build_ui(app: &Application) {
         .wrap(true)
         .build();
 
-    let error_label_clone = error_label.clone();
+    let status_label = Label::builder()
+        .label("")
+        .css_classes(["greeter-status-msg"])
+        .visible(false)
+        .wrap(true)
+        .build();
+
+    let err_clear = error_label.clone();
+    let status_clear = status_label.clone();
     password_entry.connect_changed(move |_| {
-        error_label_clone.set_visible(false);
+        err_clear.set_visible(false);
+        status_clear.set_visible(false);
     });
 
-    let error_label_activate = error_label.clone();
-    password_entry.connect_activate(move |entry| {
-        let password = entry.text().to_string();
-        entry.set_sensitive(false);
-        error_label_activate.set_visible(false);
+    let submit_login = std::rc::Rc::new({
+        let entry = password_entry.clone();
+        let err_label = error_label.clone();
+        let status_label = status_label.clone();
+        let submit_btn = submit_btn.clone();
+        move || {
+            let password = entry.text().to_string();
+            entry.set_sensitive(false);
+            submit_btn.set_sensitive(false);
+            err_label.set_visible(false);
+            status_label.set_text("Accesso in corso...");
+            status_label.set_visible(true);
 
-        let (sender, receiver) = glib::MainContext::channel::<Result<(), String>>(glib::Priority::DEFAULT);
+            let (sender, receiver) = glib::MainContext::channel::<Result<(), String>>(glib::Priority::DEFAULT);
+            std::thread::spawn(move || {
+                let res = authenticate_or_simulate(&password);
+                let _ = sender.send(res);
+            });
 
-        std::thread::spawn(move || {
-            let res = authenticate_or_simulate(&password);
-            let _ = sender.send(res);
-        });
-
-        let entry_clone = entry.clone();
-        let err_clone = error_label_activate.clone();
-        receiver.attach(None, move |res| {
-            match res {
-                Ok(_) => {
-                    std::process::exit(0);
+            let entry_clone = entry.clone();
+            let err_clone = err_label.clone();
+            let status_clone = status_label.clone();
+            let submit_clone = submit_btn.clone();
+            receiver.attach(None, move |res| {
+                match res {
+                    Ok(_) => {
+                        std::process::exit(0);
+                    }
+                    Err(e) => {
+                        status_clone.set_visible(false);
+                        err_clone.set_text(&format!("Accesso non riuscito: {}", e));
+                        err_clone.set_visible(true);
+                        entry_clone.set_text("");
+                        entry_clone.set_sensitive(true);
+                        submit_clone.set_sensitive(true);
+                        entry_clone.grab_focus();
+                    }
                 }
-                Err(e) => {
-                    eprintln!("Login failed: {}", e);
-                    err_clone.set_text(&format!("Accesso non riuscito: {}", e));
-                    err_clone.set_visible(true);
-                    entry_clone.set_text("");
-                    entry_clone.set_sensitive(true);
-                    entry_clone.grab_focus();
-                }
-            }
-            glib::ControlFlow::Break
-        });
+                glib::ControlFlow::Break
+            });
+        }
     });
 
-    card_box.append(&avatar_label);
+    let sl_clone = submit_login.clone();
+    password_entry.connect_activate(move |_| sl_clone());
+    submit_btn.connect_clicked(move |_| submit_login());
+
+    card_box.append(&avatar_widget);
     card_box.append(&user_label);
     card_box.append(&badge_label);
-    card_box.append(&password_entry);
+    card_box.append(&caps_label);
+    card_box.append(&entry_row);
     card_box.append(&error_label);
+    card_box.append(&status_label);
 
     center_box.append(&clock_box);
     center_box.append(&card_box);
