@@ -160,18 +160,18 @@ binds {
     // Applications & Shell Modals
     Mod+Return { spawn "foot"; }
     Mod+T      { spawn "foot"; }
-    Mod+D      { spawn "ags" "toggle" "spotlight"; }
-    Mod+Space  { spawn "ags" "toggle" "launcher"; }
+    Mod+D      { spawn "ermete-shell-rs" "--spotlight"; }
+    Mod+Space  { spawn "ermete-shell-rs" "--launcher"; }
     Mod+E      { spawn "nautilus"; }
     Mod+B      { spawn "firefox"; }
     
-    Mod+A      { spawn "ags" "toggle" "control-center"; }
-    Mod+M      { spawn "ags" "toggle" "media-player"; }
-    Mod+S      { spawn "ags" "toggle" "sys-monitor"; }
-    Mod+V      { spawn "ags" "toggle" "calendar"; }
-    Mod+Shift+E { spawn "ags" "toggle" "powermenu"; }
-    Mod+P      { spawn "ags" "toggle" "powermenu"; }
-    Mod+Shift+V { spawn "ags" "toggle" "clipboard"; }
+    Mod+A      { spawn "ermete-shell-rs" "--control-center"; }
+    Mod+M      { spawn "ermete-shell-rs" "--media-player"; }
+    Mod+S      { spawn "ermete-shell-rs" "--sys-monitor"; }
+    Mod+V      { spawn "ermete-shell-rs" "--calendar"; }
+    Mod+Shift+E { spawn "ermete-shell-rs" "--powermenu"; }
+    Mod+P      { spawn "ermete-shell-rs" "--powermenu"; }
+    Mod+Shift+V { spawn "ermete-shell-rs" "--clipboard"; }
     
     // Screenshots (Clipboard)
     Mod+Shift+S { spawn "sh" "-c" "grim -g \"$(slurp)\" - | wl-copy"; }

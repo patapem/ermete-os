@@ -22,11 +22,9 @@ cargo build --release --locked
 %install
 mkdir -p %{buildroot}%{_bindir}
 install -m 0755 target/release/ermete-shell-rs %{buildroot}%{_bindir}/ermete-shell-rs
-ln -sf ermete-shell-rs %{buildroot}%{_bindir}/ags
 
 %files
 %{_bindir}/ermete-shell-rs
-%{_bindir}/ags
 
 %changelog
 * Sat Jul 11 2026 Ermete Forge <forge@ermete.os> - 1.0.0-2
