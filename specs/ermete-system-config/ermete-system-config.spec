@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           ermete-system-config
 Version:        1.0.0
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        Ermete OS ermete-system-config
 License:        MIT
 URL:            https://github.com/patapem/ermete-forge
@@ -23,14 +23,22 @@ mkdir -p %{buildroot}
 cp -a %{_sourcedir}/usr %{buildroot}/
 cp -a %{_sourcedir}/etc %{buildroot}/ 2>/dev/null || true
 
+%post
+mkdir -p /etc/greetd
+ln -sf /usr/share/ermete-system-config/greetd.toml /etc/greetd/config.toml 2>/dev/null || true
+
 %files
 %dir /usr/share/ermete-system-config
+%attr(0755,root,root) /usr/bin/ermete-session
 /usr/lib/systemd/system-preset/99-Ermete.preset
 /usr/lib/tmpfiles.d/10-ermete-greetd.conf
 /usr/share/ermete-system-config/greetd.toml
 
 
 %changelog
+* Tue Jul 14 2026 Ermete Forge <forge@ermete.os> - 1.0.0-10
+- Encapsulate /usr/bin/ermete-session native script and add %post symlink for /etc/greetd/config.toml
+
 * Tue Jul 14 2026 Ermete Forge <forge@ermete.os> - 1.0.0-9
 - Add Requires: cage greetd ermete-shell-rs and remove obsolete niri-greeter.kdl and greeter-bundle.js
 

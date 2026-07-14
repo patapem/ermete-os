@@ -279,7 +279,9 @@ fn authenticate(password: &str) -> Result<(), String> {
 
     let username = resolve_target_username();
 
-    let session_cmd = if std::path::Path::new("/etc/greetd/ermete-session").exists() {
+    let session_cmd = if std::path::Path::new("/usr/bin/ermete-session").exists() {
+        "/usr/bin/ermete-session".to_string()
+    } else if std::path::Path::new("/etc/greetd/ermete-session").exists() {
         "/etc/greetd/ermete-session".to_string()
     } else if std::path::Path::new("/usr/local/bin/ermete-session").exists() {
         "/usr/local/bin/ermete-session".to_string()
