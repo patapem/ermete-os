@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           ermete-system-services
 Version:        1.0.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Ermete OS ermete-system-services
 License:        MIT
 URL:            https://github.com/patapem/ermete-forge
@@ -24,15 +24,20 @@ mkdir -p %{buildroot}/usr/lib/systemd/user
 mkdir -p %{buildroot}/usr/lib/systemd/user-preset
 cp -a %{_sourcedir}/usr/lib/systemd/user/* %{buildroot}/usr/lib/systemd/user/ || true
 cp -a %{_sourcedir}/usr/lib/systemd/user-preset/* %{buildroot}/usr/lib/systemd/user-preset/ || true
+ln -s ermete-shell.service %{buildroot}/usr/lib/systemd/user/ermete-ags.service
 
 %files
 %dir /usr/share/ermete-system-services
 /usr/lib/systemd/user/niri-session.target
 /usr/lib/systemd/user/ermete-skel-sync.service
+/usr/lib/systemd/user/ermete-shell.service
 /usr/lib/systemd/user/ermete-ags.service
 /usr/lib/systemd/user-preset/99-ermete-desktop.preset
 
 %changelog
+* Wed Jul 15 2026 Ermete Forge <forge@ermete.os> - 1.0.1-5
+- Rename ermete-ags.service to ermete-shell.service with backward compatibility alias symlink
+
 * Sat Jul 11 2026 Ermete Forge <forge@ermete.os> - 1.0.1-4
 - Switch ermete-ags.service to run pure Rust ermete-shell-rs native binary instead of GJS/JS
 

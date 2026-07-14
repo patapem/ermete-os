@@ -1,4 +1,4 @@
 enable niri-session.target
 enable ermete-skel-sync.service
-enable ermete-ags.service
+enable ermete-shell.service
 enable ermete-wallpaper.service
