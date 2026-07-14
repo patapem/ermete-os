@@ -1,12 +1,14 @@
 %global debug_package %{nil}
 Name:           ermete-base-config
 Version:        1.0.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Ermete OS Base Configuration (NVIDIA, Systemd, Branding, GPG)
 
 License:        MIT
 URL:            https://github.com/patapem/ermete-forge
 BuildArch:      noarch
+
+Requires:       glibc-langpack-it glibc-langpack-en
 
 %description
 This package provides the foundational configuration for Ermete Base.
@@ -48,6 +50,9 @@ cp -a %{_sourcedir}/* %{buildroot}/
 /usr/lib/systemd/system/bootc-fetch-apply-updates.service.d/override.conf
 
 %changelog
+* Tue Jul 14 2026 Ermete Forge <forge@ermete.os> - 1.0.0-3
+- Require glibc-langpack-it and glibc-langpack-en to guarantee Bedrock locale availability across all apps when glibc-all-langpacks is pruned
+
 * Mon Jul 06 2026 Ermete Forge <forge@ermete.os> - 1.0.0-2
 - Add enable nvidia-persistenced.service to systemd preset for deterministic GPU node creation
 

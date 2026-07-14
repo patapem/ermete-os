@@ -33,6 +33,8 @@
     "firewalld",
     "fuse",
     "fwupd",
+    "glibc-langpack-en",
+    "glibc-langpack-it",
     "gnome-keyring",
     "gnome-keyring-pam",
     "greenboot",
