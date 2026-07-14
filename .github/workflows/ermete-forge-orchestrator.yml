@@ -860,19 +860,34 @@ jobs:
         run: |
           dnf install -y createrepo_c buildah skopeo jq
           
-          # Fetch RPMs dynamically from micro-containers
+          # Fetch RPMs dynamically from micro-containers and organize by Tier
           echo "${{ secrets.GITHUB_TOKEN }}" | buildah login ghcr.io -u ${{ github.actor }} --password-stdin
           bash scripts/fetch_repo_rpms.sh ${{ github.repository_owner }}
-          
-          cd /github/home/repo
-          createrepo_c .
           
           export STORAGE_DRIVER=vfs
           export BUILDAH_ISOLATION=chroot
           buildah login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
-          ctr=$(buildah from scratch)
-          buildah copy $ctr /github/home/repo /
-          IMAGE_LOWER=$(echo "ghcr.io/${{ github.repository_owner }}/ermete-forge-repo:latest" | tr '[:upper:]' '[:lower:]')
-          buildah commit $ctr $IMAGE_LOWER
-          buildah push $IMAGE_LOWER
+          
+          # Create repositories and push micro-containers for each Tier plus the full repo
+          for tier in tier0 tier1 tier2 tier3 ""; do
+            if [ -n "$tier" ]; then
+              dir="/github/home/repo-${tier}"
+              img_name="ermete-forge-${tier}-repo:latest"
+            else
+              dir="/github/home/repo"
+              img_name="ermete-forge-repo:latest"
+            fi
+            
+            echo "----------------------------------------"
+            echo "Creating repository metadata for $img_name in $dir..."
+            cd "$dir"
+            createrepo_c .
+            
+            ctr=$(buildah from scratch)
+            buildah copy $ctr "$dir" /
+            IMAGE_LOWER=$(echo "ghcr.io/${{ github.repository_owner }}/$img_name" | tr '[:upper:]' '[:lower:]')
+            buildah commit $ctr "$IMAGE_LOWER"
+            buildah push "$IMAGE_LOWER"
+            buildah rm "$ctr"
+          done
 
