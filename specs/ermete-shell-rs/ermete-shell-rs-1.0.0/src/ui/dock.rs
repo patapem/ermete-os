@@ -1,6 +1,6 @@
-use crate::core::dock_config::{add_pin, remove_pin, DockConfig};
+use crate::core::dock_config::{add_pin, load_dock_config, remove_pin, DockConfig};
 use crate::core::dock_data::{reconcile_dock_items, DockItem, NiriWindowInfo};
-use crate::core::dock_watcher::spawn_dock_watchers;
+use crate::core::dock_watcher::{fetch_current_niri_windows, spawn_dock_watchers};
 use gtk4::glib;
 use gtk4::prelude::*;
 use gtk4::{
@@ -119,6 +119,7 @@ pub fn build_ui(app: &Application) -> ApplicationWindow {
     container.add_css_class("dock-container");
     container.set_halign(Align::Center);
     container.set_valign(Align::Center);
+    container.set_size_request(64, 48);
 
     window.set_child(Some(&container));
 
@@ -135,6 +136,10 @@ pub fn build_ui(app: &Application) -> ApplicationWindow {
     trigger_win.set_anchor(Edge::Right, true);
     trigger_win.set_height_request(2);
 
+    let trigger_box = GtkBox::new(Orientation::Horizontal, 0);
+    trigger_box.set_size_request(100, 2);
+    trigger_win.set_child(Some(&trigger_box));
+
     let motion_trigger = EventControllerMotion::new();
     let container_weak = container.downgrade();
     motion_trigger.connect_enter(move |_, _, _| {
@@ -142,13 +147,33 @@ pub fn build_ui(app: &Application) -> ApplicationWindow {
             cont.remove_css_class("dock-hidden");
         }
     });
-    trigger_win.add_controller(motion_trigger);
+    trigger_box.add_controller(motion_trigger);
+
+    let motion_trigger_win = EventControllerMotion::new();
+    let container_weak_win = container.downgrade();
+    motion_trigger_win.connect_enter(move |_, _, _| {
+        if let Some(cont) = container_weak_win.upgrade() {
+            cont.remove_css_class("dock-hidden");
+        }
+    });
+    trigger_win.add_controller(motion_trigger_win);
     trigger_win.present();
 
+    let initial_config = load_dock_config();
+    let initial_windows = fetch_current_niri_windows();
     let state = Rc::new(RefCell::new(DockState {
-        pinned: Vec::new(),
-        windows: Vec::new(),
+        pinned: initial_config.pinned,
+        windows: initial_windows,
     }));
+
+    let motion_dock_enter = EventControllerMotion::new();
+    let container_weak_enter = container.downgrade();
+    motion_dock_enter.connect_enter(move |_, _, _| {
+        if let Some(cont) = container_weak_enter.upgrade() {
+            cont.remove_css_class("dock-hidden");
+        }
+    });
+    container.add_controller(motion_dock_enter);
 
     let motion_dock = EventControllerMotion::new();
     let container_weak2 = container.downgrade();
@@ -189,6 +214,7 @@ pub fn build_ui(app: &Application) -> ApplicationWindow {
         glib::ControlFlow::Continue
     });
 
+    refresh_dock_ui(&container, &state.borrow());
     window.present();
 
     DOCK_WINDOW.with(|w| {

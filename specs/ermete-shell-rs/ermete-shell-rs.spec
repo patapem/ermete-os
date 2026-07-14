@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           ermete-shell-rs
 Version:        1.0.0
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        Ermete OS Native Rust GTK4 Shell
 
 License:        MIT
@@ -27,6 +27,9 @@ install -m 0755 target/release/ermete-shell-rs %{buildroot}%{_bindir}/ermete-she
 %{_bindir}/ermete-shell-rs
 
 %changelog
+* Wed Jul 15 2026 Ermete Forge <forge@ermete.os> - 1.0.0-12
+- Fix GTK4 Wayland size.width > 0 runtime failure by sizing trigger_win child box and container
+
 * Wed Jul 15 2026 Ermete Forge <forge@ermete.os> - 1.0.0-11
 - Implement native GTK4/Layer-Shell interactive Dock with Niri event-stream IPC and autohide trigger
 
