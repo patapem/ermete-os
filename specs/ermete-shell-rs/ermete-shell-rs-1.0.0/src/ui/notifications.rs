@@ -57,7 +57,6 @@ pub fn show_toast_popup(app: &Application, notif: &NotificationData) {
                 let id = notif.id;
                 let key_clone = ak.clone();
                 btn.connect_clicked(move |_| {
-                    println!("[Ermete Notifications] Action '{}' invoked for notification ID {}", key_clone, id);
                     crate::ui::notifications::send_action_invoked(id, &key_clone);
                     toast_clone.close();
                 });
@@ -74,12 +73,10 @@ pub fn show_toast_popup(app: &Application, notif: &NotificationData) {
         
         let entry_clone = entry.clone();
         let toast_clone = toast.clone();
-        let app_name = notif.app_name.clone();
         let id = notif.id;
         let send_action = std::rc::Rc::new(move || {
             let text = entry_clone.text().to_string();
             if !text.is_empty() {
-                println!("[Ermete Notifications] Inline reply sent to {}: {}", app_name, text);
                 crate::ui::notifications::send_action_invoked(id, &text);
                 toast_clone.close();
             }
@@ -130,13 +127,15 @@ pub fn spawn_notification_daemon(app: &Application) {
                 .unwrap();
                 
             while let Some((id, action_key)) = action_rx.recv().await {
-                let _ = conn.emit_signal(
+                if let Err(e) = conn.emit_signal(
                     None::<()>,
                     "/org/freedesktop/Notifications",
                     "org.freedesktop.Notifications",
                     "ActionInvoked",
                     &(id, action_key),
-                ).await;
+                ).await {
+                    eprintln!("Failed to emit ActionInvoked: {}", e);
+                }
             }
         });
     });
@@ -314,18 +313,34 @@ pub fn show_notification_center(app: &Application) {
                     item_box.append(&sum_hdr);
                     item_box.append(&body_lbl);
 
+                    if !item.actions.is_empty() {
+                        let act_box = GtkBox::builder().orientation(Orientation::Horizontal).spacing(6).margin_top(4).build();
+                        for (ak, al) in &item.actions {
+                            if ak != "inline-reply" && !ak.contains("reply") {
+                                let btn = Button::builder().label(al).css_classes(["cc-btn"]).build();
+                                let sb_close = sidebar.clone();
+                                let id = item.id;
+                                let key_clone = ak.clone();
+                                btn.connect_clicked(move |_| {
+                                    crate::ui::notifications::send_action_invoked(id, &key_clone);
+                                    sb_close.close();
+                                });
+                                act_box.append(&btn);
+                            }
+                        }
+                        item_box.append(&act_box);
+                    }
+
                     if item.has_inline_reply {
                         let reply_box = GtkBox::builder().orientation(Orientation::Horizontal).spacing(6).margin_top(4).build();
                         let entry = Entry::builder().placeholder_text("Rispondi...").hexpand(true).build();
                         let send_btn = Button::builder().label("󰇀").css_classes(["cc-quick-btn"]).build();
                         let entry_clone = entry.clone();
-                        let app_name_rep = item.app_name.clone();
                         let id = item.id;
                         let sb_close = sidebar.clone();
                         let send_action = std::rc::Rc::new(move || {
                             let text = entry_clone.text().to_string();
                             if !text.is_empty() {
-                                println!("[Ermete Notifications] Inline reply sent to {}: {}", app_name_rep, text);
                                 crate::ui::notifications::send_action_invoked(id, &text);
                                 sb_close.close();
                             }
