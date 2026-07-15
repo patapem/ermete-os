@@ -53,6 +53,7 @@ pub fn show_powermenu_modal(app: &Application) {
         .build();
 
     window.init_layer_shell();
+    window.set_namespace("powermenu");
     window.set_layer(Layer::Overlay);
     window.set_keyboard_mode(KeyboardMode::Exclusive);
     window.set_anchor(gtk4_layer_shell::Edge::Top, true);
@@ -119,9 +120,13 @@ pub fn show_powermenu_modal(app: &Application) {
             if let Some(w) = win_close.upgrade() {
                 w.close();
             }
-            let mut parts = cmd_str.split_whitespace();
-            if let Some(prog) = parts.next() {
-                let _ = Command::new(prog).args(parts).spawn();
+            if cmd_str == "niri msg action quit" {
+                crate::core::niri_client::quit_niri();
+            } else {
+                let mut parts = cmd_str.split_whitespace();
+                if let Some(prog) = parts.next() {
+                    let _ = Command::new(prog).args(parts).spawn();
+                }
             }
         });
         btn_box.append(&btn);

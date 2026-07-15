@@ -1,6 +1,5 @@
 use gtk4::prelude::*;
 use gtk4::{Adjustment, Box, ComboBoxText, Label, Orientation, Scale};
-use std::process::Command;
 
 pub fn build_page() -> Box {
     let container = Box::builder()
@@ -44,10 +43,8 @@ pub fn build_page() -> Box {
     layout_combo.set_active_id(Some("it"));
 
     layout_combo.connect_changed(|combo| {
-        if let Some(id) = combo.active_id() {
-            let _ = Command::new("niri")
-                .args(["msg", "keyboard-layout", "set", id.as_str()])
-                .spawn();
+        if let Some(idx) = combo.active() {
+            crate::niri_client::set_keyboard_layout_by_index(idx as usize);
         }
     });
 

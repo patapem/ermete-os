@@ -12,6 +12,7 @@ pub fn spawn_osd(app: &Application) {
     
     // Set up Layer Shell
     window.init_layer_shell();
+    window.set_namespace("osd");
     window.set_layer(Layer::Overlay);
     window.set_margin(Edge::Bottom, 100);
     // Center at the bottom horizontally

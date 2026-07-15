@@ -1,10 +1,10 @@
 use gtk4::prelude::*;
-use std::process::Command;
+use std::fs;
 
 pub fn build_page() -> gtk4::Box {
     let container = gtk4::Box::builder()
         .orientation(gtk4::Orientation::Vertical)
-        .spacing(16)
+        .spacing(24)
         .margin_top(24)
         .margin_bottom(24)
         .margin_start(24)
@@ -21,17 +21,11 @@ pub fn build_page() -> gtk4::Box {
 
     let os_name = "Ermete OS";
     
-    let kernel_version = Command::new("uname")
-        .arg("-r")
-        .output()
-        .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string())
-        .unwrap_or_else(|_| "Sconosciuto".to_string());
+    let kernel_version = fs::read_to_string("/proc/sys/kernel/osrelease")
+        .map(|o| o.trim().to_string())
+        .unwrap_or_else(|_| "6.12.0-chimera".to_string());
         
-    let arch = Command::new("uname")
-        .arg("-m")
-        .output()
-        .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string())
-        .unwrap_or_else(|_| "Sconosciuto".to_string());
+    let arch = std::env::consts::ARCH.to_string();
 
     let info_text = format!(
         "<b>Sistema Operativo:</b> {}\n<b>Versione Kernel:</b> {}\n<b>Architettura:</b> {}",

@@ -1,78 +1,41 @@
 use crate::core::dock_config::{get_dock_config_path, load_dock_config, DockConfig};
-use crate::core::dock_data::NiriWindowInfo;
+use crate::core::dock_data::{NiriWindowInfo, NiriWorkspaceInfo};
+use crate::core::niri_client;
 use notify::{RecursiveMode, Watcher};
-use std::io::BufRead;
-use std::process::Command;
 
 pub fn fetch_current_niri_windows() -> Vec<NiriWindowInfo> {
-    if let Ok(output) = Command::new("niri").args(["msg", "-j", "windows"]).output() {
-        if output.status.success() {
-            if let Ok(windows) = serde_json::from_slice::<Vec<NiriWindowInfo>>(&output.stdout) {
-                return windows;
-            }
-        }
-    }
-    Vec::new()
+    niri_client::fetch_niri_data::<Vec<NiriWindowInfo>>("Windows", "Windows").unwrap_or_default()
 }
 
-#[derive(Debug, Clone, serde::Deserialize)]
-struct NiriWorkspaceInfo {
-    id: u64,
-    is_active: bool,
+pub fn fetch_current_workspaces() -> Vec<NiriWorkspaceInfo> {
+    niri_client::fetch_niri_data::<Vec<NiriWorkspaceInfo>>("Workspaces", "Workspaces").unwrap_or_default()
 }
 
 pub fn fetch_current_active_workspace_id() -> Option<u64> {
-    if let Ok(output) = Command::new("niri").args(["msg", "-j", "workspaces"]).output() {
-        if output.status.success() {
-            if let Ok(workspaces) = serde_json::from_slice::<Vec<NiriWorkspaceInfo>>(&output.stdout) {
-                return workspaces.into_iter().find(|w| w.is_active).map(|w| w.id);
-            }
-        }
+    let workspaces = fetch_current_workspaces();
+    if let Some(focused) = workspaces.iter().find(|w| w.is_focused) {
+        return Some(focused.id);
     }
-    None
+    workspaces.into_iter().find(|w| w.is_active).map(|w| w.id)
 }
 
 pub fn spawn_dock_watchers(
     sender_windows: glib::Sender<Vec<NiriWindowInfo>>,
     sender_config: glib::Sender<DockConfig>,
-    sender_workspace: glib::Sender<Option<u64>>,
+    sender_workspaces: glib::Sender<Vec<NiriWorkspaceInfo>>,
 ) {
     // 1. Initial send
     let _ = sender_windows.send(fetch_current_niri_windows());
     let _ = sender_config.send(load_dock_config());
-    let _ = sender_workspace.send(fetch_current_active_workspace_id());
+    let _ = sender_workspaces.send(fetch_current_workspaces());
 
-    // 2. Watch Niri event stream
+    // 2. Watch Niri event stream via native UNIX socket
     let win_sender = sender_windows.clone();
-    let ws_sender = sender_workspace.clone();
-    std::thread::spawn(move || {
-        loop {
-            match Command::new("niri")
-                .args(["msg", "-j", "event-stream"])
-                .stdout(std::process::Stdio::piped())
-                .spawn()
-            {
-                Ok(mut child) => {
-                    if let Some(stdout) = child.stdout.take() {
-                        let reader = std::io::BufReader::new(stdout);
-                        for line in reader.lines() {
-                            if let Ok(line_str) = line {
-                                if line_str.contains("Window") || line_str.contains("Workspace") {
-                                    let _ = win_sender.send(fetch_current_niri_windows());
-                                    let _ = ws_sender.send(fetch_current_active_workspace_id());
-                                }
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    let _ = child.wait();
-                }
-                Err(e) => {
-                    eprintln!("Warning: niri event-stream disconnected or failed to start: {}. Retrying in 2s...", e);
-                }
-            }
-            std::thread::sleep(std::time::Duration::from_secs(2));
+    let ws_sender = sender_workspaces.clone();
+    niri_client::watch_niri_event_stream(move |line| {
+        if line.contains("Window") || line.contains("Workspace") {
+            let _ = win_sender.send(fetch_current_niri_windows());
+            let _ = ws_sender.send(fetch_current_workspaces());
         }
     });
 

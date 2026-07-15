@@ -39,6 +39,7 @@ pub fn show_clipboard_modal(app: &Application) {
         .build();
 
     window.init_layer_shell();
+    window.set_namespace("clipboard");
     window.set_layer(Layer::Top);
     window.set_keyboard_mode(KeyboardMode::OnDemand);
     window.set_anchor(gtk4_layer_shell::Edge::Top, true);

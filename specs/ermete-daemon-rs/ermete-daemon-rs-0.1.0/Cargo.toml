@@ -1,8 +1,0 @@
-[package]
-name = "ermete-daemon-rs"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-zbus = "3.14"
-tokio = { version = "1.28", features = ["full"] }

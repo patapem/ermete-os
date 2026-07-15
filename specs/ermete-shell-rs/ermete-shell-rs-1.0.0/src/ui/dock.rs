@@ -1,6 +1,6 @@
 use crate::core::dock_config::{add_pin, load_dock_config, remove_pin, DockConfig};
-use crate::core::dock_data::{reconcile_dock_items, DockItem, NiriWindowInfo};
-use crate::core::dock_watcher::{fetch_current_niri_windows, spawn_dock_watchers};
+use crate::core::dock_data::{reconcile_dock_items, DockItem, NiriWindowInfo, NiriWorkspaceInfo};
+use crate::core::dock_watcher::{fetch_current_niri_windows, fetch_current_workspaces, spawn_dock_watchers};
 use gtk4::glib;
 use gtk4::prelude::*;
 use gtk4::{
@@ -82,175 +82,353 @@ window.dock-window {
 .dock-popover-btn:hover {
     background: rgba(255, 255, 255, 0.1);
 }
+
+.dock-trigger-area {
+    background-color: rgba(0, 0, 0, 0.01);
+    min-height: 6px;
+}
 "#;
 
 struct DockState {
     pinned: Vec<String>,
     windows: Vec<NiriWindowInfo>,
-    active_workspace_id: Option<u64>,
+    workspaces: Vec<NiriWorkspaceInfo>,
+    is_hovered: bool,
 }
 
-fn should_autohide(state: &DockState) -> bool {
-    if let Some(active_ws) = state.active_workspace_id {
-        state.windows.iter().any(|w| w.workspace_id == Some(active_ws))
-    } else {
-        state.windows.iter().any(|w| w.is_focused)
-    }
+struct DockMonitorInstance {
+    monitor_connector: String,
+    screen_height: i32,
+    window: glib::WeakRef<ApplicationWindow>,
+    container: GtkBox,
+    trigger_win: glib::WeakRef<ApplicationWindow>,
+    state: Rc<RefCell<DockState>>,
+    spring: Rc<crate::core::spring::SpringAnimator>,
 }
 
 thread_local! {
-    static DOCK_WINDOW: RefCell<Option<glib::WeakRef<ApplicationWindow>>> = RefCell::new(None);
+    static DOCK_INSTANCES: RefCell<Vec<DockMonitorInstance>> = RefCell::new(Vec::new());
+}
+
+fn animate_dock_visibility(container: &GtkBox, spring: &crate::core::spring::SpringAnimator, hide: bool) {
+    let cont_weak = container.downgrade();
+    let target = if hide { 1.0 } else { 0.0 };
+    spring.animate_to(target, move |p| {
+        if let Some(cont) = cont_weak.upgrade() {
+            let opacity = (1.0 - p).clamp(0.0, 1.0);
+            cont.set_opacity(opacity);
+            let offset = -(p * 120.0) as i32;
+            cont.set_margin_bottom(offset);
+            if p >= 0.98 && hide {
+                if !cont.has_css_class("dock-hidden") {
+                    cont.add_css_class("dock-hidden");
+                }
+            } else if p < 0.98 && !hide {
+                if cont.has_css_class("dock-hidden") {
+                    cont.remove_css_class("dock-hidden");
+                }
+            }
+        }
+    });
+}
+
+fn should_autohide_for_monitor(state: &DockState, monitor_connector: &str, screen_height: i32) -> bool {
+    let target_ws_id = match state.workspaces.iter().find_map(|ws| {
+        if ws.output.as_deref() == Some(monitor_connector) && (ws.is_active || ws.is_focused) {
+            Some(ws.id)
+        } else {
+            None
+        }
+    }) {
+        Some(id) => id,
+        None => {
+            match state.workspaces.iter().find(|ws| ws.is_focused || ws.is_active) {
+                Some(ws) => ws.id,
+                None => return false,
+            }
+        }
+    };
+
+    let overlap_threshold = (screen_height as f64) - 85.0;
+
+    state.windows.iter().any(|w| {
+        if w.workspace_id != Some(target_ws_id) {
+            return false;
+        }
+        if let Some(layout) = &w.layout {
+            if let (Some((_x, y)), Some((_w, h))) = (layout.tile_pos_in_workspace_view, layout.window_size) {
+                return (y + h) >= overlap_threshold;
+            }
+        }
+        w.is_focused
+    })
 }
 
 #[allow(dead_code)]
 pub fn build_ui(app: &Application) -> ApplicationWindow {
+    let display = gtk4::gdk::Display::default().expect("Display default");
+    let provider = CssProvider::new();
+    provider.load_from_data(DOCK_CSS);
+    gtk4::style_context_add_provider_for_display(
+        &display,
+        &provider,
+        gtk4::STYLE_PROVIDER_PRIORITY_APPLICATION,
+    );
+
+    let (tx_win, rx_win) = glib::MainContext::channel::<Vec<NiriWindowInfo>>(glib::Priority::DEFAULT);
+    let (tx_cfg, rx_cfg) = glib::MainContext::channel::<DockConfig>(glib::Priority::DEFAULT);
+    let (tx_ws, rx_ws) = glib::MainContext::channel::<Vec<NiriWorkspaceInfo>>(glib::Priority::DEFAULT);
+
+    spawn_dock_watchers(tx_win, tx_cfg, tx_ws);
+
+    let initial_config = load_dock_config();
+    let initial_windows = fetch_current_niri_windows();
+    let initial_workspaces = fetch_current_workspaces();
+
+    let monitors = display.monitors();
+    let mut first_window: Option<ApplicationWindow> = None;
+
+    DOCK_INSTANCES.with(|instances| {
+        instances.borrow_mut().clear();
+    });
+
+    for i in 0..monitors.n_items() {
+        if let Some(monitor) = monitors.item(i).and_downcast::<gtk4::gdk::Monitor>() {
+            let win = create_dock_for_monitor(
+                app,
+                Some(&monitor),
+                &initial_config,
+                &initial_windows,
+                &initial_workspaces,
+            );
+            if first_window.is_none() {
+                first_window = Some(win);
+            }
+        }
+    }
+
+    if first_window.is_none() {
+        let win = create_dock_for_monitor(
+            app,
+            None,
+            &initial_config,
+            &initial_windows,
+            &initial_workspaces,
+        );
+        first_window = Some(win);
+    }
+
+    rx_win.attach(None, move |windows| {
+        DOCK_INSTANCES.with(|insts| {
+            for inst in insts.borrow_mut().iter_mut() {
+                if inst.state.borrow().windows != windows {
+                    inst.state.borrow_mut().windows = windows.clone();
+                    refresh_monitor_instance(inst);
+                }
+            }
+        });
+        glib::ControlFlow::Continue
+    });
+
+    rx_cfg.attach(None, move |cfg| {
+        DOCK_INSTANCES.with(|insts| {
+            for inst in insts.borrow_mut().iter_mut() {
+                if inst.state.borrow().pinned != cfg.pinned {
+                    inst.state.borrow_mut().pinned = cfg.pinned.clone();
+                    refresh_monitor_instance(inst);
+                }
+            }
+        });
+        glib::ControlFlow::Continue
+    });
+
+    rx_ws.attach(None, move |workspaces| {
+        DOCK_INSTANCES.with(|insts| {
+            for inst in insts.borrow_mut().iter_mut() {
+                if inst.state.borrow().workspaces != workspaces {
+                    inst.state.borrow_mut().workspaces = workspaces.clone();
+                    refresh_monitor_instance(inst);
+                }
+            }
+        });
+        glib::ControlFlow::Continue
+    });
+
+    first_window.expect("At least one dock window created")
+}
+
+fn create_dock_for_monitor(
+    app: &Application,
+    monitor: Option<&gtk4::gdk::Monitor>,
+    initial_config: &DockConfig,
+    initial_windows: &[NiriWindowInfo],
+    initial_workspaces: &[NiriWorkspaceInfo],
+) -> ApplicationWindow {
+    let connector = monitor
+        .and_then(|m| m.connector())
+        .map(|s| s.to_string())
+        .unwrap_or_else(|| "DP-1".to_string());
+    let screen_height = monitor.map(|m| m.geometry().height()).unwrap_or(1080);
+
     let window = ApplicationWindow::builder()
         .application(app)
-        .title("Ermete Dock")
+        .title(format!("Ermete Dock ({})", connector))
         .css_classes(["dock-window"])
         .build();
 
     window.init_layer_shell();
+    if let Some(m) = monitor {
+        window.set_monitor(m);
+    }
     window.set_layer(Layer::Top);
     window.set_namespace("dock");
     window.set_anchor(Edge::Bottom, true);
     window.set_margin(Edge::Bottom, 12);
-
-    let provider = CssProvider::new();
-    provider.load_from_data(DOCK_CSS);
-    gtk4::style_context_add_provider_for_display(
-        &gtk4::gdk::Display::default().expect("Display default"),
-        &provider,
-        gtk4::STYLE_PROVIDER_PRIORITY_APPLICATION,
-    );
 
     let container = GtkBox::new(Orientation::Horizontal, 8);
     container.add_css_class("dock-container");
     container.set_halign(Align::Center);
     container.set_valign(Align::Center);
     container.set_size_request(64, 48);
-
     window.set_child(Some(&container));
 
-    // Trigger Window for Auto-hide
     let trigger_win = ApplicationWindow::builder()
         .application(app)
-        .title("Ermete Dock Trigger")
+        .title(format!("Ermete Dock Trigger ({})", connector))
         .css_classes(["dock-window"])
         .build();
+
     trigger_win.init_layer_shell();
-    trigger_win.set_layer(Layer::Top);
+    if let Some(m) = monitor {
+        trigger_win.set_monitor(m);
+    }
+    trigger_win.set_namespace("dock-trigger");
+    trigger_win.set_layer(Layer::Overlay);
+    trigger_win.set_exclusive_zone(-1);
     trigger_win.set_anchor(Edge::Bottom, true);
     trigger_win.set_anchor(Edge::Left, true);
     trigger_win.set_anchor(Edge::Right, true);
-    trigger_win.set_height_request(2);
+    trigger_win.set_height_request(6);
 
     let trigger_box = GtkBox::new(Orientation::Horizontal, 0);
-    trigger_box.set_size_request(100, 2);
+    trigger_box.set_hexpand(true);
+    trigger_box.set_vexpand(true);
+    trigger_box.add_css_class("dock-trigger-area");
     trigger_win.set_child(Some(&trigger_box));
+
+    let state = Rc::new(RefCell::new(DockState {
+        pinned: initial_config.pinned.clone(),
+        windows: initial_windows.to_vec(),
+        workspaces: initial_workspaces.to_vec(),
+        is_hovered: false,
+    }));
+
+    let spring = Rc::new(crate::core::spring::SpringAnimator::new(0.0, crate::core::spring::SpringConfig::default()));
 
     let motion_trigger = EventControllerMotion::new();
     let container_weak = container.downgrade();
+    let window_weak = window.downgrade();
+    let state_trig = state.clone();
+    let spring_trig = spring.clone();
     motion_trigger.connect_enter(move |_, _, _| {
+        state_trig.borrow_mut().is_hovered = true;
         if let Some(cont) = container_weak.upgrade() {
-            cont.remove_css_class("dock-hidden");
+            animate_dock_visibility(&cont, &spring_trig, false);
+        }
+        if let Some(win) = window_weak.upgrade() {
+            win.present();
         }
     });
     trigger_box.add_controller(motion_trigger);
 
-    let motion_trigger_win = EventControllerMotion::new();
+    let motion_trig_win = EventControllerMotion::new();
     let container_weak_win = container.downgrade();
-    motion_trigger_win.connect_enter(move |_, _, _| {
+    let window_weak_win = window.downgrade();
+    let state_trig_win = state.clone();
+    let spring_trig_win = spring.clone();
+    motion_trig_win.connect_enter(move |_, _, _| {
+        state_trig_win.borrow_mut().is_hovered = true;
         if let Some(cont) = container_weak_win.upgrade() {
-            cont.remove_css_class("dock-hidden");
+            animate_dock_visibility(&cont, &spring_trig_win, false);
+        }
+        if let Some(win) = window_weak_win.upgrade() {
+            win.present();
         }
     });
-    trigger_win.add_controller(motion_trigger_win);
-    trigger_win.present();
-
-    let initial_config = load_dock_config();
-    let initial_windows = fetch_current_niri_windows();
-    let initial_ws = crate::core::dock_watcher::fetch_current_active_workspace_id();
-    let state = Rc::new(RefCell::new(DockState {
-        pinned: initial_config.pinned,
-        windows: initial_windows,
-        active_workspace_id: initial_ws,
-    }));
+    trigger_win.add_controller(motion_trig_win);
 
     let motion_dock_enter = EventControllerMotion::new();
     let container_weak_enter = container.downgrade();
+    let state_enter = state.clone();
+    let spring_enter = spring.clone();
     motion_dock_enter.connect_enter(move |_, _, _| {
+        state_enter.borrow_mut().is_hovered = true;
         if let Some(cont) = container_weak_enter.upgrade() {
-            cont.remove_css_class("dock-hidden");
+            animate_dock_visibility(&cont, &spring_enter, false);
         }
     });
     container.add_controller(motion_dock_enter);
 
-    let motion_dock = EventControllerMotion::new();
-    let container_weak2 = container.downgrade();
+    let motion_dock_leave = EventControllerMotion::new();
+    let container_weak_leave = container.downgrade();
     let state_leave = state.clone();
-    motion_dock.connect_leave(move |_| {
-        if let Some(cont) = container_weak2.upgrade() {
-            if should_autohide(&state_leave.borrow()) {
-                cont.add_css_class("dock-hidden");
+    let connector_clone = connector.clone();
+    let spring_leave = spring.clone();
+    motion_dock_leave.connect_leave(move |_| {
+        state_leave.borrow_mut().is_hovered = false;
+        let cont_weak = container_weak_leave.clone();
+        let st = state_leave.clone();
+        let conn = connector_clone.clone();
+        let spr = spring_leave.clone();
+        glib::timeout_add_local(std::time::Duration::from_millis(300), move || {
+            if let Some(cont) = cont_weak.upgrade() {
+                if !st.borrow().is_hovered && should_autohide_for_monitor(&st.borrow(), &conn, screen_height) {
+                    animate_dock_visibility(&cont, &spr, true);
+                }
             }
-        }
+            glib::ControlFlow::Break
+        });
     });
-    container.add_controller(motion_dock);
+    container.add_controller(motion_dock_leave);
 
-    let (tx_win, rx_win) = glib::MainContext::channel::<Vec<NiriWindowInfo>>(glib::Priority::DEFAULT);
-    let (tx_cfg, rx_cfg) = glib::MainContext::channel::<DockConfig>(glib::Priority::DEFAULT);
-    let (tx_ws, rx_ws) = glib::MainContext::channel::<Option<u64>>(glib::Priority::DEFAULT);
-
-    spawn_dock_watchers(tx_win, tx_cfg, tx_ws);
-
-    let container_clone = container.clone();
-    let state_clone = state.clone();
-    rx_win.attach(None, move |windows| {
-        if state_clone.borrow().windows != windows {
-            state_clone.borrow_mut().windows = windows;
-            refresh_dock_ui(&container_clone, &state_clone.borrow());
-            if !should_autohide(&state_clone.borrow()) {
-                container_clone.remove_css_class("dock-hidden");
+    let motion_trig_leave = EventControllerMotion::new();
+    let container_weak_trig_leave = container.downgrade();
+    let state_trig_leave = state.clone();
+    let connector_clone2 = connector.clone();
+    let spring_trig_leave = spring.clone();
+    motion_trig_leave.connect_leave(move |_| {
+        state_trig_leave.borrow_mut().is_hovered = false;
+        let cont_weak = container_weak_trig_leave.clone();
+        let st = state_trig_leave.clone();
+        let conn = connector_clone2.clone();
+        let spr = spring_trig_leave.clone();
+        glib::timeout_add_local(std::time::Duration::from_millis(300), move || {
+            if let Some(cont) = cont_weak.upgrade() {
+                if !st.borrow().is_hovered && should_autohide_for_monitor(&st.borrow(), &conn, screen_height) {
+                    animate_dock_visibility(&cont, &spr, true);
+                }
             }
-        }
-        glib::ControlFlow::Continue
+            glib::ControlFlow::Break
+        });
     });
+    trigger_box.add_controller(motion_trig_leave);
 
-    let container_clone2 = container.clone();
-    let state_clone2 = state.clone();
-    rx_cfg.attach(None, move |cfg| {
-        if state_clone2.borrow().pinned != cfg.pinned {
-            state_clone2.borrow_mut().pinned = cfg.pinned;
-            refresh_dock_ui(&container_clone2, &state_clone2.borrow());
-        }
-        glib::ControlFlow::Continue
-    });
+    trigger_win.present();
 
-    let container_clone3 = container.clone();
-    let state_clone3 = state.clone();
-    rx_ws.attach(None, move |ws| {
-        if state_clone3.borrow().active_workspace_id != ws {
-            state_clone3.borrow_mut().active_workspace_id = ws;
-            if should_autohide(&state_clone3.borrow()) {
-                container_clone3.add_css_class("dock-hidden");
-            } else {
-                container_clone3.remove_css_class("dock-hidden");
-            }
-        }
-        glib::ControlFlow::Continue
-    });
-
-    refresh_dock_ui(&container, &state.borrow());
-    if should_autohide(&state.borrow()) {
-        container.add_css_class("dock-hidden");
-    } else {
-        container.remove_css_class("dock-hidden");
-    }
+    let mut inst = DockMonitorInstance {
+        monitor_connector: connector,
+        screen_height,
+        window: window.downgrade(),
+        container: container.clone(),
+        trigger_win: trigger_win.downgrade(),
+        state,
+        spring,
+    };
+    refresh_monitor_instance(&mut inst);
     window.present();
 
-    DOCK_WINDOW.with(|w| {
-        *w.borrow_mut() = Some(window.downgrade());
+    DOCK_INSTANCES.with(|instances| {
+        instances.borrow_mut().push(inst);
     });
 
     window
@@ -258,28 +436,24 @@ pub fn build_ui(app: &Application) -> ApplicationWindow {
 
 #[allow(dead_code)]
 pub fn toggle_dock_visibility() {
-    DOCK_WINDOW.with(|w| {
-        if let Some(weak) = w.borrow().as_ref() {
-            if let Some(win) = weak.upgrade() {
+    DOCK_INSTANCES.with(|instances| {
+        for inst in instances.borrow().iter() {
+            if let Some(win) = inst.window.upgrade() {
                 win.set_visible(true);
                 win.present();
-                if let Some(child) = win.child() {
-                    if child.has_css_class("dock-hidden") {
-                        child.remove_css_class("dock-hidden");
-                    } else {
-                        child.add_css_class("dock-hidden");
-                    }
-                }
+                let is_hidden = inst.spring.value() > 0.5 || inst.container.has_css_class("dock-hidden");
+                animate_dock_visibility(&inst.container, &inst.spring, !is_hidden);
             }
         }
     });
 }
 
-fn refresh_dock_ui(container: &GtkBox, state: &DockState) {
-    while let Some(child) = container.first_child() {
-        container.remove(&child);
+fn refresh_monitor_instance(inst: &mut DockMonitorInstance) {
+    while let Some(child) = inst.container.first_child() {
+        inst.container.remove(&child);
     }
 
+    let state = inst.state.borrow();
     let items = reconcile_dock_items(&state.pinned, &state.windows);
     let mut added_unpinned_separator = false;
 
@@ -288,7 +462,7 @@ fn refresh_dock_ui(container: &GtkBox, state: &DockState) {
             let sep = gtk4::Separator::new(Orientation::Vertical);
             sep.set_margin_top(8);
             sep.set_margin_bottom(8);
-            container.append(&sep);
+            inst.container.append(&sep);
             added_unpinned_separator = true;
         }
 
@@ -311,50 +485,47 @@ fn refresh_dock_ui(container: &GtkBox, state: &DockState) {
             indicator.set_size_request(4, 4);
         }
         box_inner.append(&indicator);
-
         btn.set_child(Some(&box_inner));
 
-        // Click Handler (Left click / Right click)
-        let click_ctrl = GestureClick::new();
-        click_ctrl.set_button(0); // All buttons
-        let item_capture = item.clone();
+        let item_clone = item.clone();
         let btn_clone = btn.clone();
-        click_ctrl.connect_pressed(move |gesture, n_press, _, _| {
-            let button = gesture.current_button();
-            if button == 1 && n_press == 1 {
-                if item_capture.window_ids.is_empty() {
-                    let _ = Command::new("gtk-launch").arg(&item_capture.key_id).spawn();
-                } else if item_capture.window_ids.len() == 1 {
-                    let win_id = item_capture.window_ids[0];
-                    let _ = Command::new("niri")
-                        .args(["msg", "action", "focus-window", "--id", &win_id.to_string()])
-                        .spawn();
-                } else {
-                    show_window_picker_popover(&btn_clone, &item_capture);
-                }
-            } else if button == 3 && n_press == 1 {
-                show_dock_context_menu(&btn_clone, &item_capture);
+        btn.connect_clicked(move |_| {
+            if item_clone.window_ids.len() == 1 {
+                let win_id = item_clone.window_ids[0];
+                crate::core::niri_client::focus_window(win_id);
+            } else if item_clone.window_ids.len() > 1 {
+                show_window_picker_popover(&btn_clone, &item_clone);
+            } else {
+                let _ = Command::new("gtk-launch").arg(&item_clone.key_id).spawn();
             }
         });
-        btn.add_controller(click_ctrl);
 
-        // Scroll Handler (Cycle windows)
+        let gesture_right = GestureClick::new();
+        gesture_right.set_button(3);
+        let item_clone2 = item.clone();
+        let btn_clone2 = btn.clone();
+        gesture_right.connect_released(move |_, _, _, _| {
+            show_dock_context_menu(&btn_clone2, &item_clone2);
+        });
+        btn.add_controller(gesture_right);
+
         let scroll_ctrl = EventControllerScroll::new(EventControllerScrollFlags::VERTICAL);
         let win_ids = item.window_ids.clone();
         scroll_ctrl.connect_scroll(move |_, _, dy| {
             if !win_ids.is_empty() {
                 let idx = if dy > 0.0 { 0 } else { win_ids.len() - 1 };
                 let win_id = win_ids[idx];
-                let _ = Command::new("niri")
-                    .args(["msg", "action", "focus-window", "--id", &win_id.to_string()])
-                    .spawn();
+                crate::core::niri_client::focus_window(win_id);
             }
             glib::Propagation::Stop
         });
         btn.add_controller(scroll_ctrl);
 
-        container.append(&btn);
+        inst.container.append(&btn);
     }
+
+    let should_hide = !state.is_hovered && should_autohide_for_monitor(&state, &inst.monitor_connector, inst.screen_height);
+    animate_dock_visibility(&inst.container, &inst.spring, should_hide);
 }
 
 fn show_window_picker_popover(anchor: &Button, item: &DockItem) {
@@ -374,9 +545,7 @@ fn show_window_picker_popover(anchor: &Button, item: &DockItem) {
             .build();
         let pop_close = popover.clone();
         btn.connect_clicked(move |_| {
-            let _ = Command::new("niri")
-                .args(["msg", "action", "focus-window", "--id", &win_id.to_string()])
-                .spawn();
+            crate::core::niri_client::focus_window(win_id);
             pop_close.popdown();
         });
         box_inner.append(&btn);
@@ -438,9 +607,7 @@ fn show_dock_context_menu(anchor: &Button, item: &DockItem) {
         let pop_close3 = popover.clone();
         btn_close.connect_clicked(move |_| {
             for id in &win_ids {
-                let _ = Command::new("niri")
-                    .args(["msg", "action", "close-window", "--id", &id.to_string()])
-                    .spawn();
+                crate::core::niri_client::close_window_by_id(*id);
             }
             pop_close3.popdown();
         });

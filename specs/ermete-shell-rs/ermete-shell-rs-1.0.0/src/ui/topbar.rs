@@ -10,7 +10,6 @@ use gtk4::{
     Label, Orientation,
 };
 use gtk4_layer_shell::{Edge, KeyboardMode, Layer, LayerShell};
-use std::process::Command;
 
 const TOPBAR_CSS: &str = r#"
 window.topbar-window {
@@ -269,11 +268,11 @@ window.popup-window {
 }
 
 .cc-btn-active {
-    background: rgba(10, 132, 255, 0.8) !important;
-    border-color: rgba(10, 132, 255, 1.0) !important;
+    background-color: rgba(10, 132, 255, 0.8);
+    border: 1px solid rgba(10, 132, 255, 1.0);
 }
 .cc-btn-active .cc-label-main {
-    color: #ffffff !important;
+    color: #ffffff;
 }
 
 .cc-slider-icon {
@@ -504,6 +503,7 @@ pub fn setup_popup_autoclose(pop: &ApplicationWindow, tag: &str) {
     }
 
     pop.set_keyboard_mode(KeyboardMode::OnDemand);
+    pop.set_namespace(tag);
 
     if let Some(app) = pop.application() {
         let bg_win = ApplicationWindow::builder()
@@ -512,6 +512,7 @@ pub fn setup_popup_autoclose(pop: &ApplicationWindow, tag: &str) {
             .build();
             
         bg_win.init_layer_shell();
+        bg_win.set_namespace("bg-overlay");
         bg_win.set_layer(Layer::Top);
         bg_win.set_anchor(Edge::Top, true);
         bg_win.set_anchor(Edge::Bottom, true);
@@ -622,9 +623,9 @@ fn build_center_island(_app: &Application) -> GtkBox {
     let scroll_ctrl = gtk4::EventControllerScroll::new(gtk4::EventControllerScrollFlags::VERTICAL);
     scroll_ctrl.connect_scroll(|_, _dx, dy| {
         if dy > 0.0 {
-            let _ = Command::new("niri").args(["msg", "action", "focus-workspace-down"]).spawn();
+            crate::core::niri_client::focus_workspace_down();
         } else if dy < 0.0 {
-            let _ = Command::new("niri").args(["msg", "action", "focus-workspace-up"]).spawn();
+            crate::core::niri_client::focus_workspace_up();
         }
         glib::Propagation::Stop
     });
@@ -663,9 +664,7 @@ fn build_center_island(_app: &Application) -> GtkBox {
 
             let ws_id = ws.id;
             ws_btn.connect_clicked(move |_| {
-                let _ = Command::new("niri")
-                    .args(["msg", "action", "focus-workspace", &ws_id.to_string()])
-                    .spawn();
+                crate::core::niri_client::focus_workspace_by_id(ws_id);
             });
 
             workspace_box_clone.append(&ws_btn);
@@ -730,10 +729,21 @@ fn build_right_island(app: &Application, clock_label: &Label) -> (GtkBox, Button
         show_calendar_popover(&app_clone3);
     });
 
+    // 6. Notification Center Bell
+    let notif_item = Button::builder()
+        .label("󰂚")
+        .css_classes(["macos-status-item"])
+        .build();
+    let app_clone_notif = app.clone();
+    notif_item.connect_clicked(move |_| {
+        toggle_or_open_popup("notifications", || crate::ui::notifications::show_notification_center(&app_clone_notif));
+    });
+
     box_right.append(&batt_item);
     box_right.append(&net_item);
     box_right.append(&spot_item);
     box_right.append(&cc_item);
+    box_right.append(&notif_item);
     box_right.append(&clock_item);
     (box_right, net_item, batt_item)
 }
@@ -864,6 +874,7 @@ pub fn handle_command(app: &Application, arg: &str) {
     match arg {
         "spotlight" | "launcher" => toggle_or_open_popup("spotlight", || crate::ui::spotlight::show_spotlight_modal(app)),
         "control-center" => toggle_or_open_popup("control-center", || show_control_center_popover(app)),
+        "notifications" | "notification-center" => toggle_or_open_popup("notifications", || crate::ui::notifications::show_notification_center(app)),
         "sys-monitor" | "monitor" => toggle_or_open_popup("sys-monitor", || show_system_monitor_modal(app)),
         "calendar" => toggle_or_open_popup("calendar", || show_calendar_popover(app)),
         "media-player" | "mixer" | "audio" => toggle_or_open_popup("media-player", || show_audio_mixer_popover(app)),

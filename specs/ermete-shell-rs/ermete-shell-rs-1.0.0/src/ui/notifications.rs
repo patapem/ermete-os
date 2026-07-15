@@ -1,7 +1,7 @@
 use crate::core::*;
 use glib::clone;
 use gtk4::prelude::*;
-use gtk4::{Align, Application, ApplicationWindow, Box as GtkBox, Label, Orientation};
+use gtk4::{Align, Application, ApplicationWindow, Box as GtkBox, Button, Label, Orientation, ScrolledWindow};
 use gtk4_layer_shell::{Edge, Layer, LayerShell};
 
 pub fn show_toast_popup(app: &Application, notif: &NotificationData) {
@@ -11,6 +11,7 @@ pub fn show_toast_popup(app: &Application, notif: &NotificationData) {
         .build();
 
     toast.init_layer_shell();
+    toast.set_namespace("notifications");
     toast.set_layer(Layer::Overlay);
     toast.set_anchor(Edge::Top, true);
     toast.set_anchor(Edge::Right, true);
@@ -38,6 +39,7 @@ pub fn show_toast_popup(app: &Application, notif: &NotificationData) {
 }
 
 pub fn spawn_notification_daemon(app: &Application) {
+    load_notification_history();
     let (sender, receiver) = glib::MainContext::channel::<NotificationData>(glib::Priority::DEFAULT);
     
     std::thread::spawn(move || {
@@ -70,7 +72,197 @@ pub fn spawn_notification_daemon(app: &Application) {
                 list.insert(0, notif.clone());
             }
         });
+        save_notification_history();
         show_toast_popup(&app_clone, &notif);
         glib::ControlFlow::Continue
     });
+}
+
+pub fn show_notification_center(app: &Application) {
+    let sidebar = ApplicationWindow::builder()
+        .application(app)
+        .css_classes(["popup-window"])
+        .build();
+
+    sidebar.init_layer_shell();
+    sidebar.set_namespace("notifications");
+    sidebar.set_layer(Layer::Top);
+    sidebar.set_anchor(Edge::Top, true);
+    sidebar.set_anchor(Edge::Bottom, true);
+    sidebar.set_anchor(Edge::Right, true);
+    sidebar.set_width_request(380);
+
+    let main_vbox = GtkBox::builder()
+        .orientation(Orientation::Vertical)
+        .spacing(16)
+        .css_classes(["cc-card"])
+        .margin_top(16)
+        .margin_bottom(16)
+        .margin_end(16)
+        .margin_start(16)
+        .hexpand(true)
+        .vexpand(true)
+        .build();
+
+    let header_box = GtkBox::builder()
+        .orientation(Orientation::Horizontal)
+        .spacing(12)
+        .build();
+
+    let title = Label::builder()
+        .label("󰂚 Centro Notifiche")
+        .css_classes(["cc-title"])
+        .halign(Align::Start)
+        .hexpand(true)
+        .build();
+
+    let clear_all_btn = Button::builder()
+        .label("Cancella tutto")
+        .css_classes(["cc-btn"])
+        .build();
+
+    let sidebar_clone = sidebar.clone();
+    clear_all_btn.connect_clicked(move |_| {
+        NOTIFICATIONS.with(|n| n.borrow_mut().clear());
+        save_notification_history();
+        sidebar_clone.close();
+    });
+
+    header_box.append(&title);
+    header_box.append(&clear_all_btn);
+    main_vbox.append(&header_box);
+
+    let scroll = ScrolledWindow::builder()
+        .hscrollbar_policy(gtk4::PolicyType::Never)
+        .vscrollbar_policy(gtk4::PolicyType::Automatic)
+        .vexpand(true)
+        .build();
+
+    let list_box = GtkBox::builder()
+        .orientation(Orientation::Vertical)
+        .spacing(14)
+        .build();
+
+    NOTIFICATIONS.with(|n| {
+        let history = n.borrow();
+        if history.is_empty() {
+            let empty_lbl = Label::builder()
+                .label("Nessuna notifica nello storico")
+                .css_classes(["cc-label-sub"])
+                .margin_top(40)
+                .build();
+            list_box.append(&empty_lbl);
+        } else {
+            let mut groups: std::collections::HashMap<String, Vec<NotificationData>> = std::collections::HashMap::new();
+            for notif in history.iter() {
+                groups.entry(notif.app_name.clone()).or_default().push(notif.clone());
+            }
+
+            for (app_name, items) in groups.iter() {
+                let group_card = GtkBox::builder()
+                    .orientation(Orientation::Vertical)
+                    .spacing(8)
+                    .css_classes(["cc-card"])
+                    .build();
+
+                let grp_header = GtkBox::builder()
+                    .orientation(Orientation::Horizontal)
+                    .spacing(8)
+                    .build();
+
+                let grp_title = Label::builder()
+                    .label(&format!("󰣆 {}", app_name))
+                    .css_classes(["cc-label-main"])
+                    .halign(Align::Start)
+                    .hexpand(true)
+                    .build();
+
+                let dismiss_grp_btn = Button::builder()
+                    .label("󰅖")
+                    .css_classes(["greeter-icon-btn"])
+                    .build();
+
+                let app_name_clone = app_name.clone();
+                let sb_clone = sidebar.clone();
+                dismiss_grp_btn.connect_clicked(move |_| {
+                    NOTIFICATIONS.with(|n| {
+                        n.borrow_mut().retain(|x| x.app_name != app_name_clone);
+                    });
+                    save_notification_history();
+                    sb_clone.close();
+                });
+
+                grp_header.append(&grp_title);
+                grp_header.append(&dismiss_grp_btn);
+                group_card.append(&grp_header);
+
+                for item in items.iter() {
+                    let item_box = GtkBox::builder()
+                        .orientation(Orientation::Vertical)
+                        .spacing(4)
+                        .margin_start(12)
+                        .build();
+
+                    let sum_hdr = GtkBox::builder()
+                        .orientation(Orientation::Horizontal)
+                        .spacing(8)
+                        .build();
+
+                    let sum_lbl = Label::builder()
+                        .label(&item.summary)
+                        .css_classes(["cc-label-main"])
+                        .halign(Align::Start)
+                        .hexpand(true)
+                        .build();
+
+                    let time_lbl = Label::builder()
+                        .label(&item.timestamp)
+                        .css_classes(["cc-label-sub"])
+                        .build();
+
+                    sum_hdr.append(&sum_lbl);
+                    sum_hdr.append(&time_lbl);
+
+                    let body_lbl = Label::builder()
+                        .label(&item.body)
+                        .css_classes(["cc-label-sub"])
+                        .halign(Align::Start)
+                        .wrap(true)
+                        .build();
+
+                    item_box.append(&sum_hdr);
+                    item_box.append(&body_lbl);
+                    group_card.append(&item_box);
+                }
+
+                list_box.append(&group_card);
+            }
+        }
+    });
+
+    scroll.set_child(Some(&list_box));
+    main_vbox.append(&scroll);
+
+    let footer_card = GtkBox::builder()
+        .orientation(Orientation::Horizontal)
+        .spacing(12)
+        .halign(Align::Center)
+        .build();
+
+    let dnd_btn = Button::builder()
+        .label("󰂛 Non Disturbare")
+        .css_classes(["cc-btn"])
+        .build();
+
+    let dnd_status = Label::builder()
+        .label("Attivo/Disattivo dal Control Center")
+        .css_classes(["cc-label-sub"])
+        .build();
+
+    footer_card.append(&dnd_btn);
+    footer_card.append(&dnd_status);
+    main_vbox.append(&footer_card);
+
+    sidebar.set_child(Some(&main_vbox));
+    sidebar.present();
 }

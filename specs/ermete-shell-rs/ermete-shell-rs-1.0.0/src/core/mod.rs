@@ -5,9 +5,10 @@ pub mod network;
 pub mod mpris;
 pub mod niri_state;
 pub mod live_state;
+pub mod niri_client;
+pub mod spring;
 use gtk4::CssProvider;
 use chrono::Local;
-use std::io::BufRead;
 use std::process::Command;
 use serde::Deserialize;
 use zbus::interface;
@@ -23,42 +24,63 @@ pub struct NiriWorkspace {
 }
 
 pub fn spawn_niri_workspace_watcher(sender: glib::Sender<Vec<NiriWorkspace>>) {
-    std::thread::spawn(move || {
-        if let Ok(output) = Command::new("niri").args(["msg", "-j", "workspaces"]).output() {
-            if let Ok(workspaces) = serde_json::from_slice::<Vec<NiriWorkspace>>(&output.stdout) {
+    if let Some(workspaces) = niri_client::fetch_niri_data::<Vec<NiriWorkspace>>("Workspaces", "Workspaces") {
+        let _ = sender.send(workspaces);
+    }
+
+    niri_client::watch_niri_event_stream(move |line| {
+        if line.contains("Workspace") {
+            if let Some(workspaces) = niri_client::fetch_niri_data::<Vec<NiriWorkspace>>("Workspaces", "Workspaces") {
                 let _ = sender.send(workspaces);
-            }
-        }
-
-        let mut child = Command::new("niri")
-            .args(["msg", "-j", "event-stream"])
-            .stdout(std::process::Stdio::piped())
-            .spawn()
-            .expect("Failed to spawn niri event stream");
-
-        if let Some(stdout) = child.stdout.take() {
-            let reader = std::io::BufReader::new(stdout);
-            for line in reader.lines() {
-                if let Ok(line_str) = line {
-                    if line_str.contains("Workspace") {
-                        if let Ok(output) = Command::new("niri").args(["msg", "-j", "workspaces"]).output() {
-                            if let Ok(workspaces) = serde_json::from_slice::<Vec<NiriWorkspace>>(&output.stdout) {
-                                let _ = sender.send(workspaces);
-                            }
-                        }
-                    }
-                }
             }
         }
     });
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct NotificationData {
     pub id: u32,
     pub app_name: String,
     pub summary: String,
     pub body: String,
+    #[serde(default = "default_timestamp")]
+    pub timestamp: String,
+}
+
+fn default_timestamp() -> String {
+    chrono::Local::now().format("%H:%M").to_string()
+}
+
+pub fn get_notifications_file_path() -> std::path::PathBuf {
+    let mut path = dirs_next_or_home();
+    path.push(".local/share/ermete");
+    let _ = std::fs::create_dir_all(&path);
+    path.push("notifications.json");
+    path
+}
+
+fn dirs_next_or_home() -> std::path::PathBuf {
+    std::env::var("HOME").map(std::path::PathBuf::from).unwrap_or_else(|_| std::path::PathBuf::from("/tmp"))
+}
+
+pub fn save_notification_history() {
+    NOTIFICATIONS.with(|n| {
+        let list = n.borrow();
+        if let Ok(json) = serde_json::to_string_pretty(&*list) {
+            let _ = std::fs::write(get_notifications_file_path(), json);
+        }
+    });
+}
+
+pub fn load_notification_history() {
+    let path = get_notifications_file_path();
+    if let Ok(content) = std::fs::read_to_string(&path) {
+        if let Ok(list) = serde_json::from_str::<Vec<NotificationData>>(&content) {
+            NOTIFICATIONS.with(|n| {
+                *n.borrow_mut() = list;
+            });
+        }
+    }
 }
 
 thread_local! {
@@ -95,6 +117,7 @@ impl NotificationServer {
             app_name: app_name.to_string(),
             summary: summary.to_string(),
             body: body.to_string(),
+            timestamp: default_timestamp(),
         };
 
         let _ = self.sender.send(notif);

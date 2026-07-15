@@ -1,8 +1,8 @@
 %global debug_package %{nil}
 Name:           ermete-daemon-rs
-Version:        0.1.0
+Version:        0.2.0
 Release:        2%{?dist}
-Summary:        Ermete OS Native D-Bus Bedrock Daemon
+Summary:        Ermete OS Native D-Bus Bedrock & ACID Settings Daemon
 
 License:        MIT
 Source0:        ermete-daemon-rs-%{version}.tar.gz
@@ -11,7 +11,7 @@ BuildRequires:  rust cargo gcc gcc-c++ pkgconf-pkg-config
 Requires:       pipewire wireplumber
 
 %description
-Pure Rust native D-Bus IPC service for Ermete OS audio and system bedrock management.
+Pure Rust native D-Bus IPC service for Ermete OS audio, system bedrock management, ACID settings database, and XDG Desktop Portal settings backend.
 
 %prep
 %autosetup
@@ -23,9 +23,29 @@ cargo build --release
 mkdir -p %{buildroot}%{_bindir}
 install -m 0755 target/release/ermete-daemon-rs %{buildroot}%{_bindir}/ermete-daemon-rs
 
+mkdir -p %{buildroot}%{_datadir}/xdg-desktop-portal/portals
+install -m 0644 ermete.portal %{buildroot}%{_datadir}/xdg-desktop-portal/portals/ermete.portal
+install -m 0644 ermete-portals.conf %{buildroot}%{_datadir}/xdg-desktop-portal/ermete-portals.conf
+
+mkdir -p %{buildroot}%{_datadir}/dbus-1/services
+install -m 0644 org.freedesktop.impl.portal.desktop.ermete.service %{buildroot}%{_datadir}/dbus-1/services/org.freedesktop.impl.portal.desktop.ermete.service
+install -m 0644 org.ermete.Settings.service %{buildroot}%{_datadir}/dbus-1/services/org.ermete.Settings.service
+
 %files
 %{_bindir}/ermete-daemon-rs
+%{_datadir}/xdg-desktop-portal/portals/ermete.portal
+%{_datadir}/xdg-desktop-portal/ermete-portals.conf
+%{_datadir}/dbus-1/services/org.freedesktop.impl.portal.desktop.ermete.service
+%{_datadir}/dbus-1/services/org.ermete.Settings.service
 
 %changelog
+* Mon Jul 15 2026 Ermete Forge <forge@ermete.os> - 0.2.0-2
+- Added ACID JSON Settings engine (org.ermete.Settings) and XDG Desktop Portal backend (org.freedesktop.impl.portal.Settings)
+- Installed portal configuration files and D-Bus service activation units
+
+* Mon Jul 15 2026 Ermete Forge <forge@ermete.os> - 0.2.0-1
+- Migrated from CLI subprocess wrappers (nmcli/bluetoothctl) to native zbus 5.17.0 D-Bus proxies
+- Modularized source into network.rs, bluetooth.rs, and bedrock.rs
+
 * Mon Jul 13 2026 Ermete Forge <forge@ermete.os> - 0.1.0-1
 - Initial native Rust D-Bus daemon package

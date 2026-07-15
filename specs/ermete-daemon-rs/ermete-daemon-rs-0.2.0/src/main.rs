@@ -1,0 +1,41 @@
+mod bedrock;
+mod network;
+mod bluetooth;
+mod settings;
+mod portal;
+
+use std::error::Error;
+use zbus::connection::Builder;
+use bedrock::Bedrock;
+use network::Network;
+use bluetooth::Bluetooth;
+use settings::SettingsService;
+use portal::PortalSettingsService;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
+    println!("Connecting to system D-Bus for NetworkManager & BlueZ integration...");
+    let sys_conn = zbus::Connection::system().await?;
+
+    println!("Initializing ACID Settings Engine and XDG Desktop Portal backend...");
+    let settings_srv = SettingsService::new();
+    let portal_srv = PortalSettingsService::new(settings_srv.state.clone());
+
+    println!("Starting Ermete Bedrock Session Daemon on /os/ermete/Bedrock & /org/ermete/Settings...");
+    let _conn = Builder::session()?
+        .name("os.ermete.Bedrock")?
+        .name("org.ermete.Settings")?
+        .name("org.freedesktop.impl.portal.desktop.ermete")?
+        .serve_at("/os/ermete/Bedrock", Bedrock::new())?
+        .serve_at("/os/ermete/Bedrock/Network", Network::new(sys_conn.clone()))?
+        .serve_at("/os/ermete/Bedrock/Bluetooth", Bluetooth::new(sys_conn.clone()))?
+        .serve_at("/org/ermete/Settings", settings_srv.clone())?
+        .serve_at("/os/ermete/Bedrock/Settings", settings_srv)?
+        .serve_at("/org/freedesktop/portal/desktop", portal_srv)?
+        .build()
+        .await?;
+
+    println!("Ermete Bedrock & Settings Daemon started and serving natively over zbus.");
+    std::future::pending::<()>().await;
+    Ok(())
+}

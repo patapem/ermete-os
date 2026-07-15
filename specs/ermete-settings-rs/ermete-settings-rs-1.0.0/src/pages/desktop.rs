@@ -146,12 +146,16 @@ pub fn build_page() -> Box {
         let path_clone = path.clone();
         btn.connect_clicked(move |_| {
             let abs_path = path_clone.to_string_lossy().to_string();
-            let _ = Command::new("swww")
-                .arg("img")
-                .arg(&abs_path)
-                .args(["--transition-type", "grow", "--transition-pos", "0.5,0.5"])
-                .spawn();
-            println!("Wallpaper selected: {}", abs_path);
+            let abs_path_clone = abs_path.clone();
+            let ctx = gtk4::glib::MainContext::default();
+            ctx.spawn_local(async move {
+                if let Ok(conn) = crate::get_connection().await {
+                    if let Ok(proxy) = crate::settings_proxy::SettingsProxy::new(&conn).await {
+                        let _ = proxy.set_wallpaper(&abs_path_clone).await;
+                    }
+                }
+            });
+            println!("Wallpaper selected via D-Bus: {}", abs_path);
         });
 
         wallpaper_grid.attach(&btn, col, row, 1, 1);

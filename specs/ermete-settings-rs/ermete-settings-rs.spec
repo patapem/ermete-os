@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           ermete-settings-rs
 Version:        1.0.0
-Release:        5%{?dist}
+Release:        7%{?dist}
 Summary:        Pure Rust native System Settings for Ermete OS
 
 License:        GPLv3+
@@ -32,6 +32,10 @@ install -m 0644 os.ermete.Settings.desktop $RPM_BUILD_ROOT/%{_datadir}/applicati
 %{_datadir}/applications/os.ermete.Settings.desktop
 
 %changelog
+* Wed Jul 15 2026 Ermete Forge <forge@ermete.os> - 1.0.0-7
+- Implement Phase 4c: native KDL updater without subprocesses, VRR/HDR switches, display spatial layout preview, and trackpad gestures
+- Eliminate CLI subprocess calls (wpctl, nmcli, uname, whoami, niri) and integrate native Niri UNIX socket client (`niri_client.rs`), D-Bus `os.ermete.Bedrock` proxy, and sysfs/procfs readers.
+
 * Mon Jul 13 2026 Ermete Forge <forge@ermete.os> - 1.0.0-3
 - Dynamic Matugen theme generation & wallpaper integration
 

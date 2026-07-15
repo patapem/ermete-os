@@ -1174,9 +1174,7 @@ pub fn show_control_center_popover(app: &Application) {
     let pop_shot = pop.clone();
     screenshot_tile.connect_clicked(move |_| {
         pop_shot.close();
-        let _ = Command::new("niri")
-            .args(["msg", "action", "screenshot"])
-            .spawn();
+        crate::core::niri_client::screenshot();
     });
 
     let lock_tile = build_cc_compact_tile("cc-circle-blue", "🔒", "Blocca");
@@ -1321,9 +1319,7 @@ pub fn show_control_center_popover(app: &Application) {
     let pop_std = pop.clone();
     standby_btn.connect_clicked(move |_| {
         pop_std.close();
-        let _ = Command::new("niri")
-            .args(["msg", "action", "power-off-monitors"])
-            .spawn();
+        crate::core::niri_client::power_off_monitors();
     });
 
     let mixer_btn = Button::builder()

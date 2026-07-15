@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           ermete-desktop-ui
 Version:        1.0.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Ermete OS Desktop UI configurations
 License:        MIT
 URL:            https://github.com/patapem/ermete-forge

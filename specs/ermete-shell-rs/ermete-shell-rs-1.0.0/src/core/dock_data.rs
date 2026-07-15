@@ -1,13 +1,34 @@
 use serde::Deserialize;
 use std::collections::HashSet;
 
-#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Deserialize, PartialEq)]
+pub struct WindowLayout {
+    pub tile_pos_in_workspace_view: Option<(f64, f64)>,
+    pub window_size: Option<(f64, f64)>,
+}
+
+#[derive(Debug, Clone, Deserialize, PartialEq)]
 pub struct NiriWindowInfo {
     pub id: u64,
     pub title: Option<String>,
     pub app_id: Option<String>,
+    #[serde(default)]
     pub is_focused: bool,
     pub workspace_id: Option<u64>,
+    pub layout: Option<WindowLayout>,
+}
+
+#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
+pub struct NiriWorkspaceInfo {
+    pub id: u64,
+    #[serde(default)]
+    pub idx: u64,
+    pub name: Option<String>,
+    pub output: Option<String>,
+    #[serde(default)]
+    pub is_active: bool,
+    #[serde(default)]
+    pub is_focused: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]

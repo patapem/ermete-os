@@ -15,6 +15,8 @@ struct Args {
     #[arg(long)]
     greeter: bool,
     #[arg(long)]
+    lock: bool,
+    #[arg(long)]
     spotlight: bool,
     #[arg(long)]
     launcher: bool,
@@ -39,13 +41,15 @@ const APP_ID: &str = "os.ermete.Shell";
 fn main() -> glib::ExitCode {
     let args = Args::parse();
 
-    // If greeter mode is requested explicitly, run standalone greeter app
-    if args.greeter {
+    // If greeter or lock mode is requested explicitly, run standalone authentication app
+    if args.greeter || args.lock {
+        let is_lock = args.lock;
+        let app_id = if is_lock { "os.ermete.Lockscreen" } else { "os.ermete.Greeter" };
         let app = Application::builder()
-            .application_id("os.ermete.Greeter")
+            .application_id(app_id)
             .build();
-        app.connect_activate(|app| {
-            greeter::build_ui(app);
+        app.connect_activate(move |app| {
+            greeter::build_ui(app, is_lock);
         });
         return app.run_with_args(&Vec::<String>::new());
     }

@@ -1,6 +1,6 @@
 use gtk4::prelude::*;
 use gtk4::{Align, Box, Button, Label, Orientation, ToggleButton};
-use std::process::Command;
+use crate::settings_proxy::SettingsProxy;
 
 pub fn build_page() -> Box {
     let container = Box::builder()
@@ -48,25 +48,40 @@ pub fn build_page() -> Box {
 
     btn_light.connect_toggled(|btn| {
         if btn.is_active() {
-            let _ = Command::new("dconf")
-                .args(["write", "/org/gnome/desktop/interface/color-scheme", "'prefer-light'"])
-                .spawn();
+            let ctx = gtk4::glib::MainContext::default();
+            ctx.spawn_local(async move {
+                if let Ok(conn) = crate::get_connection().await {
+                    if let Ok(proxy) = SettingsProxy::new(&conn).await {
+                        let _ = proxy.set_color_scheme("prefer-light").await;
+                    }
+                }
+            });
         }
     });
 
     btn_dark.connect_toggled(|btn| {
         if btn.is_active() {
-            let _ = Command::new("dconf")
-                .args(["write", "/org/gnome/desktop/interface/color-scheme", "'prefer-dark'"])
-                .spawn();
+            let ctx = gtk4::glib::MainContext::default();
+            ctx.spawn_local(async move {
+                if let Ok(conn) = crate::get_connection().await {
+                    if let Ok(proxy) = SettingsProxy::new(&conn).await {
+                        let _ = proxy.set_color_scheme("prefer-dark").await;
+                    }
+                }
+            });
         }
     });
 
     btn_auto.connect_toggled(|btn| {
         if btn.is_active() {
-            let _ = Command::new("dconf")
-                .args(["write", "/org/gnome/desktop/interface/color-scheme", "'default'"])
-                .spawn();
+            let ctx = gtk4::glib::MainContext::default();
+            ctx.spawn_local(async move {
+                if let Ok(conn) = crate::get_connection().await {
+                    if let Ok(proxy) = SettingsProxy::new(&conn).await {
+                        let _ = proxy.set_color_scheme("default").await;
+                    }
+                }
+            });
         }
     });
 
@@ -98,30 +113,44 @@ pub fn build_page() -> Box {
         ("Rosa", "pink", "#f5c2e7"),
     ];
 
-    for (name, gnome_val, hex_val) in accents {
+    for (name, _gnome_val, hex_val) in accents {
         let btn = Button::with_label(name);
         btn.set_size_request(80, 40);
-        let gnome_clone = gnome_val.to_string();
         let hex_clone = hex_val.to_string();
         btn.connect_clicked(move |_| {
-            Command::new("gsettings")
-                .args([
-                    "set",
-                    "org.gnome.desktop.interface",
-                    "accent-color",
-                    &gnome_clone,
-                ])
-                .spawn()
-                .ok();
-            Command::new("matugen")
-                .args(["color", "hex", &hex_clone])
-                .spawn()
-                .ok();
+            let hex_c = hex_clone.clone();
+            let ctx = gtk4::glib::MainContext::default();
+            ctx.spawn_local(async move {
+                if let Ok(conn) = crate::get_connection().await {
+                    if let Ok(proxy) = SettingsProxy::new(&conn).await {
+                        let _ = proxy.set_accent_color(&hex_c).await;
+                    }
+                }
+            });
         });
         accent_box.append(&btn);
     }
 
     container.append(&accent_box);
+
+    // Load current state from D-Bus on page initialization
+    let bl = btn_light.clone();
+    let bd = btn_dark.clone();
+    let ba = btn_auto.clone();
+    let ctx = gtk4::glib::MainContext::default();
+    ctx.spawn_local(async move {
+        if let Ok(conn) = crate::get_connection().await {
+            if let Ok(proxy) = SettingsProxy::new(&conn).await {
+                if let Ok(scheme) = proxy.color_scheme().await {
+                    match scheme.as_str() {
+                        "prefer-dark" => bd.set_active(true),
+                        "prefer-light" => bl.set_active(true),
+                        _ => ba.set_active(true),
+                    }
+                }
+            }
+        }
+    });
 
     container
 }

@@ -90,6 +90,18 @@ window.background {
     margin-bottom: 10px;
 }
 
+.greeter-biometric-pill {
+    font-size: 11px;
+    font-weight: 700;
+    color: #38bdf8;
+    background-color: rgba(56, 189, 248, 0.16);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 999px;
+    padding: 4px 12px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
 .greeter-entry-box {
     background-color: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.18);
@@ -273,10 +285,18 @@ fn resolve_target_username() -> String {
     discover_target_user().username
 }
 
-fn authenticate(password: &str) -> Result<(), String> {
+fn authenticate_interactive(password: &str, is_lockscreen: bool, status_cb: &dyn Fn(&str)) -> Result<(), String> {
     let path = std::env::var("GREETD_SOCK").unwrap_or_else(|_| "/run/greetd.sock".to_string());
-    let mut stream = UnixStream::connect(path).map_err(|e| e.to_string())?;
+    if !std::path::Path::new(&path).exists() {
+        // Dry-run / standalone mode for previewing greeter/lock UI outside greetd
+        std::thread::sleep(std::time::Duration::from_millis(500));
+        if password.is_empty() {
+            return Err("Inserisci la password o usa l'impronta digitale".to_string());
+        }
+        return Ok(());
+    }
 
+    let mut stream = UnixStream::connect(path).map_err(|e| e.to_string())?;
     let username = resolve_target_username();
 
     let session_cmd = if std::path::Path::new("/usr/bin/ermete-session").exists() {
@@ -290,69 +310,66 @@ fn authenticate(password: &str) -> Result<(), String> {
     };
 
     let req = Request::CreateSession { username };
-    let resp = send_request(&mut stream, &req)?;
+    let mut resp = send_request(&mut stream, &req)?;
 
-    match resp {
-        Response::AuthMessage { .. } => {
-            let req = Request::PostAuthMessageResponse { response: Some(password.to_string()) };
-            let resp = send_request(&mut stream, &req)?;
-            match resp {
-                Response::Success => {
+    // PAM / Biometric Multi-step interactive conversation loop (pam_fprintd / pam_u2f / pam_unix)
+    let mut iterations = 0;
+    while iterations < 15 {
+        iterations += 1;
+        match resp {
+            Response::AuthMessage { auth_message_type, auth_message } => {
+                let msg_lower = auth_message.to_lowercase();
+                if msg_lower.contains("finger") || msg_lower.contains("impronta") || msg_lower.contains("touch") || matches!(auth_message_type, greetd_ipc::AuthMessageType::Info) {
+                    status_cb(&auth_message);
+                    // Send empty response to acknowledge Info / Biometric prompt and wait for next PAM message
+                    let req = Request::PostAuthMessageResponse { response: Some("".to_string()) };
+                    resp = send_request(&mut stream, &req)?;
+                } else {
+                    // Password or secret requested by PAM
+                    status_cb("Verifica credenziali in corso...");
+                    let req = Request::PostAuthMessageResponse { response: Some(password.to_string()) };
+                    resp = send_request(&mut stream, &req)?;
+                }
+            }
+            Response::Success => {
+                if is_lockscreen {
+                    // In lockscreen mode, session is already active; unlock directly
+                    return Ok(());
+                } else {
                     let req = Request::StartSession {
                         cmd: vec![session_cmd],
                         env: vec![],
                     };
-                    let resp = send_request(&mut stream, &req)?;
-                    match resp {
-                        Response::Success => Ok(()),
-                        Response::Error { description, .. } => Err(description),
-                        _ => Err("Unexpected response to StartSession".to_string()),
+                    let start_resp = send_request(&mut stream, &req)?;
+                    match start_resp {
+                        Response::Success => return Ok(()),
+                        Response::Error { description, .. } => return Err(description),
+                        _ => return Err("Risposta inattesa dal comando StartSession".to_string()),
                     }
-                },
-                Response::Error { description, .. } => Err(description),
-                _ => Err("Unexpected response to PostAuthMessageResponse".to_string()),
+                }
             }
-        },
-        Response::Success => {
-            let req = Request::StartSession {
-                cmd: vec![session_cmd],
-                env: vec![],
-            };
-            let resp = send_request(&mut stream, &req)?;
-            match resp {
-                Response::Success => Ok(()),
-                Response::Error { description, .. } => Err(description),
-                _ => Err("Unexpected response to StartSession".to_string()),
-            }
-        },
-        Response::Error { description, .. } => Err(description),
+            Response::Error { description, .. } => return Err(description),
+        }
     }
+    Err("Timeout conversazione PAM (troppi passaggi di autenticazione)".to_string())
 }
 
 #[allow(dead_code)]
-pub fn authenticate_or_simulate(password: &str) -> Result<(), String> {
-    let path = std::env::var("GREETD_SOCK").unwrap_or_else(|_| "/run/greetd.sock".to_string());
-    if !std::path::Path::new(&path).exists() {
-        // Dry-run mode for previewing greeter UI outside greetd
-        std::thread::sleep(std::time::Duration::from_millis(600));
-        if password.is_empty() {
-            return Err("Inserisci la password di accesso".to_string());
-        }
-        return Ok(());
-    }
-
-    authenticate(password)
+pub fn authenticate_or_simulate(password: &str, is_lockscreen: bool) -> Result<(), String> {
+    authenticate_interactive(password, is_lockscreen, &|_| {})
 }
 
-pub fn build_ui(app: &Application) {
+pub fn build_ui(app: &Application, is_lockscreen: bool) {
+    let title = if is_lockscreen { "Ermete Lockscreen" } else { "Ermete Greeter" };
     let window = ApplicationWindow::builder()
         .application(app)
-        .title("Ermete Greeter")
+        .title(title)
         .build();
 
     window.init_layer_shell();
     window.set_layer(Layer::Overlay);
     window.set_keyboard_mode(gtk4_layer_shell::KeyboardMode::Exclusive);
+    window.set_namespace(if is_lockscreen { "lockscreen" } else { "greeter" });
 
     window.set_anchor(Edge::Top, true);
     window.set_anchor(Edge::Bottom, true);
@@ -474,10 +491,18 @@ pub fn build_ui(app: &Application) {
         .css_classes(["greeter-user-name"])
         .build();
 
+    let badge_text = if is_lockscreen { "BLOCCO SCHERMO • WAYLAND" } else { "WAYLAND • NIRI" };
     let badge_label = Label::builder()
-        .label("WAYLAND • NIRI")
+        .label(badge_text)
         .halign(Align::Center)
         .css_classes(["greeter-badge"])
+        .build();
+
+    let biometric_pill = Label::builder()
+        .label("󰈆 BIOMETRIA (FPRINTD / PAM) IN ASCOLTO")
+        .halign(Align::Center)
+        .css_classes(["greeter-biometric-pill"])
+        .visible(std::path::Path::new("/var/run/dbus/system_bus_socket").exists())
         .build();
 
     let caps_label = Label::builder()
@@ -569,7 +594,7 @@ pub fn build_ui(app: &Application) {
 
             let (sender, receiver) = glib::MainContext::channel::<Result<(), String>>(glib::Priority::DEFAULT);
             std::thread::spawn(move || {
-                let res = authenticate_or_simulate(&password);
+                let res = authenticate_or_simulate(&password, is_lockscreen);
                 let _ = sender.send(res);
             });
 
@@ -604,6 +629,7 @@ pub fn build_ui(app: &Application) {
     card_box.append(&avatar_widget);
     card_box.append(&user_label);
     card_box.append(&badge_label);
+    card_box.append(&biometric_pill);
     card_box.append(&caps_label);
     card_box.append(&entry_row);
     card_box.append(&error_label);

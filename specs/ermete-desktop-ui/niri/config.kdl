@@ -148,15 +148,22 @@ window-rule {
 }
 
 
-// --- LAYER RULES (AGS PANELS & MODALS INTEGRATION) ---
+// --- LAYER RULES (ERMETE SHELL & MODALS INTEGRATION) ---
 layer-rule {
     match namespace="^bar$"
+    match namespace="^dock$"
     match namespace="^control-center$"
     match namespace="^launcher$"
+    match namespace="^spotlight$"
     match namespace="^powermenu$"
+    match namespace="^clipboard$"
     match namespace="^media-player$"
     match namespace="^sys-monitor$"
     match namespace="^calendar$"
+    match namespace="^wifi.*$"
+    match namespace="^bluetooth$"
+    match namespace="^osd$"
+    match namespace="^notifications$"
     
     geometry-corner-radius 14
     shadow {

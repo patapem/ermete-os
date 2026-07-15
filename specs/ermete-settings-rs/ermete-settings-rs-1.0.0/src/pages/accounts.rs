@@ -151,10 +151,7 @@ pub fn build_page() -> gtk4::Box {
 }
 
 fn get_username() -> String {
-    if let Ok(output) = std::process::Command::new("whoami").output() {
-        if let Ok(name) = String::from_utf8(output.stdout) {
-            return name.trim().to_string();
-        }
-    }
-    "Utente Sconosciuto".to_string()
+    std::env::var("USER")
+        .or_else(|_| std::env::var("LOGNAME"))
+        .unwrap_or_else(|_| "ermete".to_string())
 }

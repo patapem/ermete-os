@@ -1,4 +1,6 @@
 pub mod pages;
+pub mod niri_client;
+pub mod settings_proxy;
 use gtk4::prelude::*;
 use gtk4::{
     gio, Application, ApplicationWindow, Box as GtkBox, Orientation, Label, Stack, Align, ListBox,

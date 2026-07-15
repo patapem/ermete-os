@@ -1,6 +1,6 @@
 use gtk4::prelude::*;
 use gtk4::{Align, Box, Button, Label, Orientation};
-use std::process::Command;
+use std::fs;
 
 pub fn build_page() -> Box {
     let container = Box::builder()
@@ -40,30 +40,23 @@ pub fn build_page() -> Box {
 }
 
 fn get_ethernet_status() -> String {
-    // Esegue nmcli per ottenere i dispositivi, filtra per ethernet.
-    // L'output formattato sarà simile a "eth0:802-3-ethernet:connected"
-    let output = Command::new("sh")
-        .arg("-c")
-        .arg("nmcli -t -f DEVICE,TYPE,STATE dev | grep -i ethernet | head -n 1")
-        .output();
-
-    if let Ok(out) = output {
-        let stdout = String::from_utf8_lossy(&out.stdout).trim().to_string();
-        if !stdout.is_empty() {
-            let parts: Vec<&str> = stdout.split(':').collect();
-            if parts.len() >= 3 {
-                let dev = parts[0];
-                let state = match parts[2] {
-                    "connected" => "Connesso",
-                    "disconnected" => "Scollegato",
-                    "unavailable" => "Non disponibile",
-                    "connecting" => "In connessione",
-                    other => other,
-                };
-                return format!("{} - {}", dev, state);
+    if let Ok(entries) = fs::read_dir("/sys/class/net") {
+        for entry in entries.flatten() {
+            let name = entry.file_name().to_string_lossy().to_string();
+            if (name.starts_with("eth") || name.starts_with("en")) && !name.starts_with("enx") && !name.starts_with("lo") {
+                let state_path = format!("/sys/class/net/{}/operstate", name);
+                if let Ok(state) = fs::read_to_string(state_path) {
+                    let st = state.trim();
+                    let st_label = match st {
+                        "up" => "Connesso",
+                        "down" => "Scollegato",
+                        "unknown" => "Stato sconosciuto",
+                        other => other,
+                    };
+                    return format!("{} - {}", name, st_label);
+                }
             }
-            return stdout;
         }
     }
-    "Scollegato".to_string()
+    "Nessuna rete cablata rilevata".to_string()
 }
