@@ -3,6 +3,24 @@ use glib::clone;
 use gtk4::prelude::*;
 use gtk4::{Align, Application, ApplicationWindow, Box as GtkBox, Button, Entry, Label, Orientation, ScrolledWindow};
 use gtk4_layer_shell::{Edge, Layer, LayerShell};
+use std::cell::RefCell;
+use tokio::sync::mpsc::UnboundedSender;
+
+thread_local! {
+    pub static ACTION_SENDER: RefCell<Option<UnboundedSender<(u32, String)>>> = RefCell::new(None);
+}
+
+pub fn format_action_invoked_payload(id: u32, text: &str) -> (u32, String) {
+    (id, text.to_string())
+}
+
+pub fn send_action_invoked(id: u32, action_key: &str) {
+    ACTION_SENDER.with(|sender| {
+        if let Some(tx) = sender.borrow().as_ref() {
+            let _ = tx.send(format_action_invoked_payload(id, action_key));
+        }
+    });
+}
 
 pub fn show_toast_popup(app: &Application, notif: &NotificationData) {
     let toast = ApplicationWindow::builder()
@@ -40,6 +58,7 @@ pub fn show_toast_popup(app: &Application, notif: &NotificationData) {
                 let key_clone = ak.clone();
                 btn.connect_clicked(move |_| {
                     println!("[Ermete Notifications] Action '{}' invoked for notification ID {}", key_clone, id);
+                    crate::ui::notifications::send_action_invoked(id, &key_clone);
                     toast_clone.close();
                 });
                 act_box.append(&btn);
@@ -56,10 +75,12 @@ pub fn show_toast_popup(app: &Application, notif: &NotificationData) {
         let entry_clone = entry.clone();
         let toast_clone = toast.clone();
         let app_name = notif.app_name.clone();
+        let id = notif.id;
         let send_action = std::rc::Rc::new(move || {
             let text = entry_clone.text().to_string();
             if !text.is_empty() {
                 println!("[Ermete Notifications] Inline reply sent to {}: {}", app_name, text);
+                crate::ui::notifications::send_action_invoked(id, &text);
                 toast_clone.close();
             }
         });
@@ -88,6 +109,9 @@ pub fn spawn_notification_daemon(app: &Application) {
     load_notification_history();
     let (sender, receiver) = glib::MainContext::channel::<NotificationData>(glib::Priority::DEFAULT);
     
+    let (action_tx, mut action_rx) = tokio::sync::mpsc::unbounded_channel::<(u32, String)>();
+    ACTION_SENDER.with(|s| *s.borrow_mut() = Some(action_tx));
+
     std::thread::spawn(move || {
         let rt = tokio::runtime::Runtime::new().unwrap();
         rt.block_on(async {
@@ -95,7 +119,7 @@ pub fn spawn_notification_daemon(app: &Application) {
                 sender,
                 counter: std::sync::atomic::AtomicU32::new(1),
             };
-            let _conn = zbus::connection::Builder::session()
+            let conn = zbus::connection::Builder::session()
                 .unwrap()
                 .name("org.freedesktop.Notifications")
                 .unwrap()
@@ -104,7 +128,16 @@ pub fn spawn_notification_daemon(app: &Application) {
                 .build()
                 .await
                 .unwrap();
-            std::future::pending::<()>().await;
+                
+            while let Some((id, action_key)) = action_rx.recv().await {
+                let _ = conn.emit_signal(
+                    None::<()>,
+                    "/org/freedesktop/Notifications",
+                    "org.freedesktop.Notifications",
+                    "ActionInvoked",
+                    &(id, action_key),
+                ).await;
+            }
         });
     });
 
@@ -287,11 +320,13 @@ pub fn show_notification_center(app: &Application) {
                         let send_btn = Button::builder().label("󰇀").css_classes(["cc-quick-btn"]).build();
                         let entry_clone = entry.clone();
                         let app_name_rep = item.app_name.clone();
+                        let id = item.id;
                         let sb_close = sidebar.clone();
                         let send_action = std::rc::Rc::new(move || {
                             let text = entry_clone.text().to_string();
                             if !text.is_empty() {
                                 println!("[Ermete Notifications] Inline reply sent to {}: {}", app_name_rep, text);
+                                crate::ui::notifications::send_action_invoked(id, &text);
                                 sb_close.close();
                             }
                         });
@@ -348,4 +383,20 @@ pub fn show_notification_center(app: &Application) {
 
     sidebar.set_child(Some(&main_vbox));
     sidebar.present();
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_inline_reply_payload_structure() {
+        let id = 123;
+        let text = "Hello Ermete!";
+        
+        let payload = format_action_invoked_payload(id, text);
+        
+        assert_eq!(payload.0, 123);
+        assert_eq!(payload.1, "Hello Ermete!");
+    }
 }
