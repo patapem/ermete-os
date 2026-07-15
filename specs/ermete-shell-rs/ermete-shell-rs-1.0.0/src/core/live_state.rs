@@ -1,4 +1,3 @@
-use std::process::Command;
 use std::fs;
 
 #[derive(Debug, Clone)]
@@ -25,54 +24,43 @@ impl Default for LiveState {
 pub fn get_live_state() -> LiveState {
     let mut state = LiveState::default();
 
-    // Volume
-    if let Ok(output) = Command::new("wpctl")
-        .arg("get-volume")
-        .arg("@DEFAULT_AUDIO_SINK@")
-        .output()
-    {
-        if let Ok(out_str) = String::from_utf8(output.stdout) {
-            let parts: Vec<&str> = out_str.split_whitespace().collect();
-            if parts.len() >= 2 && parts[0] == "Volume:" {
-                if let Ok(vol) = parts[1].parse::<f64>() {
-                    state.volume = vol;
-                }
-            }
-        }
-    }
+    // Volume from SystemController D-Bus proxy cache
+    state.volume = crate::core::system_proxies::get_global_controller().get_cached_volume() * 100.0;
 
-    // Brightness
-    if let Ok(output) = Command::new("brightnessctl")
-        .arg("-m")
-        .output()
-    {
-        if let Ok(out_str) = String::from_utf8(output.stdout) {
-            let parts: Vec<&str> = out_str.trim().split(',').collect();
-            if parts.len() >= 4 {
-                let percent_str = parts[3].trim_end_matches('%');
-                if let Ok(bright) = percent_str.parse::<f64>() {
-                    state.brightness = bright;
-                }
-            }
-        }
-    }
-
-    // RAM
-    if let Ok(output) = Command::new("free")
-        .output()
-    {
-        if let Ok(out_str) = String::from_utf8(output.stdout) {
-            let lines: Vec<&str> = out_str.lines().collect();
-            if lines.len() >= 2 {
-                let parts: Vec<&str> = lines[1].split_whitespace().collect();
-                if parts.len() >= 3 && parts[0] == "Mem:" {
-                    if let (Ok(total), Ok(used)) = (parts[1].parse::<f64>(), parts[2].parse::<f64>()) {
-                        if total > 0.0 {
-                            state.ram_percent = (used / total) * 100.0;
-                        }
+    // Brightness via sysfs natively in pure Rust
+    if let Ok(entries) = fs::read_dir("/sys/class/backlight") {
+        for entry in entries.flatten() {
+            let path = entry.path();
+            if let (Ok(cur_str), Ok(max_str)) = (
+                fs::read_to_string(path.join("brightness")),
+                fs::read_to_string(path.join("max_brightness")),
+            ) {
+                if let (Ok(cur), Ok(max)) = (cur_str.trim().parse::<f64>(), max_str.trim().parse::<f64>()) {
+                    if max > 0.0 {
+                        state.brightness = (cur / max) * 100.0;
                     }
                 }
             }
+        }
+    }
+
+    // RAM via /proc/meminfo in pure Rust
+    if let Ok(meminfo) = fs::read_to_string("/proc/meminfo") {
+        let mut total = 0.0;
+        let mut available = 0.0;
+        for line in meminfo.lines() {
+            if line.starts_with("MemTotal:") {
+                if let Some(val_str) = line.split_whitespace().nth(1) {
+                    total = val_str.parse::<f64>().unwrap_or(0.0);
+                }
+            } else if line.starts_with("MemAvailable:") {
+                if let Some(val_str) = line.split_whitespace().nth(1) {
+                    available = val_str.parse::<f64>().unwrap_or(0.0);
+                }
+            }
+        }
+        if total > 0.0 {
+            state.ram_percent = ((total - available) / total) * 100.0;
         }
     }
 

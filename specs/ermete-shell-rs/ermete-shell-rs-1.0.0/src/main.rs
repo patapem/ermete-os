@@ -40,6 +40,7 @@ const APP_ID: &str = "os.ermete.Shell";
 
 fn main() -> glib::ExitCode {
     let args = Args::parse();
+    crate::core::system_proxies::init_system_controller();
 
     // If greeter or lock mode is requested explicitly, run standalone authentication app
     if args.greeter || args.lock {

@@ -7,9 +7,9 @@ pub mod niri_state;
 pub mod live_state;
 pub mod niri_client;
 pub mod spring;
+pub mod system_proxies;
 use gtk4::CssProvider;
 use chrono::Local;
-use std::process::Command;
 use serde::Deserialize;
 use zbus::interface;
 
@@ -209,37 +209,7 @@ pub fn get_cpu_load() -> (String, f64) {
 
 
 pub fn get_network_status() -> (String, String, String) {
-    if let Ok(output) = Command::new("nmcli")
-        .args(["-t", "-f", "TYPE,STATE,NAME", "connection", "show", "--active"])
-        .output()
-    {
-        let stdout = String::from_utf8_lossy(&output.stdout);
-        for line in stdout.lines() {
-            let parts: Vec<&str> = line.split(':').collect();
-            if parts.len() >= 3 {
-                let ctype = parts[0];
-                let state = parts[1];
-                let name = parts[2];
-                if state == "activated" {
-                    if ctype == "802-3-ethernet" || ctype == "ethernet" {
-                        return ("󰈀".to_string(), "Ethernet".to_string(), "Connesso via cavo".to_string());
-                    }
-                    if ctype == "802-11-wireless" || ctype == "wifi" {
-                        return ("".to_string(), "Rete Wi-Fi".to_string(), name.to_string());
-                    }
-                }
-            }
-        }
-    }
-
-    if let Ok(output) = Command::new("nmcli").args(["radio", "wifi"]).output() {
-        let stdout = String::from_utf8_lossy(&output.stdout);
-        if stdout.trim() == "disabled" {
-            return ("󰖪".to_string(), "Rete Wi-Fi".to_string(), "Disattivato".to_string());
-        }
-    }
-
-    ("󰖪".to_string(), "Rete Wi-Fi".to_string(), "Non connesso".to_string())
+    crate::core::system_proxies::get_global_controller().get_cached_network_status()
 }
 
 // Right Section: Authentic macOS Dongles/Status Items

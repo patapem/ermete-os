@@ -318,9 +318,12 @@ pub fn show_wifi_password_modal(app: &Application, ssid: &str) {
             return;
         }
         status_clone.set_label("⏳ Connessione in corso...");
-        let _ = Command::new("nmcli")
-            .args(["device", "wifi", "connect", &ssid_str, "password", &pwd])
-            .spawn();
+        let ssid_c = ssid_str.clone();
+        let pwd_c = pwd.clone();
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.connect_wifi(&ssid_c, &pwd_c).await;
+        });
         pop_conn.close();
     };
 
@@ -389,26 +392,11 @@ pub fn show_wifi_details_modal(app: &Application, ssid: &str, active: bool) {
     header_card.append(&header_icon);
     header_card.append(&texts_box);
 
-    let mut cur_method = "auto".to_string();
-    let mut cur_ip = "".to_string();
-    let mut cur_gw = "".to_string();
-    let mut cur_dns = "".to_string();
-    let mut cur_auto = true;
-
-    if let Ok(output) = Command::new("nmcli")
-        .args(["-g", "ipv4.method,ipv4.addresses,ipv4.gateway,ipv4.dns,connection.autoconnect", "connection", "show", ssid])
-        .output()
-    {
-        let stdout = String::from_utf8_lossy(&output.stdout);
-        let lines: Vec<&str> = stdout.lines().collect();
-        if lines.len() >= 5 {
-            cur_method = lines[0].trim().to_string();
-            cur_ip = lines[1].trim().to_string();
-            cur_gw = lines[2].trim().to_string();
-            cur_dns = lines[3].trim().to_string();
-            cur_auto = lines[4].trim() != "no";
-        }
-    }
+    let cur_method = "auto".to_string();
+    let cur_ip = "".to_string();
+    let cur_gw = "".to_string();
+    let cur_dns = "".to_string();
+    let cur_auto = true;
 
     let ip_section = GtkBox::builder().orientation(Orientation::Vertical).spacing(8).build();
     let ip_header = Label::builder().label("CONFIGURAZIONE IP (IPv4)").css_classes(["cc-label-sub"]).halign(Align::Start).build();
@@ -457,13 +445,34 @@ pub fn show_wifi_details_modal(app: &Application, ssid: &str, active: bool) {
     auto_row.append(&auto_lbl);
     auto_row.append(&auto_sw);
 
+    let ip_e_clone2 = ip_entry.clone();
+    let gw_e_clone2 = gw_entry.clone();
+    let dns_e_clone2 = dns_entry.clone();
+    let dhcp_sw_clone2 = dhcp_sw.clone();
+    let auto_sw_clone2 = auto_sw.clone();
+    let ssid_clone = ssid.to_string();
+    glib::MainContext::default().spawn_local(async move {
+        let ctrl = crate::core::system_proxies::get_global_controller();
+        if let Ok((method, ip, gw, dns, auto)) = ctrl.get_wifi_details(&ssid_clone).await {
+            dhcp_sw_clone2.set_active(method == "auto");
+            ip_e_clone2.set_text(&ip);
+            gw_e_clone2.set_text(&gw);
+            dns_e_clone2.set_text(&dns);
+            auto_sw_clone2.set_active(auto);
+        }
+    });
+
     let btn_box = GtkBox::builder().orientation(Orientation::Horizontal).spacing(8).build();
 
     let forget_btn = Button::builder().label("Dimentica").css_classes(["cc-quick-btn"]).build();
     let ssid_f = ssid.to_string();
     let pop_f = pop.clone();
     forget_btn.connect_clicked(move |_| {
-        let _ = Command::new("nmcli").args(["connection", "delete", &ssid_f]).spawn();
+        let ssid_f = ssid_f.clone();
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.delete_wifi(&ssid_f).await;
+        });
         pop_f.close();
     });
 
@@ -471,7 +480,11 @@ pub fn show_wifi_details_modal(app: &Application, ssid: &str, active: bool) {
     let ssid_d = ssid.to_string();
     let pop_d = pop.clone();
     disc_btn.connect_clicked(move |_| {
-        let _ = Command::new("nmcli").args(["connection", "down", &ssid_d]).spawn();
+        let ssid_d = ssid_d.clone();
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.disconnect_wifi(&ssid_d).await;
+        });
         pop_d.close();
     });
 
@@ -484,27 +497,16 @@ pub fn show_wifi_details_modal(app: &Application, ssid: &str, active: bool) {
     let auto_sw_s = auto_sw.clone();
     let pop_s = pop.clone();
     save_btn.connect_clicked(move |_| {
-        if dhcp_sw_clone.is_active() {
-            let _ = Command::new("nmcli").args(["connection", "modify", &ssid_s, "ipv4.method", "auto"]).output();
-        } else {
-            let ip_val = ip_e_s.text().to_string();
-            let gw_val = gw_e_s.text().to_string();
-            if !ip_val.is_empty() {
-                let _ = Command::new("nmcli").args(["connection", "modify", &ssid_s, "ipv4.method", "manual", "ipv4.addresses", &ip_val]).output();
-                if !gw_val.is_empty() {
-                    let _ = Command::new("nmcli").args(["connection", "modify", &ssid_s, "ipv4.gateway", &gw_val]).output();
-                }
-            }
-        }
+        let ssid_s = ssid_s.clone();
+        let dhcp_val = dhcp_sw_clone.is_active();
+        let ip_val = ip_e_s.text().to_string();
+        let gw_val = gw_e_s.text().to_string();
         let dns_val = dns_e_s.text().to_string();
-        if dns_val.trim().is_empty() {
-            let _ = Command::new("nmcli").args(["connection", "modify", &ssid_s, "ipv4.ignore-auto-dns", "no", "ipv4.dns", ""]).output();
-        } else {
-            let _ = Command::new("nmcli").args(["connection", "modify", &ssid_s, "ipv4.ignore-auto-dns", "yes", "ipv4.dns", &dns_val]).output();
-        }
-        let auto_val = if auto_sw_s.is_active() { "yes" } else { "no" };
-        let _ = Command::new("nmcli").args(["connection", "modify", &ssid_s, "connection.autoconnect", auto_val]).output();
-        let _ = Command::new("nmcli").args(["connection", "up", &ssid_s]).output();
+        let auto_val = auto_sw_s.is_active();
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.modify_wifi(&ssid_s, dhcp_val, &ip_val, &gw_val, &dns_val, auto_val).await;
+        });
         pop_s.close();
     });
 
@@ -543,37 +545,23 @@ pub(crate) fn populate_wifi_list(list_box: &GtkBox, app: &Application, pop: &App
         return;
     }
 
-    let mut known_ssids = std::collections::HashSet::new();
-    if let Ok(saved_out) = Command::new("nmcli").args(["-t", "-f", "NAME", "connection", "show"]).output() {
-        for line in String::from_utf8_lossy(&saved_out.stdout).lines() {
-            if !line.is_empty() {
-                known_ssids.insert(line.trim().to_string());
+    let list_box_clone = list_box.clone();
+    let app_clone = app.clone();
+    let pop_clone = pop.clone();
+    glib::MainContext::default().spawn_local(async move {
+        let ctrl = crate::core::system_proxies::get_global_controller();
+        if let Ok(networks) = ctrl.list_wifi_networks().await {
+            while let Some(child) = list_box_clone.first_child() {
+                list_box_clone.remove(&child);
             }
-        }
-    }
-
-    if let Ok(output) = Command::new("nmcli")
-        .args(["-t", "-f", "IN-USE,SSID,SIGNAL", "device", "wifi", "list"])
-        .output()
-    {
-        let stdout = String::from_utf8_lossy(&output.stdout);
-        let mut count = 0;
-        let mut seen = std::collections::HashSet::new();
-        for line in stdout.lines() {
-            let parts: Vec<&str> = line.split(':').collect();
-            if parts.len() >= 3 && !parts[1].is_empty() && count < 8 {
-                let ssid = parts[1];
-                if seen.contains(ssid) {
-                    continue;
+            let mut count = 0;
+            for net in networks {
+                if count >= 8 {
+                    break;
                 }
-                seen.insert(ssid.to_string());
-
-                let active = parts[0] == "*";
-                let saved = known_ssids.contains(ssid);
-                let sig = parts[2].parse::<i32>().unwrap_or(50);
-                let icon = if sig > 75 {
+                let icon = if net.signal > 75 {
                     "󰤨"
-                } else if sig > 40 {
+                } else if net.signal > 40 {
                     "󰤥"
                 } else {
                     "󰤢"
@@ -591,13 +579,13 @@ pub(crate) fn populate_wifi_list(list_box: &GtkBox, app: &Application, pop: &App
                 let icon_lbl = Label::builder().label(icon).build();
                 let texts = GtkBox::builder().orientation(Orientation::Vertical).hexpand(true).build();
                 let ssid_lbl = Label::builder()
-                    .label(ssid)
+                    .label(&net.ssid)
                     .css_classes(["cc-label-main"])
                     .halign(Align::Start)
                     .build();
-                let status_text = if active {
+                let status_text = if net.active {
                     "Connesso — Attiva"
-                } else if saved {
+                } else if net.saved {
                     "Salvato — Clicca per impostazioni"
                 } else {
                     "Disponibile — Clicca per connetterti"
@@ -613,43 +601,45 @@ pub(crate) fn populate_wifi_list(list_box: &GtkBox, app: &Application, pop: &App
                 inner_box.append(&icon_lbl);
                 inner_box.append(&texts);
 
-                if active {
+                if net.active {
                     let check_lbl = Label::builder().label("✓").css_classes(["cc-label-main"]).build();
                     inner_box.append(&check_lbl);
                 }
 
                 item_row.set_child(Some(&inner_box));
 
-                let app_clone = app.clone();
-                let pop_clone = pop.clone();
-                let ssid_str = ssid.to_string();
+                let app_c = app_clone.clone();
+                let pop_c = pop_clone.clone();
+                let ssid_str = net.ssid.clone();
+                let active_f = net.active;
+                let saved_f = net.saved;
                 item_row.connect_clicked(move |_| {
-                    pop_clone.close();
-                    if active || saved {
-                        show_wifi_details_modal(&app_clone, &ssid_str, active);
+                    pop_c.close();
+                    if active_f || saved_f {
+                        show_wifi_details_modal(&app_c, &ssid_str, active_f);
                     } else {
-                        show_wifi_password_modal(&app_clone, &ssid_str);
+                        show_wifi_password_modal(&app_c, &ssid_str);
                     }
                 });
 
-                list_box.append(&item_row);
+                list_box_clone.append(&item_row);
                 count += 1;
             }
-        }
-        if count == 0 {
-            let no_wifi = Label::builder()
-                .label("Nessuna rete Wi-Fi rilevata")
+            if count == 0 {
+                let no_wifi = Label::builder()
+                    .label("Nessuna rete Wi-Fi rilevata")
+                    .css_classes(["cc-label-sub"])
+                    .build();
+                list_box_clone.append(&no_wifi);
+            }
+        } else {
+            let err_lbl = Label::builder()
+                .label("Impossibile interrogare NetworkManager")
                 .css_classes(["cc-label-sub"])
                 .build();
-            list_box.append(&no_wifi);
+            list_box_clone.append(&err_lbl);
         }
-    } else {
-        let err_lbl = Label::builder()
-            .label("Impossibile interrogare NetworkManager")
-            .css_classes(["cc-label-sub"])
-            .build();
-        list_box.append(&err_lbl);
-    }
+    });
 }
 
 pub fn show_wifi_popover(app: &Application) {
@@ -686,12 +676,14 @@ pub fn show_wifi_popover(app: &Application) {
         .build();
     let header_icon = Label::builder().label("").css_classes(["cc-circle-blue"]).build();
     let header_lbl = Label::builder().label("Rete Wi-Fi").css_classes(["cc-label-main"]).hexpand(true).halign(Align::Start).build();
-    let wifi_enabled = if let Ok(output) = Command::new("nmcli").args(["radio", "wifi"]).output() {
-        String::from_utf8_lossy(&output.stdout).trim() == "enabled"
-    } else {
-        true
-    };
-    let wifi_sw = Switch::builder().active(wifi_enabled).valign(Align::Center).build();
+    let wifi_sw = Switch::builder().active(true).valign(Align::Center).build();
+    let wifi_sw_clone = wifi_sw.clone();
+    glib::MainContext::default().spawn_local(async move {
+        let ctrl = crate::core::system_proxies::get_global_controller();
+        if let Ok(enabled) = ctrl.is_wifi_enabled().await {
+            wifi_sw_clone.set_active(enabled);
+        }
+    });
     header_card.append(&header_icon);
     header_card.append(&header_lbl);
     header_card.append(&wifi_sw);
@@ -701,14 +693,16 @@ pub fn show_wifi_popover(app: &Application) {
         .spacing(8)
         .build();
 
-    populate_wifi_list(&list_box, app, &pop, wifi_enabled);
+    populate_wifi_list(&list_box, app, &pop, true);
 
     let list_clone = list_box.clone();
     let app_clone = app.clone();
     let pop_clone = pop.clone();
     wifi_sw.connect_state_set(move |_, state| {
-        let cmd = if state { "on" } else { "off" };
-        let _ = Command::new("nmcli").args(["radio", "wifi", cmd]).spawn();
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.set_wifi_powered(state).await;
+        });
         populate_wifi_list(&list_clone, &app_clone, &pop_clone, state);
         glib::Propagation::Proceed
     });
@@ -783,15 +777,19 @@ pub fn show_bluetooth_popover(app: &Application) {
         .build();
     let header_icon = Label::builder().label("").css_classes(["cc-circle-blue"]).build();
     let header_lbl = Label::builder().label("Bluetooth").css_classes(["cc-label-main"]).hexpand(true).halign(Align::Start).build();
-    let bt_enabled = if let Ok(output) = Command::new("bluetoothctl").arg("show").output() {
-        String::from_utf8_lossy(&output.stdout).contains("Powered: yes")
-    } else {
-        true
-    };
-    let bt_sw = Switch::builder().active(bt_enabled).valign(Align::Center).build();
+    let bt_sw = Switch::builder().active(true).valign(Align::Center).build();
+    let bt_sw_clone = bt_sw.clone();
+    glib::MainContext::default().spawn_local(async move {
+        let ctrl = crate::core::system_proxies::get_global_controller();
+        if let Ok(enabled) = ctrl.is_bluetooth_enabled().await {
+            bt_sw_clone.set_active(enabled);
+        }
+    });
     bt_sw.connect_state_set(move |_, state| {
-        let cmd = if state { "on" } else { "off" };
-        let _ = Command::new("bluetoothctl").args(["power", cmd]).spawn();
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.set_bluetooth_powered(state).await;
+        });
         glib::Propagation::Proceed
     });
     header_card.append(&header_icon);
@@ -803,13 +801,11 @@ pub fn show_bluetooth_popover(app: &Application) {
         .spacing(8)
         .build();
 
-    if let Ok(output) = Command::new("bluetoothctl").arg("devices").output() {
-        let stdout = String::from_utf8_lossy(&output.stdout);
-        let mut count = 0;
-        for line in stdout.lines() {
-            let parts: Vec<&str> = line.splitn(3, ' ').collect();
-            if parts.len() >= 3 && count < 8 {
-                let name = parts[2];
+    let list_box_clone = list_box.clone();
+    glib::MainContext::default().spawn_local(async move {
+        let ctrl = crate::core::system_proxies::get_global_controller();
+        if let Ok(devices) = ctrl.list_bluetooth_devices().await {
+            for dev in devices.iter().take(8) {
                 let item_row = GtkBox::builder()
                     .orientation(Orientation::Horizontal)
                     .spacing(10)
@@ -819,28 +815,31 @@ pub fn show_bluetooth_popover(app: &Application) {
                 let icon_lbl = Label::builder().label("").build();
                 let texts = GtkBox::builder().orientation(Orientation::Vertical).hexpand(true).build();
                 let name_lbl = Label::builder()
-                    .label(name)
+                    .label(&dev.name)
                     .css_classes(["cc-label-main"])
                     .halign(Align::Start)
                     .build();
-                let sub_lbl = Label::builder().label("Dispositivo Rilevato").css_classes(["cc-label-sub"]).halign(Align::Start).build();
+                let sub_lbl = Label::builder()
+                    .label(if dev.connected { "Connesso" } else { "Dispositivo Rilevato" })
+                    .css_classes(["cc-label-sub"])
+                    .halign(Align::Start)
+                    .build();
                 texts.append(&name_lbl);
                 texts.append(&sub_lbl);
 
                 item_row.append(&icon_lbl);
                 item_row.append(&texts);
-                list_box.append(&item_row);
-                count += 1;
+                list_box_clone.append(&item_row);
+            }
+            if devices.is_empty() {
+                let no_bt = Label::builder()
+                    .label("Nessun dispositivo accoppiato")
+                    .css_classes(["cc-label-sub"])
+                    .build();
+                list_box_clone.append(&no_bt);
             }
         }
-        if count == 0 {
-            let no_bt = Label::builder()
-                .label("Nessun dispositivo accoppiato")
-                .css_classes(["cc-label-sub"])
-                .build();
-            list_box.append(&no_bt);
-        }
-    }
+    });
 
     let close_btn = Button::builder()
         .label("Fine")
@@ -929,7 +928,10 @@ pub fn show_audio_mixer_popover(app: &Application) {
     let out_lbl = Label::builder().label("🔊  Uscita Audio (Speaker/Cuffie)").css_classes(["cc-label-main"]).hexpand(true).halign(Align::Start).build();
     let mute_out_btn = Button::builder().label("Muto").css_classes(["cc-quick-btn"]).build();
     mute_out_btn.connect_clicked(move |_| {
-        let _ = Command::new("wpctl").args(["set-mute", "@DEFAULT_AUDIO_SINK@", "toggle"]).spawn();
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.toggle_mute().await;
+        });
     });
     out_header.append(&out_lbl);
     out_header.append(&mute_out_btn);
@@ -939,12 +941,11 @@ pub fn show_audio_mixer_popover(app: &Application) {
     out_slider.set_hexpand(true);
     out_slider.set_valign(Align::Center);
     out_slider.connect_value_changed(move |s| {
-        let val = s.value() as i32;
-        let _ = Command::new("wpctl")
-            .arg("set-volume")
-            .arg("@DEFAULT_AUDIO_SINK@")
-            .arg(format!("{}%", val))
-            .spawn();
+        let val = s.value() / 100.0;
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.set_volume(val).await;
+        });
     });
     out_card.append(&out_header);
     out_card.append(&out_slider);
@@ -959,7 +960,10 @@ pub fn show_audio_mixer_popover(app: &Application) {
     let in_lbl = Label::builder().label("🎙  Ingresso Audio (Microfono)").css_classes(["cc-label-main"]).hexpand(true).halign(Align::Start).build();
     let mute_in_btn = Button::builder().label("Muto").css_classes(["cc-quick-btn"]).build();
     mute_in_btn.connect_clicked(move |_| {
-        let _ = Command::new("wpctl").args(["set-mute", "@DEFAULT_AUDIO_SOURCE@", "toggle"]).spawn();
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.toggle_source_mute().await;
+        });
     });
     in_header.append(&in_lbl);
     in_header.append(&mute_in_btn);
@@ -969,12 +973,11 @@ pub fn show_audio_mixer_popover(app: &Application) {
     in_slider.set_hexpand(true);
     in_slider.set_valign(Align::Center);
     in_slider.connect_value_changed(move |s| {
-        let val = s.value() as i32;
-        let _ = Command::new("wpctl")
-            .arg("set-volume")
-            .arg("@DEFAULT_AUDIO_SOURCE@")
-            .arg(format!("{}%", val))
-            .spawn();
+        let val = s.value() / 100.0;
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.set_source_volume(val).await;
+        });
     });
     in_card.append(&in_header);
     in_card.append(&in_slider);
@@ -1116,14 +1119,15 @@ pub fn show_control_center_popover(app: &Application) {
 
     let bt_btn = build_cc_row("cc-circle-blue", "", "Bluetooth", "Dispositivi");
     bt_btn.set_hexpand(true);
-    let bt_enabled = if let Ok(output) = Command::new("bluetoothctl").arg("show").output() {
-        String::from_utf8_lossy(&output.stdout).contains("Powered: yes")
-    } else {
-        false
-    };
-    if bt_enabled {
-        bt_btn.add_css_class("cc-btn-active");
-    }
+    let bt_btn_clone_init = bt_btn.clone();
+    glib::MainContext::default().spawn_local(async move {
+        let ctrl = crate::core::system_proxies::get_global_controller();
+        if let Ok(enabled) = ctrl.is_bluetooth_enabled().await {
+            if enabled {
+                bt_btn_clone_init.add_css_class("cc-btn-active");
+            }
+        }
+    });
     let app_bt = app.clone();
     let pop_bt = pop.clone();
     bt_btn.connect_clicked(move |_| {
@@ -1181,7 +1185,10 @@ pub fn show_control_center_popover(app: &Application) {
     let pop_lock = pop.clone();
     lock_tile.connect_clicked(move |_| {
         pop_lock.close();
-        let _ = Command::new("swaylock").spawn();
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.lock_screen().await;
+        });
     });
 
     right_col.append(&screenshot_tile);
@@ -1204,10 +1211,11 @@ pub fn show_control_center_popover(app: &Application) {
     bright_slider.set_hexpand(true);
     bright_slider.set_valign(Align::Center);
     bright_slider.connect_value_changed(move |s| {
-        let val = s.value() as i32;
-        let _ = Command::new("brightnessctl")
-            .args(["set", &format!("{}%", val)])
-            .spawn();
+        let val = s.value() / 100.0;
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.set_brightness(val).await;
+        });
     });
     bright_card.append(&bright_icon);
     bright_card.append(&bright_slider);
@@ -1239,12 +1247,11 @@ pub fn show_control_center_popover(app: &Application) {
     audio_slider.set_hexpand(true);
     audio_slider.set_valign(Align::Center);
     audio_slider.connect_value_changed(move |s| {
-        let val = s.value() as i32;
-        let _ = Command::new("wpctl")
-            .arg("set-volume")
-            .arg("@DEFAULT_AUDIO_SINK@")
-            .arg(format!("{}%", val))
-            .spawn();
+        let val = s.value() / 100.0;
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.set_volume(val).await;
+        });
     });
     audio_card.append(&audio_icon);
     audio_card.append(&audio_slider);
@@ -1276,9 +1283,24 @@ pub fn show_control_center_popover(app: &Application) {
     let play_btn = Button::builder().label("▶").css_classes(["cc-quick-btn"]).build();
     let next_btn = Button::builder().label("⏭").css_classes(["cc-quick-btn"]).build();
     
-    prev_btn.connect_clicked(|_| { let _ = Command::new("playerctl").arg("previous").spawn(); });
-    play_btn.connect_clicked(|_| { let _ = Command::new("playerctl").arg("play-pause").spawn(); });
-    next_btn.connect_clicked(|_| { let _ = Command::new("playerctl").arg("next").spawn(); });
+    prev_btn.connect_clicked(|_| {
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.player_command("previous").await;
+        });
+    });
+    play_btn.connect_clicked(|_| {
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.player_command("play-pause").await;
+        });
+    });
+    next_btn.connect_clicked(|_| {
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.player_command("next").await;
+        });
+    });
 
     mpris_ctrl_box.append(&prev_btn);
     mpris_ctrl_box.append(&play_btn);
@@ -1415,16 +1437,17 @@ pub fn show_control_center_popover(app: &Application) {
             wifi_btn_clone.remove_css_class("cc-btn-active");
         }
 
-        let bt_enabled = if let Ok(output) = Command::new("bluetoothctl").arg("show").output() {
-            String::from_utf8_lossy(&output.stdout).contains("Powered: yes")
-        } else {
-            false
-        };
-        if bt_enabled {
-            bt_btn_clone.add_css_class("cc-btn-active");
-        } else {
-            bt_btn_clone.remove_css_class("cc-btn-active");
-        }
+        let bt_btn_clone_timer = bt_btn_clone.clone();
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            if let Ok(enabled) = ctrl.is_bluetooth_enabled().await {
+                if enabled {
+                    bt_btn_clone_timer.add_css_class("cc-btn-active");
+                } else {
+                    bt_btn_clone_timer.remove_css_class("cc-btn-active");
+                }
+            }
+        });
 
         glib::ControlFlow::Continue
     }));
