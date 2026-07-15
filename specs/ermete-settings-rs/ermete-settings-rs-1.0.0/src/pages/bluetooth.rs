@@ -159,32 +159,54 @@ pub fn build_page() -> Box {
                                             .build();
                                             
                                         let device_path = device.clone();
+                                        let connect_btn_clone = connect_btn.clone();
                                         connect_btn.connect_clicked(move |_| {
+                                            connect_btn_clone.set_label("Connessione...");
+                                            connect_btn_clone.set_sensitive(false);
                                             let path = device_path.clone();
+                                            let connect_btn_async = connect_btn_clone.clone();
                                             let ctx = gtk4::glib::MainContext::default();
                                             ctx.spawn_local(async move {
+                                                let mut success = true;
                                                 match crate::get_connection().await {
                                                     Ok(conn) => {
                                                         let Ok(builder) = Device1Proxy::builder(&conn).path(path.as_str()) else {
                                                             eprintln!("Invalid DBus object path for device: {}", path);
+                                                            connect_btn_async.set_label("Errore");
+                                                            connect_btn_async.set_sensitive(true);
                                                             return;
                                                         };
                                                         if let Ok(proxy) = builder.build().await {
                                                             if let Err(e) = proxy.pair().await {
                                                                 eprintln!("Error pairing with {}: {:?}", proxy.path(), e);
+                                                                success = false;
                                                             } else {
                                                                 println!("Successfully paired with {}", proxy.path());
                                                             }
-                                                            if let Err(e) = proxy.connect().await {
-                                                                eprintln!("Error connecting to {}: {:?}", proxy.path(), e);
-                                                            } else {
-                                                                println!("Successfully connected to {}", proxy.path());
+                                                            if success {
+                                                                if let Err(e) = proxy.connect().await {
+                                                                    eprintln!("Error connecting to {}: {:?}", proxy.path(), e);
+                                                                    success = false;
+                                                                } else {
+                                                                    println!("Successfully connected to {}", proxy.path());
+                                                                }
                                                             }
                                                         } else {
                                                             eprintln!("Error building proxy for Device1");
+                                                            success = false;
                                                         }
                                                     }
-                                                    Err(e) => eprintln!("Error connecting to DBus: {:?}", e),
+                                                    Err(e) => {
+                                                        eprintln!("Error connecting to DBus: {:?}", e);
+                                                        success = false;
+                                                    }
+                                                }
+                                                
+                                                if success {
+                                                    connect_btn_async.set_label("Connesso");
+                                                } else {
+                                                    connect_btn_async.set_label("Errore");
+                                                    connect_btn_async.set_sensitive(true);
                                                 }
                                             });
                                         });
@@ -227,8 +249,17 @@ mod tests {
 
     #[test]
     fn test_bluetooth_proxies_exist() {
-        let _ = BluetoothProxy::builder;
-        let _ = Device1Proxy::builder;
+        let ctx = gtk4::glib::MainContext::default();
+        ctx.block_on(async {
+            if let Ok(conn) = zbus::Connection::session().await {
+                if let Ok(proxy) = BluetoothProxy::builder(&conn).build().await {
+                    assert_eq!(proxy.inner().interface().as_str(), "os.ermete.Bedrock.Bluetooth");
+                }
+                if let Ok(proxy) = Device1Proxy::builder(&conn).path("/org/bluez/hci0/dev_00_00_00_00_00_00").unwrap().build().await {
+                    assert_eq!(proxy.inner().interface().as_str(), "org.bluez.Device1");
+                }
+            }
+        });
     }
 }
 

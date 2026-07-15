@@ -139,19 +139,25 @@ pub fn build_page() -> gtk4::Box {
             dialog.connect_response(move |dlg, response| {
                 if response == gtk4::ResponseType::Ok {
                     let new_password = entry_clone.text().to_string();
+                    let dlg_clone = dlg.clone();
+                    let entry_for_error = entry_clone.clone();
                     let ctx = gtk4::glib::MainContext::default();
                     ctx.spawn_local(async move {
+                        let mut success = false;
                         match crate::get_connection().await {
                             Ok(conn) => {
                                 let uid = unsafe { libc::getuid() };
                                 let path = format!("/org/freedesktop/Accounts/User{}", uid);
                                 let Ok(builder) = AccountsUserProxy::builder(&conn).path(path.as_str()) else {
                                     eprintln!("Invalid DBus object path for user: {}", path);
+                                    entry_for_error.add_css_class("error");
                                     return;
                                 };
                                 if let Ok(proxy) = builder.build().await {
                                     if let Err(e) = proxy.set_password(&new_password, "hint").await {
                                         eprintln!("Error setting password on AccountService: {:?}", e);
+                                    } else {
+                                        success = true;
                                     }
                                 } else {
                                     eprintln!("Error building proxy for AccountService");
@@ -159,18 +165,27 @@ pub fn build_page() -> gtk4::Box {
                                 if let Ok(bedrock) = BedrockProxy::new(&conn).await {
                                     if let Err(e) = bedrock.enroll_keyring_secret(&new_password).await {
                                         eprintln!("Error enrolling secret: {:?}", e);
+                                        success = false;
                                     } else {
                                         println!("Successfully changed password and enrolled secret.");
                                     }
                                 } else {
                                     eprintln!("Error building proxy for Bedrock");
+                                    success = false;
                                 }
                             }
                             Err(e) => eprintln!("Error connecting to DBus: {:?}", e),
                         }
+                        
+                        if success {
+                            dlg_clone.close();
+                        } else {
+                            entry_for_error.add_css_class("error");
+                        }
                     });
+                } else {
+                    dlg.close();
                 }
-                dlg.close();
             });
 
             dialog.present();
@@ -240,7 +255,16 @@ mod tests {
 
     #[test]
     fn test_accounts_proxies_exist() {
-        let _ = AccountsUserProxy::builder;
-        let _ = BedrockProxy::builder;
+        let ctx = gtk4::glib::MainContext::default();
+        ctx.block_on(async {
+            if let Ok(conn) = zbus::Connection::session().await {
+                if let Ok(proxy) = AccountsUserProxy::builder(&conn).path("/org/freedesktop/Accounts/User1000").unwrap().build().await {
+                    assert_eq!(proxy.inner().interface().as_str(), "org.freedesktop.Accounts.User");
+                }
+                if let Ok(proxy) = BedrockProxy::builder(&conn).build().await {
+                    assert_eq!(proxy.inner().interface().as_str(), "org.ermete.Bedrock");
+                }
+            }
+        });
     }
 }
