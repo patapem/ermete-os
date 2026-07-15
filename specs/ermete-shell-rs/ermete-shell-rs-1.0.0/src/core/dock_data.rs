@@ -149,6 +149,7 @@ mod tests {
                 app_id: Some("firefox".to_string()),
                 is_focused: true,
                 workspace_id: Some(1),
+                layout: None,
             },
             NiriWindowInfo {
                 id: 102,
@@ -156,6 +157,7 @@ mod tests {
                 app_id: Some("org.gnome.Terminal".to_string()),
                 is_focused: false,
                 workspace_id: Some(1),
+                layout: None,
             },
             NiriWindowInfo {
                 id: 103,
@@ -163,6 +165,7 @@ mod tests {
                 app_id: Some("nautilus".to_string()),
                 is_focused: false,
                 workspace_id: Some(1),
+                layout: None,
             },
         ];
 
