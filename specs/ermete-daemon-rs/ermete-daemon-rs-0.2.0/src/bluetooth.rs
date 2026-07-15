@@ -48,7 +48,7 @@ impl Bluetooth {
         Ok(())
     }
 
-    async fn get_devices(&self) -> fdo::Result<Vec<String>> {
+    async fn get_devices(&self) -> fdo::Result<Vec<(String, String)>> {
         let obj_mgr = fdo::ObjectManagerProxy::builder(&self.sys_conn)
             .destination("org.bluez").unwrap()
             .path("/").unwrap()
@@ -75,10 +75,10 @@ impl Bluetooth {
                     .unwrap_or(false);
 
                 let status_icon = if connected { " (Connesso)" } else { "" };
-                devices.push(format!("{} {}", status_icon, name));
+                devices.push((format!("{} {}", status_icon, name), path.to_string()));
             }
         }
-        devices.sort();
+        devices.sort_by(|a, b| a.0.cmp(&b.0));
         Ok(devices)
     }
 }

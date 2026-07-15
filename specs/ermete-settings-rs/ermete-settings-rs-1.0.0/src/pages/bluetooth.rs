@@ -12,7 +12,7 @@ trait Bluetooth {
     #[dbus_proxy(property)]
     fn set_power(&self, value: bool) -> zbus::Result<()>;
 
-    fn get_devices(&self) -> zbus::Result<Vec<String>>;
+    fn get_devices(&self) -> zbus::Result<Vec<(String, String)>>;
 }
 
 #[zbus::dbus_proxy(
@@ -139,7 +139,7 @@ pub fn build_page() -> Box {
                                     while let Some(child) = list_box.first_child() {
                                         list_box.remove(&child);
                                     }
-                                    for device in devices {
+                                    for (device_name, device_path) in devices {
                                         let row_box = Box::builder()
                                             .orientation(Orientation::Horizontal)
                                             .spacing(12)
@@ -149,7 +149,7 @@ pub fn build_page() -> Box {
                                             .margin_end(12)
                                             .build();
                                             
-                                        let label = Label::new(Some(&device));
+                                        let label = Label::new(Some(&device_name));
                                         label.set_halign(Align::Start);
                                         label.set_hexpand(true);
                                         
@@ -158,7 +158,6 @@ pub fn build_page() -> Box {
                                             .valign(Align::Center)
                                             .build();
                                             
-                                        let device_path = device.clone();
                                         let connect_btn_clone = connect_btn.clone();
                                         connect_btn.connect_clicked(move |_| {
                                             connect_btn_clone.set_label("Connessione...");
