@@ -47,6 +47,15 @@ trait NmAccessPoint {
     fn rsn_flags(&self) -> zbus::Result<u32>;
 }
 
+#[proxy(
+    interface = "org.freedesktop.NetworkManager.Settings",
+    default_service = "org.freedesktop.NetworkManager",
+    default_path = "/org/freedesktop/NetworkManager/Settings"
+)]
+trait NmSettings {
+    fn add_connection(&self, connection: HashMap<&'static str, HashMap<&'static str, zbus::zvariant::Value<'_>>>) -> zbus::Result<OwnedObjectPath>;
+}
+
 pub struct Network {
     pub sys_conn: Connection,
 }
@@ -140,18 +149,181 @@ impl Network {
         &self,
         ssid: String,
         identity: String,
-        _password: String,
+        password: String,
         eap_method: String,
         ca_cert_path: String,
     ) -> fdo::Result<String> {
         println!("[Bedrock Network] Enterprise Wi-Fi requested for SSID={}, identity={}, method={}", ssid, identity, eap_method);
-        // Returns D-Bus object path of created connection or active connection
-        Ok(format!("Enterprise Wi-Fi profile '{}' staged via NetworkManager D-Bus (PEAP/TLS CA: {})", ssid, ca_cert_path))
+        let nm_settings = NmSettingsProxy::new(&self.sys_conn).await
+            .map_err(|e| fdo::Error::Failed(format!("Failed to connect to NetworkManager Settings DBus: {}", e)))?;
+        let dict = Self::build_enterprise_wifi_dict(&ssid, &identity, &password, &eap_method, &ca_cert_path);
+        let path = nm_settings.add_connection(dict).await
+            .map_err(|e| fdo::Error::Failed(format!("Failed to add connection: {}", e)))?;
+        Ok(path.to_string())
     }
 
     /// Add WireGuard or OpenVPN tunnel from config file
     async fn add_vpn_tunnel(&self, name: String, vpn_type: String, config_path: String) -> fdo::Result<String> {
         println!("[Bedrock Network] Staging VPN Tunnel: name={}, type={}, path={}", name, vpn_type, config_path);
-        Ok(format!("VPN Tunnel '{}' ({}) configured via NetworkManager.", name, vpn_type))
+        let nm_settings = NmSettingsProxy::new(&self.sys_conn).await
+            .map_err(|e| fdo::Error::Failed(format!("Failed to connect to NetworkManager Settings DBus: {}", e)))?;
+        let dict = Self::build_vpn_tunnel_dict(&name, &vpn_type, &config_path);
+        let path = nm_settings.add_connection(dict).await
+            .map_err(|e| fdo::Error::Failed(format!("Failed to add connection: {}", e)))?;
+        Ok(path.to_string())
     }
 }
+
+impl Network {
+    pub fn build_enterprise_wifi_dict(
+        ssid: &str,
+        identity: &str,
+        password: &str,
+        eap_method: &str,
+        ca_cert_path: &str,
+    ) -> HashMap<&'static str, HashMap<&'static str, zbus::zvariant::Value<'static>>> {
+        let mut dict = HashMap::new();
+
+        let mut conn = HashMap::new();
+        conn.insert("id", zbus::zvariant::Value::from(ssid.to_string()));
+        conn.insert("type", zbus::zvariant::Value::from("802-11-wireless"));
+        dict.insert("connection", conn);
+
+        let mut wifi = HashMap::new();
+        wifi.insert("ssid", zbus::zvariant::Value::from(ssid.as_bytes().to_vec()));
+        wifi.insert("security", zbus::zvariant::Value::from("802-11-wireless-security"));
+        dict.insert("802-11-wireless", wifi);
+
+        let mut sec = HashMap::new();
+        sec.insert("key-mgmt", zbus::zvariant::Value::from("wpa-eap"));
+        dict.insert("802-11-wireless-security", sec);
+
+        let mut eap = HashMap::new();
+        eap.insert("eap", zbus::zvariant::Value::from(vec![eap_method.to_string()]));
+        eap.insert("identity", zbus::zvariant::Value::from(identity.to_string()));
+        eap.insert("password", zbus::zvariant::Value::from(password.to_string()));
+        eap.insert("ca-cert", zbus::zvariant::Value::from(ca_cert_path.as_bytes().to_vec()));
+        dict.insert("802-1x", eap);
+
+        let mut ipv4 = HashMap::new();
+        ipv4.insert("method", zbus::zvariant::Value::from("auto"));
+        dict.insert("ipv4", ipv4);
+
+        let mut ipv6 = HashMap::new();
+        ipv6.insert("method", zbus::zvariant::Value::from("auto"));
+        dict.insert("ipv6", ipv6);
+
+        dict
+    }
+
+    pub fn build_vpn_tunnel_dict(
+        name: &str,
+        vpn_type: &str,
+        config_path: &str,
+    ) -> HashMap<&'static str, HashMap<&'static str, zbus::zvariant::Value<'static>>> {
+        let mut dict = HashMap::new();
+
+        let mut conn = HashMap::new();
+        conn.insert("id", zbus::zvariant::Value::from(name.to_string()));
+        conn.insert("type", zbus::zvariant::Value::from(vpn_type.to_string()));
+        dict.insert("connection", conn);
+
+        let mut vpn = HashMap::new();
+        let service_type = if vpn_type.contains('.') {
+            vpn_type.to_string()
+        } else {
+            format!("org.freedesktop.NetworkManager.{}", vpn_type)
+        };
+        vpn.insert("service-type", zbus::zvariant::Value::from(service_type));
+
+        let mut data_map: HashMap<String, String> = HashMap::new();
+        if let Ok(content) = std::fs::read_to_string(config_path) {
+            for line in content.lines() {
+                let trimmed = line.trim();
+                if trimmed.is_empty() || trimmed.starts_with('#') || trimmed.starts_with(';') || trimmed.starts_with('[') {
+                    continue;
+                }
+                if let Some((k, v)) = trimmed.split_once('=') {
+                    data_map.insert(k.trim().to_string(), v.trim().to_string());
+                } else if let Some((k, v)) = trimmed.split_once(' ') {
+                    data_map.insert(k.trim().to_string(), v.trim().to_string());
+                }
+            }
+        }
+        if data_map.is_empty() {
+            data_map.insert("config".to_string(), config_path.to_string());
+        }
+        vpn.insert("data", zbus::zvariant::Value::from(data_map));
+        dict.insert("vpn", vpn);
+
+        dict
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use zbus::zvariant::Value;
+
+    #[test]
+    fn test_build_enterprise_wifi_dict() {
+        let dict = Network::build_enterprise_wifi_dict(
+            "Corporate-SSID",
+            "user@ermete.os",
+            "secretpass",
+            "peap",
+            "/etc/ssl/certs/ca.pem",
+        );
+
+        let conn = dict.get("connection").expect("missing 'connection' setting");
+        assert_eq!(conn.get("id").unwrap(), &Value::from("Corporate-SSID"));
+        assert_eq!(conn.get("type").unwrap(), &Value::from("802-11-wireless"));
+
+        let wifi = dict.get("802-11-wireless").expect("missing '802-11-wireless' setting");
+        assert_eq!(wifi.get("ssid").unwrap(), &Value::from("Corporate-SSID".as_bytes().to_vec()));
+        assert_eq!(wifi.get("security").unwrap(), &Value::from("802-11-wireless-security"));
+
+        let sec = dict.get("802-11-wireless-security").expect("missing '802-11-wireless-security' setting");
+        assert_eq!(sec.get("key-mgmt").unwrap(), &Value::from("wpa-eap"));
+
+        let eap = dict.get("802-1x").expect("missing '802-1x' setting");
+        assert_eq!(eap.get("eap").unwrap(), &Value::from(vec!["peap".to_string()]));
+        assert_eq!(eap.get("identity").unwrap(), &Value::from("user@ermete.os"));
+        assert_eq!(eap.get("password").unwrap(), &Value::from("secretpass"));
+        assert_eq!(eap.get("ca-cert").unwrap(), &Value::from("/etc/ssl/certs/ca.pem".as_bytes().to_vec()));
+
+        let ipv4 = dict.get("ipv4").expect("missing 'ipv4' setting");
+        assert_eq!(ipv4.get("method").unwrap(), &Value::from("auto"));
+
+        let ipv6 = dict.get("ipv6").expect("missing 'ipv6' setting");
+        assert_eq!(ipv6.get("method").unwrap(), &Value::from("auto"));
+    }
+
+    #[test]
+    fn test_build_vpn_tunnel_dict_from_file() {
+        let tmp_path = "/tmp/test_ermete_vpn.conf";
+        let _ = std::fs::write(tmp_path, "remote = vpn.ermete.os\nport = 1194\n");
+        let dict = Network::build_vpn_tunnel_dict("Ermete-VPN", "openvpn", tmp_path);
+
+        let conn = dict.get("connection").expect("missing 'connection' setting");
+        assert_eq!(conn.get("id").unwrap(), &Value::from("Ermete-VPN"));
+        assert_eq!(conn.get("type").unwrap(), &Value::from("openvpn"));
+
+        let vpn = dict.get("vpn").expect("missing 'vpn' setting");
+        assert_eq!(vpn.get("service-type").unwrap(), &Value::from("org.freedesktop.NetworkManager.openvpn"));
+
+        let data = vpn.get("data").expect("missing 'data' dictionary");
+        if let Value::Dict(d) = data {
+            let remote_key = Value::from("remote");
+            let remote: Value = d.get::<_, Value<'_>>(&remote_key).unwrap().unwrap().clone();
+            assert_eq!(remote, Value::from("vpn.ermete.os"));
+            let port_key = Value::from("port");
+            let port: Value = d.get::<_, Value<'_>>(&port_key).unwrap().unwrap().clone();
+            assert_eq!(port, Value::from("1194"));
+        } else {
+            panic!("expected Dict for vpn.data");
+        }
+        let _ = std::fs::remove_file(tmp_path);
+    }
+}
+

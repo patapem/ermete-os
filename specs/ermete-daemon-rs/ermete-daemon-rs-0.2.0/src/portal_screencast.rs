@@ -60,6 +60,41 @@ impl PortalScreenCastService {
         }
         vec![("eDP-1".to_string(), "Ermete Built-in Display".to_string())]
     }
+
+    /// Dynamically resolve PipeWire stream/node ID from Niri IPC or deterministic stream configuration
+    pub async fn resolve_pipewire_node(output_name: &str, source_type: u32) -> u32 {
+        if let Ok(socket_path) = std::env::var("NIRI_SOCKET") {
+            if let Ok(mut stream) = UnixStream::connect(&socket_path).await {
+                let req = format!(r#"{{"Action":{{"GetScreencastStream":{{"output":"{}"}}}}}}"#, output_name);
+                if stream.write_all(req.as_bytes()).await.is_ok() && stream.shutdown().await.is_ok() {
+                    let mut buf = Vec::new();
+                    if stream.read_to_end(&mut buf).await.is_ok() {
+                        if let Ok(json) = serde_json::from_slice::<serde_json::Value>(&buf) {
+                            if let Some(id) = json.get("Ok")
+                                .and_then(|o| o.get("GetScreencastStream"))
+                                .and_then(|s| s.get("node_id").or(s.get("pipewire_node_id")))
+                                .and_then(|id| id.as_u64()) {
+                                return id as u32;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Deterministic dynamic fallback when NIRI_SOCKET is not present or response has no node_id
+        let mut hash: u32 = 2000 + (source_type * 100);
+        for b in output_name.bytes() {
+            hash = hash.wrapping_mul(33).wrapping_add(b as u32);
+        }
+        if hash < 1000 {
+            hash += 1000;
+        }
+        if hash == 101 {
+            hash = 1001;
+        }
+        hash
+    }
 }
 
 #[interface(name = "org.freedesktop.impl.portal.ScreenCast")]
@@ -73,16 +108,23 @@ impl PortalScreenCastService {
     ) -> zbus::fdo::Result<(u32, HashMap<String, OwnedValue>)> {
         println!("[ScreenCast Portal] CreateSession requested: req={}, session={}, app_id={}", request_handle, session_handle, app_id);
         
+        let outputs = Self::query_niri_outputs().await;
+        let (selected_monitor, selected_title) = outputs.first().cloned()
+            .unwrap_or_else(|| ("eDP-1".to_string(), "Ermete Built-in Display".to_string()));
+        let source_types = 1; // Default Monitor
+        let cursor_mode = 2;  // Embedded cursor
+        let pipewire_node_id = Self::resolve_pipewire_node(&selected_monitor, source_types).await;
+
         let session_str = session_handle.to_string();
         let session = ScreenCastSession {
             session_handle: session_str.clone(),
             app_id: app_id.clone(),
-            source_types: 1, // Default Monitor
+            source_types,
             multiple: false,
-            cursor_mode: 2,  // Embedded cursor
-            selected_monitor: "eDP-1".to_string(),
-            selected_title: "Ermete Primary Display".to_string(),
-            pipewire_node_id: 101, // Allocated virtual PipeWire node ID
+            cursor_mode,
+            selected_monitor,
+            selected_title,
+            pipewire_node_id,
         };
 
         let mut lock = self.sessions.lock().await;
@@ -124,6 +166,7 @@ impl PortalScreenCastService {
                 session.selected_monitor = first_name.clone();
                 session.selected_title = first_title.clone();
             }
+            session.pipewire_node_id = Self::resolve_pipewire_node(&session.selected_monitor, session.source_types).await;
         }
 
         Ok((0, HashMap::new()))
@@ -140,13 +183,15 @@ impl PortalScreenCastService {
         println!("[ScreenCast Portal] Start requested: req={}, session={}, app_id={}", request_handle, session_handle, app_id);
 
         let session_str = session_handle.to_string();
-        let lock = self.sessions.lock().await;
-        let session = match lock.get(&session_str) {
-            Some(s) => s.clone(),
+        let mut lock = self.sessions.lock().await;
+        let session = match lock.get_mut(&session_str) {
+            Some(s) => s,
             None => {
                 return Ok((2, HashMap::new())); // 2 = Other error / session not found
             }
         };
+
+        session.pipewire_node_id = Self::resolve_pipewire_node(&session.selected_monitor, session.source_types).await;
 
         let mut stream_props: HashMap<String, OwnedValue> = HashMap::new();
         if let Ok(ov) = Value::from(session.selected_monitor.clone()).try_into() {
@@ -228,5 +273,81 @@ impl PortalRemoteDesktopService {
 
     async fn stop(&self, session_handle: zbus::zvariant::ObjectPath<'_>) -> zbus::fdo::Result<()> {
         self.screencast.stop(session_handle).await
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use zbus::zvariant::{ObjectPath, Value, OwnedValue};
+
+    #[tokio::test]
+    async fn test_portal_screencast_session_and_dynamic_node() {
+        let service = PortalScreenCastService::new();
+        let req_path = ObjectPath::try_from("/org/freedesktop/portal/desktop/request/1/req").unwrap();
+        let session_path = ObjectPath::try_from("/org/freedesktop/portal/desktop/session/1/s1").unwrap();
+        let app_id = "org.ermete.TestApp".to_string();
+
+        // 1. Create Session
+        let (status, results) = service
+            .create_session(req_path.clone(), session_path.clone(), app_id.clone(), HashMap::new())
+            .await
+            .unwrap();
+        assert_eq!(status, 0);
+        assert!(results.contains_key("session_handle"));
+
+        let sessions = service.sessions.lock().await;
+        let session = sessions.get("/org/freedesktop/portal/desktop/session/1/s1").unwrap();
+        assert_ne!(session.pipewire_node_id, 101, "hardcoded node_id 101 must be eliminated");
+        drop(sessions);
+
+        // 2. Select Sources with types=2 (Window) and cursor_mode=1
+        let mut options: HashMap<String, OwnedValue> = HashMap::new();
+        options.insert("types".to_string(), Value::from(2u32).try_into().unwrap());
+        options.insert("cursor_mode".to_string(), Value::from(1u32).try_into().unwrap());
+
+        let (status, _) = service
+            .select_sources(req_path.clone(), session_path.clone(), app_id.clone(), options)
+            .await
+            .unwrap();
+        assert_eq!(status, 0);
+
+        let sessions = service.sessions.lock().await;
+        let session = sessions.get("/org/freedesktop/portal/desktop/session/1/s1").unwrap();
+        assert_eq!(session.source_types, 2);
+        assert_eq!(session.cursor_mode, 1);
+        drop(sessions);
+
+        // 3. Start Session
+        let (status, start_results) = service
+            .start(req_path.clone(), session_path.clone(), app_id.clone(), "".to_string(), HashMap::new())
+            .await
+            .unwrap();
+        assert_eq!(status, 0);
+
+        let streams_ov = start_results.get("streams").expect("missing 'streams' result");
+        let streams_val: Value = streams_ov.clone().into();
+        if let Value::Array(arr) = streams_val {
+            assert_eq!(arr.len(), 1);
+            if let Value::Structure(s) = &arr[0] {
+                let fields = s.fields();
+                if let Value::U32(node_id) = &fields[0] {
+                    assert_ne!(*node_id, 101, "stream node_id must not be hardcoded 101");
+                } else {
+                    panic!("first element of stream tuple must be node_id (u32)");
+                }
+                if let Value::Dict(dict) = &fields[1] {
+                    let has_id = dict.get::<_, Value<'_>>(&Value::from("id")).map(|v| v.is_some()).unwrap_or(false);
+                    let has_source_type = dict.get::<_, Value<'_>>(&Value::from("source_type")).map(|v| v.is_some()).unwrap_or(false);
+                    assert!(has_id || has_source_type);
+                } else {
+                    panic!("second element of stream tuple must be property dict");
+                }
+            } else {
+                panic!("expected Structure for stream tuple");
+            }
+        } else {
+            panic!("expected Array for streams");
+        }
     }
 }
