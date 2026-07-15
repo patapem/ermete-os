@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           ermete-shell-rs
 Version:        1.0.0
-Release:        18%{?dist}
+Release:        19%{?dist}
 Summary:        Ermete OS Native Rust GTK4 Shell
 
 License:        MIT
@@ -27,6 +27,11 @@ install -m 0755 target/release/ermete-shell-rs %{buildroot}%{_bindir}/ermete-she
 %{_bindir}/ermete-shell-rs
 
 %changelog
+* Wed Jul 15 2026 Ermete Forge <forge@ermete.os> - 1.0.0-19
+- Implemented automatic Keyring unlock during biometric / FIDO2 login via TPM 2.0 sealed secret (`systemd-creds decrypt`) or password fallback (`greeter.rs`)
+- Implemented Inline Replies (`has_inline_reply`) with quick text field inside notification toast and center (`notifications.rs`)
+- Added Master Do Not Disturb (`DND_ACTIVE`) atomic toggle across notification center and toasts (`core/mod.rs`)
+
 * Wed Jul 15 2026 Ermete Forge <forge@ermete.os> - 1.0.0-18
 - Implement Phase 4: interactive multi-step PAM Lockscreen (--lock), Notification Center history sidebar, and topbar bell icon
 - Implement Phase 3 Visual Polish & Physics: Mica/Frosted Glass blur namespaces, SpringAnimator kinematics solver, and Spotlight FTS5 deeplinks

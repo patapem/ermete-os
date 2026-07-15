@@ -3,6 +3,7 @@ mod network;
 mod bluetooth;
 mod settings;
 mod portal;
+mod portal_screencast;
 
 use std::error::Error;
 use zbus::connection::Builder;
@@ -11,6 +12,7 @@ use network::Network;
 use bluetooth::Bluetooth;
 use settings::SettingsService;
 use portal::PortalSettingsService;
+use portal_screencast::{PortalScreenCastService, PortalRemoteDesktopService};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -20,6 +22,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!("Initializing ACID Settings Engine and XDG Desktop Portal backend...");
     let settings_srv = SettingsService::new();
     let portal_srv = PortalSettingsService::new(settings_srv.state.clone());
+    let screencast_srv = PortalScreenCastService::new();
+    let remotedesktop_srv = PortalRemoteDesktopService::new(screencast_srv.clone());
 
     println!("Starting Ermete Bedrock Session Daemon on /os/ermete/Bedrock & /org/ermete/Settings...");
     let _conn = Builder::session()?
@@ -32,6 +36,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .serve_at("/org/ermete/Settings", settings_srv.clone())?
         .serve_at("/os/ermete/Bedrock/Settings", settings_srv)?
         .serve_at("/org/freedesktop/portal/desktop", portal_srv)?
+        .serve_at("/org/freedesktop/portal/desktop", screencast_srv)?
+        .serve_at("/org/freedesktop/portal/desktop", remotedesktop_srv)?
         .build()
         .await?;
 
@@ -39,3 +45,4 @@ async fn main() -> Result<(), Box<dyn Error>> {
     std::future::pending::<()>().await;
     Ok(())
 }
+

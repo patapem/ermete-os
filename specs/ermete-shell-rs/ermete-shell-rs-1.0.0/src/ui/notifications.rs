@@ -1,7 +1,7 @@
 use crate::core::*;
 use glib::clone;
 use gtk4::prelude::*;
-use gtk4::{Align, Application, ApplicationWindow, Box as GtkBox, Button, Label, Orientation, ScrolledWindow};
+use gtk4::{Align, Application, ApplicationWindow, Box as GtkBox, Button, Entry, Label, Orientation, ScrolledWindow};
 use gtk4_layer_shell::{Edge, Layer, LayerShell};
 
 pub fn show_toast_popup(app: &Application, notif: &NotificationData) {
@@ -20,7 +20,7 @@ pub fn show_toast_popup(app: &Application, notif: &NotificationData) {
 
     let vbox = GtkBox::builder()
         .orientation(Orientation::Vertical)
-        .spacing(4)
+        .spacing(6)
         .css_classes(["cc-card"])
         .build();
     
@@ -29,10 +29,54 @@ pub fn show_toast_popup(app: &Application, notif: &NotificationData) {
     
     vbox.append(&title);
     vbox.append(&body);
+
+    if !notif.actions.is_empty() {
+        let act_box = GtkBox::builder().orientation(Orientation::Horizontal).spacing(6).build();
+        for (ak, al) in &notif.actions {
+            if ak != "inline-reply" && !ak.contains("reply") {
+                let btn = Button::builder().label(al).css_classes(["cc-btn"]).build();
+                let toast_clone = toast.clone();
+                let id = notif.id;
+                let key_clone = ak.clone();
+                btn.connect_clicked(move |_| {
+                    println!("[Ermete Notifications] Action '{}' invoked for notification ID {}", key_clone, id);
+                    toast_clone.close();
+                });
+                act_box.append(&btn);
+            }
+        }
+        vbox.append(&act_box);
+    }
+
+    if notif.has_inline_reply {
+        let reply_box = GtkBox::builder().orientation(Orientation::Horizontal).spacing(6).margin_top(4).build();
+        let entry = Entry::builder().placeholder_text("Rispondi rapidamente...").hexpand(true).build();
+        let send_btn = Button::builder().label("󰇀").css_classes(["cc-quick-btn"]).build();
+        
+        let entry_clone = entry.clone();
+        let toast_clone = toast.clone();
+        let app_name = notif.app_name.clone();
+        let send_action = move |_| {
+            let text = entry_clone.text().to_string();
+            if !text.is_empty() {
+                println!("[Ermete Notifications] Inline reply sent to {}: {}", app_name, text);
+                toast_clone.close();
+            }
+        };
+        send_btn.connect_clicked(send_action.clone());
+        entry.connect_activate(move |_| send_action(()));
+
+        reply_box.append(&entry);
+        reply_box.append(&send_btn);
+        vbox.append(&reply_box);
+    }
+
     toast.set_child(Some(&vbox));
     toast.present();
 
-    glib::timeout_add_seconds_local(5, clone!(@weak toast => @default-return glib::ControlFlow::Break, move || {
+    let has_reply = notif.has_inline_reply;
+    let timeout_secs = if has_reply { 12 } else { 5 };
+    glib::timeout_add_seconds_local(timeout_secs, clone!(@weak toast => @default-return glib::ControlFlow::Break, move || {
         toast.close();
         glib::ControlFlow::Break
     }));
@@ -73,7 +117,9 @@ pub fn spawn_notification_daemon(app: &Application) {
             }
         });
         save_notification_history();
-        show_toast_popup(&app_clone, &notif);
+        if !crate::core::DND_ACTIVE.load(std::sync::atomic::Ordering::SeqCst) {
+            show_toast_popup(&app_clone, &notif);
+        }
         glib::ControlFlow::Continue
     });
 }
@@ -232,6 +278,28 @@ pub fn show_notification_center(app: &Application) {
 
                     item_box.append(&sum_hdr);
                     item_box.append(&body_lbl);
+
+                    if item.has_inline_reply {
+                        let reply_box = GtkBox::builder().orientation(Orientation::Horizontal).spacing(6).margin_top(4).build();
+                        let entry = Entry::builder().placeholder_text("Rispondi...").hexpand(true).build();
+                        let send_btn = Button::builder().label("󰇀").css_classes(["cc-quick-btn"]).build();
+                        let entry_clone = entry.clone();
+                        let app_name_rep = item.app_name.clone();
+                        let sb_close = sidebar.clone();
+                        let send_action = move |_| {
+                            let text = entry_clone.text().to_string();
+                            if !text.is_empty() {
+                                println!("[Ermete Notifications] Inline reply sent to {}: {}", app_name_rep, text);
+                                sb_close.close();
+                            }
+                        };
+                        send_btn.connect_clicked(send_action.clone());
+                        entry.connect_activate(move |_| send_action(()));
+                        reply_box.append(&entry);
+                        reply_box.append(&send_btn);
+                        item_box.append(&reply_box);
+                    }
+
                     group_card.append(&item_box);
                 }
 
@@ -249,15 +317,26 @@ pub fn show_notification_center(app: &Application) {
         .halign(Align::Center)
         .build();
 
+    let is_dnd = crate::core::DND_ACTIVE.load(std::sync::atomic::Ordering::SeqCst);
     let dnd_btn = Button::builder()
-        .label("󰂛 Non Disturbare")
+        .label(if is_dnd { "󰂛 Non Disturbare: ATTIVO" } else { "󰂛 Non Disturbare: OFF" })
         .css_classes(["cc-btn"])
         .build();
 
     let dnd_status = Label::builder()
-        .label("Attivo/Disattivo dal Control Center")
+        .label(if is_dnd { "Notifiche popup bloccate" } else { "Notifiche popup attive" })
         .css_classes(["cc-label-sub"])
         .build();
+
+    let dnd_btn_clone = dnd_btn.clone();
+    let dnd_stat_clone = dnd_status.clone();
+    dnd_btn.connect_clicked(move |_| {
+        let curr = crate::core::DND_ACTIVE.load(std::sync::atomic::Ordering::SeqCst);
+        let next = !curr;
+        crate::core::DND_ACTIVE.store(next, std::sync::atomic::Ordering::SeqCst);
+        dnd_btn_clone.set_label(if next { "󰂛 Non Disturbare: ATTIVO" } else { "󰂛 Non Disturbare: OFF" });
+        dnd_stat_clone.set_text(if next { "Notifiche popup bloccate" } else { "Notifiche popup attive" });
+    });
 
     footer_card.append(&dnd_btn);
     footer_card.append(&dnd_status);

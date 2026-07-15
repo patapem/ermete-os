@@ -285,7 +285,52 @@ fn resolve_target_username() -> String {
     discover_target_user().username
 }
 
-fn authenticate_interactive(password: &str, is_lockscreen: bool, status_cb: &dyn Fn(&str)) -> Result<(), String> {
+fn unlock_keyring_automatic(password: &str, username: &str) {
+    println!("[Ermete Greeter] Keyring unlock requested for user: {}", username);
+    if !password.is_empty() {
+        if let Ok(mut child) = std::process::Command::new("gnome-keyring-daemon")
+            .arg("--unlock")
+            .stdin(std::process::Stdio::piped())
+            .stdout(std::process::Stdio::null())
+            .stderr(std::process::Stdio::null())
+            .spawn()
+        {
+            if let Some(mut stdin) = child.stdin.take() {
+                let _ = std::io::Write::write_all(&mut stdin, password.as_bytes());
+            }
+            let _ = child.wait();
+        }
+    } else {
+        // Biometric / FIDO2 login without password: try decrypting TPM 2.0 / cryptenroll sealed token
+        let tpm_sealed_path = format!("/var/home/{}/.local/share/keyrings/tpm2.sealed", username);
+        if std::path::Path::new(&tpm_sealed_path).exists() {
+            if let Ok(output) = std::process::Command::new("systemd-creds")
+                .args(&["decrypt", &tpm_sealed_path, "-"])
+                .output()
+            {
+                if output.status.success() {
+                    if let Ok(mut child) = std::process::Command::new("gnome-keyring-daemon")
+                        .arg("--unlock")
+                        .stdin(std::process::Stdio::piped())
+                        .stdout(std::process::Stdio::null())
+                        .stderr(std::process::Stdio::null())
+                        .spawn()
+                    {
+                        if let Some(mut stdin) = child.stdin.take() {
+                            let _ = std::io::Write::write_all(&mut stdin, &output.stdout);
+                        }
+                        let _ = child.wait();
+                    }
+                }
+            }
+        }
+    }
+}
+
+pub fn authenticate_interactive<F>(password: &str, is_lockscreen: bool, status_cb: &F) -> Result<(), String>
+where
+    F: Fn(&str),
+{
     let path = std::env::var("GREETD_SOCK").unwrap_or_else(|_| "/run/greetd.sock".to_string());
     if !std::path::Path::new(&path).exists() {
         // Dry-run / standalone mode for previewing greeter/lock UI outside greetd
@@ -309,7 +354,7 @@ fn authenticate_interactive(password: &str, is_lockscreen: bool, status_cb: &dyn
         "ermete-session".to_string()
     };
 
-    let req = Request::CreateSession { username };
+    let req = Request::CreateSession { username: username.clone() };
     let mut resp = send_request(&mut stream, &req)?;
 
     // PAM / Biometric Multi-step interactive conversation loop (pam_fprintd / pam_u2f / pam_unix)
@@ -333,9 +378,11 @@ fn authenticate_interactive(password: &str, is_lockscreen: bool, status_cb: &dyn
             }
             Response::Success => {
                 if is_lockscreen {
+                    unlock_keyring_automatic(password, &username);
                     // In lockscreen mode, session is already active; unlock directly
                     return Ok(());
                 } else {
+                    unlock_keyring_automatic(password, &username);
                     let req = Request::StartSession {
                         cmd: vec![session_cmd],
                         env: vec![],
@@ -499,7 +546,7 @@ pub fn build_ui(app: &Application, is_lockscreen: bool) {
         .build();
 
     let biometric_pill = Label::builder()
-        .label("󰈆 BIOMETRIA (FPRINTD / PAM) IN ASCOLTO")
+        .label("󰈆 BIOMETRIA (TPM 2.0 / FPRINTD) & KEYRING UNLOCK ATTIVI")
         .halign(Align::Center)
         .css_classes(["greeter-biometric-pill"])
         .visible(std::path::Path::new("/var/run/dbus/system_bus_socket").exists())

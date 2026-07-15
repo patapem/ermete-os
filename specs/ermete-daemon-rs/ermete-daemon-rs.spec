@@ -1,8 +1,8 @@
 %global debug_package %{nil}
 Name:           ermete-daemon-rs
 Version:        0.2.0
-Release:        2%{?dist}
-Summary:        Ermete OS Native D-Bus Bedrock & ACID Settings Daemon
+Release:        3%{?dist}
+Summary:        Ermete OS Native D-Bus Bedrock, ACID Settings & Multimedia Portal Daemon
 
 License:        MIT
 Source0:        ermete-daemon-rs-%{version}.tar.gz
@@ -11,7 +11,7 @@ BuildRequires:  rust cargo gcc gcc-c++ pkgconf-pkg-config
 Requires:       pipewire wireplumber
 
 %description
-Pure Rust native D-Bus IPC service for Ermete OS audio, system bedrock management, ACID settings database, and XDG Desktop Portal settings backend.
+Pure Rust native D-Bus IPC service for Ermete OS audio, system bedrock management, ACID settings database, and XDG Desktop Portal backend (Settings, ScreenCast, RemoteDesktop).
 
 %prep
 %autosetup
@@ -39,6 +39,10 @@ install -m 0644 org.ermete.Settings.service %{buildroot}%{_datadir}/dbus-1/servi
 %{_datadir}/dbus-1/services/org.ermete.Settings.service
 
 %changelog
+* Mon Jul 15 2026 Ermete Forge <forge@ermete.os> - 0.2.0-3
+- Implemented native XDG Desktop Portal ScreenCast and RemoteDesktop backends (org.freedesktop.impl.portal.ScreenCast & RemoteDesktop)
+- Added Niri output discovery via UNIX socket ($NIRI_SOCKET) and PipeWire stream negotiation
+
 * Mon Jul 15 2026 Ermete Forge <forge@ermete.os> - 0.2.0-2
 - Added ACID JSON Settings engine (org.ermete.Settings) and XDG Desktop Portal backend (org.freedesktop.impl.portal.Settings)
 - Installed portal configuration files and D-Bus service activation units

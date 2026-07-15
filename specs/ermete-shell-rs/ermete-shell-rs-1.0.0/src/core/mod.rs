@@ -45,6 +45,10 @@ pub struct NotificationData {
     pub body: String,
     #[serde(default = "default_timestamp")]
     pub timestamp: String,
+    #[serde(default)]
+    pub actions: Vec<(String, String)>,
+    #[serde(default)]
+    pub has_inline_reply: bool,
 }
 
 fn default_timestamp() -> String {
@@ -83,6 +87,8 @@ pub fn load_notification_history() {
     }
 }
 
+pub static DND_ACTIVE: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
 thread_local! {
     pub static NOTIFICATIONS: std::cell::RefCell<Vec<NotificationData>> = std::cell::RefCell::new(Vec::new());
     pub static CSS_PROVIDER: std::cell::RefCell<Option<CssProvider>> = std::cell::RefCell::new(None);
@@ -112,12 +118,31 @@ impl NotificationServer {
             replaces_id
         };
 
+        let mut parsed_actions = Vec::new();
+        let mut has_inline = false;
+        let mut i = 0;
+        while i + 1 < _actions.len() {
+            let key = _actions[i].to_string();
+            let label = _actions[i + 1].to_string();
+            if key == "inline-reply" || key.contains("reply") {
+                has_inline = true;
+            }
+            parsed_actions.push((key, label));
+            i += 2;
+        }
+        let app_lower = app_name.to_lowercase();
+        if app_lower.contains("telegram") || app_lower.contains("slack") || app_lower.contains("whatsapp") || app_lower.contains("discord") || app_lower.contains("matrix") || app_lower.contains("element") || app_lower.contains("mail") {
+            has_inline = true;
+        }
+
         let notif = NotificationData {
             id,
             app_name: app_name.to_string(),
             summary: summary.to_string(),
             body: body.to_string(),
             timestamp: default_timestamp(),
+            actions: parsed_actions,
+            has_inline_reply: has_inline,
         };
 
         let _ = self.sender.send(notif);
@@ -125,7 +150,7 @@ impl NotificationServer {
     }
 
     async fn get_capabilities(&self) -> Vec<&str> {
-        vec!["body"]
+        vec!["body", "actions", "inline-reply", "persistence"]
     }
 
     async fn get_server_information(&self) -> (&str, &str, &str, &str) {
