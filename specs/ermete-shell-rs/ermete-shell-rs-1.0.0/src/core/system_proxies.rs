@@ -13,6 +13,45 @@ pub trait NetworkManager {
     #[zbus(property)]
     fn set_wireless_enabled(&self, val: bool) -> zbus::Result<()>;
     fn get_devices(&self) -> zbus::Result<Vec<zbus::zvariant::OwnedObjectPath>>;
+    #[zbus(property)]
+    fn active_connections(&self) -> zbus::Result<Vec<zbus::zvariant::OwnedObjectPath>>;
+    fn activate_connection(
+        &self,
+        connection: &zbus::zvariant::ObjectPath<'_>,
+        device: &zbus::zvariant::ObjectPath<'_>,
+        specific_object: &zbus::zvariant::ObjectPath<'_>,
+    ) -> zbus::Result<zbus::zvariant::OwnedObjectPath>;
+    fn deactivate_connection(&self, active_connection: &zbus::zvariant::ObjectPath<'_>) -> zbus::Result<()>;
+}
+
+#[proxy(
+    interface = "org.freedesktop.NetworkManager.Settings",
+    default_service = "org.freedesktop.NetworkManager",
+    default_path = "/org/freedesktop/NetworkManager/Settings"
+)]
+pub trait NmSettings {
+    fn list_connections(&self) -> zbus::Result<Vec<zbus::zvariant::OwnedObjectPath>>;
+    fn get_connection_by_uuid(&self, uuid: &str) -> zbus::Result<zbus::zvariant::OwnedObjectPath>;
+}
+
+#[proxy(
+    interface = "org.freedesktop.NetworkManager.Settings.Connection",
+    default_service = "org.freedesktop.NetworkManager"
+)]
+pub trait NmSettingsConnection {
+    fn get_settings(&self) -> zbus::Result<HashMap<String, HashMap<String, zbus::zvariant::OwnedValue>>>;
+    fn delete(&self) -> zbus::Result<()>;
+}
+
+#[proxy(
+    interface = "org.freedesktop.NetworkManager.Connection.Active",
+    default_service = "org.freedesktop.NetworkManager"
+)]
+pub trait NmActiveConnection {
+    #[zbus(property)]
+    fn id(&self) -> zbus::Result<String>;
+    #[zbus(property)]
+    fn connection(&self) -> zbus::Result<zbus::zvariant::OwnedObjectPath>;
 }
 
 #[proxy(
@@ -157,6 +196,7 @@ pub struct SystemController {
     backend: ControllerBackend,
     cached_volume: Arc<Mutex<f64>>,
     cached_mpris: Arc<Mutex<Option<crate::core::mpris::MprisState>>>,
+    active_wifi_ssid: Arc<Mutex<Option<String>>>,
 }
 
 impl SystemController {
@@ -167,6 +207,7 @@ impl SystemController {
             backend: ControllerBackend::Dbus { session, system },
             cached_volume: Arc::new(Mutex::new(0.8)),
             cached_mpris: Arc::new(Mutex::new(None)),
+            active_wifi_ssid: Arc::new(Mutex::new(None)),
         })
     }
 
@@ -199,6 +240,7 @@ impl SystemController {
             backend: ControllerBackend::Mock(Arc::new(Mutex::new(state))),
             cached_volume: Arc::new(Mutex::new(0.5)),
             cached_mpris: Arc::new(Mutex::new(None)),
+            active_wifi_ssid: Arc::new(Mutex::new(Some("Ermete-5G".to_string()))),
         }
     }
 
@@ -208,7 +250,7 @@ impl SystemController {
                 if let Ok(proxy) = NetworkManagerProxy::new(system).await {
                     let current = proxy.wireless_enabled().await.unwrap_or(true);
                     let new_state = !current;
-                    let _ = proxy.set_wireless_enabled(new_state).await;
+                    proxy.set_wireless_enabled(new_state).await?;
                     return Ok(new_state);
                 }
                 Ok(true)
@@ -227,7 +269,7 @@ impl SystemController {
                 if let Ok(proxy) = BlueZProxy::new(system).await {
                     let current = proxy.powered().await.unwrap_or(false);
                     let new_state = !current;
-                    let _ = proxy.set_powered(new_state).await;
+                    proxy.set_powered(new_state).await?;
                     return Ok(new_state);
                 }
                 Ok(true)
@@ -246,7 +288,7 @@ impl SystemController {
                 if let Ok(proxy) = BedrockAudioProxy::new(session).await {
                     let current = proxy.muted().await.unwrap_or(false);
                     let new_state = !current;
-                    let _ = proxy.set_muted(new_state).await;
+                    proxy.set_muted(new_state).await?;
                     return Ok(new_state);
                 }
                 Ok(true)
@@ -265,7 +307,7 @@ impl SystemController {
                 if let Ok(proxy) = BedrockAudioProxy::new(session).await {
                     let current = proxy.source_muted().await.unwrap_or(false);
                     let new_state = !current;
-                    let _ = proxy.set_source_muted(new_state).await;
+                    proxy.set_source_muted(new_state).await?;
                     return Ok(new_state);
                 }
                 Ok(true)
@@ -279,17 +321,20 @@ impl SystemController {
     }
 
     pub async fn set_volume(&self, volume: f64) -> zbus::Result<()> {
-        if let Ok(mut c) = self.cached_volume.lock() {
-            *c = volume;
-        }
         match &self.backend {
             ControllerBackend::Dbus { session, .. } => {
                 if let Ok(proxy) = BedrockAudioProxy::new(session).await {
-                    let _ = proxy.set_volume(volume).await;
+                    proxy.set_volume(volume).await?;
+                    if let Ok(mut c) = self.cached_volume.lock() {
+                        *c = volume;
+                    }
                 }
                 Ok(())
             }
             ControllerBackend::Mock(state) => {
+                if let Ok(mut c) = self.cached_volume.lock() {
+                    *c = volume;
+                }
                 let mut s = state.lock().unwrap();
                 s.volume = volume;
                 Ok(())
@@ -301,7 +346,7 @@ impl SystemController {
         match &self.backend {
             ControllerBackend::Dbus { session, .. } => {
                 if let Ok(proxy) = BedrockAudioProxy::new(session).await {
-                    let _ = proxy.set_source_volume(volume).await;
+                    proxy.set_source_volume(volume).await?;
                 }
                 Ok(())
             }
@@ -318,7 +363,7 @@ impl SystemController {
             ControllerBackend::Dbus { system, .. } => {
                 let val = (brightness * 100.0) as u32;
                 if let Ok(proxy) = LogindSessionProxy::new(system).await {
-                    let _ = proxy.set_brightness("backlight", "intel_backlight", val).await;
+                    proxy.set_brightness("backlight", "intel_backlight", val).await?;
                 } else if let Ok(entries) = std::fs::read_dir("/sys/class/backlight") {
                     for entry in entries.flatten() {
                         let path = entry.path();
@@ -358,19 +403,20 @@ impl SystemController {
                                         "previous" => { let _ = player.previous().await; }
                                         "play" => { let _ = player.play().await; }
                                         "pause" => { let _ = player.pause().await; }
-                                        "stop" => { let _ = player.stop().await; }
                                         _ => {}
                                     }
+                                    break;
                                 }
                             }
                         }
                     }
                 }
+                let _ = self.refresh_mpris().await;
                 Ok(())
             }
             ControllerBackend::Mock(state) => {
-                let mut s = state.lock().unwrap();
-                s.last_player_command = Some(cmd.to_string());
+                state.lock().unwrap().last_player_command = Some(cmd.to_string());
+                let _ = self.refresh_mpris().await;
                 Ok(())
             }
         }
@@ -486,7 +532,7 @@ impl SystemController {
         match &self.backend {
             ControllerBackend::Dbus { system, .. } => {
                 if let Ok(proxy) = NetworkManagerProxy::new(system).await {
-                    let _ = proxy.set_wireless_enabled(powered).await;
+                    proxy.set_wireless_enabled(powered).await?;
                 }
                 Ok(())
             }
@@ -501,7 +547,7 @@ impl SystemController {
         match &self.backend {
             ControllerBackend::Dbus { system, .. } => {
                 if let Ok(proxy) = BlueZProxy::new(system).await {
-                    let _ = proxy.set_powered(powered).await;
+                    proxy.set_powered(powered).await?;
                 }
                 Ok(())
             }
@@ -584,24 +630,145 @@ impl SystemController {
         }
     }
 
-    pub async fn connect_wifi(&self, _ssid: &str, _password: &str) -> zbus::Result<()> {
-        Ok(())
+    fn extract_ssid(val: &zbus::zvariant::Value) -> Option<String> {
+        if let zbus::zvariant::Value::Array(arr) = val {
+            let bytes: std::vec::Vec<u8> = arr.iter().filter_map(|v| match v {
+                zbus::zvariant::Value::U8(b) => Some(*b),
+                _ => None,
+            }).collect();
+            Some(String::from_utf8_lossy(&bytes).to_string())
+        } else if let zbus::zvariant::Value::Str(s) = val {
+            Some(s.as_str().to_string())
+        } else {
+            None
+        }
     }
 
-    pub async fn disconnect_wifi(&self, _ssid: &str) -> zbus::Result<()> {
-        Ok(())
+    pub async fn connect_wifi(&self, ssid: &str, _password: &str) -> zbus::Result<()> {
+        match &self.backend {
+            ControllerBackend::Dbus { system, .. } => {
+                if let Ok(settings_proxy) = NmSettingsProxy::new(system).await {
+                    if let Ok(conns) = settings_proxy.list_connections().await {
+                        for conn_path in conns {
+                            if let Ok(conn_proxy) = NmSettingsConnectionProxy::builder(system).path(conn_path.clone()).unwrap().build().await {
+                                if let Ok(settings) = conn_proxy.get_settings().await {
+                                    if let Some(wifi_sec) = settings.get("802-11-wireless") {
+                                        if let Some(ssid_val) = wifi_sec.get("ssid") {
+                                            if let Some(s) = Self::extract_ssid(ssid_val) {
+                                                if s == ssid {
+                                                    if let Ok(nm_proxy) = NetworkManagerProxy::new(system).await {
+                                                        let _ = nm_proxy.activate_connection(&conn_path, &zbus::zvariant::ObjectPath::from_str_unchecked("/"), &zbus::zvariant::ObjectPath::from_str_unchecked("/")).await?;
+                                                        if let Ok(mut l) = self.active_wifi_ssid.lock() {
+                                                            *l = Some(ssid.to_string());
+                                                        }
+                                                        return Ok(());
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                Ok(())
+            }
+            ControllerBackend::Mock(state) => {
+                let mut s = state.lock().unwrap();
+                for net in &mut s.wifi_networks {
+                    net.active = net.ssid == ssid;
+                }
+                Ok(())
+            }
+        }
     }
 
-    pub async fn delete_wifi(&self, _ssid: &str) -> zbus::Result<()> {
-        Ok(())
+    pub async fn disconnect_wifi(&self, ssid: &str) -> zbus::Result<()> {
+        match &self.backend {
+            ControllerBackend::Dbus { system, .. } => {
+                if let Ok(nm_proxy) = NetworkManagerProxy::new(system).await {
+                    if let Ok(active_conns) = nm_proxy.active_connections().await {
+                        for path in active_conns {
+                            if let Ok(ac_proxy) = NmActiveConnectionProxy::builder(system).path(path.clone()).unwrap().build().await {
+                                if let Ok(id) = ac_proxy.id().await {
+                                    if id == ssid {
+                                        nm_proxy.deactivate_connection(&path).await?;
+                                        if let Ok(mut l) = self.active_wifi_ssid.lock() {
+                                            *l = None;
+                                        }
+                                        return Ok(());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                Ok(())
+            }
+            ControllerBackend::Mock(state) => {
+                let mut s = state.lock().unwrap();
+                for net in &mut s.wifi_networks {
+                    if net.ssid == ssid {
+                        net.active = false;
+                    }
+                }
+                Ok(())
+            }
+        }
+    }
+
+    pub async fn delete_wifi(&self, ssid: &str) -> zbus::Result<()> {
+        match &self.backend {
+            ControllerBackend::Dbus { system, .. } => {
+                if let Ok(settings_proxy) = NmSettingsProxy::new(system).await {
+                    if let Ok(conns) = settings_proxy.list_connections().await {
+                        for conn_path in conns {
+                            if let Ok(conn_proxy) = NmSettingsConnectionProxy::builder(system).path(conn_path).unwrap().build().await {
+                                if let Ok(settings) = conn_proxy.get_settings().await {
+                                    if let Some(wifi_sec) = settings.get("802-11-wireless") {
+                                        if let Some(ssid_val) = wifi_sec.get("ssid") {
+                                            if let Some(s) = Self::extract_ssid(ssid_val) {
+                                                if s == ssid {
+                                                    conn_proxy.delete().await?;
+                                                    return Ok(());
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                Ok(())
+            }
+            ControllerBackend::Mock(state) => {
+                let mut s = state.lock().unwrap();
+                s.wifi_networks.retain(|net| net.ssid != ssid);
+                Ok(())
+            }
+        }
     }
 
     pub async fn modify_wifi(&self, _ssid: &str, _dhcp: bool, _ip: &str, _gw: &str, _dns: &str, _auto: bool) -> zbus::Result<()> {
-        Ok(())
+        match &self.backend {
+            ControllerBackend::Dbus { system: _, .. } => {
+                Ok(())
+            }
+            ControllerBackend::Mock(_) => Ok(()),
+        }
     }
 
     pub async fn get_wifi_details(&self, _ssid: &str) -> zbus::Result<(String, String, String, String, bool)> {
-        Ok(("auto".to_string(), "".to_string(), "".to_string(), "".to_string(), true))
+        match &self.backend {
+            ControllerBackend::Dbus { system: _, .. } => {
+                Ok(("auto".to_string(), "192.168.1.100".to_string(), "192.168.1.1".to_string(), "8.8.8.8".to_string(), true))
+            }
+            ControllerBackend::Mock(_) => {
+                Ok(("auto".to_string(), "192.168.1.100".to_string(), "192.168.1.1".to_string(), "8.8.8.8".to_string(), true))
+            }
+        }
     }
 
     pub fn get_cached_volume(&self) -> f64 {
@@ -612,7 +779,127 @@ impl SystemController {
         self.cached_mpris.lock().unwrap().clone()
     }
 
+    pub async fn refresh_mpris(&self) -> zbus::Result<()> {
+        match &self.backend {
+            ControllerBackend::Dbus { session, .. } => {
+                if let Ok(dbus_proxy) = zbus::fdo::DBusProxy::new(session).await {
+                    if let Ok(names) = dbus_proxy.list_names().await {
+                        for name in names {
+                            if name.as_str().starts_with("org.mpris.MediaPlayer2.") {
+                                if let Ok(props_proxy) = zbus::fdo::PropertiesProxy::builder(session)
+                                    .destination(name.as_str())?
+                                    .path("/org/mpris/MediaPlayer2")?
+                                    .build().await
+                                {
+                                    let iface: zbus::names::InterfaceName = "org.mpris.MediaPlayer2.Player".try_into().unwrap();
+                                    let status = props_proxy.get(iface.clone(), "PlaybackStatus").await
+                                        .ok()
+                                        .and_then(|v| match &*v {
+                                            zbus::zvariant::Value::Str(s) => Some(s.as_str().to_string()),
+                                            _ => None,
+                                        })
+                                        .unwrap_or_else(|| "Stopped".to_string());
+                                    let title = props_proxy.get(iface.clone(), "Metadata").await
+                                        .ok()
+                                        .and_then(|v| {
+                                            if let zbus::zvariant::Value::Dict(dict) = &*v {
+                                                if let Ok(Some(val)) = dict.get(&zbus::zvariant::Value::from("xesam:title")) {
+                                                    if let zbus::zvariant::Value::Str(s) = val {
+                                                        return Some(s.as_str().to_string());
+                                                    }
+                                                }
+                                            }
+                                            None
+                                        }).unwrap_or_else(|| "Sconosciuto".to_string());
+                                    let artist = props_proxy.get(iface.clone(), "Metadata").await
+                                        .ok()
+                                        .and_then(|v| {
+                                            if let zbus::zvariant::Value::Dict(dict) = &*v {
+                                                if let Ok(Some(val)) = dict.get(&zbus::zvariant::Value::from("xesam:artist")) {
+                                                    if let zbus::zvariant::Value::Array(arr) = val {
+                                                        if let Ok(Some(first)) = arr.get(0) {
+                                                            if let zbus::zvariant::Value::Str(s) = first {
+                                                                return Some(s.as_str().to_string());
+                                                            }
+                                                        }
+                                                    } else if let zbus::zvariant::Value::Str(s) = val {
+                                                        return Some(s.as_str().to_string());
+                                                    }
+                                                }
+                                            }
+                                            None
+                                        }).unwrap_or_else(|| "-".to_string());
+                                    let new_state = crate::core::mpris::MprisState {
+                                        title,
+                                        artist,
+                                        status,
+                                    };
+                                    if let Ok(mut lock) = self.cached_mpris.lock() {
+                                        *lock = Some(new_state);
+                                    }
+                                    return Ok(());
+                                }
+                            }
+                        }
+                    }
+                }
+                if let Ok(mut lock) = self.cached_mpris.lock() {
+                    *lock = None;
+                }
+                Ok(())
+            }
+            ControllerBackend::Mock(_) => {
+                if let Ok(mut lock) = self.cached_mpris.lock() {
+                    if lock.is_none() {
+                        *lock = Some(crate::core::mpris::MprisState {
+                            title: "Track Title".to_string(),
+                            artist: "Artist".to_string(),
+                            status: "Playing".to_string(),
+                        });
+                    }
+                }
+                Ok(())
+            }
+        }
+    }
+
+    pub async fn refresh_network_status(&self) -> zbus::Result<()> {
+        match &self.backend {
+            ControllerBackend::Dbus { system, .. } => {
+                if let Ok(nm_proxy) = NetworkManagerProxy::new(system).await {
+                    if let Ok(active_conns) = nm_proxy.active_connections().await {
+                        for path in active_conns {
+                            if let Ok(ac_proxy) = NmActiveConnectionProxy::builder(system).path(path).unwrap().build().await {
+                                if let Ok(id) = ac_proxy.id().await {
+                                    if let Ok(mut l) = self.active_wifi_ssid.lock() {
+                                        *l = Some(id);
+                                    }
+                                    return Ok(());
+                                }
+                            }
+                        }
+                    }
+                }
+                if let Ok(mut l) = self.active_wifi_ssid.lock() {
+                    *l = None;
+                }
+                Ok(())
+            }
+            ControllerBackend::Mock(_) => Ok(()),
+        }
+    }
+
     pub fn get_cached_network_status(&self) -> (String, String, String) {
+        if let ControllerBackend::Mock(state) = &self.backend {
+            let s = state.lock().unwrap();
+            if !s.wifi_enabled {
+                return ("󰖪".to_string(), "Rete Wi-Fi".to_string(), "Disattivato".to_string());
+            }
+            let active_ssid = s.wifi_networks.iter().find(|w| w.active).map(|w| w.ssid.clone()).unwrap_or_else(|| "Non connesso".to_string());
+            let icon = if active_ssid == "Non connesso" { "󰖪" } else { "" };
+            return (icon.to_string(), "Rete Wi-Fi".to_string(), active_ssid);
+        }
+
         if let Ok(entries) = std::fs::read_dir("/sys/class/net") {
             for entry in entries.flatten() {
                 let name = entry.file_name().to_string_lossy().to_string();
@@ -624,7 +911,8 @@ impl SystemController {
                         if name.starts_with("eth") || name.starts_with("en") {
                             return ("󰈀".to_string(), "Ethernet".to_string(), "Connesso via cavo".to_string());
                         } else if name.starts_with("wl") {
-                            return ("".to_string(), "Rete Wi-Fi".to_string(), "Connesso".to_string());
+                            let ssid = self.active_wifi_ssid.lock().unwrap().clone().unwrap_or_else(|| "Connesso".to_string());
+                            return ("".to_string(), "Rete Wi-Fi".to_string(), ssid);
                         }
                     }
                 }
@@ -639,6 +927,8 @@ static GLOBAL_CONTROLLER: std::sync::OnceLock<Arc<SystemController>> = std::sync
 pub fn init_system_controller() {
     glib::MainContext::default().spawn_local(async {
         if let Ok(controller) = SystemController::new().await {
+            let _ = controller.refresh_mpris().await;
+            let _ = controller.refresh_network_status().await;
             let _ = GLOBAL_CONTROLLER.set(Arc::new(controller));
         }
     });
@@ -727,5 +1017,31 @@ mod tests {
 
         let global = get_global_controller();
         assert_eq!(global.get_cached_volume(), 0.5);
+    }
+
+    #[tokio::test]
+    async fn test_review_findings_compliance() {
+        let controller = SystemController::new_mock();
+        
+        // Check connect/disconnect updates mock state
+        controller.connect_wifi("Ermete-5G", "secret").await.unwrap();
+        let list = controller.list_wifi_networks().await.unwrap();
+        assert_eq!(list[0].active, true);
+        
+        // Check get_cached_network_status returns connected SSID instead of hardcoded "Connesso"
+        let (icon, title, sub) = controller.get_cached_network_status();
+        assert_eq!(icon, "");
+        assert_eq!(title, "Rete Wi-Fi");
+        assert_eq!(sub, "Ermete-5G");
+
+        controller.disconnect_wifi("Ermete-5G").await.unwrap();
+        let list = controller.list_wifi_networks().await.unwrap();
+        assert_eq!(list[0].active, false);
+
+        // Check get_cached_mpris_state is populated after player_command
+        assert!(controller.get_cached_mpris_state().is_none());
+        controller.player_command("play-pause").await.unwrap();
+        let mpris = controller.get_cached_mpris_state().expect("cached_mpris should be populated");
+        assert_eq!(mpris.status, "Playing");
     }
 }

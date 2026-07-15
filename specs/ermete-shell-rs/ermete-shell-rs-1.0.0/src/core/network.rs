@@ -1,4 +1,4 @@
-use zbus::{Connection, proxy};
+use zbus::proxy;
 
 #[proxy(
     interface = "org.freedesktop.NetworkManager",
@@ -12,16 +12,9 @@ trait NetworkManager {
     fn wireless_enabled(&self) -> zbus::Result<bool>;
 }
 
+#[allow(dead_code)]
 pub async fn get_network_status_dbus() -> (String, String, String) {
-    if let Ok(connection) = Connection::system().await {
-        if let Ok(proxy) = NetworkManagerProxy::new(&connection).await {
-            // Simplified fallback for now: just check if wifi is enabled
-            if let Ok(enabled) = proxy.wireless_enabled().await {
-                if enabled {
-                    return ("".to_string(), "Rete Wi-Fi".to_string(), "Connesso".to_string());
-                }
-            }
-        }
-    }
-    ("󰖪".to_string(), "Rete Wi-Fi".to_string(), "Disattivato".to_string())
+    let ctrl = crate::core::system_proxies::get_global_controller();
+    let _ = ctrl.refresh_network_status().await;
+    ctrl.get_cached_network_status()
 }

@@ -701,6 +701,7 @@ pub fn show_wifi_popover(app: &Application) {
     wifi_sw.connect_state_set(move |_, state| {
         glib::MainContext::default().spawn_local(async move {
             let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.toggle_wifi().await;
             let _ = ctrl.set_wifi_powered(state).await;
         });
         populate_wifi_list(&list_clone, &app_clone, &pop_clone, state);
@@ -788,6 +789,7 @@ pub fn show_bluetooth_popover(app: &Application) {
     bt_sw.connect_state_set(move |_, state| {
         glib::MainContext::default().spawn_local(async move {
             let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.toggle_bluetooth().await;
             let _ = ctrl.set_bluetooth_powered(state).await;
         });
         glib::Propagation::Proceed
@@ -1255,6 +1257,18 @@ pub fn show_control_center_popover(app: &Application) {
     });
     audio_card.append(&audio_icon);
     audio_card.append(&audio_slider);
+
+    let bright_slider_clone_init = bright_slider.clone();
+    let audio_slider_clone_init = audio_slider.clone();
+    glib::MainContext::default().spawn_local(async move {
+        let ctrl = crate::core::system_proxies::get_global_controller();
+        if let Ok(b) = ctrl.get_brightness().await {
+            bright_slider_clone_init.set_value(b * 100.0);
+        }
+        if let Ok(v) = ctrl.get_volume().await {
+            audio_slider_clone_init.set_value(v * 100.0);
+        }
+    });
     let audio_settings_btn = Button::builder()
         .label("⚙")
         .css_classes(["cc-quick-btn"])
@@ -1323,14 +1337,8 @@ pub fn show_control_center_popover(app: &Application) {
     dark_btn.set_child(Some(&build_quick_toggle_content("☾", "Scuro")));
 
     dark_btn.connect_clicked(move |_| {
-        let _ = Command::new("gsettings")
-            .args([
-                "set",
-                "org.gnome.desktop.interface",
-                "color-scheme",
-                "prefer-dark",
-            ])
-            .spawn();
+        let settings = gtk4::gio::Settings::new("org.gnome.desktop.interface");
+        let _ = settings.set_string("color-scheme", "prefer-dark");
     });
 
     let standby_btn = Button::builder()
@@ -1342,6 +1350,10 @@ pub fn show_control_center_popover(app: &Application) {
     standby_btn.connect_clicked(move |_| {
         pop_std.close();
         crate::core::niri_client::power_off_monitors();
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.suspend().await;
+        });
     });
 
     let mixer_btn = Button::builder()
@@ -1572,7 +1584,10 @@ pub fn show_start_menu_popover(app: &Application) {
         .hexpand(true)
         .build();
     off_btn.connect_clicked(move |_| {
-        let _ = Command::new("systemctl").arg("poweroff").spawn();
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.power_off().await;
+        });
     });
 
     let reb_btn = Button::builder()
@@ -1581,11 +1596,27 @@ pub fn show_start_menu_popover(app: &Application) {
         .hexpand(true)
         .build();
     reb_btn.connect_clicked(move |_| {
-        let _ = Command::new("systemctl").arg("reboot").spawn();
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.reboot().await;
+        });
+    });
+
+    let susp_btn = Button::builder()
+        .label("💤  Sospendi")
+        .css_classes(["cc-btn"])
+        .hexpand(true)
+        .build();
+    susp_btn.connect_clicked(move |_| {
+        glib::MainContext::default().spawn_local(async move {
+            let ctrl = crate::core::system_proxies::get_global_controller();
+            let _ = ctrl.suspend().await;
+        });
     });
 
     footer.append(&off_btn);
     footer.append(&reb_btn);
+    footer.append(&susp_btn);
 
     card.append(&title);
     card.append(&search);
