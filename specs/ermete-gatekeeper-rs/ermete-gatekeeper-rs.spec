@@ -54,5 +54,5 @@ EOF
 %{_userunitdir}/%{name}.service
 
 %changelog
-* Mon Jul 15 2026 Ermete Forge <forge@ermete.os> - 1.0.0-1
+* Wed Jul 15 2026 Ermete Forge <forge@ermete.os> - 1.0.0-1
 - Initial release

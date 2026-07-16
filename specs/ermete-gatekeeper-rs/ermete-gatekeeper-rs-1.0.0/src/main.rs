@@ -86,7 +86,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!("Starting Ermete Gatekeeper Daemon...");
 
     let fanotify_fd = unsafe {
-        libc::fanotify_init(FAN_CLASS_CONTENT | FAN_NONBLOCK, libc::O_RDONLY | libc::O_LARGEFILE)
+        libc::fanotify_init(FAN_CLASS_CONTENT | FAN_NONBLOCK, (libc::O_RDONLY | libc::O_LARGEFILE) as u32)
     };
 
     if fanotify_fd < 0 {
@@ -128,7 +128,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .build()
         .await?;
 
-    let signal_ctxt = conn.object_server().signal_context("/os/ermete/Gatekeeper", "os.ermete.Gatekeeper").await?;
+    let iface_ref = conn.object_server().interface::<_, GatekeeperManager>("/os/ermete/Gatekeeper").await?;
+    let signal_ctxt = iface_ref.signal_context().clone();
 
     let async_fd = AsyncFd::new(fanotify_fd)?;
     let mut next_id: u64 = 1;
