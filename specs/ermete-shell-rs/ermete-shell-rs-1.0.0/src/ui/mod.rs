@@ -7,6 +7,7 @@ pub mod powermenu;
 pub mod spotlight;
 pub mod clipboard;
 pub mod gatekeeper_prompt;
+pub mod privacy_prompt;
 pub mod mission_control;
 pub mod a11y;
 pub mod generative;

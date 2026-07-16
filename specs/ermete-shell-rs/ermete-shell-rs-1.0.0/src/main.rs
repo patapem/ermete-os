@@ -35,6 +35,8 @@ struct Args {
     #[arg(long)]
     gatekeeper_prompt: Option<String>,
     #[arg(long)]
+    privacy_prompt: Option<String>,
+    #[arg(long)]
     overview: bool,
     #[arg(long)]
     store: bool,
@@ -45,6 +47,17 @@ const APP_ID: &str = "os.ermete.Shell";
 fn main() -> glib::ExitCode {
     let args = Args::parse();
     crate::core::system_proxies::init_system_controller();
+
+    if let Some(req_info) = args.privacy_prompt {
+        let app = Application::builder()
+            .application_id("os.ermete.PrivacyPrompt")
+            .build();
+        let req_clone = req_info.clone();
+        app.connect_activate(move |app| {
+            crate::ui::privacy_prompt::build_ui(app, &req_clone);
+        });
+        return app.run_with_args(&Vec::<String>::new());
+    }
 
     if let Some(app_path) = args.gatekeeper_prompt {
         let app = Application::builder()
