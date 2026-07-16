@@ -1,3 +1,4 @@
+// Mission Control spatial overlay
 use gtk4::prelude::*;
 use gtk4::{Align, Application, ApplicationWindow, Box as GtkBox, Button, FlowBox, Image, Label, Orientation, ScrolledWindow, Widget};
 use gtk4_layer_shell::{Edge, Layer, LayerShell};
