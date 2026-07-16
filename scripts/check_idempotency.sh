@@ -78,7 +78,11 @@ fi
 
 CACHE_HIT="false"
 if command -v skopeo >/dev/null 2>&1; then
-  if skopeo inspect --no-tags "${IMAGE_URL_LOWER}" >/dev/null 2>&1; then
+  INSPECT_CMD="skopeo inspect --no-tags"
+  if [[ -n "${GITHUB_TOKEN:-}" ]]; then
+    INSPECT_CMD="skopeo inspect --creds ${OWNER}:${GITHUB_TOKEN} --no-tags"
+  fi
+  if $INSPECT_CMD "${IMAGE_URL_LOWER}" >/dev/null 2>&1; then
     CACHE_HIT="true"
   fi
 fi

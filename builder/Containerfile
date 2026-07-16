@@ -3,7 +3,7 @@ FROM registry.fedoraproject.org/fedora:43
 # Copy the custom RPMFusion repository configurations pointing to stable release paths
 COPY rpmfusion-custom.repo /etc/yum.repos.d/rpmfusion-custom.repo
 
-# Install core build tools
+# Install core build tools and full development environment
 RUN dnf install -y \
     dnf-plugins-core \
     rpm-build \
@@ -17,4 +17,29 @@ RUN dnf install -y \
     buildah \
     jq \
     skopeo \
+    cargo \
+    rust \
+    cmake \
+    mold \
+    clang \
+    clang-devel \
+    sccache \
+    ccache \
+    systemd-devel \
+    nlohmann-json-devel \
+    fmt-devel \
+    spdlog-devel \
+    policycoreutils \
+    checkpolicy \
+    pango-devel \
+    cairo-devel \
+    gdk-pixbuf2-devel \
+    glib2-devel \
+    gtk4-devel \
+    graphene-devel \
+    wayland-devel \
+    pipewire-devel \
+    speech-dispatcher-devel \
+    pkgconf-pkg-config \
+    openssl-devel \
     && dnf clean all

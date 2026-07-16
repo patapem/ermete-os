@@ -88,6 +88,14 @@ jobs:
           source ./idemp.out
           echo "hash=$CONTENT_HASH" >> $GITHUB_OUTPUT
           if [ "$CACHE_HIT" = "true" ]; then echo "skip=true" >> $GITHUB_OUTPUT; else echo "skip=false" >> $GITHUB_OUTPUT; fi
+      - name: Cache sccache
+        if: steps.check.outputs.skip != 'true'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/sccache
+          key: sccache-${{ matrix.package }}-${{ github.sha }}
+          restore-keys: |
+            sccache-${{ matrix.package }}-
       - name: Install Dependencies and Build
         if: steps.check.outputs.skip != 'true'
         run: |
@@ -313,6 +321,13 @@ jobs:
         with:
           path: /var/cache/akmods/nvidia/
           key: rpm-nvidia-bedrock2-${{ steps.kernel.outputs.kernel_ver }}
+      - name: Cache Compiler Objects (ccache)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ccache
+          key: nvidia-ccache-${{ github.sha }}
+          restore-keys: |
+            nvidia-ccache-
       - name: Install Dependencies and Build
         if: steps.cache.outputs['cache-hit'] != 'true'
         run: |
@@ -335,9 +350,16 @@ jobs:
           export KCFLAGS="-Wno-error"
           export CFLAGS="-Wno-error"
           export LLVM=1
-          export MAKEFLAGS="LLVM=1 LLVM_IAS=1"
+          
+          export PATH="/usr/lib64/ccache:/usr/lib/ccache:$PATH"
+          export CCACHE_DIR=~/.cache/ccache
+          mkdir -p ~/.cache/ccache
+          ccache -z
+          
+          export MAKEFLAGS="LLVM=1 LLVM_IAS=1 CC=\"ccache clang\""
 
           akmods --force --kernels $REAL_KERNEL_VER || true
+          ccache -s
           
           # [BEDROCK UNIFICATION] Download userspace NVIDIA drivers, Wayland EGL, persistenced, and container toolkit
           # into the micro-container so they are encapsulated natively without remote DNF calls during OSTree build.

@@ -54,3 +54,4 @@
 # evitando il crash globale sulle macro procedurali che avremmo con RUSTFLAGS.
 %__spec_build_pre %{___build_pre}\
   export CARGO_PROFILE_RELEASE_LTO="thin"\
+  export RUSTC_WRAPPER=sccache\
