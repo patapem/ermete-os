@@ -42,6 +42,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let gaze_tracker = gaze::GazeTracker::new();
     gaze_tracker.start();
 
+    println!("Starting Spatial Audio Raytracing engine...");
+    audio_spatial::start_audio_raytracing().await;
+
     println!("Starting Continuity & Handoff daemon...");
     let continuity_srv = continuity::ContinuityService::new();
     continuity_srv.start_background_sync().await;
