@@ -1,3 +1,4 @@
+%global debug_package %{nil}
 Name:           ermete-telemetry-rs
 Version:        1.0.0
 Release:        1%{?dist}
