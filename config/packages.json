@@ -24,10 +24,11 @@
     "gatekeeper-rs",
     "updater-rs",
     "telemetry-rs",
-    "store-rs",
     "cloud-rs",
     "mdm-rs",
-    "xdg-desktop-portal-ermete"
+    "xdg-desktop-portal-ermete",
+    "secure-boot",
+    "lvfs-rs"
   ],
   "cachyos_addons": [],
   "upstream_core": [

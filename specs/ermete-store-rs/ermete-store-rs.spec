@@ -16,11 +16,9 @@ Ermete OS Universal App Store Daemon for Flatpak and OCI container management.
 %autosetup
 
 %build
-cd %{name}-%{version}
 cargo build --release --locked
 
 %install
-cd %{name}-%{version}
 install -D -m 0755 target/release/%{name} %{buildroot}%{_bindir}/%{name}
 
 # Install D-Bus system configuration

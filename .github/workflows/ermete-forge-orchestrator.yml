@@ -821,7 +821,7 @@ jobs:
           cat << 'EOF' > ~/.rpmmacros
           %_signature gpg
           %_gpg_name ermete
-          %__gpg_sign_cmd %{__gpg} gpg --batch --verbose --no-armor --passphrase "${RPM_GPG_PASSPHRASE}" --pinentry-mode loopback --no-secmem-warning -u "%{_gpg_name}" -sbo %{__signature_filename} --digest-algo sha256 %{__plaintext_filename}
+          %__gpg_sign_cmd %{__gpg} --batch --verbose --no-armor --passphrase "${RPM_GPG_PASSPHRASE}" --pinentry-mode loopback --no-secmem-warning -u "%{_gpg_name}" -sbo %{__signature_filename} --digest-algo sha256 %{__plaintext_filename}
           EOF
           export RPM_GPG_PASSPHRASE="${{ secrets.RPM_GPG_PASSPHRASE }}"
           

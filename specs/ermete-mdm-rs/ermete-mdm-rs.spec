@@ -16,11 +16,9 @@ Ermete OS MDM Daemon for Anti-Theft tracking and cryptographic Remote Wipe.
 %autosetup
 
 %build
-cd %{name}-%{version}
 cargo build --release --locked
 
 %install
-cd %{name}-%{version}
 install -D -m 0755 target/release/%{name} %{buildroot}%{_bindir}/%{name}
 
 # Install D-Bus system configuration

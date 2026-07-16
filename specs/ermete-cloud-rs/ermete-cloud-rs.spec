@@ -16,11 +16,9 @@ Ermete OS Cloud Daemon for Universal Clipboard and Local P2P synchronization.
 %autosetup
 
 %build
-cd %{name}-%{version}
 cargo build --release --locked
 
 %install
-cd %{name}-%{version}
 install -D -m 0755 target/release/%{name} %{buildroot}%{_bindir}/%{name}
 
 # Install D-Bus system configuration

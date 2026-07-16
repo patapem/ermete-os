@@ -16,11 +16,9 @@ Ermete OS Telemetry Daemon for opt-in kernel panic and coredump reporting to Git
 %autosetup
 
 %build
-cd %{name}-%{version}
 cargo build --release --locked
 
 %install
-cd %{name}-%{version}
 install -D -m 0755 target/release/%{name} %{buildroot}%{_bindir}/%{name}
 
 # Install D-Bus system configuration

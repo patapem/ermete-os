@@ -17,11 +17,9 @@ Ermete OS LVFS Daemon for automated background UEFI/BIOS firmware updates via fw
 %autosetup
 
 %build
-cd %{name}-%{version}
 cargo build --release --locked
 
 %install
-cd %{name}-%{version}
 install -D -m 0755 target/release/%{name} %{buildroot}%{_bindir}/%{name}
 
 # Install D-Bus system configuration

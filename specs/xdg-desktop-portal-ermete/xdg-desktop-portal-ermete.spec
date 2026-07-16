@@ -16,11 +16,9 @@ Ermete OS implementation of the XDG Desktop Portal for native Wayland/Niri integ
 %autosetup
 
 %build
-cd %{name}-%{version}
 cargo build --release --locked
 
 %install
-cd %{name}-%{version}
 install -D -m 0755 target/release/%{name} %{buildroot}%{_libexecdir}/%{name}
 
 # Install D-Bus session service
