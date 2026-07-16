@@ -1,13 +1,13 @@
-use zbus::{dbus_proxy, Connection};
+use zbus::{proxy, Connection};
 use std::process::Command;
 
-#[dbus_proxy(
+#[proxy(
     interface = "os.ermete.Gatekeeper",
     default_service = "os.ermete.Gatekeeper",
     default_path = "/os/ermete/Gatekeeper"
 )]
 trait Gatekeeper {
-    #[dbus_proxy(signal)]
+    #[zbus(signal)]
     fn prompt_required(&self, fd_id: u64, app_name: &str) -> zbus::Result<()>;
 
     fn approve_execution(&self, fd_id: u64) -> zbus::Result<()>;

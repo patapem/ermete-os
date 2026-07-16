@@ -14,7 +14,7 @@ pub fn build_ui(app: &Application, app_path: &str) {
     window.init_layer_shell();
     window.set_namespace("gatekeeper");
     window.set_layer(Layer::Overlay);
-    window.set_keyboard_interactivity(true);
+    window.set_keyboard_mode(gtk4_layer_shell::KeyboardMode::OnDemand);
     window.auto_exclusive_zone_enable();
     
     // Center it

@@ -26,7 +26,7 @@ pub fn build_ui(app: &Application) {
     window.init_layer_shell();
     window.set_namespace("overview");
     window.set_layer(Layer::Overlay);
-    window.set_keyboard_interactivity(true);
+    window.set_keyboard_mode(gtk4_layer_shell::KeyboardMode::OnDemand);
     window.auto_exclusive_zone_enable();
     
     // Full screen
@@ -57,7 +57,7 @@ pub fn build_ui(app: &Application) {
     for ws in &workspaces {
         let ws_btn = Button::builder()
             .label(&ws.name.clone().unwrap_or_else(|| format!("Desktop {}", ws.idx)))
-            .css_classes(if ws.is_active { ["mc-ws-btn", "active"] } else { ["mc-ws-btn"] })
+            .css_classes(if ws.is_active { vec!["mc-ws-btn", "active"] } else { vec!["mc-ws-btn"] })
             .build();
         
         let ws_id = ws.id;
@@ -146,7 +146,7 @@ pub fn build_ui(app: &Application) {
             win_clone.close();
         });
 
-        flowbox.append(&card_btn);
+        flowbox.insert(&card_btn, -1);
     }
 
     scroll.set_child(Some(&flowbox));
