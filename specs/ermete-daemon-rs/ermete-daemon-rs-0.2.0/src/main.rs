@@ -8,6 +8,7 @@ mod secret_enroller;
 mod gatekeeper_listener;
 mod voiceover;
 mod qos;
+pub mod ai;
 
 use std::error::Error;
 use zbus::connection::Builder;
@@ -19,6 +20,7 @@ use portal::PortalSettingsService;
 use portal_screencast::{PortalScreenCastService, PortalRemoteDesktopService};
 use secret_enroller::SecretEnrollerService;
 use voiceover::VoiceOverService;
+use ai::AiCore;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -30,6 +32,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     println!("Starting App Nap QoS Observer...");
     qos::start_qos_observer().await;
+
+    let _ai_core = AiCore::new();
 
     println!("Initializing ACID Settings Engine and XDG Desktop Portal backend...");
     let settings_srv = SettingsService::new();
