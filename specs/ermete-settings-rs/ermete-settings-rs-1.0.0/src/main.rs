@@ -147,6 +147,10 @@ fn build_ui(app: &Application) {
         ("Desktop & Dock", "preferences-desktop", "desktop"),
         ("Schermi", "preferences-desktop-display", "displays"),
         ("SEPARATOR", "", ""),
+        ("Ecosistema", "network-server", "ecosystem"),
+        ("Ermete Labs", "applications-science", "labs"),
+        ("Aggiornamenti", "software-update-available", "updates"),
+        ("SEPARATOR", "", ""),
         ("Batteria", "battery", "battery"),
         ("Tastiera", "input-keyboard", "keyboard"),
         ("Mouse & Trackpad", "input-mouse", "mouse"),
@@ -219,6 +223,12 @@ fn build_ui(app: &Application) {
             crate::pages::wired::build_page()
         } else if id == "focus" {
             crate::pages::focus::build_page()
+        } else if id == "ecosystem" {
+            crate::pages::ecosystem::build_page()
+        } else if id == "labs" {
+            crate::pages::labs::build_page()
+        } else if id == "updates" {
+            crate::pages::updates::build_page()
         } else {
             let p = GtkBox::builder()
                 .orientation(Orientation::Vertical)
@@ -297,21 +307,77 @@ fn build_ui(app: &Application) {
     MAIN_STACK.with(|s| *s.borrow_mut() = Some(stack.clone()));
     MAIN_LIST_BOX.with(|lb| *lb.borrow_mut() = Some(list_box.clone()));
 
-    // Apply basic CSS
+    // Apply Glassmorphism & Modern macOS-like CSS
     let provider = gtk4::CssProvider::new();
     provider.load_from_data("
-        .title-1 { font-size: 28px; font-weight: bold; margin-bottom: 10px; }
+        .title-1 { font-size: 32px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.5px; }
         .subtitle { font-size: 16px; color: #a6adc8; }
-        window { background-color: #1e1e2e; color: #cdd6f4; }
-        .sidebar-container { background-color: rgba(17, 17, 27, 0.9); border-right: 1px solid #313244; }
+        .heading { font-size: 14px; font-weight: bold; color: #cdd6f4; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        window { background-color: rgba(24, 24, 37, 0.85); color: #cdd6f4; }
+        
+        /* Sidebar Glassmorphism */
+        .sidebar-container { 
+            background: linear-gradient(135deg, rgba(30, 30, 46, 0.8), rgba(17, 17, 27, 0.95));
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        }
+        
         .sidebar-list { background-color: transparent; }
-        .sidebar-list row { padding: 4px 8px; margin: 2px 10px; border-radius: 8px; }
-        .sidebar-list row:selected { background-color: rgba(10, 132, 255, 0.9); color: white; }
+        .sidebar-list row { 
+            padding: 8px 12px; 
+            margin: 2px 12px; 
+            border-radius: 10px;
+            transition: all 0.2s ease-in-out;
+        }
+        .sidebar-list row:hover { background-color: rgba(255, 255, 255, 0.05); }
+        .sidebar-list row:selected { 
+            background: linear-gradient(90deg, #89b4fa, #cba6f7);
+            color: #11111b; 
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(137, 180, 250, 0.3);
+        }
+        
         .sidebar-label { font-size: 14px; font-weight: 500; }
-        .sidebar-search { margin: 8px 12px; }
-        .profile-name { font-size: 16px; font-weight: bold; }
-        .profile-role { font-size: 12px; color: #a6adc8; }
-        .stack-container { background-color: #1e1e2e; }
+        .sidebar-search { 
+            margin: 12px 16px; 
+            border-radius: 12px; 
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.1); 
+        }
+        
+        .profile-name { font-size: 18px; font-weight: 800; }
+        .profile-role { font-size: 13px; color: #a6adc8; }
+        
+        .stack-container { 
+            background-color: transparent; 
+        }
+        
+        /* Modern Cards */
+        .settings-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+        .settings-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Buttons */
+        button {
+            border-radius: 8px;
+            font-weight: bold;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s;
+        }
+        button:hover { background: rgba(255, 255, 255, 0.15); }
+        button.suggested-action { background: #89b4fa; color: #11111b; }
+        button.destructive-action { background: #f38ba8; color: #11111b; }
     ");
     gtk4::style_context_add_provider_for_display(
         &gtk4::gdk::Display::default().unwrap(),
