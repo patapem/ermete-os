@@ -11,6 +11,7 @@ mod qos;
 pub mod ai;
 pub mod gaze;
 pub mod audio_spatial;
+pub mod continuity;
 
 use std::error::Error;
 use zbus::connection::Builder;
@@ -40,6 +41,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!("Starting Gaze-Tracking Navigation module...");
     let gaze_tracker = gaze::GazeTracker::new();
     gaze_tracker.start();
+
+    println!("Starting Continuity & Handoff daemon...");
+    let continuity_srv = continuity::ContinuityService::new();
+    continuity_srv.start_background_sync().await;
 
     println!("Initializing ACID Settings Engine and XDG Desktop Portal backend...");
     let settings_srv = SettingsService::new();
