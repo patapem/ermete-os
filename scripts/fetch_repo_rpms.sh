@@ -63,13 +63,29 @@ TIER3_IMAGES=(
   "ermete-forge-gatekeeper-rs"
 )
 
+declare -A OLD_DIGESTS
+declare -A NEW_DIGESTS
+
 pull_and_extract() {
   local img="$1"
   local target_dir="$2"
   local IMAGE_LOWER=$(echo "ghcr.io/$OWNER/$img:latest" | tr '[:upper:]' '[:lower:]')
-  echo ">>> Pulling $IMAGE_LOWER into $target_dir"
   
-  # Best effort: se un container manca (es. build fallita), lo skippiamo
+  local old_digest="${OLD_DIGESTS[$img]:-}"
+  local new_digest=$(skopeo inspect --config "docker://$IMAGE_LOWER" 2>/dev/null | jq -r '.config.Labels["org.opencontainers.image.revision"] // .config.Labels["tier.content.sha256"] // ""' || true)
+  if [ -z "$new_digest" ]; then
+    new_digest=$(skopeo inspect "docker://$IMAGE_LOWER" 2>/dev/null | jq -r '.Digest' || true)
+  fi
+
+  if [ -n "$old_digest" ] && [ -n "$new_digest" ] && [ "$old_digest" = "$new_digest" ]; then
+    echo "    [CACHE HIT] $img hasn't changed. Skipping pull."
+    NEW_DIGESTS["$img"]="$new_digest"
+    return 0
+  fi
+  
+  echo "    [CACHE MISS] Pulling $img (old: $old_digest, new: $new_digest)"
+  NEW_DIGESTS["$img"]="$new_digest"
+
   local ctr
   ctr=$(buildah from "$IMAGE_LOWER" || true)
   if [ -n "$ctr" ]; then
@@ -83,6 +99,31 @@ pull_and_extract() {
     echo "    [!] Immagine non trovata o scaricamento fallito per $img"
   fi
 }
+
+echo "=== Restoring Aggregate Tier Repos (Caching) ==="
+for tier in tier0 tier1 tier2 tier3; do
+  img="ermete-forge-${tier}-repo:latest"
+  IMAGE_LOWER=$(echo "ghcr.io/$OWNER/$img" | tr '[:upper:]' '[:lower:]')
+  echo "    Pulling previous $IMAGE_LOWER..."
+  ctr=$(buildah from "$IMAGE_LOWER" 2>/dev/null || true)
+  if [ -n "$ctr" ]; then
+    mnt=$(buildah mount "$ctr")
+    cp -a "$mnt"/*.rpm "/github/home/repo-${tier}/" 2>/dev/null || true
+    cp -a "$mnt"/*.rpm "/github/home/repo/" 2>/dev/null || true
+    if [ -f "$mnt/manifest.json" ]; then
+      cp -a "$mnt/manifest.json" "/github/home/repo-${tier}/" 2>/dev/null || true
+    fi
+    buildah umount "$ctr"
+    buildah rm "$ctr"
+  fi
+  
+  # Load old digests
+  if [ -f "/github/home/repo-${tier}/manifest.json" ]; then
+    while read -r k v; do
+      OLD_DIGESTS["$k"]="$v"
+    done < <(jq -r 'to_entries[] | "\(.key) \(.value)"' "/github/home/repo-${tier}/manifest.json")
+  fi
+done
 
 echo "=== Extracting Tier 0 RPMs ==="
 for img in "${TIER0_IMAGES[@]}"; do
@@ -102,6 +143,20 @@ done
 echo "=== Extracting Tier 3 RPMs ==="
 for img in "${TIER3_IMAGES[@]}"; do
   pull_and_extract "$img" "/github/home/repo-tier3"
+done
+
+echo "=== Saving New Manifests ==="
+for tier in tier0 tier1 tier2 tier3; do
+  # We construct the manifest for the tier
+  echo "{}" > "/github/home/repo-${tier}/manifest.json"
+  eval "TIER_ARRAY=(\"\${TIER${tier#tier}_IMAGES[@]}\")"
+  for img in "${TIER_ARRAY[@]}"; do
+    digest="${NEW_DIGESTS[$img]:-}"
+    if [ -n "$digest" ]; then
+      jq --arg k "$img" --arg v "$digest" '.[$k] = $v' "/github/home/repo-${tier}/manifest.json" > tmp.json && mv tmp.json "/github/home/repo-${tier}/manifest.json"
+    fi
+  done
+  cp "/github/home/repo-${tier}/manifest.json" "/github/home/repo/manifest_${tier}.json" 2>/dev/null || true
 done
 
 echo "--- Extracted RPMs Summary ---"
