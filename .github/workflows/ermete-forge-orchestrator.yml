@@ -803,7 +803,7 @@ jobs:
 
   build-repo:
     name: 📦 Build Repository
-    if: (!failure() && !cancelled()) && (needs.orchestrator-brain.outputs.has_changes == 'true' || needs.build-kernel.outputs.rebuilt == 'true' || needs.build-nvidia.outputs.rebuilt == 'true')
+    if: success() && (needs.orchestrator-brain.outputs.has_changes == 'true' || needs.build-kernel.outputs.rebuilt == 'true' || needs.build-nvidia.outputs.rebuilt == 'true')
     needs: [orchestrator-brain, custom-packages, build-kernel, build-nvidia, upstream-core, upstream-desktop, upstream-media, upstream-cli]
     runs-on: ubuntu-latest
     permissions:
