@@ -8,3 +8,4 @@ pub mod spotlight;
 pub mod clipboard;
 pub mod gatekeeper_prompt;
 pub mod mission_control;
+pub mod a11y;
