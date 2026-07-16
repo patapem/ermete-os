@@ -21,7 +21,13 @@
     "doctor",
     "cliphist",
     "backup",
-    "gatekeeper-rs"
+    "gatekeeper-rs",
+    "updater-rs",
+    "telemetry-rs",
+    "store-rs",
+    "cloud-rs",
+    "mdm-rs",
+    "xdg-desktop-portal-ermete"
   ],
   "cachyos_addons": [],
   "upstream_core": [
