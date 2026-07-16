@@ -26,16 +26,41 @@ impl GatekeeperManager {
     async fn approve_execution(&self, fd_id: u64) -> zbus::fdo::Result<()> {
         let mut pending = self.pending_events.lock().await;
         if let Some(event_fd) = pending.remove(&fd_id) {
-            // Remove the quarantine xattr
             let path = format!("/proc/self/fd/{}", event_fd);
-            if let Ok(target) = std::fs::read_link(&path) {
-                let _ = xattr::remove(&target, "user.ermete.quarantine");
+            let target_path = std::fs::read_link(&path).unwrap_or_else(|_| Default::default());
+            
+            if target_path.exists() {
+                // Remove the quarantine xattr so it's not repeatedly trapped
+                let _ = xattr::remove(&target_path, "user.ermete.quarantine");
+
+                // TODO(feat/sandbox): Implement Bubblewrap (bwrap) Zero-Trust Enforcement.
+                // fanotify does not allow mutating the exec() context or environment.
+                // To sandbox the execution, we must DENY the original direct execution request
+                // and instead manually spawn the application wrapped inside `bwrap`.
+                /*
+                std::process::Command::new("bwrap")
+                    .arg("--unshare-all")
+                    .arg("--share-net")
+                    .arg("--ro-bind").arg("/usr").arg("/usr")
+                    .arg("--ro-bind").arg("/lib").arg("/lib")
+                    .arg("--ro-bind").arg("/lib64").arg("/lib64")
+                    .arg("--proc").arg("/proc")
+                    .arg("--dev").arg("/dev")
+                    .arg("--dir").arg("/tmp")
+                    // Mount the application itself
+                    .arg("--ro-bind").arg(&target_path).arg(&target_path)
+                    .arg("--")
+                    .arg(&target_path)
+                    .spawn()
+                    .expect("Failed to spawn sandboxed application");
+                */
             }
             
-            // Allow execution
+            // For now, we still allow the original execution (or if we fully implemented bwrap above, we would DENY here)
+            // If bwrap is spawned above, change FAN_ALLOW to FAN_DENY.
             let mut response = fanotify_response {
                 fd: event_fd,
-                response: FAN_ALLOW,
+                response: FAN_ALLOW, // change to FAN_DENY when bwrap spawn is fully active
             };
             unsafe {
                 libc::write(
