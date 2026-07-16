@@ -7,7 +7,7 @@ License:        MIT
 URL:            https://github.com/patapem/ermete-forge
 BuildArch:      noarch
 
-Requires:       cage greetd ermete-shell-rs
+Requires:       cage greetd ermete-shell-rs greenboot
 
 %description
 Provides ermete-system-config for Ermete OS.
@@ -35,6 +35,8 @@ ln -sf /usr/share/ermete-system-config/greetd.toml /etc/greetd/config.toml 2>/de
 /usr/share/ermete-system-config/greetd.toml
 %dir /etc/yum.repos.d
 %config(noreplace) /etc/yum.repos.d/ermete-forge.repo
+%attr(0755,root,root) /etc/greenboot/check/required.d/10-greetd-running.sh
+%attr(0755,root,root) /etc/greenboot/check/required.d/20-niri-running.sh
 
 
 %changelog
