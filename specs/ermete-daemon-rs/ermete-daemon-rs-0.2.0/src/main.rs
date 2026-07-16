@@ -10,6 +10,7 @@ mod voiceover;
 mod qos;
 pub mod ai;
 pub mod gaze;
+pub mod audio_spatial;
 
 use std::error::Error;
 use zbus::connection::Builder;
