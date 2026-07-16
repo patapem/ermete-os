@@ -7,6 +7,7 @@ mod portal_screencast;
 mod secret_enroller;
 mod gatekeeper_listener;
 mod voiceover;
+mod qos;
 
 use std::error::Error;
 use zbus::connection::Builder;
@@ -26,6 +27,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     println!("Starting Gatekeeper Listener...");
     let _ = gatekeeper_listener::start_gatekeeper_listener(sys_conn.clone()).await;
+
+    println!("Starting App Nap QoS Observer...");
+    qos::start_qos_observer().await;
 
     println!("Initializing ACID Settings Engine and XDG Desktop Portal backend...");
     let settings_srv = SettingsService::new();
