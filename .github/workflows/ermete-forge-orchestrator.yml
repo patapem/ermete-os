@@ -849,7 +849,7 @@ jobs:
     needs: [orchestrator-brain, custom-packages, build-kernel, build-nvidia, build-initramfs, upstream-core, upstream-desktop, upstream-media, upstream-cli]
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
     container:
       image: ghcr.io/${{ github.repository_owner }}/ermete-builder:latest
@@ -900,3 +900,20 @@ jobs:
             buildah rm "$ctr"
           done
 
+          # Aggrega i tier e pubblica su GitHub Pages (Rolling Release)
+          echo "🌐 Pubblicazione dei repository DNF su GitHub Pages (gh-pages branch)..."
+          mkdir -p /github/home/pages_repo
+          cp -a /github/home/repo-tier0 /github/home/pages_repo/tier0
+          cp -a /github/home/repo-tier1 /github/home/pages_repo/tier1
+          cp -a /github/home/repo-tier2 /github/home/pages_repo/tier2
+          cp -a /github/home/repo-tier3 /github/home/pages_repo/tier3
+          
+          cd /github/home/pages_repo
+          git init
+          git config --global user.name "Ermete Forge"
+          git config --global user.email "forge@ermete.os"
+          git config --global --add safe.directory /github/home/pages_repo
+          git checkout -b gh-pages
+          git add .
+          git commit -m "🚀 Deploy DNF repositories for Ermete OS Rolling Release"
+          git push -f "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages
