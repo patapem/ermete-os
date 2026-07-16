@@ -5,6 +5,7 @@ use tracing::{info, warn, error};
 
 mod dbus;
 mod flatpak;
+mod flathub;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -17,13 +18,13 @@ async fn main() -> Result<()> {
     // Export D-Bus interface
     let _conn = zbus::ConnectionBuilder::system()?
         .name("os.ermete.Store")?
-        .serve_at("/os/ermete/Store", dbus::StoreIface)?
+        .serve_at("/os/ermete/Store", dbus::StoreIface::new())?
         .build()
         .await?;
 
     info!("D-Bus Interface 'os.ermete.Store' registered.");
 
-    let mut manager = flatpak::FlatpakManager::new();
+    let manager = flatpak::FlatpakManager::new();
     
     // Perform initial sync on startup
     if let Err(e) = manager.sync_remotes().await {
