@@ -883,7 +883,7 @@ jobs:
           echo "🌐 Generazione payload UEFI HTTP Boot Internet Recovery..."
           dnf install -y ipxe-bootimgs
           mkdir -p /github/home/pages_repo/recovery
-          cp /usr/share/ipxe/ipxe.efi /github/home/pages_repo/recovery/ipxe.efi
+          cp /usr/share/ipxe/ipxe-x86_64.efi /github/home/pages_repo/recovery/ipxe.efi
           cat << 'EOF' > /github/home/pages_repo/recovery/boot.ipxe
           #!ipxe
           dhcp
