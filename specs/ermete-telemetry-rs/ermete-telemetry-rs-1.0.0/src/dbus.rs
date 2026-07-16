@@ -1,5 +1,6 @@
 use zbus::interface;
-use tracing::info;
+use tracing::{info, warn};
+use std::process::Command;
 use crate::github::GitHubReporter;
 
 pub struct TelemetryIface;
@@ -11,10 +12,26 @@ impl TelemetryIface {
         info!("Received D-Bus request to submit crash: {}", crash_id);
         
         let reporter = GitHubReporter::new();
-        // Here we would fetch the crash dump using `coredumpctl info <crash_id>`
-        let dummy_data = format!("Crash dump for {}", crash_id);
         
-        if let Err(e) = reporter.report_crash(&dummy_data).await {
+        // Fetch the crash dump using `coredumpctl info <crash_id>`
+        let output = Command::new("coredumpctl")
+            .arg("info")
+            .arg(&crash_id)
+            .output();
+
+        let dump_data = match output {
+            Ok(out) if out.status.success() => String::from_utf8_lossy(&out.stdout).to_string(),
+            Ok(out) => {
+                warn!("coredumpctl failed: {}", String::from_utf8_lossy(&out.stderr));
+                format!("Failed to retrieve full dump for {}. (Exit code: {})", crash_id, out.status)
+            }
+            Err(e) => {
+                warn!("Failed to execute coredumpctl: {}", e);
+                format!("Failed to execute coredumpctl for {}", crash_id)
+            }
+        };
+        
+        if let Err(e) = reporter.report_crash(&dump_data).await {
             return Ok(format!("Failed to submit: {}", e));
         }
         
