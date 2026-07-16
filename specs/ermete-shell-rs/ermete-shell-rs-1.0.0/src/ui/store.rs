@@ -3,6 +3,16 @@ use gtk4::{Align, Application, ApplicationWindow, Box as GtkBox, Button, Entry, 
 use glib::clone;
 use serde_json::Value;
 
+#[zbus::proxy(
+    interface = "os.ermete.Store",
+    default_service = "os.ermete.Store",
+    default_path = "/os/ermete/Store"
+)]
+trait Store {
+    async fn search_apps(&self, query: &str) -> zbus::Result<String>;
+    async fn install_app(&self, app_id: &str) -> zbus::Result<()>;
+}
+
 pub fn show_store_modal(app: &Application) {
     let window = ApplicationWindow::builder()
         .application(app)
@@ -82,28 +92,17 @@ pub fn show_store_modal(app: &Application) {
 
         glib::spawn_future_local(async move {
             if let Ok(conn) = zbus::Connection::system().await {
-                if let Ok(proxy) = zbus::Proxy::builder(&conn)
-                    .interface("os.ermete.Store")
-                    .unwrap()
-                    .destination("os.ermete.Store")
-                    .unwrap()
-                    .path("/os/ermete/Store")
-                    .unwrap()
-                    .build()
-                    .await
-                {
-                    if let Ok(json_str) = proxy.call_method("search_apps", &(query,)).await {
-                        if let Ok((res_str,)) = json_str.body().deserialize::<(String,)>() {
-                            if let Ok(apps) = serde_json::from_str::<Vec<Value>>(&res_str) {
-                                for app in apps {
-                                    if let (Some(id), Some(name), Some(summary)) = (
-                                        app.get("id").and_then(|v| v.as_str()),
-                                        app.get("name").and_then(|v| v.as_str()),
-                                        app.get("summary").and_then(|v| v.as_str()),
-                                    ) {
-                                        let card = create_app_card(id, name, summary, &conn);
-                                        flowbox.append(&card);
-                                    }
+                if let Ok(proxy) = StoreProxy::new(&conn).await {
+                    if let Ok(res_str) = proxy.search_apps(&query).await {
+                        if let Ok(apps) = serde_json::from_str::<Vec<Value>>(&res_str) {
+                            for app in apps {
+                                if let (Some(id), Some(name), Some(summary)) = (
+                                    app.get("id").and_then(|v| v.as_str()),
+                                    app.get("name").and_then(|v| v.as_str()),
+                                    app.get("summary").and_then(|v| v.as_str()),
+                                ) {
+                                    let card = create_app_card(id, name, summary, &conn);
+                                    flowbox.append(&card);
                                 }
                             }
                         }
@@ -169,17 +168,8 @@ fn create_app_card(id: &str, name: &str, summary: &str, conn: &zbus::Connection)
         let conn = conn_clone.clone();
 
         glib::spawn_future_local(async move {
-            if let Ok(proxy) = zbus::Proxy::builder(&conn)
-                .interface("os.ermete.Store")
-                .unwrap()
-                .destination("os.ermete.Store")
-                .unwrap()
-                .path("/os/ermete/Store")
-                .unwrap()
-                .build()
-                .await
-            {
-                match proxy.call_method("install_app", &(app_id,)).await {
+            if let Ok(proxy) = StoreProxy::new(&conn).await {
+                match proxy.install_app(&app_id).await {
                     Ok(_) => {
                         btn_clone.set_label("Apri");
                         btn_clone.set_sensitive(true);
