@@ -1,4 +1,4 @@
-use zbus::{interface, Result};
+use zbus::interface;
 use tracing::info;
 use crate::sync::SyncEngine;
 
@@ -7,7 +7,7 @@ pub struct CloudIface;
 #[interface(name = "os.ermete.Cloud")]
 impl CloudIface {
     /// Syncs local clipboard to trusted peers
-    async fn push_clipboard(&self, content: String) -> Result<String> {
+    async fn push_clipboard(&self, content: String) -> std::result::Result<String, zbus::fdo::Error> {
         info!("Received D-Bus request to push clipboard to cloud.");
         
         let engine = SyncEngine::new();

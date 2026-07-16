@@ -1,4 +1,4 @@
-use zbus::{interface, Result};
+use zbus::interface;
 use tracing::info;
 use crate::flatpak::FlatpakManager;
 
@@ -7,7 +7,7 @@ pub struct StoreIface;
 #[interface(name = "os.ermete.Store")]
 impl StoreIface {
     /// Installs a Flatpak app system-wide. Polkit auth required.
-    async fn install_app(&self, app_id: String) -> Result<String> {
+    async fn install_app(&self, app_id: String) -> std::result::Result<String, zbus::fdo::Error> {
         info!("Received D-Bus request to install app: {}", app_id);
         
         let manager = FlatpakManager::new();
