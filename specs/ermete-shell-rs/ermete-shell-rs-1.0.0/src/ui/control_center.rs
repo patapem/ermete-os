@@ -1234,6 +1234,56 @@ pub fn show_control_center_popover(app: &Application) {
             .args(["--page", "displays"])
             .spawn();
     });
+
+    let tt_btn = Button::builder()
+        .label("☾")
+        .css_classes(["cc-quick-btn"])
+        .valign(Align::Center)
+        .tooltip_text("True Tone")
+        .build();
+    let tt_btn_clone_click = tt_btn.clone();
+    tt_btn.connect_clicked(move |_| {
+        let is_active = tt_btn_clone_click.has_css_class("cc-btn-active");
+        let new_state = !is_active;
+        if new_state {
+            tt_btn_clone_click.add_css_class("cc-btn-active");
+        } else {
+            tt_btn_clone_click.remove_css_class("cc-btn-active");
+        }
+        glib::MainContext::default().spawn_local(async move {
+            if let Ok(connection) = zbus::Connection::session().await {
+                let _ = connection.call_method(
+                    Some("org.ermete.Settings"),
+                    "/org/ermete/Settings",
+                    Some("org.freedesktop.DBus.Properties"),
+                    "Set",
+                    &("org.ermete.Settings", "TrueToneEnabled", zbus::zvariant::Value::from(new_state))
+                ).await;
+            }
+        });
+    });
+    let tt_btn_clone_init = tt_btn.clone();
+    glib::MainContext::default().spawn_local(async move {
+        if let Ok(connection) = zbus::Connection::session().await {
+            if let Ok(msg) = connection.call_method(
+                Some("org.ermete.Settings"),
+                "/org/ermete/Settings",
+                Some("org.freedesktop.DBus.Properties"),
+                "Get",
+                &("org.ermete.Settings", "TrueToneEnabled")
+            ).await {
+                if let Ok(val) = msg.body().deserialize::<zbus::zvariant::OwnedValue>() {
+                    if let Ok(enabled) = bool::try_from(val) {
+                        if enabled {
+                            tt_btn_clone_init.add_css_class("cc-btn-active");
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    bright_card.append(&tt_btn);
     bright_card.append(&disp_settings_btn);
 
     // Slider Volume Audio
@@ -1335,6 +1385,7 @@ pub fn show_control_center_popover(app: &Application) {
         .css_classes(["cc-quick-btn"])
         .build();
     dark_btn.set_child(Some(&build_quick_toggle_content("☾", "Scuro")));
+    crate::core::attach_voiceover_hover(&dark_btn, "Attiva o disattiva la modalità scura");
 
     dark_btn.connect_clicked(move |_| {
         let settings = gtk4::gio::Settings::new("org.gnome.desktop.interface");
@@ -1345,6 +1396,7 @@ pub fn show_control_center_popover(app: &Application) {
         .css_classes(["cc-quick-btn"])
         .build();
     standby_btn.set_child(Some(&build_quick_toggle_content("🖥", "Standby")));
+    crate::core::attach_voiceover_hover(&standby_btn, "Sospendi il computer");
 
     let pop_std = pop.clone();
     standby_btn.connect_clicked(move |_| {
@@ -1360,6 +1412,7 @@ pub fn show_control_center_popover(app: &Application) {
         .css_classes(["cc-quick-btn"])
         .build();
     mixer_btn.set_child(Some(&build_quick_toggle_content("🎚️", "Mixer")));
+    crate::core::attach_voiceover_hover(&mixer_btn, "Apri il mixer audio avanzato");
 
     let app_mixer = app.clone();
     let pop_mixer = pop.clone();
@@ -1372,6 +1425,7 @@ pub fn show_control_center_popover(app: &Application) {
         .css_classes(["cc-quick-btn"])
         .build();
     term_btn.set_child(Some(&build_quick_toggle_content("", "Shell")));
+    crate::core::attach_voiceover_hover(&term_btn, "Apri un terminale");
 
     let pop_term = pop.clone();
     term_btn.connect_clicked(move |_| {

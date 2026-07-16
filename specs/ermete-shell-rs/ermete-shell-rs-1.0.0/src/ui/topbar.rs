@@ -602,12 +602,14 @@ fn build_left_island(app: &Application) -> (GtkBox, Button) {
     apple_logo.connect_clicked(move |_| {
         show_start_menu_popover(&app_clone);
     });
+    crate::core::attach_voiceover_hover(&apple_logo, "Menu di avvio e sistema");
     box_left.append(&apple_logo);
 
     let app_title = Button::builder()
         .label("Ermete OS")
         .css_classes(["macos-menu-item", "macos-app-title"])
         .build();
+    crate::core::attach_voiceover_hover(&app_title, "Nome dell'applicazione corrente");
     box_left.append(&app_title);
 
     (box_left, app_title)
@@ -687,6 +689,7 @@ fn build_right_island(app: &Application, clock_label: &Label) -> (GtkBox, Button
         .label("100% 󰁹")
         .css_classes(["macos-status-item"])
         .build();
+    crate::core::attach_voiceover_hover(&batt_item, "Stato batteria e alimentazione");
 
     // 2. Dynamic Network Dongle (macOS style: Ethernet/Wi-Fi/Off)
     let (init_icon, _, _) = get_network_status();
@@ -698,6 +701,7 @@ fn build_right_island(app: &Application, clock_label: &Label) -> (GtkBox, Button
     net_item.connect_clicked(move |_| {
         show_wifi_popover(&app_net);
     });
+    crate::core::attach_voiceover_hover(&net_item, "Connettività Wi-Fi e Rete");
 
     // 3. Spotlight Dongle (macOS style)
     let spot_item = Button::builder()
@@ -708,6 +712,7 @@ fn build_right_island(app: &Application, clock_label: &Label) -> (GtkBox, Button
     spot_item.connect_clicked(move |_| {
         show_spotlight_modal(&app_clone1);
     });
+    crate::core::attach_voiceover_hover(&spot_item, "Ricerca globale Spotlight");
 
     // 4. Control Center Dongle (macOS style)
     let cc_item = Button::builder()
@@ -718,6 +723,7 @@ fn build_right_island(app: &Application, clock_label: &Label) -> (GtkBox, Button
     cc_item.connect_clicked(move |_| {
         show_control_center_popover(&app_clone2);
     });
+    crate::core::attach_voiceover_hover(&cc_item, "Centro di Controllo di sistema");
 
     // 5. Clock Dongle (macOS style)
     let clock_item = Button::builder()
@@ -728,6 +734,7 @@ fn build_right_island(app: &Application, clock_label: &Label) -> (GtkBox, Button
     clock_item.connect_clicked(move |_| {
         show_calendar_popover(&app_clone3);
     });
+    crate::core::attach_voiceover_hover(&clock_item, "Orologio e Calendario");
 
     // 6. Notification Center Bell
     let notif_item = Button::builder()
@@ -738,6 +745,7 @@ fn build_right_island(app: &Application, clock_label: &Label) -> (GtkBox, Button
     notif_item.connect_clicked(move |_| {
         toggle_or_open_popup("notifications", || crate::ui::notifications::show_notification_center(&app_clone_notif));
     });
+    crate::core::attach_voiceover_hover(&notif_item, "Centro Notifiche");
 
     box_right.append(&batt_item);
     box_right.append(&net_item);

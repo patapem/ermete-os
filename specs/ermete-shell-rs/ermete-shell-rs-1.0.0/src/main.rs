@@ -33,7 +33,9 @@ struct Args {
     #[arg(long)]
     powermenu: bool,
     #[arg(long)]
-    clipboard: bool,
+    gatekeeper_prompt: Option<String>,
+    #[arg(long)]
+    overview: bool,
 }
 
 const APP_ID: &str = "os.ermete.Shell";
@@ -41,6 +43,27 @@ const APP_ID: &str = "os.ermete.Shell";
 fn main() -> glib::ExitCode {
     let args = Args::parse();
     crate::core::system_proxies::init_system_controller();
+
+    if let Some(app_path) = args.gatekeeper_prompt {
+        let app = Application::builder()
+            .application_id("os.ermete.GatekeeperPrompt")
+            .build();
+        let path_clone = app_path.clone();
+        app.connect_activate(move |app| {
+            crate::ui::gatekeeper_prompt::build_ui(app, &path_clone);
+        });
+        return app.run_with_args(&Vec::<String>::new());
+    }
+
+    if args.overview {
+        let app = Application::builder()
+            .application_id("os.ermete.MissionControl")
+            .build();
+        app.connect_activate(|app| {
+            crate::ui::mission_control::build_ui(app);
+        });
+        return app.run_with_args(&Vec::<String>::new());
+    }
 
     // If greeter or lock mode is requested explicitly, run standalone authentication app
     if args.greeter || args.lock {

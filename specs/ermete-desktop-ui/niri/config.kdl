@@ -157,6 +157,7 @@ layer-rule {
     match namespace="^spotlight$"
     match namespace="^powermenu$"
     match namespace="^clipboard$"
+    match namespace="^overview$"
     match namespace="^media-player$"
     match namespace="^sys-monitor$"
     match namespace="^calendar$"
@@ -188,6 +189,7 @@ binds {
     Mod+T      { spawn "foot"; }
     Mod+D      { spawn "ermete-shell-rs" "--dock"; }
     Mod+Space  { spawn "ermete-shell-rs" "--launcher"; }
+    Mod+Tab    { spawn "ermete-shell-rs" "--overview"; }
     Mod+E      { spawn "nautilus"; }
     Mod+B      { spawn "firefox"; }
     Mod+I      { spawn "ermete-settings-rs"; }

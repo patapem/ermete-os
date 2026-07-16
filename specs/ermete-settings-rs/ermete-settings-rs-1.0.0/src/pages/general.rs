@@ -63,5 +63,63 @@ pub fn build_page() -> gtk4::Box {
         update_status.set_label("Sistema Aggiornato");
     });
 
+    // Accessibilità (VoiceOver)
+    let a11y_title = gtk4::Label::builder()
+        .label("<span size='large' weight='bold'>Accessibilità</span>")
+        .use_markup(true)
+        .halign(gtk4::Align::Start)
+        .margin_top(16)
+        .build();
+    container.append(&a11y_title);
+
+    let vo_box = gtk4::Box::builder()
+        .orientation(gtk4::Orientation::Horizontal)
+        .spacing(12)
+        .build();
+    let vo_lbl = gtk4::Label::builder()
+        .label("VoiceOver (Screen Reader Nativo)")
+        .halign(gtk4::Align::Start)
+        .hexpand(true)
+        .build();
+    let vo_switch = gtk4::Switch::builder().valign(gtk4::Align::Center).build();
+    let vo_sw_clone = vo_switch.clone();
+
+    vo_switch.connect_state_set(move |_, state| {
+        glib::MainContext::default().spawn_local(async move {
+            if let Ok(connection) = zbus::Connection::session().await {
+                let _ = connection.call_method(
+                    Some("org.ermete.Settings"),
+                    "/org/ermete/Settings",
+                    Some("org.freedesktop.DBus.Properties"),
+                    "Set",
+                    &("org.ermete.Settings", "VoiceOverEnabled", zbus::zvariant::Value::from(state))
+                ).await;
+            }
+        });
+        glib::Propagation::Proceed
+    });
+
+    glib::MainContext::default().spawn_local(async move {
+        if let Ok(connection) = zbus::Connection::session().await {
+            if let Ok(msg) = connection.call_method(
+                Some("org.ermete.Settings"),
+                "/org/ermete/Settings",
+                Some("org.freedesktop.DBus.Properties"),
+                "Get",
+                &("org.ermete.Settings", "VoiceOverEnabled")
+            ).await {
+                if let Ok(val) = msg.body().deserialize::<zbus::zvariant::OwnedValue>() {
+                    if let Ok(enabled) = bool::try_from(val) {
+                        vo_sw_clone.set_active(enabled);
+                    }
+                }
+            }
+        }
+    });
+
+    vo_box.append(&vo_lbl);
+    vo_box.append(&vo_switch);
+    container.append(&vo_box);
+
     container
 }

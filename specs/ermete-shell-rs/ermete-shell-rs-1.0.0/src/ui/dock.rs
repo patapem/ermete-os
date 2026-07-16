@@ -487,6 +487,13 @@ fn refresh_monitor_instance(inst: &mut DockMonitorInstance) {
         box_inner.append(&indicator);
         btn.set_child(Some(&box_inner));
 
+        let voice_text = if item.window_ids.is_empty() {
+            format!("App, {}", item.key_id.replace(".desktop", "").replace("org.", "").replace("com.", "").replace("gnome.", ""))
+        } else {
+            format!("{}, {} finestre aperte", item.key_id.replace(".desktop", "").replace("org.", "").replace("com.", "").replace("gnome.", ""), item.window_ids.len())
+        };
+        crate::core::attach_voiceover_hover(&btn, &voice_text);
+
         let item_clone = item.clone();
         let btn_clone = btn.clone();
         btn.connect_clicked(move |_| {

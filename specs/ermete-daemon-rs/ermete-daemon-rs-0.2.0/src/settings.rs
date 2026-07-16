@@ -10,6 +10,9 @@ pub struct SettingsState {
     pub accent_color: String,  // hex e.g. "#89b4fa"
     pub wallpaper: String,     // e.g. "/usr/share/backgrounds/ermete-default.png"
     pub dock_pinned: Vec<String>,
+    pub true_tone_enabled: bool,
+    pub true_tone_temperature: u32,
+    pub voiceover_enabled: bool,
 }
 
 impl Default for SettingsState {
@@ -23,6 +26,9 @@ impl Default for SettingsState {
                 "org.mozilla.firefox.desktop".to_string(),
                 "os.ermete.Settings.desktop".to_string(),
             ],
+            true_tone_enabled: false,
+            true_tone_temperature: 4500,
+            voiceover_enabled: false,
         }
     }
 }
@@ -136,5 +142,76 @@ impl SettingsService {
             .output()
             .await;
         Ok(())
+    }
+
+    #[zbus(property, name = "TrueToneEnabled")]
+    async fn true_tone_enabled(&self) -> bool {
+        self.state.lock().await.true_tone_enabled
+    }
+
+    #[zbus(property, name = "TrueToneEnabled")]
+    async fn set_true_tone_enabled(&self, val: bool) -> fdo::Result<()> {
+        let temp = {
+            let mut st = self.state.lock().await;
+            st.true_tone_enabled = val;
+            st.save().map_err(|e| fdo::Error::Failed(format!("Failed to save state: {}", e)))?;
+            st.true_tone_temperature
+        };
+        apply_true_tone(val, temp).await;
+        Ok(())
+    }
+
+    #[zbus(property, name = "TrueToneTemperature")]
+    async fn true_tone_temperature(&self) -> u32 {
+        self.state.lock().await.true_tone_temperature
+    }
+
+    #[zbus(property, name = "TrueToneTemperature")]
+    async fn set_true_tone_temperature(&self, val: u32) -> fdo::Result<()> {
+        let enabled = {
+            let mut st = self.state.lock().await;
+            st.true_tone_temperature = val;
+            st.save().map_err(|e| fdo::Error::Failed(format!("Failed to save state: {}", e)))?;
+            st.true_tone_enabled
+        };
+        apply_true_tone(enabled, val).await;
+        Ok(())
+    }
+
+    #[zbus(property, name = "VoiceOverEnabled")]
+    async fn voiceover_enabled(&self) -> bool {
+        self.state.lock().await.voiceover_enabled
+    }
+
+    #[zbus(property, name = "VoiceOverEnabled")]
+    async fn set_voiceover_enabled(&self, val: bool) -> fdo::Result<()> {
+        let mut st = self.state.lock().await;
+        st.voiceover_enabled = val;
+        st.save().map_err(|e| fdo::Error::Failed(format!("Failed to save state: {}", e)))?;
+        
+        if val {
+            let _ = tokio::process::Command::new("spd-say")
+                .arg("Voice Over attivato. Accessibilità sistema pronta.")
+                .spawn();
+        }
+        Ok(())
+    }
+}
+
+async fn apply_true_tone(enabled: bool, temp: u32) {
+    // Kill existing wlsunset instances
+    let _ = tokio::process::Command::new("killall")
+        .arg("wlsunset")
+        .output()
+        .await;
+
+    if enabled {
+        // Spawn wlsunset with target temperature
+        let _ = tokio::process::Command::new("wlsunset")
+            .arg("-T")
+            .arg(temp.to_string())
+            .arg("-t")
+            .arg(temp.to_string()) // Force fixed temp
+            .spawn();
     }
 }

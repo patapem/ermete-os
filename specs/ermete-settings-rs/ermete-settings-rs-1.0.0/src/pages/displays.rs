@@ -181,6 +181,105 @@ pub fn build_page() -> Box {
     hdr_box.append(&hdr_switch);
     container.append(&hdr_box);
 
+    // True Tone & ColorSync
+    let tt_title = Label::builder()
+        .label("<b>ColorSync & True Tone</b>")
+        .use_markup(true)
+        .halign(Align::Start)
+        .margin_top(24)
+        .build();
+    container.append(&tt_title);
+
+    let tt_box = Box::new(Orientation::Horizontal, 12);
+    let tt_lbl = Label::builder()
+        .label("True Tone (Adatta automaticamente i colori per non affaticare la vista)")
+        .halign(Align::Start)
+        .hexpand(true)
+        .build();
+    let tt_switch = Switch::builder().valign(Align::Center).build();
+    let tt_sw_clone = tt_switch.clone();
+
+    let temp_box = Box::new(Orientation::Vertical, 8);
+    temp_box.set_margin_start(16);
+    let temp_lbl = Label::builder()
+        .label("Temperatura Colore (Kelvin):")
+        .halign(Align::Start)
+        .build();
+    let temp_scale = Scale::with_range(Orientation::Horizontal, 3000.0, 6500.0, 100.0);
+    temp_scale.set_value(4500.0);
+    temp_scale.set_draw_value(true);
+    let temp_scale_clone = temp_scale.clone();
+
+    tt_switch.connect_state_set(move |_, state| {
+        glib::MainContext::default().spawn_local(async move {
+            if let Ok(connection) = zbus::Connection::session().await {
+                let _ = connection.call_method(
+                    Some("org.ermete.Settings"),
+                    "/org/ermete/Settings",
+                    Some("org.freedesktop.DBus.Properties"),
+                    "Set",
+                    &("org.ermete.Settings", "TrueToneEnabled", zbus::zvariant::Value::from(state))
+                ).await;
+            }
+        });
+        glib::Propagation::Proceed
+    });
+
+    temp_scale.connect_value_changed(move |s| {
+        let val = s.value() as u32;
+        glib::MainContext::default().spawn_local(async move {
+            if let Ok(connection) = zbus::Connection::session().await {
+                let _ = connection.call_method(
+                    Some("org.ermete.Settings"),
+                    "/org/ermete/Settings",
+                    Some("org.freedesktop.DBus.Properties"),
+                    "Set",
+                    &("org.ermete.Settings", "TrueToneTemperature", zbus::zvariant::Value::from(val))
+                ).await;
+            }
+        });
+    });
+
+    glib::MainContext::default().spawn_local(async move {
+        if let Ok(connection) = zbus::Connection::session().await {
+            if let Ok(msg) = connection.call_method(
+                Some("org.ermete.Settings"),
+                "/org/ermete/Settings",
+                Some("org.freedesktop.DBus.Properties"),
+                "Get",
+                &("org.ermete.Settings", "TrueToneEnabled")
+            ).await {
+                if let Ok(val) = msg.body().deserialize::<zbus::zvariant::OwnedValue>() {
+                    if let Ok(enabled) = bool::try_from(val) {
+                        tt_sw_clone.set_active(enabled);
+                    }
+                }
+            }
+
+            if let Ok(msg) = connection.call_method(
+                Some("org.ermete.Settings"),
+                "/org/ermete/Settings",
+                Some("org.freedesktop.DBus.Properties"),
+                "Get",
+                &("org.ermete.Settings", "TrueToneTemperature")
+            ).await {
+                if let Ok(val) = msg.body().deserialize::<zbus::zvariant::OwnedValue>() {
+                    if let Ok(temp) = u32::try_from(val) {
+                        temp_scale_clone.set_value(temp as f64);
+                    }
+                }
+            }
+        }
+    });
+
+    tt_box.append(&tt_lbl);
+    tt_box.append(&tt_switch);
+    temp_box.append(&temp_lbl);
+    temp_box.append(&temp_scale);
+
+    container.append(&tt_box);
+    container.append(&temp_box);
+
     container
 }
 
