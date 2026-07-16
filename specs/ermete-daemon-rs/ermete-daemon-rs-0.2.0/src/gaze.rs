@@ -45,6 +45,7 @@ impl GazeTracker {
         });
     }
 
+    #[allow(dead_code)]
     pub fn stop(&self) {
         self.running.store(false, Ordering::SeqCst);
     }

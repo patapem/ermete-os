@@ -25,7 +25,7 @@ impl AudioSpatializer {
 
     /// Listens for Niri window events (e.g., window focus, window move)
     /// and triggers the spatial audio raytracer for notifications anchored to that window.
-    pub async fn listen_to_niri_events(&self) -> Result<(), Box<dyn Error>> {
+    pub async fn listen_to_niri_events(&self) -> Result<(), Box<dyn Error + Send + Sync>> {
         println!("Listening to Niri Wayland IPC for window coordinates...");
         
         // Mocking an event loop listening to Niri
@@ -45,6 +45,7 @@ impl AudioSpatializer {
     }
 
     /// Updates the PipeWire notification stream panning based on the window's X/Y coordinates
+    #[allow(dead_code)]
     pub fn update_binaural_panning(&self, win_x: f64, win_y: f64) {
         // Normalize coordinates from -1.0 to 1.0 where 0 is center
         let pan_x = (win_x / self.screen_width) * 2.0 - 1.0;
