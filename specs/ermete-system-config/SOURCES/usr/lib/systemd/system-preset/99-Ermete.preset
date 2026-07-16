@@ -2,3 +2,4 @@ enable greetd.service
 enable nix-daemon.socket
 enable bootc-fetch-apply.timer
 enable fstrim.timer
+enable ermete-timewarp.timer

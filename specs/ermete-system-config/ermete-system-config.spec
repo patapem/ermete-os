@@ -31,6 +31,9 @@ ln -sf /usr/share/ermete-system-config/greetd.toml /etc/greetd/config.toml 2>/de
 %dir /usr/share/ermete-system-config
 %attr(0755,root,root) /usr/bin/ermete-session
 %attr(0755,root,root) /usr/bin/ermete-uki-enroll
+%attr(0755,root,root) /usr/libexec/ermete-snapshot-trigger.sh
+/usr/lib/systemd/system/ermete-timewarp.service
+/usr/lib/systemd/system/ermete-timewarp.timer
 /usr/lib/systemd/system-preset/99-Ermete.preset
 /usr/lib/tmpfiles.d/10-ermete-greetd.conf
 /usr/share/ermete-system-config/greetd.toml
