@@ -285,6 +285,7 @@ jobs:
         env:
           COSIGN_EXPERIMENTAL: false
         run: |
+          cosign login ${{ env.REGISTRY }} -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
           IMAGE_LATEST=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-kernel:latest" | tr '[:upper:]' '[:lower:]')
           IMAGE_FINGERPRINT=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-kernel:${{ env.FINGERPRINT }}" | tr '[:upper:]' '[:lower:]')
           cosign sign --yes $IMAGE_LATEST
@@ -437,6 +438,7 @@ jobs:
         env:
           COSIGN_EXPERIMENTAL: false
         run: |
+          cosign login ${{ env.REGISTRY }} -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-forge-nvidia:latest" | tr '[:upper:]' '[:lower:]')
           cosign sign --yes $IMAGE_LOWER
 
