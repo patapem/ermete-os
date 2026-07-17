@@ -839,7 +839,7 @@ jobs:
 
   build-repo:
     name: 📦 Build Repository
-    if: ${{ !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
+    if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
     needs: [orchestrator-brain, custom-packages, build-kernel, build-nvidia, upstream-core, upstream-desktop, upstream-media, upstream-cli]
     runs-on: ubuntu-latest
     permissions:
