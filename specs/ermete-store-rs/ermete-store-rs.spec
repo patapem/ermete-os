@@ -1,8 +1,9 @@
 %global debug_package %{nil}
 Name:           ermete-store-rs
 Version:        1.0.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Ermete OS Universal App Store Daemon
+
 
 License:        GPL-3.0-or-later
 URL:            https://github.com/patapem/ermete-forge

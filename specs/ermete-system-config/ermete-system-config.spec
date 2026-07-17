@@ -1,7 +1,8 @@
 %global debug_package %{nil}
+%global __requires_exclude ^kernel-rt$
 Name:           ermete-system-config
 Version:        1.0.0
-Release:        13%{?dist}
+Release:        14%{?dist}
 Summary:        Ermete OS ermete-system-config
 License:        MIT
 URL:            https://github.com/patapem/ermete-forge
