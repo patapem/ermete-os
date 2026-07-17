@@ -376,7 +376,7 @@ jobs:
           mkdir -p ~/.cache/ccache
           ccache -z
 
-          akmods --force --kernels $REAL_KERNEL_VER || true
+          akmods --force --kernels $REAL_KERNEL_VER || { cat /var/cache/akmods/nvidia/*.log; false; }
           ccache -s
           
           # [BEDROCK UNIFICATION] Download userspace NVIDIA drivers, Wayland EGL, persistenced, and container toolkit
