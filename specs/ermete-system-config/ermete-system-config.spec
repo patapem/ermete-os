@@ -2,7 +2,7 @@
 %global __requires_exclude ^kernel-rt$
 Name:           ermete-system-config
 Version:        1.0.0
-Release:        14%{?dist}
+Release:        15%{?dist}
 Summary:        Ermete OS ermete-system-config
 License:        MIT
 URL:            https://github.com/patapem/ermete-forge
@@ -12,6 +12,8 @@ Requires:       cage greetd greenboot systemd-ukify usbguard
 # Core UI and Daemons
 Requires:       ermete-shell-rs ermete-settings-rs ermete-daemon-rs
 Requires:       ermete-updater-rs ermete-store-rs ermete-telemetry-rs ermete-cloud-rs xdg-desktop-portal-ermete
+# Provide the usbguard daemon conf without RPM file conflict
+Requires:       usbguard
 %description
 Provides ermete-system-config for Ermete OS.
 
@@ -26,9 +28,15 @@ mkdir -p %{buildroot}
 cp -a %{_sourcedir}/usr %{buildroot}/
 cp -a %{_sourcedir}/etc %{buildroot}/ 2>/dev/null || true
 
+mkdir -p %{buildroot}/usr/share/ermete-system-config
+mv %{buildroot}/etc/usbguard/usbguard-daemon.conf %{buildroot}/usr/share/ermete-system-config/usbguard-daemon.conf
+
 %post
 mkdir -p /etc/greetd
 ln -sf /usr/share/ermete-system-config/greetd.toml /etc/greetd/config.toml 2>/dev/null || true
+
+# Overwrite usbguard-daemon.conf without claiming RPM file ownership
+cp -f /usr/share/ermete-system-config/usbguard-daemon.conf /etc/usbguard/usbguard-daemon.conf 2>/dev/null || true
 
 %files
 %dir /usr/share/ermete-system-config
@@ -40,17 +48,18 @@ ln -sf /usr/share/ermete-system-config/greetd.toml /etc/greetd/config.toml 2>/de
 /usr/lib/systemd/system-preset/99-Ermete.preset
 /usr/lib/tmpfiles.d/10-ermete-greetd.conf
 /usr/share/ermete-system-config/greetd.toml
-%dir /etc/yum.repos.d
+/usr/share/ermete-system-config/usbguard-daemon.conf
 %config(noreplace) /etc/yum.repos.d/ermete-forge.repo
 %attr(0755,root,root) /etc/greenboot/check/required.d/10-greetd-running.sh
 %attr(0755,root,root) /etc/greenboot/check/required.d/20-niri-running.sh
-%dir /etc/usbguard
-%config(noreplace) /etc/usbguard/usbguard-daemon.conf
-%dir /etc/security/limits.d
 %config(noreplace) /etc/security/limits.d/99-ermete-realtime.conf
 
 %changelog
-* Thu Jul 16 2026 Ermete Forge <forge@ermete.os> - 1.0.0-13
+* Fri Jul 17 2026 Ermete Forge <forge@ermete.os> - 1.0.0-15
+- Fix DNF file conflicts: removed %dir ownerships for /etc/yum.repos.d and /etc/security/limits.d
+- Fix usbguard-daemon.conf RPM file conflict by copying it in %post instead of packaging it in /etc
+
+* Thu Jul 16 2026 Ermete Forge <forge@ermete.os> - 1.0.0-14
 - Enforce PREEMPT_RT scheduling limits for sub-5ms latency and add kernel-rt requirement
 
 * Thu Jul 16 2026 Ermete Forge <forge@ermete.os> - 1.0.0-12

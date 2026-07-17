@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           ermete-daemon-rs
-Version:        0.2.0
-Release:        3%{?dist}
+Version:        0.2.1
+Release:        1%{?dist}
 Summary:        Ermete OS Native D-Bus Bedrock, ACID Settings & Multimedia Portal Daemon
 
 License:        MIT
@@ -23,22 +23,17 @@ cargo build --release
 mkdir -p %{buildroot}%{_bindir}
 install -m 0755 target/release/ermete-daemon-rs %{buildroot}%{_bindir}/ermete-daemon-rs
 
-mkdir -p %{buildroot}%{_datadir}/xdg-desktop-portal/portals
-install -m 0644 ermete.portal %{buildroot}%{_datadir}/xdg-desktop-portal/portals/ermete.portal
-install -m 0644 ermete-portals.conf %{buildroot}%{_datadir}/xdg-desktop-portal/ermete-portals.conf
-
 mkdir -p %{buildroot}%{_datadir}/dbus-1/services
-install -m 0644 org.freedesktop.impl.portal.desktop.ermete.service %{buildroot}%{_datadir}/dbus-1/services/org.freedesktop.impl.portal.desktop.ermete.service
 install -m 0644 org.ermete.Settings.service %{buildroot}%{_datadir}/dbus-1/services/org.ermete.Settings.service
 
 %files
 %{_bindir}/ermete-daemon-rs
-%{_datadir}/xdg-desktop-portal/portals/ermete.portal
-%{_datadir}/xdg-desktop-portal/ermete-portals.conf
-%{_datadir}/dbus-1/services/org.freedesktop.impl.portal.desktop.ermete.service
 %{_datadir}/dbus-1/services/org.ermete.Settings.service
 
 %changelog
+* Fri Jul 17 2026 Ermete Forge <forge@ermete.os> - 0.2.1-1
+- Remove portal configuration files (migrated to dedicated xdg-desktop-portal-ermete package)
+
 * Mon Jul 15 2026 Ermete Forge <forge@ermete.os> - 0.2.0-3
 - Implemented native XDG Desktop Portal ScreenCast and RemoteDesktop backends (org.freedesktop.impl.portal.ScreenCast & RemoteDesktop)
 - Added Niri output discovery via UNIX socket ($NIRI_SOCKET) and PipeWire stream negotiation
