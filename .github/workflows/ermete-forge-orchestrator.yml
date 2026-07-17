@@ -340,21 +340,17 @@ jobs:
           echo "Real kernel version is $REAL_KERNEL_VER"
           mkdir -p /lib/modules/$REAL_KERNEL_VER
           ln -sf /usr/src/kernels/$REAL_KERNEL_VER /lib/modules/$REAL_KERNEL_VER/build
-          
-          # Restore fake LLVM symlinks because NVIDIA Makefile hardcodes "ld", "ar", etc.
-          mkdir -p /tmp/llvm-symlinks
-          ln -sf /usr/bin/clang /tmp/llvm-symlinks/gcc
-          ln -sf /usr/bin/clang++ /tmp/llvm-symlinks/g++
-          ln -sf /usr/bin/clang /tmp/llvm-symlinks/cc
-          ln -sf /usr/bin/clang++ /tmp/llvm-symlinks/c++
-          ln -sf /usr/bin/ld.lld /tmp/llvm-symlinks/ld
-          ln -sf /usr/bin/llvm-ar /tmp/llvm-symlinks/ar
-          ln -sf /usr/bin/llvm-nm /tmp/llvm-symlinks/nm
-          ln -sf /usr/bin/llvm-objcopy /tmp/llvm-symlinks/objcopy
-          ln -sf /usr/bin/llvm-objdump /tmp/llvm-symlinks/objdump
-          ln -sf /usr/bin/llvm-readelf /tmp/llvm-symlinks/readelf
-          ln -sf /usr/bin/llvm-strip /tmp/llvm-symlinks/strip
-          chmod -R 777 /tmp/llvm-symlinks
+          ln -sf /usr/bin/clang /usr/bin/gcc
+          ln -sf /usr/bin/clang++ /usr/bin/g++
+          ln -sf /usr/bin/clang /usr/bin/cc
+          ln -sf /usr/bin/clang++ /usr/bin/c++
+          ln -sf /usr/bin/ld.lld /usr/bin/ld
+          ln -sf /usr/bin/llvm-ar /usr/bin/ar
+          ln -sf /usr/bin/llvm-nm /usr/bin/nm
+          ln -sf /usr/bin/llvm-objcopy /usr/bin/objcopy
+          ln -sf /usr/bin/llvm-objdump /usr/bin/objdump
+          ln -sf /usr/bin/llvm-readelf /usr/bin/readelf
+          ln -sf /usr/bin/llvm-strip /usr/bin/strip
           mkdir -p /etc/pki/akmods/certs /etc/pki/akmods/private
           echo "${{ secrets.MOK_PRIVATE_KEY }}" | base64 -d > /etc/pki/akmods/private/private_key.priv
           echo "${{ secrets.MOK_PUBLIC_DER }}" | base64 -d > /etc/pki/akmods/certs/public_key.der
@@ -378,12 +374,12 @@ jobs:
             export CFLAGS="-Wno-error -fno-lto"\
             export LLVM=1\
             export LLVM_IAS=1\
-            export PATH="/tmp/llvm-symlinks:/usr/lib64/ccache:/usr/lib/ccache:$PATH"\
+            export PATH="/usr/lib64/ccache:/usr/lib/ccache:$PATH"\
             export CCACHE_DIR=/var/cache/ccache
 
           MACRO
 
-          export PATH="/tmp/llvm-symlinks:/usr/lib64/ccache:/usr/lib/ccache:$PATH"
+          export PATH="/usr/lib64/ccache:/usr/lib/ccache:$PATH"
           export CCACHE_DIR=/var/cache/ccache
           mkdir -p /var/cache/ccache
           chmod 777 -R /var/cache/ccache
