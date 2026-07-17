@@ -367,7 +367,7 @@ jobs:
             export LLVM=1\
             export LLVM_IAS=1\
             export PATH="/usr/lib64/ccache:/usr/lib/ccache:$PATH"\
-            export CCACHE_DIR=~/.cache/ccache\
+            export CCACHE_DIR=~/.cache/ccache
 
           MACRO
 
