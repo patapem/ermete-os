@@ -22,7 +22,6 @@ readarray -t UPSTREAM_CLI < <(jq -r '.upstream_cli[]' config/packages.json)
 TIER0_IMAGES=(
   "ermete-forge-kernel"
   "ermete-forge-nvidia"
-  "ermete-forge-initramfs"
   "ermete-forge-base-config"
   "ermete-forge-selinux"
   "ermete-forge-nix-support"
