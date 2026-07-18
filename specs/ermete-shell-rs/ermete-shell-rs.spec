@@ -45,6 +45,9 @@ install -m 0755 target/release/ermete-shell-rs %{buildroot}%{_bindir}/ermete-she
 * Wed Jul 15 2026 Ermete Forge <forge@ermete.os> - 1.0.0-15
 - Implement multi-monitor independent dock instances per gdk::Monitor with intelligent Dodge/Overlap auto-hide
 
+* Wed Jul 15 2026 Ermete Forge <forge@ermete.os> - 1.0.0-14
+- Fix dock workspace tracking across monitors (prioritize focused workspace ID) and fix auto-hide hover tracking
+
 * Wed Jul 15 2026 Ermete Forge <forge@ermete.os> - 1.0.0-13
 - Separate single-instance dock process (`--dock`) with D-Bus toggle and active workspace intelli-hide
 
@@ -65,9 +68,6 @@ install -m 0755 target/release/ermete-shell-rs %{buildroot}%{_bindir}/ermete-she
 
 * Mon Jul 13 2026 Ermete Forge <forge@ermete.os> - 1.0.0-7
 - Redesign greeter login UI to BigTech macOS Lock Screen & Glassmorphism style with live clock and power actions
-
-* Wed Jul 15 2026 Ermete Forge <forge@ermete.os> - 1.0.0-14
-- Fix dock workspace tracking across monitors (prioritize focused workspace ID) and fix auto-hide hover tracking
 
 * Mon Jul 13 2026 Ermete Forge <forge@ermete.os> - 1.0.0-6
 - Fix greeter PAM authentication username resolution and add premium GTK4 CSS design

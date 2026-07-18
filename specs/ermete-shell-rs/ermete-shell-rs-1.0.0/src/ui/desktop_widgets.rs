@@ -354,7 +354,7 @@ pub fn build_desktop_widgets(app: &Application) {
                 reload_widgets(&canvas_clone);
             }
         });
-        Box::leak(Box::new(monitor));
+        std::boxed::Box::leak(std::boxed::Box::new(monitor));
     }
 
     window.set_child(Some(&canvas));
