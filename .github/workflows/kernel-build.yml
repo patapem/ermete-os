@@ -72,7 +72,15 @@ jobs:
                "${IMAGE}:${nvr}" 2> /dev/null \
              | jq -cS '.payload | @base64d | fromjson | .predicate.Data | fromjson' \
              | grep -qxF "$(jq -cS . inputs.json)"; then
+            # Stessi input: si riusa solo se tutte e quattro le immagini sono firmate.
+            # publish puo' essersi fermato dopo il push e prima delle firme.
             reuse=true
+            for ref in "${IMAGE}:${nvr}" "${IMAGE}:${nvr}-microvm" "${IMAGE}-devel:${nvr}" "${IMAGE}-debuginfo:${nvr}"; do
+              cosign verify \
+                --certificate-identity-regexp "^${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/" \
+                --certificate-oidc-issuer https://token.actions.githubusercontent.com "$ref" > /dev/null 2>&1 \
+                || { echo "${ref} non firmata: build necessaria"; reuse=false; }
+            done
           fi
           echo "kernel ${nvr}: $([[ $reuse == true ]] && echo "immagine pubblicata con gli stessi input, niente build" || echo "build necessaria")" | tee -a "$GITHUB_STEP_SUMMARY"
           echo "nvr=${nvr}" >> "$GITHUB_OUTPUT"
@@ -304,13 +312,16 @@ jobs:
           echo "${GH_TOKEN}" | cosign login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
           mkdir -p sbom
           python3 forge/specs/azoth/build-inputs.py > pins.json
+          # L'RPM che ogni immagine deve contenere: la SBOM che non lo elenca e' vuota
+          # (senza il cataloger degli archivi RPM syft non vede nulla).
+          declare -A SBOM_PACKAGE=([kernel]=kernel-core [devel]=kernel-devel [debuginfo]=kernel-debuginfo [microvm]=azoth-microvm)
           for group in kernel devel debuginfo microvm; do
             image=$IMAGE
             [[ $group == kernel || $group == microvm ]] || image="${IMAGE}-${group}"
             ref="${image}@$(cat "digests/${group}")"
             syft scan "registry:${ref}" --select-catalogers "+rpm-archive-cataloger" -o "spdx-json=sbom/${group}.spdx.json"
-            jq -e '[.packages[] | select(.name | test("kernel"))] | length > 0' "sbom/${group}.spdx.json" > /dev/null \
-              || { echo "SBOM di ${group} senza pacchetti kernel"; exit 1; }
+            jq -e --arg name "${SBOM_PACKAGE[$group]}" '[.packages[] | select(.name == $name)] | length > 0' "sbom/${group}.spdx.json" > /dev/null \
+              || { echo "SBOM di ${group} senza il pacchetto ${SBOM_PACKAGE[$group]}"; exit 1; }
             cosign sign --yes "$ref"
             cosign attest --yes --type spdxjson --predicate "sbom/${group}.spdx.json" "$ref"
             cosign attest --yes --type custom --predicate pins.json "$ref"
