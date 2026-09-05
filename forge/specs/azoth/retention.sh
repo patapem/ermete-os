@@ -25,8 +25,18 @@ DRY=''
 OWNER=${GITHUB_REPOSITORY_OWNER:-hr-mes}
 
 prune() { # prune PACKAGE KEEP
-  local pkg=$1 keep=$2 api versions digest hex member
+  local pkg=$1 keep=$2 api versions digest hex member err
   local -A live=()
+  # A package that has never been published (azoth-nvidia before its first NVIDIA
+  # build, every package on the first run of a renamed project) has nothing to prune.
+  # Any other API error stays fatal.
+  if ! err=$(gh api "/users/${OWNER}/packages/container/${pkg}" --silent 2>&1); then
+    case $err in
+      *"HTTP 404"*) echo "${pkg}: not published yet, nothing to prune"; return 0 ;;
+    esac
+    printf '%s\n' "$err" >&2
+    return 1
+  fi
   api="/users/${OWNER}/packages/container/${pkg}/versions"
   versions=$(gh api --paginate "${api}?per_page=100" | jq -s 'add // []')
 
