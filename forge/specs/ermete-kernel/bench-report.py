@@ -5,8 +5,8 @@
 
 Ogni DIR e' un run settimanale, in ordine cronologico, con uno o piu' results.json
 (<etichetta>/results.json). Stampa Markdown per il summary del job: la tabella
-dell'ultimo run, il confronto tra i kernel misurati nello stesso run (per esempio -O3
-contro la variante o2: e' il confronto che decide, perche' i runner GitHub cambiano CPU
+dell'ultimo run, il confronto tra i kernel misurati nello stesso run (per esempio il
+kernel pubblicato contro la variante o3: e' il confronto che decide, perche' i runner GitHub cambiano CPU
 da un run all'altro) e un grafico Mermaid per metrica con l'andamento tra i run del
 kernel di riferimento (il primo di ogni run).
 """

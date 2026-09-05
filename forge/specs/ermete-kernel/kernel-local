@@ -8,11 +8,13 @@
 CONFIG_SCHED_BORE=y
 CONFIG_CACHY=y
 
-# Codegen: -O3, niente LTO. Il frammento clang_lto di Fedora accende ThinLTO, ma
-# Rust con DEBUG_INFO_BTF richiede !LTO: si riaccende quando pahole reggera' i
-# DWARF fusi da LTO (decisione del 2026-09-04, sezione 13 della specifica).
-CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3=y
-# CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE is not set
+# Codegen: -O2, niente LTO. -O3 (il default CachyOS) e' stato misurato con l'A/B
+# settimanale (variants/o3): mai meglio del rumore, -O2 vince hackbench (decisione del
+# 2026-09-05, sezione 13 della specifica). Il frammento clang_lto di Fedora accende
+# ThinLTO, ma Rust con DEBUG_INFO_BTF richiede !LTO: si riaccende quando pahole
+# reggera' i DWARF fusi da LTO (decisione del 2026-09-04, sezione 13).
+CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y
+# CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3 is not set
 CONFIG_LTO_NONE=y
 # CONFIG_LTO_CLANG_THIN is not set
 

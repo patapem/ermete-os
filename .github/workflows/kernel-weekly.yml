@@ -5,11 +5,11 @@ name: Kernel Weekly
 # pubblicato con cache vuota e builder appena costruito e lo confronta con l'OCI pubblicato
 # (repro.py: config, System.map, vmlinux sezione per sezione, moduli senza firma); una
 # differenza oltre la traccia della chiave di firma effimera e' un job rosso, un bug da
-# aprire. variant: a richiesta, la stessa build con un frammento di variants/ (o2: -O2 al
-# posto di -O3) per il confronto A/B. bench: su runner GitHub con KVM, il kernel pubblicato
+# aprire. variant: a richiesta, la stessa build con un frammento di variants/ (o3: -O3 al
+# posto di -O2) per il confronto A/B. bench: su runner GitHub con KVM, il kernel pubblicato
 # e la variante, se c'e', in QEMU con hackbench, schbench, fio e netperf (bench.sh); i
 # risultati si accumulano tra i run e bench-report.py ne fa tabelle e grafici nel summary.
-# Non blocca nulla: e' il numero che decide -O3 e le opzioni future. `schedule` vale solo
+# Non blocca nulla: e' il numero che ha deciso -O2 (2026-09-05) e decide le opzioni future. `schedule` vale solo
 # dal branch di default; `push` sul file stesso registra il workflow sul branch (senza,
 # workflow_dispatch da' 404 fuori dal branch di default) e ne prova il job bench.
 
@@ -29,7 +29,7 @@ on:
       variant:
         description: "variante (variants/<nome>) da costruire e mettere a confronto nel benchmark"
         type: choice
-        options: [none, o2]
+        options: [none, o3]
         default: none
   push:
     branches: [main, iso-v0]

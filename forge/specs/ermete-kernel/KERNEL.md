@@ -1,7 +1,7 @@
 # ermete-kernel
 
 Il kernel di Ermete OS: il pacchetto `kernel` di Fedora ricostruito con clang/ThinLTO
-sopra la base CachyOS (BORE, -O3, tunable), con l'hardening in piu' di Ermete. La
+sopra la base CachyOS (BORE, tunable; -O2 al posto del loro -O3, deciso dall'A/B), con l'hardening in piu' di Ermete. La
 specifica e' `docs/architecture/doc_kernel_build.md`; qui c'e' solo cosa sta in questa
 directory e come si usa.
 
@@ -17,7 +17,7 @@ directory e come si usa.
 | `fedora-wins.list` | percorsi in cui un conflitto tra base CachyOS e patch Red Hat si risolve con l'albero Fedora |
 | `cmdline` | la riga di comando del kernel che la UKI firma (spec, sezione 6) |
 | `build.sh` | dai pin agli RPM: stadi `manifest` (scarica i sorgenti dei pin e scrive il loro manifesto), `prep` (sorgenti, patch, gate dei config), `microvm` (prep e il solo kernel guest) e `build` (entrambi i kernel); `--variant NOME` per una variante di `variants/` |
-| `variants/` | frammenti che sovrascrivono righe di `kernel-local` per il confronto A/B del benchmark (`o2`: -O2 al posto di -O3); buildid `.ermete.NOME`, mai pubblicati |
+| `variants/` | frammenti che sovrascrivono righe di `kernel-local` per il confronto A/B del benchmark (`o3`: -O3 al posto di -O2); buildid `.ermete.NOME`, mai pubblicati |
 | `repro.py` | la riproducibilita': due build dello stesso pin a confronto (config, System.map, vmlinux per sezioni, moduli senza firma) |
 | `bench.sh`, `bench/init`, `bench-report.py` | il benchmark di tendenza: kernel in QEMU/KVM con hackbench, schbench, fio, netperf; tabelle, confronto A/B e grafici dai `results.json` |
 | `build-inputs.py` | gli input della build come JSON: predicato dell'attestazione dei pin e chiave del riuso in CI |
@@ -97,7 +97,7 @@ Firecracker vuole KVM: senza `/dev/kvm` il gate gira solo in CI.
 ## Settimanale: riproducibilita' e benchmark
 
 `.github/workflows/kernel-weekly.yml` (domenica, dal branch di default; a mano con
-`workflow_dispatch`, anche con la variante `o2` per il confronto A/B di -O3). In locale:
+`workflow_dispatch`, anche con la variante `o3` per rimisurare -O3). In locale:
 
 ```sh
 podman run --rm -v "$PWD:/forge" -w /forge localhost/ermete-kernel-builder python3 forge/specs/ermete-kernel/repro.py --a /forge/out-a --b /forge/out-b --out /forge/repro-out

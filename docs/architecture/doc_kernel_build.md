@@ -1,6 +1,6 @@
 # Ermete OS: Specifica del Kernel (costruzione, pin, manutenzione automatica)
 
-Stato: **approvata il 2026-09-03** (serie `stable` 7.x, `-O3` acceso, debuginfo
+Stato: **approvata il 2026-09-03** (serie `stable` 7.x, `-O2` dal 2026-09-05, debuginfo
 come OCI separato con retention di due versioni; dal 2026-09-04 Rust acceso,
 ThinLTO e `RANDSTRUCT` spenti, sezione 13). Sostituisce il
 README "Testo Sacro" di `forge/specs/ermete-kernel/` e lo script
@@ -192,7 +192,7 @@ delta, e resta corto:
 | Opzione                                               | Valore | Perché                                                                                                        |
 | ----------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------- |
 | `SCHED_BORE`                                          | y      | patch CachyOS, responsività desktop                                                                           |
-| `CC_OPTIMIZE_FOR_PERFORMANCE_O3`                      | y      | opzione della base CachyOS, come nei loro kernel; resta finché il benchmark (sezione 7) non dice il contrario |
+| `CC_OPTIMIZE_FOR_PERFORMANCE`                         | y      | `-O2`: la base CachyOS accende `-O3`, ma due A/B di K7 non gli hanno trovato vantaggi (sezione 13, punto 2); `variants/o3` lo rimisura |
 | `LTO_NONE`                                            | y      | ThinLTO spento: con `DEBUG_INFO_BTF`, `RUST` richiede `!LTO`; il bcond `clang_lto` resta per il toolchain (sezione 5) |
 | `RUST`                                                | y      | come Fedora: la porta ai driver che nascono in Rust; con kCFI seleziona `CFI_ICALL_NORMALIZE_INTEGERS`        |
 | `CFI`                                                 | y      | kCFI, richiede clang; con IBT già attivo                                                                      |
@@ -298,7 +298,7 @@ Ogni PR di bump e ogni cambio in `forge/specs/ermete-kernel/**` passa:
    verifica firma e attestazione con cosign;
 5. **benchmark di tendenza** (non bloccante): hackbench, schbench, fio null,
    netperf loopback per cinque minuti, risultati come artefatto e grafico nel
-   summary. È il numero che decide `-O3` e ogni futura opzione;
+   summary. È il numero che ha deciso `-O2` e decide ogni futura opzione;
 6. **riproducibilità** settimanale (sezione 3).
 
 **Il check unico.** Il job `gate` di `kernel-build.yml` (check `Kernel gate`)
@@ -322,7 +322,7 @@ CPU da un run all'altro: l'andamento è indicativo, la decisione sta nel
 confronto A/B nello stesso run, con l'input `variant`: `build.sh --variant
 <nome>` fonde `variants/<nome>` sopra `kernel-local` (le righe con lo stesso
 simbolo vengono sostituite), buildid `.ermete.<nome>`, mai pubblicato, misurato
-accanto al kernel pubblicato. `o2` è il confronto che decide `-O3`.
+accanto al kernel pubblicato. `o3` rimisura `-O3` contro il default `-O2`.
 
 **Riuso.** Il job `inputs` calcola `build-inputs.py` (pin, manifest delle
 sorgenti, `kernel-local`, `patches.list`, `patches/`, `fedora-wins.list`, `build.sh`,
@@ -510,7 +510,12 @@ l'implementazione scopre che un gancio Fedora non è come descritto.
 
 1. Serie: `stable` (segue 7.x con CachyOS, bump frequenti); `lts` (6.18) resta
    un valore possibile di `KERNEL_CHANNEL`.
-2. `-O3` acceso di default come CachyOS; il benchmark di K7 lo conferma o lo spegne.
+2. `-O3` era acceso come in CachyOS, in attesa del benchmark di K7. Il 2026-09-05 due
+   A/B nello stesso run e sulla stessa macchina (EPYC 7763, 4 vCPU, 30 s per prova)
+   non hanno mai visto `-O3` vincere oltre il rumore; `-O2` ha vinto hackbench
+   entrambe le volte (-7.0%, -2.5%) e una volta TCP_STREAM (+7.0%), pari altrove.
+   Decisione: **`-O2`**, kernel più piccolo a parità di resa. `variants/o3` resta
+   per rimisurare quando cambiano toolchain o serie.
 3. `RANDSTRUCT_FULL` era acceso; il 2026-09-04 la scelta è **Rust acceso, ThinLTO e
    `RANDSTRUCT` spenti**: in 7.1 `RUST` esclude entrambi (sezione 5), il kernel deve
    restare agnostico anche verso i driver futuri in Rust, ThinLTO vale pochi punti
