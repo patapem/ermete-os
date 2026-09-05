@@ -263,6 +263,568 @@ dependencies = [
 ]
 
 [[package]]
+name = "athanor-agentic-kernel"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "athanor-bus-api",
+ "aya",
+ "bytes",
+ "libc",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "zbus",
+]
+
+[[package]]
+name = "athanor-backup"
+version = "1.0.0"
+dependencies = [
+ "athanor-bus-api",
+ "chrono",
+ "dirs",
+ "glib",
+ "libc",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "zbus",
+]
+
+[[package]]
+name = "athanor-bus-api"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "base64 0.21.7",
+ "hex",
+ "libc",
+ "rand 0.8.8",
+ "rand_core 0.6.4",
+ "ring",
+ "serde",
+ "serde_json",
+ "sha2",
+ "subtle",
+ "tracing",
+ "x25519-dalek 2.0.1",
+ "zbus",
+ "zeroize",
+]
+
+[[package]]
+name = "athanor-cloud-rs"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "athanor-bus-api",
+ "base64 0.21.7",
+ "pqc_dilithium",
+ "pqc_kyber",
+ "rand_core 0.6.4",
+ "reqwest 0.13.4",
+ "serde",
+ "serde_json",
+ "sha2",
+ "subtle",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "zbus",
+ "zeroize",
+]
+
+[[package]]
+name = "athanor-cluster-mesh"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "athanor-bus-api",
+ "base64 0.21.7",
+ "rand 0.8.8",
+ "serde",
+ "serde_json",
+ "sha2",
+ "thiserror 2.0.20",
+ "tokio",
+ "tokio-util",
+ "tracing",
+ "tracing-subscriber",
+ "zbus",
+]
+
+[[package]]
+name = "athanor-compositor"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "drm 0.15.0",
+ "futures-util",
+ "gbm 0.18.0",
+ "glam",
+ "nix 0.29.0",
+ "serde",
+ "serde_json",
+ "smithay",
+ "thiserror 2.0.20",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "wayland-server 0.31.14",
+ "zbus",
+]
+
+[[package]]
+name = "athanor-cvm-attestation"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "env_logger",
+ "hex",
+ "log",
+ "nix 0.29.0",
+ "p256",
+ "p384",
+ "pqc_dilithium",
+ "reqwest 0.12.28",
+ "ring",
+ "serde",
+ "serde_json",
+ "sha2",
+ "subtle",
+ "tokio",
+ "tracing",
+ "zbus",
+ "zeroize",
+]
+
+[[package]]
+name = "athanor-daemon-rs"
+version = "0.2.1"
+dependencies = [
+ "anyhow",
+ "athanor-bus-api",
+ "athanor-style",
+ "aya",
+ "futures-util",
+ "libc",
+ "libloading 0.8.9",
+ "mimalloc",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tokio-util",
+ "tracing",
+ "tracing-subscriber",
+ "zbus",
+]
+
+[[package]]
+name = "athanor-dock"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "athanor-niri-ipc",
+ "athanor-style",
+ "glib",
+ "gtk4",
+ "gtk4-layer-shell",
+ "log",
+ "notify",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "athanor-doctor"
+version = "1.0.0"
+dependencies = [
+ "libc",
+ "serde",
+ "serde_json",
+ "tokio",
+ "zbus",
+]
+
+[[package]]
+name = "athanor-ebpf-sched"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "athanor-bus-api",
+ "aya",
+ "candle-core",
+ "libc",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "zbus",
+]
+
+[[package]]
+name = "athanor-gatekeeper-rs"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "athanor-bus-api",
+ "libc",
+ "pqc_dilithium",
+ "serde",
+ "subtle",
+ "tokio",
+ "tracing",
+ "uuid",
+ "xattr",
+ "zbus",
+ "zeroize",
+]
+
+[[package]]
+name = "athanor-greeter"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "env_logger",
+ "glib",
+ "gtk4",
+ "gtk4-layer-shell",
+ "hex",
+ "log",
+ "pam",
+ "serde",
+ "serde_json",
+ "sha2",
+ "tokio",
+ "tracing",
+ "tss-esapi",
+ "zbus",
+ "zeroize",
+]
+
+[[package]]
+name = "athanor-hypervisor-daemon"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "athanor-bus-api",
+ "env_logger",
+ "hex",
+ "libc",
+ "log",
+ "nix 0.29.0",
+ "pqc_dilithium",
+ "ring",
+ "serde",
+ "serde_json",
+ "sha2",
+ "tempfile",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "vmm-sys-util",
+ "zbus",
+]
+
+[[package]]
+name = "athanor-init-oracle"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "athanor-bus-api",
+ "regex",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "zbus",
+]
+
+[[package]]
+name = "athanor-lvfs-rs"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "athanor-bus-api",
+ "mimalloc",
+ "reqwest 0.13.4",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "zbus",
+]
+
+[[package]]
+name = "athanor-mdm-rs"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "athanor-bus-api",
+ "libc",
+ "mimalloc",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "zbus",
+]
+
+[[package]]
+name = "athanor-mesh-bus"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "athanor-bus-api",
+ "base64 0.21.7",
+ "hex",
+ "libc",
+ "rand 0.8.8",
+ "rand_core 0.6.4",
+ "ring",
+ "serde",
+ "serde_json",
+ "sha2",
+ "subtle",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "x25519-dalek 2.0.1",
+ "zbus",
+ "zeroize",
+]
+
+[[package]]
+name = "athanor-mesh-sync"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "athanor-bus-api",
+ "base64 0.21.7",
+ "boringtun",
+ "defguard_wireguard_rs",
+ "futures",
+ "netlink-packet-route 0.19.0",
+ "pqc_dilithium",
+ "rand_core 0.6.4",
+ "rtnetlink",
+ "tokio",
+ "tracing",
+ "x25519-dalek 2.0.1",
+ "zbus",
+]
+
+[[package]]
+name = "athanor-net-unikernel"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "athanor-bus-api",
+ "env_logger",
+ "libc",
+ "log",
+ "nix 0.29.0",
+ "serde",
+ "serde_json",
+ "smoltcp",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "athanor-niri-ipc"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "athanor-oobe"
+version = "0.1.0"
+dependencies = [
+ "athanor-style",
+ "gtk4",
+ "relm4",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "athanor-recovery"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "athanor-style",
+ "futures-util",
+ "glib",
+ "gtk4",
+ "libc",
+ "relm4",
+ "subtle",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "zbus",
+ "zeroize",
+]
+
+[[package]]
+name = "athanor-settings-rs"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "athanor-bus-api",
+ "athanor-niri-ipc",
+ "athanor-style",
+ "glib",
+ "gtk4",
+ "libc",
+ "mimalloc",
+ "pqc_dilithium",
+ "relm4",
+ "rustix 0.38.44",
+ "serde",
+ "serde_json",
+ "tokio",
+ "zbus",
+]
+
+[[package]]
+name = "athanor-shell-rs"
+version = "1.0.0"
+dependencies = [
+ "arc-swap",
+ "athanor-dock",
+ "athanor-niri-ipc",
+ "athanor-style",
+ "chrono",
+ "clap",
+ "futures-util",
+ "glib",
+ "greetd_ipc",
+ "gtk4",
+ "gtk4-layer-shell",
+ "hex",
+ "landlock",
+ "meval",
+ "mimalloc",
+ "notify",
+ "notify-rust",
+ "relm4",
+ "serde",
+ "serde_json",
+ "sha2",
+ "tokio",
+ "toml",
+ "tracing",
+ "tracing-subscriber",
+ "zbus",
+]
+
+[[package]]
+name = "athanor-store"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bytes",
+ "clap",
+ "libc",
+ "pqc_dilithium",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "athanor-store-rs"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "athanor-style",
+ "hex",
+ "mimalloc",
+ "pqc_dilithium",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "zbus",
+]
+
+[[package]]
+name = "athanor-style"
+version = "1.0.0"
+dependencies = [
+ "glib",
+ "gtk4",
+ "gtk4-layer-shell",
+ "serde",
+ "serde_json",
+ "tokio",
+ "toml",
+ "tracing",
+ "zbus",
+]
+
+[[package]]
+name = "athanor-sysmon-ebpf"
+version = "1.0.0"
+dependencies = [
+ "aya",
+ "bytes",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "athanor-telemetry"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "athanor-bus-api",
+ "aya",
+ "chrono",
+ "libc",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "zbus",
+]
+
+[[package]]
+name = "athanor-updater-rs"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "zbus",
+]
+
+[[package]]
 name = "atomic-waker"
 version = "1.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1534,568 +2096,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6c138974f9d5e7fe373eb04df7cae98833802ae4b11c24ac7039a21d5af4b26c"
 dependencies = [
  "serde",
-]
-
-[[package]]
-name = "athanor-agentic-kernel"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "aya",
- "bytes",
- "athanor-bus-api",
- "libc",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "zbus",
-]
-
-[[package]]
-name = "athanor-backup"
-version = "1.0.0"
-dependencies = [
- "chrono",
- "dirs",
- "athanor-bus-api",
- "glib",
- "libc",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "zbus",
-]
-
-[[package]]
-name = "athanor-bus-api"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "async-trait",
- "base64 0.21.7",
- "hex",
- "libc",
- "rand 0.8.8",
- "rand_core 0.6.4",
- "ring",
- "serde",
- "serde_json",
- "sha2",
- "subtle",
- "tracing",
- "x25519-dalek 2.0.1",
- "zbus",
- "zeroize",
-]
-
-[[package]]
-name = "athanor-cloud-rs"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "base64 0.21.7",
- "athanor-bus-api",
- "pqc_dilithium",
- "pqc_kyber",
- "rand_core 0.6.4",
- "reqwest 0.13.4",
- "serde",
- "serde_json",
- "sha2",
- "subtle",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "zbus",
- "zeroize",
-]
-
-[[package]]
-name = "athanor-cluster-mesh"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "base64 0.21.7",
- "athanor-bus-api",
- "rand 0.8.8",
- "serde",
- "serde_json",
- "sha2",
- "thiserror 2.0.20",
- "tokio",
- "tokio-util",
- "tracing",
- "tracing-subscriber",
- "zbus",
-]
-
-[[package]]
-name = "athanor-compositor"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "drm 0.15.0",
- "futures-util",
- "gbm 0.18.0",
- "glam",
- "nix 0.29.0",
- "serde",
- "serde_json",
- "smithay",
- "thiserror 2.0.20",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "wayland-server 0.31.14",
- "zbus",
-]
-
-[[package]]
-name = "athanor-cvm-attestation"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "env_logger",
- "hex",
- "log",
- "nix 0.29.0",
- "p256",
- "p384",
- "pqc_dilithium",
- "reqwest 0.12.28",
- "ring",
- "serde",
- "serde_json",
- "sha2",
- "subtle",
- "tokio",
- "tracing",
- "zbus",
- "zeroize",
-]
-
-[[package]]
-name = "athanor-daemon-rs"
-version = "0.2.1"
-dependencies = [
- "anyhow",
- "aya",
- "athanor-bus-api",
- "athanor-style",
- "futures-util",
- "libc",
- "libloading 0.8.9",
- "mimalloc",
- "serde",
- "serde_json",
- "tokio",
- "tokio-util",
- "tracing",
- "tracing-subscriber",
- "zbus",
-]
-
-[[package]]
-name = "athanor-dock"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "athanor-niri-ipc",
- "athanor-style",
- "glib",
- "gtk4",
- "gtk4-layer-shell",
- "log",
- "notify",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "athanor-doctor"
-version = "1.0.0"
-dependencies = [
- "libc",
- "serde",
- "serde_json",
- "tokio",
- "zbus",
-]
-
-[[package]]
-name = "athanor-ebpf-sched"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "aya",
- "candle-core",
- "athanor-bus-api",
- "libc",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "zbus",
-]
-
-[[package]]
-name = "athanor-gatekeeper-rs"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "athanor-bus-api",
- "libc",
- "pqc_dilithium",
- "serde",
- "subtle",
- "tokio",
- "tracing",
- "uuid",
- "xattr",
- "zbus",
- "zeroize",
-]
-
-[[package]]
-name = "athanor-greeter"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "env_logger",
- "glib",
- "gtk4",
- "gtk4-layer-shell",
- "hex",
- "log",
- "pam",
- "serde",
- "serde_json",
- "sha2",
- "tokio",
- "tracing",
- "tss-esapi",
- "zbus",
- "zeroize",
-]
-
-[[package]]
-name = "athanor-hypervisor-daemon"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "env_logger",
- "athanor-bus-api",
- "hex",
- "libc",
- "log",
- "nix 0.29.0",
- "pqc_dilithium",
- "ring",
- "serde",
- "serde_json",
- "sha2",
- "tempfile",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "vmm-sys-util",
- "zbus",
-]
-
-[[package]]
-name = "athanor-init-oracle"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "athanor-bus-api",
- "regex",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "zbus",
-]
-
-[[package]]
-name = "athanor-lvfs-rs"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "athanor-bus-api",
- "mimalloc",
- "reqwest 0.13.4",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "zbus",
-]
-
-[[package]]
-name = "athanor-mdm-rs"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "athanor-bus-api",
- "libc",
- "mimalloc",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "zbus",
-]
-
-[[package]]
-name = "athanor-mesh-bus"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "base64 0.21.7",
- "athanor-bus-api",
- "hex",
- "libc",
- "rand 0.8.8",
- "rand_core 0.6.4",
- "ring",
- "serde",
- "serde_json",
- "sha2",
- "subtle",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "x25519-dalek 2.0.1",
- "zbus",
- "zeroize",
-]
-
-[[package]]
-name = "athanor-mesh-sync"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "base64 0.21.7",
- "boringtun",
- "defguard_wireguard_rs",
- "athanor-bus-api",
- "futures",
- "netlink-packet-route 0.19.0",
- "pqc_dilithium",
- "rand_core 0.6.4",
- "rtnetlink",
- "tokio",
- "tracing",
- "x25519-dalek 2.0.1",
- "zbus",
-]
-
-[[package]]
-name = "athanor-net-unikernel"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "env_logger",
- "athanor-bus-api",
- "libc",
- "log",
- "nix 0.29.0",
- "serde",
- "serde_json",
- "smoltcp",
- "tokio",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
-name = "athanor-niri-ipc"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde_json",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "athanor-oobe"
-version = "0.1.0"
-dependencies = [
- "athanor-style",
- "gtk4",
- "relm4",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "athanor-recovery"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "athanor-style",
- "futures-util",
- "glib",
- "gtk4",
- "libc",
- "relm4",
- "subtle",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "zbus",
- "zeroize",
-]
-
-[[package]]
-name = "athanor-settings-rs"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "athanor-bus-api",
- "athanor-niri-ipc",
- "athanor-style",
- "glib",
- "gtk4",
- "libc",
- "mimalloc",
- "pqc_dilithium",
- "relm4",
- "rustix 0.38.44",
- "serde",
- "serde_json",
- "tokio",
- "zbus",
-]
-
-[[package]]
-name = "athanor-shell-rs"
-version = "1.0.0"
-dependencies = [
- "arc-swap",
- "chrono",
- "clap",
- "athanor-dock",
- "athanor-niri-ipc",
- "athanor-style",
- "futures-util",
- "glib",
- "greetd_ipc",
- "gtk4",
- "gtk4-layer-shell",
- "hex",
- "landlock",
- "meval",
- "mimalloc",
- "notify",
- "notify-rust",
- "relm4",
- "serde",
- "serde_json",
- "sha2",
- "tokio",
- "toml",
- "tracing",
- "tracing-subscriber",
- "zbus",
-]
-
-[[package]]
-name = "athanor-store"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "bytes",
- "clap",
- "libc",
- "pqc_dilithium",
- "serde",
- "serde_json",
- "thiserror 2.0.20",
- "tokio",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
-name = "athanor-store-rs"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "athanor-style",
- "hex",
- "mimalloc",
- "pqc_dilithium",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "zbus",
-]
-
-[[package]]
-name = "athanor-style"
-version = "1.0.0"
-dependencies = [
- "glib",
- "gtk4",
- "gtk4-layer-shell",
- "serde",
- "serde_json",
- "tokio",
- "toml",
- "tracing",
- "zbus",
-]
-
-[[package]]
-name = "athanor-sysmon-ebpf"
-version = "1.0.0"
-dependencies = [
- "aya",
- "bytes",
- "tokio",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
-name = "athanor-telemetry"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "aya",
- "chrono",
- "athanor-bus-api",
- "libc",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "zbus",
-]
-
-[[package]]
-name = "athanor-updater-rs"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "zbus",
 ]
 
 [[package]]
