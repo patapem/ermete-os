@@ -1,43 +1,41 @@
 ---
 type: community
-cohesion: 0.15
 members: 28
 ---
 
 # Community 25
 
-**Cohesion:** 0.15 - loosely connected
 **Members:** 28 nodes
 
 ## Members
-- [[.as_any()_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[.handle_is_bluetooth_enabled()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[.handle_list_bluetooth_devices()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[.handle_set_bluetooth_powered()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[.handle_toggle_bluetooth()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[.is_bluetooth_enabled()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[.list_bluetooth_devices()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[.name()_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[.new()_42]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[.new_disconnected()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[.run()_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[.set_bluetooth_powered()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[.spawn()_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[.toggle_bluetooth()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[Any_1]] - code
-- [[BlueZ]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[BluetoothActor]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[BluetoothCommand]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[BluetoothController]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[BluetoothDeviceInfo]] - code
-- [[Receiver_4]] - code
-- [[Result_53]] - code
-- [[Self_49]] - code
+- [[dot-ensure_config_file()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-ensure_config_file()_1]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-load()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-load()_1]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-load_async()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-new()_17]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-new()_18]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-new()_19]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-new()_20]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-new_async()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-new_async()_1]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-new_with_token()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-save()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-save()_1]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-save_async()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-save_async()_1]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[AppearanceStateStore]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[CancellationToken_1]] - code
+- [[PathBuf_7]] - code
+- [[Receiver]] - code
+- [[Self_19]] - code
 - [[Sender_3]] - code
-- [[Sync]] - code
-- [[Vec_29]] - code
-- [[bluetooth.rs_2]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
-- [[get_bluetooth_controller()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs
+- [[SettingsWorker]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[VoiceOverDomainState]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[VoiceOverStateStore]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[config_dir()_1]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[settings.rs]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[test_settings_service_cancellation()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -47,23 +45,15 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 4 edges to [[_COMMUNITY_Community 21]]
-- 4 edges to [[_COMMUNITY_Community 23]]
-- 3 edges to [[_COMMUNITY_Community 34]]
-- 1 edge to [[_COMMUNITY_Community 97]]
-- 1 edge to [[_COMMUNITY_Community 9]]
-- 1 edge to [[_COMMUNITY_Community 27]]
-- 1 edge to [[_COMMUNITY_Community 31]]
-- 1 edge to [[_COMMUNITY_Community 17]]
-- 1 edge to [[_COMMUNITY_Community 29]]
-- 1 edge to [[_COMMUNITY_Community 48]]
-- 1 edge to [[_COMMUNITY_Community 4]]
-- 1 edge to [[_COMMUNITY_Community 36]]
-- 1 edge to [[_COMMUNITY_Community 13]]
+- 15 edges to [[_COMMUNITY_Community 36]]
+- 9 edges to [[_COMMUNITY_Community 42]]
+- 3 edges to [[_COMMUNITY_Community 67]]
+- 1 edge to [[_COMMUNITY_Community 26]]
+- 1 edge to [[_COMMUNITY_Community 50]]
 
 ## Top bridge nodes
-- [[Sync]] - degree 13, connects to 11 communities
-- [[BluetoothActor]] - degree 11, connects to 2 communities
-- [[.new()_42]] - degree 9, connects to 2 communities
-- [[.spawn()_1]] - degree 8, connects to 2 communities
-- [[BluetoothController]] - degree 13, connects to 1 community
+- [[settings.rs]] - degree 14, connects to 4 communities
+- [[dot-new_with_token()]] - degree 10, connects to 2 communities
+- [[dot-ensure_config_file()_1]] - degree 8, connects to 2 communities
+- [[dot-new()_19]] - degree 7, connects to 2 communities
+- [[dot-save()]] - degree 5, connects to 2 communities

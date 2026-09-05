@@ -11,6 +11,6 @@ tags:
 # Option
 
 ## Connections
-- [[.next_event()]] - `references` [EXTRACTED]
+- [[WidgetConfig]] - `references` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_3

@@ -1,43 +1,40 @@
 ---
 type: community
-cohesion: 0.22
-members: 28
+members: 27
 ---
 
 # Community 26
 
-**Cohesion:** 0.22 - loosely connected
-**Members:** 28 nodes
+**Members:** 27 nodes
 
 ## Members
-- [[.create_session()_1]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[.create_session()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[.new()_15]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[.new()_14]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[.query_niri_outputs()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[.resolve_pipewire_node()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[.select_devices()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[.select_sources()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[.start()_1]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[.start()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[.stop()_1]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[.stop()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[Arc_9]] - code
-- [[HashMap_10]] - code
-- [[Mutex_5]] - code
-- [[ObjectPath]] - code
-- [[OutputDiscovery]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[OwnedValue_4]] - code
-- [[PipeWireStreamManager]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[PortalRemoteDesktopService]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[PortalScreenCastService]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[Result_21]] - code
-- [[ScreenCastSession]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[Self_15]] - code
-- [[String_24]] - code
-- [[Vec_12]] - code
-- [[portal_screencast.rs]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
-- [[test_portal_screencast_session_and_dynamic_node()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal_screencast.rs
+- [[dot-apply_live_patch()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bedrock.rs
+- [[dot-audio_volume()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bedrock.rs
+- [[dot-default()_5]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bedrock.rs
+- [[dot-get_live_patch_status()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bedrock.rs
+- [[dot-new()_21]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bedrock.rs
+- [[dot-ping()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bedrock.rs
+- [[dot-set_audio_volume()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bedrock.rs
+- [[Arc_5]] - code
+- [[AtomicU64]] - code
+- [[AudioWorker]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bedrock.rs
+- [[Bedrock_1]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bedrock.rs
+- [[Box_16]] - code
+- [[Connection_2]] - code
+- [[Default_5]] - code
+- [[Error_8]] - code
+- [[Header_1]] - code
+- [[Option_16]] - code
+- [[Result_24]] - code
+- [[Result_25]] - code
+- [[Self_20]] - code
+- [[String_31]] - code
+- [[athanor-daemon-rs-0.2.1srcmain.rs]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/main.rs
+- [[bedrock.rs]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bedrock.rs
+- [[check_polkit_auth()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bedrock.rs
+- [[get_session_conn()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bedrock.rs
+- [[init_telemetry()_1]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/main.rs
+- [[main()_17]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/main.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -47,8 +44,8 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 1 edge to [[_COMMUNITY_Community 1]]
-- 1 edge to [[_COMMUNITY_Community 38]]
+- 1 edge to [[_COMMUNITY_Community 24]]
+- 1 edge to [[_COMMUNITY_Community 25]]
 
 ## Top bridge nodes
-- [[portal_screencast.rs]] - degree 11, connects to 2 communities
+- [[athanor-daemon-rs-0.2.1srcmain.rs]] - degree 6, connects to 2 communities

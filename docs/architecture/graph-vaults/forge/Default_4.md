@@ -1,19 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 40"
+community: "Community 22"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_40
+  - community/Community_22
 ---
 
 # Default
 
 ## Connections
-- [[DisplayState]] - `implements` [EXTRACTED]
-- [[DockState]] - `implements` [EXTRACTED]
-- [[ThemeState]] - `implements` [EXTRACTED]
-- [[WallpaperState]] - `implements` [EXTRACTED]
+- [[EbpfJitCompiler]] - `implements` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_40
+#graphify/code #graphify/EXTRACTED #community/Community_22

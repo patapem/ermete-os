@@ -1,21 +1,21 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs"
 type: "code"
-community: "Community 23"
+community: "Community 44"
 location: "L186"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_23
+  - community/Community_44
 ---
 
 # NetEvent
 
 ## Connections
-- [[.emit()_1]] - `references` [EXTRACTED]
-- [[.subscribe()_1]] - `references` [EXTRACTED]
+- [[dot-emit()_3]] - `references` [EXTRACTED]
+- [[dot-subscribe()_3]] - `references` [EXTRACTED]
 - [[NetBus]] - `references` [EXTRACTED]
-- [[String_63]] - `references` [EXTRACTED]
-- [[types.rs_1]] - `contains` [EXTRACTED]
+- [[String_44]] - `references` [EXTRACTED]
+- [[ipctypes.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_23
+#graphify/code #graphify/EXTRACTED #community/Community_44

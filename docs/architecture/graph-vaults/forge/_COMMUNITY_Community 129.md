@@ -1,18 +1,17 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 4
 ---
 
 # Community 129
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 4 nodes
 
 ## Members
-- [[Application_23]] - code
-- [[build_ui()_5]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/prompts/privacy.rs
-- [[privacy.rs_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/prompts/privacy.rs
+- [[boot.sh script_1]] - code - specs/azoth/microvm/boot.sh
+- [[die()_2]] - code - specs/azoth/microvm/boot.sh
+- [[microvmboot.sh]] - code - specs/azoth/microvm/boot.sh
+- [[step()_2]] - code - specs/azoth/microvm/boot.sh
 
 ## Live Query (requires Dataview plugin)
 

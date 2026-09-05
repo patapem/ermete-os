@@ -1,64 +1,67 @@
 ---
 type: community
-cohesion: 0.11
-members: 49
+members: 54
 ---
 
 # Community 4
 
-**Cohesion:** 0.11 - loosely connected
-**Members:** 49 nodes
+**Members:** 54 nodes
 
 ## Members
-- [[.as_any()_4]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.connect_wifi()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.delete_wifi()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.disconnect_wifi()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.extract_ssid()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.get_cached_network_status()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.get_network_status_async()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.get_wifi_details()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.handle_connect_wifi()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.handle_delete_wifi()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.handle_disconnect_wifi()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.handle_get_wifi_details()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.handle_is_wifi_enabled()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.handle_list_wifi_networks()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.handle_modify_wifi()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.handle_refresh_network_status()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.handle_set_wifi_powered()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.handle_toggle_wifi()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.is_wifi_enabled()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.list_wifi_networks()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.modify_wifi()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.name()_4]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.new()_45]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.new_disconnected()_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.refresh_network_status()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.run()_4]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.set_wifi_powered()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.spawn()_4]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[.toggle_wifi()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[Any_4]] - code
-- [[Arc_19]] - code
-- [[ArcSwap]] - code
-- [[Mutex_12]] - code
-- [[NetworkActor]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[NetworkCommand]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[NetworkController]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[Option_26]] - code
-- [[Receiver_7]] - code
-- [[Result_56]] - code
-- [[Self_52]] - code
-- [[Sender_6]] - code
-- [[String_61]] - code
-- [[Value_2]] - code
-- [[Vec_30]] - code
-- [[WifiNetworkInfo]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[check_sysfs_net_status()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[get_net_cache()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[get_network_controller()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
-- [[network.rs_3]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-css_class()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/forge_widget.rs
+- [[dot-fmt()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/forge_widget.rs
+- [[dot-from_path()_1]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/quicklook.rs
+- [[dot-icon()_1]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/forge_widget.rs
+- [[dot-init()_2]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/forge_widget.rs
+- [[dot-init()_3]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/quicklook.rs
+- [[dot-status_text()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/forge_widget.rs
+- [[dot-update()_7]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/forge_widget.rs
+- [[dot-update()_8]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/quicklook.rs
+- [[Application_23]] - code
+- [[Application_24]] - code
+- [[ComponentParts_2]] - code
+- [[ComponentParts_3]] - code
+- [[ComponentSender_2]] - code
+- [[ComponentSender_3]] - code
+- [[FalState]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/forge_widget.rs
+- [[ForgeMode]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/forge_widget.rs
+- [[ForgeWidgetInput]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/forge_widget.rs
+- [[ForgeWidgetModel]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/forge_widget.rs
+- [[Formatter]] - code
+- [[GtkBox_12]] - code
+- [[Init_3]] - code
+- [[Init_4]] - code
+- [[Input_3]] - code
+- [[Input_4]] - code
+- [[Option_24]] - code
+- [[P]] - code
+- [[Path_6]] - code
+- [[PathBuf_9]] - code
+- [[QuickLookContentType]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/quicklook.rs
+- [[QuickLookFileData]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/quicklook.rs
+- [[QuickLookModel]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/quicklook.rs
+- [[QuickLookMsg]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/quicklook.rs
+- [[Result_35]] - code
+- [[Root_2]] - code
+- [[Root_3]] - code
+- [[Self_31]] - code
+- [[Self_32]] - code
+- [[SimpleComponent_3]] - code
+- [[SimpleComponent_4]] - code
+- [[String_40]] - code
+- [[String_41]] - code
+- [[build_ui()_4]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/prompts/file_chooser.rs
+- [[create_forge_cc_tile()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/forge_widget.rs
+- [[detect_hardware_hash()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/forge_widget.rs
+- [[ensure_forge_css()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/forge_widget.rs
+- [[ensure_quicklook_css()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/quicklook.rs
+- [[file_chooser.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/prompts/file_chooser.rs
+- [[forge_widget.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/forge_widget.rs
+- [[format_file_size()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/quicklook.rs
+- [[open_file_with_default()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/quicklook.rs
+- [[quicklook.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/quicklook.rs
+- [[show_quicklook_modal()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/quicklook.rs
+- [[uimod.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/mod.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -68,19 +71,7 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 4 edges to [[_COMMUNITY_Community 23]]
-- 3 edges to [[_COMMUNITY_Community 21]]
-- 2 edges to [[_COMMUNITY_Community 1]]
-- 2 edges to [[_COMMUNITY_Community 58]]
-- 1 edge to [[_COMMUNITY_Community 97]]
-- 1 edge to [[_COMMUNITY_Community 80]]
-- 1 edge to [[_COMMUNITY_Community 64]]
-- 1 edge to [[_COMMUNITY_Community 25]]
-- 1 edge to [[_COMMUNITY_Community 34]]
+- 1 edge to [[_COMMUNITY_Community 68]]
 
 ## Top bridge nodes
-- [[network.rs_3]] - degree 14, connects to 5 communities
-- [[NetworkActor]] - degree 20, connects to 2 communities
-- [[.new()_45]] - degree 17, connects to 2 communities
-- [[.spawn()_4]] - degree 11, connects to 2 communities
-- [[NetworkController]] - degree 25, connects to 1 community
+- [[ForgeMode]] - degree 5, connects to 1 community

@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/settings.rs"
+source_file: "specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs"
 type: "code"
-community: "Community 27"
+community: "Community 25"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_27
+  - community/Community_25
 ---
 
 # settings.rs
@@ -15,7 +15,7 @@ tags:
 - [[AppearanceService]] - `contains` [EXTRACTED]
 - [[AppearanceStateStore]] - `contains` [EXTRACTED]
 - [[CancellationToken_1]] - `imports_from` [EXTRACTED]
-- [[PathBuf_4]] - `imports_from` [EXTRACTED]
+- [[PathBuf_7]] - `imports_from` [EXTRACTED]
 - [[SettingsCommand]] - `contains` [EXTRACTED]
 - [[SettingsService]] - `contains` [EXTRACTED]
 - [[SettingsWorker]] - `contains` [EXTRACTED]
@@ -23,8 +23,8 @@ tags:
 - [[VoiceOverDomainState]] - `contains` [EXTRACTED]
 - [[VoiceOverStateStore]] - `contains` [EXTRACTED]
 - [[appearance_domain.rs]] - `imports_from` [EXTRACTED]
-- [[config_dir()]] - `contains` [EXTRACTED]
-- [[main.rs_3]] - `imports_from` [EXTRACTED]
+- [[athanor-daemon-rs-0.2.1srcmain.rs]] - `imports_from` [EXTRACTED]
+- [[config_dir()_1]] - `contains` [EXTRACTED]
 - [[test_settings_service_cancellation()]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_27
+#graphify/code #graphify/EXTRACTED #community/Community_25

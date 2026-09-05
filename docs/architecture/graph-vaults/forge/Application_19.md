@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 105"
+community: "Community 3"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_105
+  - community/Community_3
 ---
 
 # Application
 
 ## Connections
-- [[spawn_osd()]] - `references` [EXTRACTED]
+- [[build_desktop_widgets()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_105
+#graphify/code #graphify/EXTRACTED #community/Community_3

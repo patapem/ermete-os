@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs"
 type: "code"
-community: "Community 0"
+community: "Community 2"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_0
+  - community/Community_2
 ---
 
 # control_center_vm.rs
@@ -16,6 +16,6 @@ tags:
 - [[ControlCenterIntent]] - `contains` [EXTRACTED]
 - [[ControlCenterState]] - `contains` [EXTRACTED]
 - [[ControlCenterViewModel]] - `contains` [EXTRACTED]
-- [[mod.rs_13]] - `imports_from` [EXTRACTED]
+- [[viewmodelmod.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_0
+#graphify/code #graphify/EXTRACTED #community/Community_2

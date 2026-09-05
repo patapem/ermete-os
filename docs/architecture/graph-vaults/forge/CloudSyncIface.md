@@ -1,19 +1,19 @@
 ---
-source_file: "specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/main.rs"
+source_file: "specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/main.rs"
 type: "code"
-community: "Community 72"
-location: "L84"
+community: "Community 82"
+location: "L31"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_72
+  - community/Community_82
 ---
 
 # CloudSyncIface
 
 ## Connections
-- [[.authenticate_oauth()]] - `method` [EXTRACTED]
-- [[.mount_fuse()]] - `method` [EXTRACTED]
-- [[main.rs_2]] - `contains` [EXTRACTED]
+- [[dot-authenticate_oauth()]] - `method` [EXTRACTED]
+- [[dot-mount_fuse()]] - `method` [EXTRACTED]
+- [[athanor-cloud-rs-1.0.0srcmain.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_72
+#graphify/code #graphify/EXTRACTED #community/Community_82

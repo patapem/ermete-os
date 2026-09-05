@@ -1,27 +1,27 @@
 ---
-source_file: "specs/Static Rules Engine/Static Rules Engine-1.0.0/src/npu/offloader.rs"
+source_file: "specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/npu/offloader.rs"
 type: "code"
-community: "Community 53"
+community: "Community 55"
 location: "L26"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_53
+  - community/Community_55
 ---
 
 # HardwareOffloader
 
 ## Connections
-- [[.default()]] - `method` [EXTRACTED]
-- [[.get_active_hardware_info()]] - `method` [EXTRACTED]
-- [[.new()_1]] - `method` [EXTRACTED]
-- [[.process_inference()]] - `method` [EXTRACTED]
+- [[dot-default()_17]] - `method` [EXTRACTED]
+- [[dot-get_active_hardware_info()]] - `method` [EXTRACTED]
+- [[dot-new()_43]] - `method` [EXTRACTED]
+- [[dot-process_inference()]] - `method` [EXTRACTED]
 - [[AiDaemonProxy]] - `references` [EXTRACTED]
-- [[Default]] - `implements` [EXTRACTED]
+- [[Default_10]] - `implements` [EXTRACTED]
 - [[OffloadPolicy]] - `references` [EXTRACTED]
 - [[OpenVinoNpuEngine]] - `references` [EXTRACTED]
 - [[VulkanTensorEngine]] - `references` [EXTRACTED]
-- [[main.rs]] - `imports_from` [EXTRACTED]
+- [[athanor-ai-daemon-1.0.0srcmain.rs]] - `imports_from` [EXTRACTED]
 - [[offloader.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_53
+#graphify/code #graphify/EXTRACTED #community/Community_55

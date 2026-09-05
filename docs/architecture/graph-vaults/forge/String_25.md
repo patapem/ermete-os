@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 10"
+community: "Community 2"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_10
+  - community/Community_2
 ---
 
 # String
 
 ## Connections
-- [[.on_window_focused()]] - `references` [EXTRACTED]
-- [[EnergyAwareSchedulerState]] - `references` [EXTRACTED]
+- [[NotificationData]] - `references` [EXTRACTED]
+- [[default_timestamp()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_10
+#graphify/code #graphify/EXTRACTED #community/Community_2

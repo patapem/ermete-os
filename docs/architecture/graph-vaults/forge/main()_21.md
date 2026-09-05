@@ -1,18 +1,18 @@
 ---
-source_file: "portal/scripts/npu_translator.py"
+source_file: "specs/athanor-mdm-rs/athanor-mdm-rs-1.0.0/src/main.rs"
 type: "code"
-community: "Community 168"
-location: "L10"
+community: "Community 71"
+location: "L159"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_168
+  - community/Community_71
 ---
 
 # main()
 
 ## Connections
-- [[npu_translator.py]] - `contains` [EXTRACTED]
-- [[translate()]] - `calls` [EXTRACTED]
+- [[Result_55]] - `references` [EXTRACTED]
+- [[athanor-mdm-rs-1.0.0srcmain.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_168
+#graphify/code #graphify/EXTRACTED #community/Community_71

@@ -1,22 +1,22 @@
 ---
-source_file: "specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/wipe.rs"
+source_file: "specs/athanor-mdm-rs/athanor-mdm-rs-1.0.0/src/wipe.rs"
 type: "code"
-community: "Community 67"
+community: "Community 72"
 location: "L15"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_67
+  - community/Community_72
 ---
 
 # WipeEngine
 
 ## Connections
-- [[.detect_target_device()]] - `method` [EXTRACTED]
-- [[.execute_cryptsetup_erase()]] - `method` [EXTRACTED]
-- [[.native_cryptsetup_erase()]] - `method` [EXTRACTED]
-- [[.new()_34]] - `method` [EXTRACTED]
-- [[.poll_server()]] - `method` [EXTRACTED]
+- [[dot-detect_target_device()]] - `method` [EXTRACTED]
+- [[dot-execute_cryptsetup_erase()]] - `method` [EXTRACTED]
+- [[dot-native_cryptsetup_erase()]] - `method` [EXTRACTED]
+- [[dot-new()_53]] - `method` [EXTRACTED]
+- [[dot-poll_server()]] - `method` [EXTRACTED]
 - [[wipe.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_67
+#graphify/code #graphify/EXTRACTED #community/Community_72

@@ -1,17 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 6"
+community: "Community 73"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_6
+  - community/Community_73
 ---
 
 # Application
 
 ## Connections
-- [[.navigate_to()]] - `references` [EXTRACTED]
-- [[navigation.rs]] - `imports_from` [EXTRACTED]
+- [[build_ui()_6]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_6
+#graphify/code #graphify/EXTRACTED #community/Community_73

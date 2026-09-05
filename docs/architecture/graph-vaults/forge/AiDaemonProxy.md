@@ -1,23 +1,23 @@
 ---
-source_file: "specs/Static Rules Engine/Static Rules Engine-1.0.0/src/main.rs"
+source_file: "specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/main.rs"
 type: "code"
-community: "Community 71"
-location: "L23"
+community: "Community 76"
+location: "L20"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_71
+  - community/Community_76
 ---
 
 # AiDaemonProxy
 
 ## Connections
-- [[.classify_workload()]] - `method` [EXTRACTED]
-- [[.process_query()]] - `method` [EXTRACTED]
-- [[Arc]] - `references` [EXTRACTED]
+- [[dot-classify_workload()]] - `method` [EXTRACTED]
+- [[dot-process_query()]] - `method` [EXTRACTED]
+- [[Arc_15]] - `references` [EXTRACTED]
 - [[HardwareOffloader]] - `references` [EXTRACTED]
-- [[NeuralModelEngine]] - `references` [EXTRACTED]
-- [[RwLock]] - `references` [EXTRACTED]
-- [[main.rs]] - `contains` [EXTRACTED]
+- [[InferenceEngine]] - `references` [EXTRACTED]
+- [[RwLock_3]] - `references` [EXTRACTED]
+- [[athanor-ai-daemon-1.0.0srcmain.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_71
+#graphify/code #graphify/EXTRACTED #community/Community_76

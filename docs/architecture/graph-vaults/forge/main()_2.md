@@ -1,21 +1,19 @@
 ---
-source_file: "specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs"
+source_file: "specs/azoth/bench-report.py"
 type: "code"
-community: "Community 11"
-location: "L382"
+community: "Community 122"
+location: "L45"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_11
+  - community/Community_122
 ---
 
 # main()
 
 ## Connections
-- [[.new()_4]] - `calls` [EXTRACTED]
-- [[Box_1]] - `references` [EXTRACTED]
-- [[Error_1]] - `references` [EXTRACTED]
-- [[Result_7]] - `references` [EXTRACTED]
-- [[daemon.rs]] - `contains` [EXTRACTED]
+- [[bench-report.py]] - `contains` [EXTRACTED]
+- [[fmt()]] - `calls` [EXTRACTED]
+- [[load()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_11
+#graphify/code #graphify/EXTRACTED #community/Community_122

@@ -1,18 +1,18 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 5
 ---
 
 # Community 120
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 5 nodes
 
 ## Members
-- [[GtkBox_8]] - code
-- [[build_page()_10]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/focus.rs
-- [[focus.rs]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/focus.rs
+- [[Box_5]] - code
+- [[Error_5]] - code
+- [[Result_13]] - code
+- [[athanor-sysmon-ebpf-1.0.0srcmain.rs]] - code - specs/athanor-sysmon-ebpf/athanor-sysmon-ebpf-1.0.0/src/main.rs
+- [[main()_11]] - code - specs/athanor-sysmon-ebpf/athanor-sysmon-ebpf-1.0.0/src/main.rs
 
 ## Live Query (requires Dataview plugin)
 

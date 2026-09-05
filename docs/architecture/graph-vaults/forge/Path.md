@@ -1,18 +1,19 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 11"
+community: "Community 1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_11
+  - community/Community_1
 ---
 
 # Path
 
 ## Connections
-- [[daemon.rs]] - `imports_from` [EXTRACTED]
-- [[native_bcachefs_delete()]] - `references` [EXTRACTED]
-- [[native_bcachefs_snapshot()]] - `references` [EXTRACTED]
+- [[build_crosvm_command()]] - `references` [EXTRACTED]
+- [[hypervisor.rs]] - `imports_from` [EXTRACTED]
+- [[read_seccomp_policy()]] - `references` [EXTRACTED]
+- [[spawn_microvm_isolated_app()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_11
+#graphify/code #graphify/EXTRACTED #community/Community_1

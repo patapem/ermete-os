@@ -1,16 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 83"
+community: "Community 55"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_83
+  - community/Community_55
 ---
 
 # String
 
 ## Connections
-- [[generate_permission_store_payload()]] - `references` [EXTRACTED]
+- [[dot-process_inference()]] - `references` [EXTRACTED]
+- [[HardwareDeviceInfo]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_83
+#graphify/code #graphify/EXTRACTED #community/Community_55

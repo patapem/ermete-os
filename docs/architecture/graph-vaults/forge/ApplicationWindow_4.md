@@ -1,19 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 7"
+community: "Community 34"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_7
+  - community/Community_34
 ---
 
 # ApplicationWindow
 
 ## Connections
-- [[build_layout_card_widget()]] - `references` [EXTRACTED]
-- [[render_snap_assist_view()]] - `references` [EXTRACTED]
-- [[show_snap_overlay()]] - `references` [EXTRACTED]
-- [[start_snap_assist_session()]] - `references` [EXTRACTED]
+- [[dot-apply_anchors()]] - `references` [EXTRACTED]
+- [[DockTaskbar]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_7
+#graphify/code #graphify/EXTRACTED #community/Community_34

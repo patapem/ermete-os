@@ -1,21 +1,21 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs"
 type: "code"
-community: "Community 4"
+community: "Community 5"
 location: "L587"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_4
+  - community/Community_5
 ---
 
 # get_net_cache()
 
 ## Connections
-- [[.get_cached_network_status()]] - `calls` [EXTRACTED]
-- [[.get_network_status_async()]] - `calls` [EXTRACTED]
-- [[ArcSwap]] - `references` [EXTRACTED]
-- [[String_61]] - `references` [EXTRACTED]
-- [[network.rs_3]] - `contains` [EXTRACTED]
+- [[dot-get_cached_network_status()]] - `calls` [EXTRACTED]
+- [[dot-get_network_status_async()]] - `calls` [EXTRACTED]
+- [[ArcSwap_1]] - `references` [EXTRACTED]
+- [[String_49]] - `references` [EXTRACTED]
+- [[ipcnetwork.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_4
+#graphify/code #graphify/EXTRACTED #community/Community_5

@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 94"
+community: "Community 116"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_94
+  - community/Community_116
 ---
 
 # String
 
 ## Connections
-- [[start_udp_discovery()]] - `references` [EXTRACTED]
+- [[speak_text()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_94
+#graphify/code #graphify/EXTRACTED #community/Community_116

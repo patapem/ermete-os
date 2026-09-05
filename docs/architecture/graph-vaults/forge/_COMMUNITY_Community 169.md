@@ -1,17 +1,15 @@
 ---
 type: community
-cohesion: 1.00
 members: 2
 ---
 
 # Community 169
 
-**Cohesion:** 1.00 - tightly connected
 **Members:** 2 nodes
 
 ## Members
-- [[build.rs]] - code - ebpf/ebpf-loader/build.rs
-- [[main()_1]] - code - ebpf/ebpf-loader/build.rs
+- [[athanor-tpm-rollback-update.sh]] - code - specs/athanor-secure-boot/SOURCES/usr/libexec/athanor/athanor-tpm-rollback-update.sh
+- [[athanor-tpm-rollback-update.sh script]] - code - specs/athanor-secure-boot/SOURCES/usr/libexec/athanor/athanor-tpm-rollback-update.sh
 
 ## Live Query (requires Dataview plugin)
 

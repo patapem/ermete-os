@@ -1,16 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 14"
+community: "Community 54"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_14
+  - community/Community_54
 ---
 
 # Option
 
 ## Connections
-- [[apply_dynamic_material3_theme()]] - `references` [EXTRACTED]
+- [[dot-new()_41]] - `references` [EXTRACTED]
+- [[ActionRowBuilder]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_14
+#graphify/code #graphify/EXTRACTED #community/Community_54

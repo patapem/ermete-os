@@ -1,18 +1,15 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 2
 ---
 
 # Community 162
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 2 nodes
 
 ## Members
-- [[Application_20]] - code
-- [[build_ui()_3]] - code - ermete-shell-rs/src/ui/prompts/gatekeeper.rs
-- [[gatekeeper.rs]] - code - ermete-shell-rs/src/ui/prompts/gatekeeper.rs
+- [[nix_hermetic_build.sh]] - code - scripts/nix_hermetic_build.sh
+- [[nix_hermetic_build.sh script]] - code - scripts/nix_hermetic_build.sh
 
 ## Live Query (requires Dataview plugin)
 

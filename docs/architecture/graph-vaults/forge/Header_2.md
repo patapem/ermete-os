@@ -1,18 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 24"
+community: "Community 28"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_24
+  - community/Community_28
 ---
 
 # Header
 
 ## Connections
-- [[.apply_live_patch()]] - `references` [EXTRACTED]
-- [[.set_audio_volume()]] - `references` [EXTRACTED]
-- [[bedrock.rs]] - `imports_from` [EXTRACTED]
+- [[dot-add_vpn_tunnel()]] - `references` [EXTRACTED]
+- [[dot-connect_enterprise_wifi()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_24
+#graphify/code #graphify/EXTRACTED #community/Community_28

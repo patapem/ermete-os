@@ -1,21 +1,20 @@
 ---
-source_file: "scripts/dag_orchestrator.py"
+source_file: "scripts/zero_trust_updater.py"
 type: "code"
-community: "Community 55"
-location: "L263"
+community: "Community 107"
+location: "L59"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_55
+  - community/Community_107
 ---
 
 # main()
 
 ## Connections
-- [[build_dag()]] - `calls` [EXTRACTED]
-- [[dag_orchestrator.py]] - `contains` [EXTRACTED]
-- [[evaluate_dirty_nodes()]] - `calls` [EXTRACTED]
-- [[load_package_manifest()]] - `calls` [EXTRACTED]
-- [[partition_dag_levels()]] - `calls` [EXTRACTED]
+- [[download_and_hash()]] - `calls` [EXTRACTED]
+- [[fetch_latest_release()]] - `calls` [EXTRACTED]
+- [[update_spec_file()]] - `calls` [EXTRACTED]
+- [[zero_trust_updater.py]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_55
+#graphify/code #graphify/EXTRACTED #community/Community_107

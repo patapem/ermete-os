@@ -1,19 +1,21 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 47"
+community: "Community 35"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_47
+  - community/Community_35
 ---
 
 # String
 
 ## Connections
-- [[.apply_kernel_patch()]] - `references` [EXTRACTED]
-- [[.system_bus_name()_4]] - `references` [EXTRACTED]
-- [[PolkitAuthorizationResult_4]] - `references` [EXTRACTED]
-- [[PolkitSubject_4]] - `references` [EXTRACTED]
+- [[dot-get_status()_2]] - `references` [EXTRACTED]
+- [[dot-new()_33]] - `references` [EXTRACTED]
+- [[BftConsensusEngine]] - `references` [EXTRACTED]
+- [[BftProposal]] - `references` [EXTRACTED]
+- [[BftProposalRecord]] - `references` [EXTRACTED]
+- [[BftVote]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_47
+#graphify/code #graphify/EXTRACTED #community/Community_35

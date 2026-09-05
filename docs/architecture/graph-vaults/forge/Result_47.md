@@ -1,18 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 20"
+community: "Community 59"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_20
+  - community/Community_59
 ---
 
 # Result
 
 ## Connections
-- [[RecoveryMsg]] - `references` [EXTRACTED]
-- [[execute_rollback_async()]] - `references` [EXTRACTED]
-- [[native_bcachefs_snapshot()_2]] - `references` [EXTRACTED]
+- [[dot-poll_passive_status()]] - `references` [EXTRACTED]
+- [[dot-submit_event()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_20
+#graphify/code #graphify/EXTRACTED #community/Community_59

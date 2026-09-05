@@ -1,17 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 0"
+community: "Community 87"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_0
+  - community/Community_87
 ---
 
 # String
 
 ## Connections
-- [[ControlCenterIntent]] - `references` [EXTRACTED]
-- [[ControlCenterState]] - `references` [EXTRACTED]
+- [[generate_permission_store_payload()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_0
+#graphify/code #graphify/EXTRACTED #community/Community_87

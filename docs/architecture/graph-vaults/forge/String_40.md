@@ -1,19 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 50"
+community: "Community 4"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_50
+  - community/Community_4
 ---
 
 # String
 
 ## Connections
-- [[.system_bus_name()_6]] - `references` [EXTRACTED]
-- [[.trigger_local_wipe()]] - `references` [EXTRACTED]
-- [[PolkitAuthorizationResult_6]] - `references` [EXTRACTED]
-- [[PolkitSubject_6]] - `references` [EXTRACTED]
+- [[dot-status_text()]] - `references` [EXTRACTED]
+- [[ForgeWidgetModel]] - `references` [EXTRACTED]
+- [[detect_hardware_hash()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_50
+#graphify/code #graphify/EXTRACTED #community/Community_4

@@ -1,19 +1,19 @@
 ---
-source_file: "specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/layout_switcher.rs"
+source_file: "specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/appearance.rs"
 type: "code"
-community: "Community 35"
-location: "L461"
+community: "Community 33"
+location: "L6"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_35
+  - community/Community_33
 ---
 
 # build_page()
 
 ## Connections
-- [[Box_16]] - `references` [EXTRACTED]
-- [[build_switcher_section()]] - `calls` [EXTRACTED]
-- [[layout_switcher.rs]] - `contains` [EXTRACTED]
+- [[Box_18]] - `references` [EXTRACTED]
+- [[appearance.rs]] - `contains` [EXTRACTED]
+- [[with_settings_proxy()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_35
+#graphify/code #graphify/EXTRACTED #community/Community_33

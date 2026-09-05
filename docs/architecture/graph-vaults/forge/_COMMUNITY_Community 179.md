@@ -1,16 +1,15 @@
 ---
 type: community
-cohesion: 1.00
-members: 1
+members: 2
 ---
 
 # Community 179
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 1 nodes
+**Members:** 2 nodes
 
 ## Members
-- [[mod.rs_19]] - code - ermete-shell-rs/src/ui/prompts/mod.rs
+- [[nvr.sh]] - code - specs/azoth/nvr.sh
+- [[nvr.sh script]] - code - specs/azoth/nvr.sh
 
 ## Live Query (requires Dataview plugin)
 

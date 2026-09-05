@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 9"
+community: "Community 34"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_9
+  - community/Community_34
 ---
 
 # Arc
 
 ## Connections
-- [[LivePatchManager]] - `references` [EXTRACTED]
+- [[DockTaskbar]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_9
+#graphify/code #graphify/EXTRACTED #community/Community_34

@@ -1,23 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 26"
+community: "Community 49"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_26
+  - community/Community_49
 ---
 
 # HashMap
 
 ## Connections
-- [[.create_session()_1]] - `references` [EXTRACTED]
-- [[.create_session()]] - `references` [EXTRACTED]
-- [[.select_devices()]] - `references` [EXTRACTED]
-- [[.select_sources()]] - `references` [EXTRACTED]
-- [[.start()_1]] - `references` [EXTRACTED]
-- [[.start()]] - `references` [EXTRACTED]
-- [[PortalScreenCastService]] - `references` [EXTRACTED]
-- [[portal_screencast.rs]] - `imports_from` [EXTRACTED]
+- [[SyncEngine]] - `references` [EXTRACTED]
+- [[sync.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_26
+#graphify/code #graphify/EXTRACTED #community/Community_49

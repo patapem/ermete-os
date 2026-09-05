@@ -1,16 +1,15 @@
 ---
 type: community
-cohesion: 1.00
-members: 1
+members: 2
 ---
 
 # Community 175
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 1 nodes
+**Members:** 2 nodes
 
 ## Members
-- [[lib.rs_2]] - code - ermete-cluster-mesh/src/lib.rs
+- [[athanor-uki-enroll]] - code - specs/athanor-system-config/SOURCES/usr/bin/athanor-uki-enroll
+- [[athanor-uki-enroll script]] - code - specs/athanor-system-config/SOURCES/usr/bin/athanor-uki-enroll
 
 ## Live Query (requires Dataview plugin)
 

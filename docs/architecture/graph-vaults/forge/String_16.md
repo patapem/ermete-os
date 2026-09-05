@@ -1,20 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 46"
+community: "Community 12"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_46
+  - community/Community_12
 ---
 
 # String
 
 ## Connections
-- [[.get_dilithium_public_key_b64()]] - `references` [EXTRACTED]
-- [[.get_kyber_public_key_b64()]] - `references` [EXTRACTED]
-- [[.get_zk_identity_info()]] - `references` [EXTRACTED]
-- [[.propose_bft_state_update()]] - `references` [EXTRACTED]
-- [[SyncEngine]] - `references` [EXTRACTED]
+- [[NiriState]] - `references` [EXTRACTED]
+- [[NiriWorkspace]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_46
+#graphify/code #graphify/EXTRACTED #community/Community_12

@@ -1,39 +1,38 @@
 ---
 type: community
-cohesion: 0.18
-members: 24
+members: 25
 ---
 
 # Community 36
 
-**Cohesion:** 0.18 - loosely connected
-**Members:** 24 nodes
+**Members:** 25 nodes
 
 ## Members
-- [[.as_any()_5]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[.handle_lock_screen()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[.handle_power_off()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[.handle_reboot()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[.handle_suspend()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[.lock_screen()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[.name()_6]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[.new()_46]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[.power_off()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[.reboot()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[.run()_5]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[.spawn()_5]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[.suspend()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[Any_5]] - code
-- [[Logind]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[PowerActor]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[PowerCommand]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[PowerController]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[Receiver_8]] - code
-- [[Result_57]] - code
-- [[Self_54]] - code
-- [[Sender_8]] - code
-- [[get_power_controller()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
-- [[power.rs]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs
+- [[dot-accent_color()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-accent_color()_1]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-color_scheme()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-color_scheme()_1]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-set_accent_color()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-set_accent_color()_1]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-set_color_scheme()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-set_color_scheme()_1]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-set_true_tone_enabled()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-set_true_tone_temperature()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-set_voiceover_enabled()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-set_wallpaper()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-set_wallpaper()_1]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-true_tone_enabled()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-true_tone_temperature()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-voiceover_enabled()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-wallpaper()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[dot-wallpaper()_1]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[AppearanceService]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[Header_3]] - code
+- [[Option_22]] - code
+- [[Result_34]] - code
+- [[SettingsCommand]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[SettingsService]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs
+- [[String_39]] - code
 
 ## Live Query (requires Dataview plugin)
 
@@ -43,16 +42,10 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 3 edges to [[_COMMUNITY_Community 23]]
-- 3 edges to [[_COMMUNITY_Community 21]]
-- 1 edge to [[_COMMUNITY_Community 97]]
-- 1 edge to [[_COMMUNITY_Community 1]]
-- 1 edge to [[_COMMUNITY_Community 25]]
-- 1 edge to [[_COMMUNITY_Community 34]]
+- 15 edges to [[_COMMUNITY_Community 25]]
 
 ## Top bridge nodes
-- [[power.rs]] - degree 8, connects to 3 communities
-- [[PowerActor]] - degree 11, connects to 2 communities
-- [[.new()_46]] - degree 10, connects to 2 communities
-- [[.spawn()_5]] - degree 7, connects to 2 communities
-- [[PowerController]] - degree 12, connects to 1 community
+- [[SettingsService]] - degree 19, connects to 1 community
+- [[Result_34]] - degree 16, connects to 1 community
+- [[AppearanceService]] - degree 9, connects to 1 community
+- [[SettingsCommand]] - degree 6, connects to 1 community

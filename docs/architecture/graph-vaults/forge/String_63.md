@@ -1,19 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 58"
+community: "Community 66"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_58
+  - community/Community_66
 ---
 
 # String
 
 ## Connections
-- [[BluetoothDeviceInfo_1]] - `references` [EXTRACTED]
-- [[MprisState]] - `references` [EXTRACTED]
-- [[NetEvent]] - `references` [EXTRACTED]
-- [[WifiNetworkInfo]] - `references` [EXTRACTED]
+- [[dot-read()]] - `references` [EXTRACTED]
+- [[dot-read_all()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_58
+#graphify/code #graphify/EXTRACTED #community/Community_66

@@ -1,20 +1,20 @@
 ---
-source_file: "specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/security.rs"
+source_file: "specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/security.rs"
 type: "code"
-community: "Community 102"
+community: "Community 114"
 location: "L7"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_102
+  - community/Community_114
 ---
 
 # drop_capabilities()
 
 ## Connections
-- [[Result_23]] - `references` [EXTRACTED]
-- [[String_26]] - `references` [EXTRACTED]
+- [[Result_10]] - `references` [EXTRACTED]
+- [[String_11]] - `references` [EXTRACTED]
 - [[apply_daemon_hardening()]] - `calls` [EXTRACTED]
-- [[security.rs_1]] - `contains` [EXTRACTED]
+- [[athanor-daemon-rs-0.2.1srcsecurity.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_102
+#graphify/code #graphify/EXTRACTED #community/Community_114

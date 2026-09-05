@@ -1,25 +1,24 @@
 ---
 type: community
-cohesion: 0.27
-members: 10
+members: 11
 ---
 
 # Community 78
 
-**Cohesion:** 0.27 - loosely connected
-**Members:** 10 nodes
+**Members:** 11 nodes
 
 ## Members
-- [[.default_config()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/a11y.rs
-- [[.to_crdt_entries()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/a11y.rs
-- [[A11yConfigPayload]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/a11y.rs
-- [[GtkBox_4]] - code
-- [[Self_37]] - code
-- [[String_50]] - code
-- [[Vec_22]] - code
-- [[a11y.rs]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/a11y.rs
-- [[build_page()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/a11y.rs
-- [[test_a11y_config_payload_crdt_conversion()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/a11y.rs
+- [[dot-default()_22]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/ebpf.rs
+- [[dot-description()_1]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/ebpf.rs
+- [[dot-label()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/ebpf.rs
+- [[Default_15]] - code
+- [[EbpfMode]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/ebpf.rs
+- [[EbpfModuleData]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/ebpf.rs
+- [[GtkBox_15]] - code
+- [[Self_55]] - code
+- [[String_74]] - code
+- [[build_ebpf_widget()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/ebpf.rs
+- [[control_centerebpf.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/ebpf.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -27,3 +26,13 @@ members: 10
 TABLE source_file, type FROM #community/Community_78
 SORT file.name ASC
 ```
+
+## Connections to other communities
+- 1 edge to [[_COMMUNITY_Community 104]]
+- 1 edge to [[_COMMUNITY_Community 68]]
+- 1 edge to [[_COMMUNITY_Community 84]]
+- 1 edge to [[_COMMUNITY_Community 88]]
+
+## Top bridge nodes
+- [[EbpfModuleData]] - degree 9, connects to 3 communities
+- [[build_ebpf_widget()]] - degree 6, connects to 1 community

@@ -1,23 +1,19 @@
 ---
-source_file: "specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/main.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/main.rs"
 type: "code"
-community: "Community 5"
-location: "L28"
+community: "Community 100"
+location: "L77"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_5
+  - community/Community_100
 ---
 
 # main()
 
 ## Connections
-- [[Box_5]] - `references` [EXTRACTED]
-- [[Error_10]] - `references` [EXTRACTED]
-- [[Result_36]] - `references` [EXTRACTED]
-- [[main.rs_6]] - `contains` [EXTRACTED]
-- [[respond_and_close()]] - `calls` [INFERRED]
-- [[restore_bcachefs_snapshot_impl()]] - `calls` [INFERRED]
-- [[take_bcachefs_snapshot()]] - `calls` [INFERRED]
+- [[ExitCode]] - `references` [EXTRACTED]
+- [[athanor-shell-rs-1.0.0srcmain.rs]] - `contains` [EXTRACTED]
+- [[init_telemetry()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_5
+#graphify/code #graphify/EXTRACTED #community/Community_100

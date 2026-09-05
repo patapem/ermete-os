@@ -1,19 +1,19 @@
 ---
-source_file: "specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/wired.rs"
+source_file: "specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/wired.rs"
 type: "code"
-community: "Community 103"
+community: "Community 115"
 location: "L79"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_103
+  - community/Community_115
 ---
 
 # get_ethernet_status_async()
 
 ## Connections
-- [[String_53]] - `references` [EXTRACTED]
-- [[build_page()_19]] - `calls` [EXTRACTED]
+- [[String_12]] - `references` [EXTRACTED]
+- [[build_page()_1]] - `calls` [EXTRACTED]
 - [[wired.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_103
+#graphify/code #graphify/EXTRACTED #community/Community_115

@@ -1,18 +1,18 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/prompts/gatekeeper.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/prompts/file_chooser.rs"
 type: "code"
-community: "Community 128"
-location: "L6"
+community: "Community 4"
+location: "L5"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_128
+  - community/Community_4
 ---
 
 # build_ui()
 
 ## Connections
-- [[Application_22]] - `references` [EXTRACTED]
-- [[gatekeeper.rs]] - `contains` [EXTRACTED]
+- [[Application_23]] - `references` [EXTRACTED]
+- [[file_chooser.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_128
+#graphify/code #graphify/EXTRACTED #community/Community_4

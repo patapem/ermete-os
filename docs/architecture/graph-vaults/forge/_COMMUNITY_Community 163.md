@@ -1,18 +1,15 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 2
 ---
 
 # Community 163
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 2 nodes
 
 ## Members
-- [[Application_21]] - code
-- [[build_ui()_4]] - code - ermete-shell-rs/src/ui/prompts/privacy.rs
-- [[privacy.rs]] - code - ermete-shell-rs/src/ui/prompts/privacy.rs
+- [[run_fuzz.sh]] - code - scripts/run_fuzz.sh
+- [[run_fuzz.sh script]] - code - scripts/run_fuzz.sh
 
 ## Live Query (requires Dataview plugin)
 

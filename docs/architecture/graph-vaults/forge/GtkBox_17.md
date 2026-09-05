@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 1"
+community: "Community 84"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_1
+  - community/Community_84
 ---
 
 # GtkBox
 
 ## Connections
-- [[populate_wifi_list()]] - `references` [EXTRACTED]
+- [[build_display_widget()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_1
+#graphify/code #graphify/EXTRACTED #community/Community_84

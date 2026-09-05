@@ -1,18 +1,17 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 4
 ---
 
 # Community 127
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 4 nodes
 
 ## Members
-- [[Application_20]] - code
-- [[powermenu.rs]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/powermenu.rs
-- [[show_powermenu_modal()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/powermenu.rs
+- [[GtkBox_5]] - code
+- [[build_page()_3]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/continuity.rs
+- [[continuity.rs]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/continuity.rs
+- [[test_continuity_page_builds()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/continuity.rs
 
 ## Live Query (requires Dataview plugin)
 

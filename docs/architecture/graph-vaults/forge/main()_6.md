@@ -1,18 +1,23 @@
 ---
-source_file: "specs/ermete-dock/ermete-dock-1.0.0/src/main.rs"
+source_file: "specs/azoth/repro.py"
 type: "code"
-community: "Community 31"
-location: "L22"
+community: "Community 61"
+location: "L108"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_31
+  - community/Community_61
 ---
 
 # main()
 
 ## Connections
-- [[Result_30]] - `references` [EXTRACTED]
-- [[main.rs_4]] - `contains` [EXTRACTED]
+- [[extract()]] - `calls` [EXTRACTED]
+- [[kver()]] - `calls` [EXTRACTED]
+- [[module_bytes()]] - `calls` [EXTRACTED]
+- [[module_payload()]] - `calls` [EXTRACTED]
+- [[modules()]] - `calls` [EXTRACTED]
+- [[repro.py]] - `contains` [EXTRACTED]
+- [[sections()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_31
+#graphify/code #graphify/EXTRACTED #community/Community_61

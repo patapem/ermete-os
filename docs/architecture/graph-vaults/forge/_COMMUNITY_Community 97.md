@@ -1,21 +1,21 @@
 ---
 type: community
-cohesion: 0.47
-members: 6
+members: 8
 ---
 
 # Community 97
 
-**Cohesion:** 0.47 - moderately connected
-**Members:** 6 nodes
+**Members:** 8 nodes
 
 ## Members
-- [[AiIntent]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/types.rs
-- [[String_7]] - code
-- [[Vec_4]] - code
-- [[WorkloadClassificationRequest]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/types.rs
-- [[WorkloadClassificationResponse]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/types.rs
-- [[types.rs]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/types.rs
+- [[dot-init()_6]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/panel.rs
+- [[dot-update()_12]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/panel.rs
+- [[ComponentParts_6]] - code
+- [[ComponentSender_6]] - code
+- [[Init_7]] - code
+- [[Input_7]] - code
+- [[Root_6]] - code
+- [[Self_62]] - code
 
 ## Live Query (requires Dataview plugin)
 
@@ -25,16 +25,8 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 2 edges to [[_COMMUNITY_Community 53]]
-- 1 edge to [[_COMMUNITY_Community 71]]
-- 1 edge to [[_COMMUNITY_Community 29]]
-- 1 edge to [[_COMMUNITY_Community 25]]
-- 1 edge to [[_COMMUNITY_Community 48]]
-- 1 edge to [[_COMMUNITY_Community 21]]
-- 1 edge to [[_COMMUNITY_Community 4]]
-- 1 edge to [[_COMMUNITY_Community 36]]
-- 1 edge to [[_COMMUNITY_Community 34]]
+- 2 edges to [[_COMMUNITY_Community 104]]
 
 ## Top bridge nodes
-- [[types.rs]] - degree 11, connects to 8 communities
-- [[AiIntent]] - degree 4, connects to 1 community
+- [[dot-init()_6]] - degree 6, connects to 1 community
+- [[dot-update()_12]] - degree 4, connects to 1 community

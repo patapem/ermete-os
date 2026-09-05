@@ -1,18 +1,18 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 5
 ---
 
 # Community 118
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 5 nodes
 
 ## Members
-- [[Box_12]] - code
-- [[build_page()_8]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/displays.rs
-- [[displays.rs]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/displays.rs
+- [[Application_11]] - code
+- [[init_osd_css()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/osd.rs
+- [[osd.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/osd.rs
+- [[spawn_osd()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/osd.rs
+- [[test_osd_ui_instantiation()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/osd.rs
 
 ## Live Query (requires Dataview plugin)
 

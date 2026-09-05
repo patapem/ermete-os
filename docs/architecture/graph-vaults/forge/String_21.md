@@ -1,28 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 9"
+community: "Community 16"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_9
+  - community/Community_16
 ---
 
 # String
 
 ## Connections
-- [[.attach_uprobe()]] - `references` [EXTRACTED]
-- [[.compile_and_validate()]] - `references` [EXTRACTED]
-- [[.dispatch()]] - `references` [EXTRACTED]
-- [[.extract_ebpf_instructions()]] - `references` [EXTRACTED]
-- [[.jit_compile_patch()]] - `references` [EXTRACTED]
-- [[.load_patch_so()]] - `references` [EXTRACTED]
-- [[.sanitize_id()]] - `references` [EXTRACTED]
-- [[.validate_buffer_overflow()]] - `references` [EXTRACTED]
-- [[BufferOverflowValidation]] - `references` [EXTRACTED]
-- [[CompiledEbpfArtifact]] - `references` [EXTRACTED]
-- [[EbpfJitCompiler]] - `references` [EXTRACTED]
-- [[LivePatchManager]] - `references` [EXTRACTED]
-- [[LivePatchStatus]] - `references` [EXTRACTED]
+- [[get_niri_socket_path()]] - `references` [EXTRACTED]
+- [[get_outputs()]] - `references` [EXTRACTED]
+- [[send_socket_request()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_9
+#graphify/code #graphify/EXTRACTED #community/Community_16

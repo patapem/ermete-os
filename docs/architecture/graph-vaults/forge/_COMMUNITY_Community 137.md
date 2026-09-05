@@ -1,17 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 2
+members: 3
 ---
 
 # Community 137
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 2 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[nix_hermetic_build.sh]] - code - scripts/nix_hermetic_build.sh
-- [[nix_hermetic_build.sh script]] - code - scripts/nix_hermetic_build.sh
+- [[GtkBox_6]] - code
+- [[build_page()_4]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/battery.rs
+- [[pagesbattery.rs]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/battery.rs
 
 ## Live Query (requires Dataview plugin)
 

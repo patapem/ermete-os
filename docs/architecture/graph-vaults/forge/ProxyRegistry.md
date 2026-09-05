@@ -1,27 +1,27 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/system_proxies.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/system_proxies.rs"
 type: "code"
-community: "Community 34"
+community: "Community 38"
 location: "L30"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_34
+  - community/Community_38
 ---
 
 # ProxyRegistry
 
 ## Connections
-- [[.get()]] - `method` [EXTRACTED]
-- [[.get_typed()]] - `method` [EXTRACTED]
-- [[.new()_47]] - `method` [EXTRACTED]
-- [[.register()]] - `method` [EXTRACTED]
-- [[.register_arc()]] - `method` [EXTRACTED]
-- [[Arc_20]] - `references` [EXTRACTED]
+- [[dot-get()]] - `method` [EXTRACTED]
+- [[dot-get_typed()]] - `method` [EXTRACTED]
+- [[dot-new()_34]] - `method` [EXTRACTED]
+- [[dot-register()]] - `method` [EXTRACTED]
+- [[dot-register_arc()]] - `method` [EXTRACTED]
+- [[Arc_10]] - `references` [EXTRACTED]
 - [[ControllerBackend]] - `references` [EXTRACTED]
-- [[HashMap_21]] - `references` [EXTRACTED]
-- [[Mutex_13]] - `references` [EXTRACTED]
+- [[HashMap_9]] - `references` [EXTRACTED]
+- [[Mutex_6]] - `references` [EXTRACTED]
 - [[get_registry()]] - `references` [EXTRACTED]
 - [[system_proxies.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_34
+#graphify/code #graphify/EXTRACTED #community/Community_38

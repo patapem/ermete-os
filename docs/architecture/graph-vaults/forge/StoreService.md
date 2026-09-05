@@ -1,20 +1,20 @@
 ---
-source_file: "specs/ermete-store-rs/ermete-store-rs-1.0.0/src/backend/dbus.rs"
+source_file: "specs/athanor-store-rs/athanor-store-rs-1.0.0/src/backend/dbus.rs"
 type: "code"
-community: "Community 92"
+community: "Community 98"
 location: "L7"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_92
+  - community/Community_98
 ---
 
 # StoreService
 
 ## Connections
-- [[.install()]] - `method` [EXTRACTED]
-- [[.search()]] - `method` [EXTRACTED]
-- [[.verify_pqc_package()]] - `method` [EXTRACTED]
-- [[dbus.rs_4]] - `contains` [EXTRACTED]
+- [[dot-install()]] - `method` [EXTRACTED]
+- [[dot-search()]] - `method` [EXTRACTED]
+- [[dot-verify_pqc_package()]] - `method` [EXTRACTED]
+- [[backenddbus.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_92
+#graphify/code #graphify/EXTRACTED #community/Community_98

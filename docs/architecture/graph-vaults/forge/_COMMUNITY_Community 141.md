@@ -1,17 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 2
+members: 3
 ---
 
 # Community 141
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 2 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[test-nvidia-modules.sh]] - code - specs/ermete-qa/SOURCES/test-nvidia-modules.sh
-- [[test-nvidia-modules.sh script]] - code - specs/ermete-qa/SOURCES/test-nvidia-modules.sh
+- [[Box_9]] - code
+- [[build_page()_8]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/general.rs
+- [[general.rs]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/general.rs
 
 ## Live Query (requires Dataview plugin)
 

@@ -1,26 +1,25 @@
 ---
 type: community
-cohesion: 0.29
-members: 11
+members: 12
 ---
 
 # Community 73
 
-**Cohesion:** 0.29 - loosely connected
-**Members:** 11 nodes
+**Members:** 12 nodes
 
 ## Members
-- [[Box_4]] - code
-- [[Error_7]] - code
-- [[HealthReport]] - code - specs/ermete-doctor/ermete-doctor-1.0.0/src/main.rs
-- [[Option_16]] - code
-- [[Result_31]] - code
-- [[String_34]] - code
-- [[SystemHealth]] - code - specs/ermete-doctor/ermete-doctor-1.0.0/src/main.rs
-- [[get_bcachefs_health()]] - code - specs/ermete-doctor/ermete-doctor-1.0.0/src/main.rs
-- [[get_nvme_health()]] - code - specs/ermete-doctor/ermete-doctor-1.0.0/src/main.rs
-- [[main()_7]] - code - specs/ermete-doctor/ermete-doctor-1.0.0/src/main.rs
-- [[main.rs_5]] - code - specs/ermete-doctor/ermete-doctor-1.0.0/src/main.rs
+- [[dot-new()_54]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/prompts/biometrics.rs
+- [[Application_29]] - code
+- [[BiometricPrompt]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/prompts/biometrics.rs
+- [[BiometricState]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/prompts/biometrics.rs
+- [[Rc_6]] - code
+- [[RefCell_6]] - code
+- [[Result_57]] - code
+- [[Self_53]] - code
+- [[String_70]] - code
+- [[biometrics.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/prompts/biometrics.rs
+- [[build_ui()_6]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/prompts/biometrics.rs
+- [[run_biometric_scan()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/prompts/biometrics.rs
 
 ## Live Query (requires Dataview plugin)
 

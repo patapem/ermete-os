@@ -1,19 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 8"
+community: "Community 47"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_8
+  - community/Community_47
 ---
 
 # ComponentSender
 
 ## Connections
-- [[.init()_4]] - `references` [EXTRACTED]
-- [[.update()_9]] - `references` [EXTRACTED]
-- [[LiveActivityZbusServer]] - `references` [EXTRACTED]
-- [[spawn_zbus_listener()]] - `references` [EXTRACTED]
+- [[dot-init()_4]] - `references` [EXTRACTED]
+- [[dot-update()_9]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_8
+#graphify/code #graphify/EXTRACTED #community/Community_47

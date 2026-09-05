@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/mpris.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/mpris.rs"
 type: "code"
-community: "Community 21"
+community: "Community 30"
 location: "L13"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_21
+  - community/Community_30
 ---
 
 # MprisPlayer
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[mpris.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_21
+#graphify/code #graphify/EXTRACTED #community/Community_30

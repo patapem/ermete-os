@@ -1,17 +1,15 @@
 ---
 type: community
-cohesion: 1.00
 members: 2
 ---
 
 # Community 173
 
-**Cohesion:** 1.00 - tightly connected
 **Members:** 2 nodes
 
 ## Members
-- [[ermete-theme-generator.sh]] - code - scripts/ermete-theme-generator.sh
-- [[ermete-theme-generator.sh script]] - code - scripts/ermete-theme-generator.sh
+- [[10-greetd-running.sh]] - code - specs/athanor-system-config/SOURCES/etc/greenboot/check/required.d/10-greetd-running.sh
+- [[10-greetd-running.sh script]] - code - specs/athanor-system-config/SOURCES/etc/greenboot/check/required.d/10-greetd-running.sh
 
 ## Live Query (requires Dataview plugin)
 

@@ -1,17 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 12"
+community: "Community 77"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_12
+  - community/Community_77
 ---
 
 # Option
 
 ## Connections
-- [[NiriState]] - `references` [EXTRACTED]
-- [[NiriWorkspace]] - `references` [EXTRACTED]
+- [[HealthReport]] - `references` [EXTRACTED]
+- [[get_bcachefs_health()]] - `references` [EXTRACTED]
+- [[get_nvme_health()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_12
+#graphify/code #graphify/EXTRACTED #community/Community_77

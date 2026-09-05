@@ -1,21 +1,20 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 10"
+community: "Community 22"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_10
+  - community/Community_22
 ---
 
 # Result
 
 ## Connections
-- [[.apply_nice_fallback()]] - `references` [EXTRACTED]
-- [[.freeze_app()]] - `references` [EXTRACTED]
-- [[.freeze_pid()]] - `references` [EXTRACTED]
-- [[.is_frozen()]] - `references` [EXTRACTED]
-- [[.thaw_app()]] - `references` [EXTRACTED]
-- [[.thaw_pid()]] - `references` [EXTRACTED]
+- [[dot-compile_and_validate()]] - `references` [EXTRACTED]
+- [[dot-extract_ebpf_instructions()]] - `references` [EXTRACTED]
+- [[dot-jit_compile_patch()]] - `references` [EXTRACTED]
+- [[dot-load_patch_so()]] - `references` [EXTRACTED]
+- [[dot-validate_buffer_overflow()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_10
+#graphify/code #graphify/EXTRACTED #community/Community_22

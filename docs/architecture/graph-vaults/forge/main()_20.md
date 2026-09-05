@@ -1,21 +1,20 @@
 ---
-source_file: "ermete-updater-rs/src/main.rs"
+source_file: "specs/athanor-backup/athanor-backup-1.0.0/src/main.rs"
 type: "code"
-community: "Community 86"
-location: "L139"
+community: "Community 62"
+location: "L76"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_86
+  - community/Community_62
 ---
 
 # main()
 
 ## Connections
-- [[.check_for_updates()]] - `calls` [EXTRACTED]
-- [[.get_state()_2]] - `calls` [EXTRACTED]
-- [[.new()_119]] - `calls` [EXTRACTED]
-- [[Result_97]] - `references` [EXTRACTED]
-- [[main.rs_20]] - `contains` [EXTRACTED]
+- [[Box_22]] - `references` [EXTRACTED]
+- [[Error_11]] - `references` [EXTRACTED]
+- [[Result_48]] - `references` [EXTRACTED]
+- [[athanor-backup-1.0.0srcmain.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_86
+#graphify/code #graphify/EXTRACTED #community/Community_62

@@ -1,19 +1,19 @@
 ---
 type: community
-cohesion: 0.67
-members: 4
+members: 6
 ---
 
 # Community 110
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 4 nodes
+**Members:** 6 nodes
 
 ## Members
-- [[GtkBox_7]] - code
-- [[build_page()_6]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/continuity.rs
-- [[continuity.rs]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/continuity.rs
-- [[test_continuity_page_builds()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/continuity.rs
+- [[dot-get_attestation()]] - code - specs/athanor-secure-boot/athanor-secure-boot-1.0.0/src/main.rs
+- [[Result_8]] - code
+- [[SecureBootAttestation]] - code - specs/athanor-secure-boot/athanor-secure-boot-1.0.0/src/main.rs
+- [[String_9]] - code
+- [[athanor-secure-boot-1.0.0srcmain.rs]] - code - specs/athanor-secure-boot/athanor-secure-boot-1.0.0/src/main.rs
+- [[main()_10]] - code - specs/athanor-secure-boot/athanor-secure-boot-1.0.0/src/main.rs
 
 ## Live Query (requires Dataview plugin)
 

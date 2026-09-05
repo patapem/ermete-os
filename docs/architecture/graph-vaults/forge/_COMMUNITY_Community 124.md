@@ -1,18 +1,17 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 4
 ---
 
 # Community 124
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 4 nodes
 
 ## Members
-- [[Box_20]] - code
-- [[build_page()_18]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/updates.rs
-- [[updates.rs]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/updates.rs
+- [[athanor-dock]] - code - specs/athanor-dock/athanor-dock-1.0.0/Cargo.toml
+- [[athanor-niri-ipc]] - code - specs/athanor-niri-ipc/Cargo.toml
+- [[athanor-settings-rs]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/Cargo.toml
+- [[athanor-shell-rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/Cargo.toml
 
 ## Live Query (requires Dataview plugin)
 

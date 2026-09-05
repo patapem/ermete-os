@@ -1,21 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 9"
+community: "Community 14"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_9
+  - community/Community_14
 ---
 
 # Result
 
 ## Connections
-- [[.attach_uprobe()]] - `references` [EXTRACTED]
-- [[.compile_and_validate()]] - `references` [EXTRACTED]
-- [[.extract_ebpf_instructions()]] - `references` [EXTRACTED]
-- [[.jit_compile_patch()]] - `references` [EXTRACTED]
-- [[.load_patch_so()]] - `references` [EXTRACTED]
-- [[.validate_buffer_overflow()]] - `references` [EXTRACTED]
+- [[dot-write_to_file()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_9
+#graphify/code #graphify/EXTRACTED #community/Community_14

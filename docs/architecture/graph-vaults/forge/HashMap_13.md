@@ -1,17 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 17"
+community: "Community 8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_17
+  - community/Community_8
 ---
 
 # HashMap
 
 ## Connections
-- [[DmaBufPreviewManager]] - `references` [EXTRACTED]
-- [[preview_popup.rs]] - `imports_from` [EXTRACTED]
+- [[dot-new()_55]] - `references` [EXTRACTED]
+- [[GatekeeperManager]] - `references` [EXTRACTED]
+- [[athanor-gatekeeper-rs-1.0.0srcdbus.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_17
+#graphify/code #graphify/EXTRACTED #community/Community_8

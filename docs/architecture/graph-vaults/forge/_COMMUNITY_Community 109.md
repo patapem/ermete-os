@@ -1,19 +1,19 @@
 ---
 type: community
-cohesion: 0.50
-members: 4
+members: 6
 ---
 
 # Community 109
 
-**Cohesion:** 0.50 - moderately connected
-**Members:** 4 nodes
+**Members:** 6 nodes
 
 ## Members
-- [[Bedrock_2]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/audio.rs
-- [[Box_9]] - code
-- [[audio.rs]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/audio.rs
-- [[build_page()_3]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/audio.rs
+- [[PathBuf_1]] - code
+- [[Result_4]] - code
+- [[apply_dynamic_theme()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/theme.rs
+- [[config_dir()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/theme.rs
+- [[test_apply_dynamic_theme_pipeline()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/theme.rs
+- [[theme.rs]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/theme.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -21,3 +21,9 @@ members: 4
 TABLE source_file, type FROM #community/Community_109
 SORT file.name ASC
 ```
+
+## Connections to other communities
+- 1 edge to [[_COMMUNITY_Community 62]]
+
+## Top bridge nodes
+- [[theme.rs]] - degree 5, connects to 1 community

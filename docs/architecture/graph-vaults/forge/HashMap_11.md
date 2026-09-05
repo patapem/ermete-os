@@ -1,16 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 10"
+community: "Community 66"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_10
+  - community/Community_66
 ---
 
 # HashMap
 
 ## Connections
-- [[EnergyAwareSchedulerState]] - `references` [EXTRACTED]
+- [[dot-read_all()]] - `references` [EXTRACTED]
+- [[athanor-daemon-rs-0.2.1srcportal.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_10
+#graphify/code #graphify/EXTRACTED #community/Community_66

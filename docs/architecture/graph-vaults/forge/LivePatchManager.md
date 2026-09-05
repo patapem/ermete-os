@@ -1,28 +1,23 @@
 ---
-source_file: "specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/live_patch.rs"
+source_file: "specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/live_patch.rs"
 type: "code"
-community: "Community 9"
-location: "L247"
+community: "Community 22"
+location: "L212"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_9
+  - community/Community_22
 ---
 
 # LivePatchManager
 
 ## Connections
-- [[.attach_uprobe()]] - `method` [EXTRACTED]
-- [[.dispatch()]] - `method` [EXTRACTED]
-- [[.get_status()_1]] - `method` [EXTRACTED]
-- [[.global()]] - `references` [EXTRACTED]
-- [[.jit_compile_patch()]] - `method` [EXTRACTED]
-- [[.load_patch_so()]] - `method` [EXTRACTED]
-- [[Arc_8]] - `references` [EXTRACTED]
-- [[Library]] - `references` [EXTRACTED]
+- [[dot-dispatch()_1]] - `method` [EXTRACTED]
+- [[dot-get_status()_1]] - `method` [EXTRACTED]
+- [[dot-global()_1]] - `method` [EXTRACTED]
+- [[dot-jit_compile_patch()]] - `method` [EXTRACTED]
+- [[dot-load_patch_so()]] - `method` [EXTRACTED]
 - [[RwLock_1]] - `references` [EXTRACTED]
-- [[String_21]] - `references` [EXTRACTED]
-- [[Vec_9]] - `references` [EXTRACTED]
 - [[live_patch.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_9
+#graphify/code #graphify/EXTRACTED #community/Community_22

@@ -1,20 +1,20 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/mission_control.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/mission_control.rs"
 type: "code"
-community: "Community 37"
+community: "Community 41"
 location: "L95"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_37
+  - community/Community_41
 ---
 
 # fetch_window_thumbnail()
 
 ## Connections
-- [[Option_36]] - `references` [EXTRACTED]
+- [[Option_26]] - `references` [EXTRACTED]
 - [[Texture_1]] - `references` [EXTRACTED]
-- [[build_ui()_2]] - `calls` [EXTRACTED]
+- [[build_ui()_5]] - `calls` [EXTRACTED]
 - [[mission_control.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_37
+#graphify/code #graphify/EXTRACTED #community/Community_41

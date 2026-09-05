@@ -1,18 +1,20 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 19"
+community: "Community 16"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_19
+  - community/Community_16
 ---
 
 # Option
 
 ## Connections
-- [[.update_cursor()]] - `references` [EXTRACTED]
-- [[DockEngine]] - `references` [EXTRACTED]
-- [[compute_fisheye_scales()]] - `references` [EXTRACTED]
+- [[fetch_niri_data()]] - `references` [EXTRACTED]
+- [[get_niri_socket_path()]] - `references` [EXTRACTED]
+- [[niri_action()]] - `references` [EXTRACTED]
+- [[niri_request()]] - `references` [EXTRACTED]
+- [[send_socket_request()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_19
+#graphify/code #graphify/EXTRACTED #community/Community_16

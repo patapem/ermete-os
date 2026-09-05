@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/bluetooth_vm.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/bluetooth_vm.rs"
 type: "code"
 community: "Community 6"
 location: "L2"
@@ -12,7 +12,7 @@ tags:
 # BluetoothDeviceInfo
 
 ## Connections
-- [[String_81]] - `references` [EXTRACTED]
+- [[String_56]] - `references` [EXTRACTED]
 - [[bluetooth_vm.rs]] - `contains` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_6

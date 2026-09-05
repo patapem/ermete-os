@@ -1,19 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 1"
+community: "Community 148"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_1
+  - community/Community_148
 ---
 
 # Application
 
 ## Connections
-- [[populate_wifi_list()]] - `references` [EXTRACTED]
-- [[show_wifi_details_modal()]] - `references` [EXTRACTED]
-- [[show_wifi_password_modal()]] - `references` [EXTRACTED]
-- [[show_wifi_popover()]] - `references` [EXTRACTED]
+- [[show_powermenu_modal()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_1
+#graphify/code #graphify/EXTRACTED #community/Community_148

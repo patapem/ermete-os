@@ -1,20 +1,20 @@
 ---
 type: community
-cohesion: 0.50
-members: 5
+members: 7
 ---
 
 # Community 105
 
-**Cohesion:** 0.50 - moderately connected
-**Members:** 5 nodes
+**Members:** 7 nodes
 
 ## Members
-- [[Application_19]] - code
-- [[init_osd_css()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/osd.rs
-- [[osd.rs]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/osd.rs
-- [[spawn_osd()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/osd.rs
-- [[test_bezier_curve_definition()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/osd.rs
+- [[Application_9]] - code
+- [[Option_5]] - code
+- [[T]] - code
+- [[build_desktop_canvas()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/desktop_canvas/mod.rs
+- [[desktop_canvasmod.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/desktop_canvas/mod.rs
+- [[show_snap_overlay()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/snap_overlay.rs
+- [[snap_overlay.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/snap_overlay.rs
 
 ## Live Query (requires Dataview plugin)
 

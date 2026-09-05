@@ -1,18 +1,18 @@
 ---
-source_file: "specs/ermete-store-rs/ermete-store-rs-1.0.0/src/backend/dbus.rs"
+source_file: "specs/athanor-store-rs/athanor-store-rs-1.0.0/src/backend/dbus.rs"
 type: "code"
-community: "Community 92"
+community: "Community 98"
 location: "L104"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_92
+  - community/Community_98
 ---
 
 # start_dbus_server()
 
 ## Connections
-- [[Result_63]] - `references` [EXTRACTED]
-- [[dbus.rs_4]] - `contains` [EXTRACTED]
+- [[Result_68]] - `references` [EXTRACTED]
+- [[backenddbus.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_92
+#graphify/code #graphify/EXTRACTED #community/Community_98

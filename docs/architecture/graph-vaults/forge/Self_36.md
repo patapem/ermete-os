@@ -1,17 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 45"
+community: "Community 46"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_45
+  - community/Community_46
 ---
 
 # Self
 
 ## Connections
-- [[.init()_1]] - `references` [EXTRACTED]
-- [[.update()_3]] - `references` [EXTRACTED]
+- [[dot-default()_16]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_45
+#graphify/code #graphify/EXTRACTED #community/Community_46

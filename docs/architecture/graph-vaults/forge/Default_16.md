@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 8"
+community: "Community 84"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_8
+  - community/Community_84
 ---
 
 # Default
 
 ## Connections
-- [[LiveActivityPayload]] - `implements` [EXTRACTED]
+- [[DisplayModuleData]] - `implements` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_8
+#graphify/code #graphify/EXTRACTED #community/Community_84

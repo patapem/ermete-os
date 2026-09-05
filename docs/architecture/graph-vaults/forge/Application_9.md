@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 1"
+community: "Community 105"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_1
+  - community/Community_105
 ---
 
 # Application
 
 ## Connections
-- [[show_bluetooth_popover()]] - `references` [EXTRACTED]
+- [[build_desktop_canvas()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_1
+#graphify/code #graphify/EXTRACTED #community/Community_105

@@ -1,18 +1,19 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 6
 ---
 
 # Community 111
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 6 nodes
 
 ## Members
-- [[SOURCE_DATE_EPOCH]] - code - scripts/check_idempotency.sh
-- [[check_idempotency.sh]] - code - scripts/check_idempotency.sh
-- [[check_idempotency.sh script]] - code - scripts/check_idempotency.sh
+- [[Bluetooth]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/bluetooth.rs
+- [[Box_2]] - code
+- [[Device1]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/bluetooth.rs
+- [[build_page()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/bluetooth.rs
+- [[pagesbluetooth.rs]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/bluetooth.rs
+- [[test_bluetooth_proxies_exist()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/bluetooth.rs
 
 ## Live Query (requires Dataview plugin)
 

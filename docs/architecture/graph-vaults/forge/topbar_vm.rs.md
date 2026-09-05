@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs"
 type: "code"
-community: "Community 81"
+community: "Community 85"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_81
+  - community/Community_85
 ---
 
 # topbar_vm.rs
@@ -15,4 +15,4 @@ tags:
 - [[TopbarState]] - `contains` [EXTRACTED]
 - [[TopbarViewModel]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_81
+#graphify/code #graphify/EXTRACTED #community/Community_85

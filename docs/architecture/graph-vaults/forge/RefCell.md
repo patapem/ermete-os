@@ -1,18 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 17"
+community: "Community 15"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_17
+  - community/Community_15
 ---
 
 # RefCell
 
 ## Connections
-- [[LivePreviewPopover]] - `references` [EXTRACTED]
-- [[attach_hover_preview()]] - `references` [EXTRACTED]
-- [[preview_popup.rs]] - `imports_from` [EXTRACTED]
+- [[DockItemWidget]] - `references` [EXTRACTED]
+- [[DockMonitorInstance]] - `references` [EXTRACTED]
+- [[ui.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_17
+#graphify/code #graphify/EXTRACTED #community/Community_15

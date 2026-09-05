@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 14"
+community: "Community 72"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_14
+  - community/Community_72
 ---
 
 # String
 
 ## Connections
-- [[.to_gtk4_css()]] - `references` [EXTRACTED]
-- [[.to_hex()]] - `references` [EXTRACTED]
+- [[dot-detect_target_device()]] - `references` [EXTRACTED]
+- [[dot-poll_server()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_14
+#graphify/code #graphify/EXTRACTED #community/Community_72

@@ -1,22 +1,22 @@
 ---
-source_file: "specs/ermete-mesh-sync/ermete-mesh-sync-1.0.0/src/main.rs"
+source_file: "specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/main.rs"
 type: "code"
-community: "Community 43"
-location: "L10"
+community: "Community 11"
+location: "L11"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_43
+  - community/Community_11
 ---
 
 # MeshSyncBus
 
 ## Connections
-- [[.get_pqc_status()]] - `method` [EXTRACTED]
-- [[.get_public_key()]] - `method` [EXTRACTED]
-- [[.status()]] - `method` [EXTRACTED]
-- [[Arc_15]] - `references` [EXTRACTED]
+- [[dot-get_pqc_status()]] - `method` [EXTRACTED]
+- [[dot-get_public_key()]] - `method` [EXTRACTED]
+- [[dot-status()]] - `method` [EXTRACTED]
+- [[Arc_2]] - `references` [EXTRACTED]
 - [[WgMeshManager]] - `references` [EXTRACTED]
-- [[main.rs_10]] - `contains` [EXTRACTED]
+- [[athanor-mesh-sync-1.0.0srcmain.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_43
+#graphify/code #graphify/EXTRACTED #community/Community_11

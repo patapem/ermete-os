@@ -1,18 +1,14 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/appearance_engine.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/appearance_engine.rs"
 type: "code"
-community: "Community 39"
+community: "Community 202"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_39
+  - community/Community_202
 ---
 
 # appearance_engine.rs
 
-## Connections
-- [[accent_engine.rs_1]] - `imports_from` [EXTRACTED]
-- [[appearance_engine.rs]] - `imports_from` [EXTRACTED]
-
-#graphify/code #graphify/EXTRACTED #community/Community_39
+#graphify/code #graphify/EXTRACTED #community/Community_202

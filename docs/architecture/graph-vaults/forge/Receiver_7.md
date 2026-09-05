@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 4"
+community: "Community 50"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_4
+  - community/Community_50
 ---
 
 # Receiver
 
 ## Connections
-- [[NetworkActor]] - `references` [EXTRACTED]
+- [[DisplayActor]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_4
+#graphify/code #graphify/EXTRACTED #community/Community_50

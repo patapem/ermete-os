@@ -1,18 +1,18 @@
 ---
-source_file: "specs/ermete-secure-boot/ermete-secure-boot-1.0.0/src/main.rs"
+source_file: "specs/athanor-secure-boot/athanor-secure-boot-1.0.0/src/main.rs"
 type: "code"
-community: "Community 99"
+community: "Community 110"
 location: "L6"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_99
+  - community/Community_110
 ---
 
 # SecureBootAttestation
 
 ## Connections
-- [[.get_attestation()]] - `method` [EXTRACTED]
-- [[main.rs_12]] - `contains` [EXTRACTED]
+- [[dot-get_attestation()]] - `method` [EXTRACTED]
+- [[athanor-secure-boot-1.0.0srcmain.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_99
+#graphify/code #graphify/EXTRACTED #community/Community_110

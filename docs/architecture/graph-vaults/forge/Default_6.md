@@ -1,16 +1,19 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 9"
+community: "Community 31"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_9
+  - community/Community_31
 ---
 
 # Default
 
 ## Connections
-- [[EbpfJitCompiler]] - `implements` [EXTRACTED]
+- [[AudioBus]] - `implements` [EXTRACTED]
+- [[HardwareBus]] - `implements` [EXTRACTED]
+- [[MprisBus]] - `implements` [EXTRACTED]
+- [[NetBus]] - `implements` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_9
+#graphify/code #graphify/EXTRACTED #community/Community_31

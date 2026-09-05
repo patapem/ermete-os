@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 17"
+community: "Community 5"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_17
+  - community/Community_5
 ---
 
 # Arc
 
 ## Connections
-- [[DmaBufPreviewManager]] - `references` [EXTRACTED]
+- [[NetworkController]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_17
+#graphify/code #graphify/EXTRACTED #community/Community_5

@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 66"
+community: "Community 71"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_66
+  - community/Community_71
 ---
 
 # SignalEmitter
 
 ## Connections
-- [[.apply_policy()]] - `references` [EXTRACTED]
+- [[dot-apply_policy()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_66
+#graphify/code #graphify/EXTRACTED #community/Community_71

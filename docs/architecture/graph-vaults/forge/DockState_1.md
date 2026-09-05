@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-dock/ermete-dock-1.0.0/src/ui.rs"
+source_file: "specs/athanor-dock/athanor-dock-1.0.0/src/ui.rs"
 type: "code"
-community: "Community 56"
+community: "Community 58"
 location: "L16"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_56
+  - community/Community_58
 ---
 
 # DockState
@@ -16,9 +16,9 @@ tags:
 - [[DockMonitorInstance]] - `references` [EXTRACTED]
 - [[NiriWindowInfo]] - `references` [EXTRACTED]
 - [[NiriWorkspaceInfo]] - `references` [EXTRACTED]
-- [[String_33]] - `references` [EXTRACTED]
-- [[Vec_18]] - `references` [EXTRACTED]
+- [[String_20]] - `references` [EXTRACTED]
+- [[Vec_29]] - `references` [EXTRACTED]
 - [[should_autohide_for_monitor()]] - `references` [EXTRACTED]
 - [[ui.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_56
+#graphify/code #graphify/EXTRACTED #community/Community_58

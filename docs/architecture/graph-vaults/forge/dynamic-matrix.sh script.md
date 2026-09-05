@@ -1,12 +1,12 @@
 ---
 source_file: "scripts/dynamic-matrix.sh"
 type: "code"
-community: "Community 136"
+community: "Community 160"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_136
+  - community/Community_160
 ---
 
 # dynamic-matrix.sh script
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[dynamic-matrix.sh]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_136
+#graphify/code #graphify/EXTRACTED #community/Community_160

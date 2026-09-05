@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 14"
+community: "Community 56"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_14
+  - community/Community_56
 ---
 
 # Option
 
 ## Connections
-- [[.extract_from_wallpaper()]] - `references` [EXTRACTED]
+- [[dot-new()_44]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_14
+#graphify/code #graphify/EXTRACTED #community/Community_56

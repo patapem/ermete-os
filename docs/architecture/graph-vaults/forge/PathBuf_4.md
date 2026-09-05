@@ -1,19 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 27"
+community: "Community 19"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_27
+  - community/Community_19
 ---
 
 # PathBuf
 
 ## Connections
-- [[.ensure_config_file()]] - `references` [EXTRACTED]
-- [[.ensure_config_file()_1]] - `references` [EXTRACTED]
-- [[config_dir()]] - `references` [EXTRACTED]
-- [[settings.rs]] - `imports_from` [EXTRACTED]
+- [[dot-get_manifest_path()]] - `references` [EXTRACTED]
+- [[BackupServer]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_27
+#graphify/code #graphify/EXTRACTED #community/Community_19

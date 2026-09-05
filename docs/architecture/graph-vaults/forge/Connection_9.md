@@ -1,17 +1,19 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 50"
+community: "Community 8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_50
+  - community/Community_8
 ---
 
 # Connection
 
 ## Connections
-- [[.trigger_local_wipe()]] - `references` [EXTRACTED]
-- [[check_polkit_auth_zbus()_5]] - `references` [EXTRACTED]
+- [[dot-approve_execution()]] - `references` [EXTRACTED]
+- [[dot-deny_execution()]] - `references` [EXTRACTED]
+- [[dot-request_root_privilege()]] - `references` [EXTRACTED]
+- [[dot-rollback_snapshot()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_50
+#graphify/code #graphify/EXTRACTED #community/Community_8

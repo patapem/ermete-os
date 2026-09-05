@@ -1,17 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 63"
+community: "Community 29"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_63
+  - community/Community_29
 ---
 
 # Receiver
 
 ## Connections
-- [[.new()_21]] - `references` [EXTRACTED]
-- [[VoiceOverService]] - `references` [EXTRACTED]
+- [[AudioActor]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_63
+#graphify/code #graphify/EXTRACTED #community/Community_29

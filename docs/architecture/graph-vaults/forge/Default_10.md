@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 79"
+community: "Community 55"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_79
+  - community/Community_55
 ---
 
 # Default
 
 ## Connections
-- [[AudioModuleData]] - `implements` [EXTRACTED]
+- [[HardwareOffloader]] - `implements` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_79
+#graphify/code #graphify/EXTRACTED #community/Community_55

@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/desktop_canvas/physics.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/desktop_canvas/physics.rs"
 type: "code"
 community: "Community 18"
 location: "L1"

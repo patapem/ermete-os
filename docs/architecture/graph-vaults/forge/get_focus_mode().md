@@ -1,19 +1,19 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs"
 type: "code"
-community: "Community 0"
+community: "Community 2"
 location: "L152"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_0
+  - community/Community_2
 ---
 
 # get_focus_mode()
 
 ## Connections
-- [[.from_u8()]] - `calls` [EXTRACTED]
+- [[dot-from_u8()]] - `calls` [EXTRACTED]
 - [[FocusMode]] - `references` [EXTRACTED]
-- [[notifications.rs_1]] - `contains` [EXTRACTED]
+- [[ipcnotifications.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_0
+#graphify/code #graphify/EXTRACTED #community/Community_2

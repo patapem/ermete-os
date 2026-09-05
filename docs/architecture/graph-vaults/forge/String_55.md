@@ -1,16 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 84"
+community: "Community 6"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_84
+  - community/Community_6
 ---
 
 # String
 
 ## Connections
-- [[DisplayModuleData]] - `references` [EXTRACTED]
+- [[AppAudioStream]] - `references` [EXTRACTED]
+- [[AudioIntent]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_84
+#graphify/code #graphify/EXTRACTED #community/Community_6

@@ -1,16 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 90"
+community: "Community 6"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_90
+  - community/Community_6
 ---
 
 # String
 
 ## Connections
-- [[NetworkModuleData]] - `references` [EXTRACTED]
+- [[WifiIntent]] - `references` [EXTRACTED]
+- [[WifiNetworkItem]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_90
+#graphify/code #graphify/EXTRACTED #community/Community_6

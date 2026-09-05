@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 68"
+community: "Community 73"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_68
+  - community/Community_73
 ---
 
 # RefCell
@@ -14,4 +14,4 @@ tags:
 - [[BiometricPrompt]] - `references` [EXTRACTED]
 - [[biometrics.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_68
+#graphify/code #graphify/EXTRACTED #community/Community_73

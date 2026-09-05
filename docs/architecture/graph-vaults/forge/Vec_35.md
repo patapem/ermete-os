@@ -1,22 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 7"
+community: "Community 79"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_7
+  - community/Community_79
 ---
 
 # Vec
 
 ## Connections
-- [[ActiveSnapGroup]] - `references` [EXTRACTED]
-- [[LayoutTemplate]] - `references` [EXTRACTED]
-- [[PendingAssistSession]] - `references` [EXTRACTED]
-- [[fetch_running_apps()]] - `references` [EXTRACTED]
-- [[get_active_snap_groups()]] - `references` [EXTRACTED]
-- [[get_layout_templates()]] - `references` [EXTRACTED]
-- [[start_snap_assist_session()]] - `references` [EXTRACTED]
+- [[get_featured_catalog()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_7
+#graphify/code #graphify/EXTRACTED #community/Community_79

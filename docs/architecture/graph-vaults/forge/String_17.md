@@ -1,20 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 54"
+community: "Community 125"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_54
+  - community/Community_125
 ---
 
 # String
 
 ## Connections
-- [[.compute_commitment()]] - `references` [EXTRACTED]
-- [[.new()_7]] - `references` [EXTRACTED]
-- [[.to_b64()]] - `references` [EXTRACTED]
-- [[ZkProof]] - `references` [EXTRACTED]
-- [[ZkProofEngine]] - `references` [EXTRACTED]
+- [[acquire_drm_lease()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_54
+#graphify/code #graphify/EXTRACTED #community/Community_125

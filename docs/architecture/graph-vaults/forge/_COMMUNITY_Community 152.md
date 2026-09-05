@@ -1,16 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 1
+members: 3
 ---
 
 # Community 152
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 1 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[mod.rs_2]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/mod.rs
+- [[athanor-snapshot-trigger.sh]] - code - specs/athanor-system-config/SOURCES/usr/libexec/athanor-snapshot-trigger.sh
+- [[athanor-snapshot-trigger.sh script]] - code - specs/athanor-system-config/SOURCES/usr/libexec/athanor-snapshot-trigger.sh
+- [[create_snapshot()]] - code - specs/athanor-system-config/SOURCES/usr/libexec/athanor-snapshot-trigger.sh
 
 ## Live Query (requires Dataview plugin)
 

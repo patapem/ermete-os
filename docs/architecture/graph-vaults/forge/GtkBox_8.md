@@ -1,16 +1,20 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 120"
+community: "Community 15"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_120
+  - community/Community_15
 ---
 
 # GtkBox
 
 ## Connections
-- [[build_page()_10]] - `references` [EXTRACTED]
+- [[DockItemWidget]] - `references` [EXTRACTED]
+- [[DockMonitorInstance]] - `references` [EXTRACTED]
+- [[animate_dock_visibility()]] - `references` [EXTRACTED]
+- [[apply_dock_mode_layout()]] - `references` [EXTRACTED]
+- [[update_indicator_style()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_120
+#graphify/code #graphify/EXTRACTED #community/Community_15

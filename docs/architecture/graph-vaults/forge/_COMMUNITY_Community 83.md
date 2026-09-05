@@ -1,24 +1,23 @@
 ---
 type: community
-cohesion: 0.28
-members: 9
+members: 10
 ---
 
 # Community 83
 
-**Cohesion:** 0.28 - loosely connected
-**Members:** 9 nodes
+**Members:** 10 nodes
 
 ## Members
-- [[GtkBox_9]] - code
-- [[HashMap_19]] - code
-- [[PermissionStore]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/privacy.rs
-- [[String_52]] - code
-- [[Vec_26]] - code
-- [[build_page()_17]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/privacy.rs
-- [[generate_permission_store_payload()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/privacy.rs
-- [[privacy.rs]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/privacy.rs
-- [[test_permission_store_key_generation()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/privacy.rs
+- [[dot-default_config()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/a11y.rs
+- [[dot-to_crdt_entries()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/a11y.rs
+- [[A11yConfigPayload]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/a11y.rs
+- [[GtkBox_16]] - code
+- [[Self_57]] - code
+- [[String_79]] - code
+- [[Vec_36]] - code
+- [[a11y.rs]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/a11y.rs
+- [[build_page()_17]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/a11y.rs
+- [[test_a11y_config_payload_crdt_conversion()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/a11y.rs
 
 ## Live Query (requires Dataview plugin)
 

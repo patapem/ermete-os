@@ -1,25 +1,25 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/display.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/display.rs"
 type: "code"
-community: "Community 48"
+community: "Community 50"
 location: "L65"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_48
+  - community/Community_50
 ---
 
 # DisplayController
 
 ## Connections
-- [[.as_any()_2]] - `method` [EXTRACTED]
-- [[.name()_2]] - `method` [EXTRACTED]
-- [[.new()_43]] - `method` [EXTRACTED]
-- [[.set_brightness()]] - `method` [EXTRACTED]
+- [[dot-as_any()_5]] - `method` [EXTRACTED]
+- [[dot-name()_6]] - `method` [EXTRACTED]
+- [[dot-new()_39]] - `method` [EXTRACTED]
+- [[dot-set_brightness()]] - `method` [EXTRACTED]
 - [[ControllerBackend]] - `implements` [EXTRACTED]
 - [[DisplayCommand]] - `references` [EXTRACTED]
-- [[Sender_4]] - `references` [EXTRACTED]
-- [[display.rs_1]] - `contains` [EXTRACTED]
+- [[Sender_11]] - `references` [EXTRACTED]
 - [[get_display_controller()]] - `references` [EXTRACTED]
+- [[ipcdisplay.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_48
+#graphify/code #graphify/EXTRACTED #community/Community_50

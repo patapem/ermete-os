@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/panel.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/panel.rs"
 type: "code"
-community: "Community 84"
+community: "Community 88"
 location: "L58"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_84
+  - community/Community_88
 ---
 
 # CcPanelInput
@@ -18,4 +18,4 @@ tags:
 - [[NetworkModuleData]] - `references` [EXTRACTED]
 - [[panel.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_84
+#graphify/code #graphify/EXTRACTED #community/Community_88

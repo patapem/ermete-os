@@ -11,7 +11,7 @@ tags:
 # FactorySender
 
 ## Connections
-- [[.init_model()_1]] - `references` [EXTRACTED]
-- [[.update()_11]] - `references` [EXTRACTED]
+- [[dot-init_model()_1]] - `references` [EXTRACTED]
+- [[dot-update()_2]] - `references` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_12

@@ -1,18 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 25"
+community: "Community 58"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_25
+  - community/Community_58
 ---
 
 # Vec
 
 ## Connections
-- [[.handle_list_bluetooth_devices()]] - `references` [EXTRACTED]
-- [[.list_bluetooth_devices()]] - `references` [EXTRACTED]
-- [[BluetoothCommand]] - `references` [EXTRACTED]
+- [[DockMonitorInstance]] - `references` [EXTRACTED]
+- [[DockState_1]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_25
+#graphify/code #graphify/EXTRACTED #community/Community_58

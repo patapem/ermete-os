@@ -1,21 +1,21 @@
 ---
 type: community
-cohesion: 0.60
-members: 6
+members: 8
 ---
 
 # Community 98
 
-**Cohesion:** 0.60 - moderately connected
-**Members:** 6 nodes
+**Members:** 8 nodes
 
 ## Members
-- [[PathBuf_5]] - code
-- [[Result_25]] - code
-- [[apply_dynamic_theme()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/theme.rs
-- [[config_dir()_1]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/theme.rs
-- [[test_apply_dynamic_theme_pipeline()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/theme.rs
-- [[theme.rs]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/theme.rs
+- [[dot-install()]] - code - specs/athanor-store-rs/athanor-store-rs-1.0.0/src/backend/dbus.rs
+- [[dot-search()]] - code - specs/athanor-store-rs/athanor-store-rs-1.0.0/src/backend/dbus.rs
+- [[dot-verify_pqc_package()]] - code - specs/athanor-store-rs/athanor-store-rs-1.0.0/src/backend/dbus.rs
+- [[Result_68]] - code
+- [[StoreService]] - code - specs/athanor-store-rs/athanor-store-rs-1.0.0/src/backend/dbus.rs
+- [[String_91]] - code
+- [[backenddbus.rs]] - code - specs/athanor-store-rs/athanor-store-rs-1.0.0/src/backend/dbus.rs
+- [[start_dbus_server()]] - code - specs/athanor-store-rs/athanor-store-rs-1.0.0/src/backend/dbus.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -25,7 +25,8 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 1 edge to [[_COMMUNITY_Community 76]]
+- 1 edge to [[_COMMUNITY_Community 101]]
+- 1 edge to [[_COMMUNITY_Community 62]]
 
 ## Top bridge nodes
-- [[theme.rs]] - degree 5, connects to 1 community
+- [[backenddbus.rs]] - degree 4, connects to 2 communities

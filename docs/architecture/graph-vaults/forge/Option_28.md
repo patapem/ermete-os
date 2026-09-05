@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 21"
+community: "Community 47"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_21
+  - community/Community_47
 ---
 
 # Option
 
 ## Connections
-- [[MprisEvent]] - `references` [EXTRACTED]
+- [[AppModel]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_21
+#graphify/code #graphify/EXTRACTED #community/Community_47

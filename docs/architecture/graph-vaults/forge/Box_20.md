@@ -1,16 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 124"
+community: "Community 39"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_124
+  - community/Community_39
 ---
 
 # Box
 
 ## Connections
-- [[build_page()_18]] - `references` [EXTRACTED]
+- [[CardWidgetRef]] - `references` [EXTRACTED]
+- [[build_page()_14]] - `references` [EXTRACTED]
+- [[build_switcher_section()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_124
+#graphify/code #graphify/EXTRACTED #community/Community_39

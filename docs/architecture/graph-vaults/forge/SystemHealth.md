@@ -1,17 +1,17 @@
 ---
-source_file: "specs/ermete-doctor/ermete-doctor-1.0.0/src/main.rs"
+source_file: "specs/athanor-doctor/athanor-doctor-1.0.0/src/main.rs"
 type: "code"
-community: "Community 73"
+community: "Community 77"
 location: "L12"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_73
+  - community/Community_77
 ---
 
 # SystemHealth
 
 ## Connections
-- [[main.rs_5]] - `contains` [EXTRACTED]
+- [[athanor-doctor-1.0.0srcmain.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_73
+#graphify/code #graphify/EXTRACTED #community/Community_77

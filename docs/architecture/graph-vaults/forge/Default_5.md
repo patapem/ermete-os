@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 24"
+community: "Community 26"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_24
+  - community/Community_26
 ---
 
 # Default
 
 ## Connections
-- [[Bedrock]] - `implements` [EXTRACTED]
+- [[Bedrock_1]] - `implements` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_24
+#graphify/code #graphify/EXTRACTED #community/Community_26

@@ -1,18 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 47"
+community: "Community 43"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_47
+  - community/Community_43
 ---
 
 # Result
 
 ## Connections
-- [[.apply_kernel_patch()]] - `references` [EXTRACTED]
-- [[check_polkit_auth_zbus()_3]] - `references` [EXTRACTED]
-- [[main()_9]] - `references` [EXTRACTED]
+- [[update_setting_crdt()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_47
+#graphify/code #graphify/EXTRACTED #community/Community_43

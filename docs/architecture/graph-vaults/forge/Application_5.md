@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 7"
+community: "Community 0"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_7
+  - community/Community_0
 ---
 
 # Application
 
 ## Connections
-- [[build_desktop_canvas()]] - `references` [EXTRACTED]
+- [[show_system_monitor_modal()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_7
+#graphify/code #graphify/EXTRACTED #community/Community_0

@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/desktop_widgets.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/desktop_widgets.rs"
 type: "code"
-community: "Community 42"
+community: "Community 3"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_42
+  - community/Community_3
 ---
 
 # desktop_widgets.rs
@@ -14,7 +14,7 @@ tags:
 ## Connections
 - [[DesktopConfig]] - `contains` [EXTRACTED]
 - [[Local]] - `imports_from` [EXTRACTED]
-- [[PathBuf_13]] - `imports_from` [EXTRACTED]
+- [[PathBuf_8]] - `imports_from` [EXTRACTED]
 - [[WidgetConfig]] - `contains` [EXTRACTED]
 - [[build_clock_widget()]] - `contains` [EXTRACTED]
 - [[build_desktop_widgets()]] - `contains` [EXTRACTED]
@@ -28,4 +28,4 @@ tags:
 - [[reload_widgets()]] - `contains` [EXTRACTED]
 - [[update_widget_position()]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_42
+#graphify/code #graphify/EXTRACTED #community/Community_3

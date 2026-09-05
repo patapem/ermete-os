@@ -1,18 +1,18 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 5
 ---
 
 # Community 123
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 5 nodes
 
 ## Members
-- [[Box_17]] - code
-- [[build_page()_14]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/mouse.rs
-- [[mouse.rs]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/mouse.rs
+- [[azothboot.sh]] - code - specs/azoth/boot.sh
+- [[boot.sh script]] - code - specs/azoth/boot.sh
+- [[die()]] - code - specs/azoth/boot.sh
+- [[run_case()]] - code - specs/azoth/boot.sh
+- [[step()]] - code - specs/azoth/boot.sh
 
 ## Live Query (requires Dataview plugin)
 

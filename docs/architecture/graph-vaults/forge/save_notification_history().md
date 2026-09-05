@@ -1,20 +1,20 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs"
 type: "code"
-community: "Community 0"
+community: "Community 2"
 location: "L36"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_0
+  - community/Community_2
 ---
 
 # save_notification_history()
 
 ## Connections
 - [[get_notifications_file_path()]] - `calls` [EXTRACTED]
-- [[notifications.rs_1]] - `contains` [EXTRACTED]
+- [[ipcnotifications.rs]] - `contains` [EXTRACTED]
 - [[show_notification_center()]] - `calls` [INFERRED]
 - [[spawn_notification_daemon()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_0
+#graphify/code #graphify/EXTRACTED #community/Community_2

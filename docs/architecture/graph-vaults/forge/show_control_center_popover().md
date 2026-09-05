@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/control_center/main_cc.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/main_cc.rs"
 type: "code"
 community: "Community 0"
 location: "L66"
@@ -12,7 +12,7 @@ tags:
 # show_control_center_popover()
 
 ## Connections
-- [[Application_11]] - `references` [EXTRACTED]
+- [[Application_3]] - `references` [EXTRACTED]
 - [[build_focus_mode_widget()]] - `calls` [EXTRACTED]
 - [[build_quick_action_btn()]] - `calls` [EXTRACTED]
 - [[build_quick_toggle_pill()]] - `calls` [EXTRACTED]

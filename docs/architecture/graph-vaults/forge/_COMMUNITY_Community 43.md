@@ -1,36 +1,35 @@
 ---
 type: community
-cohesion: 0.12
-members: 21
+members: 22
 ---
 
 # Community 43
 
-**Cohesion:** 0.12 - loosely connected
-**Members:** 21 nodes
+**Members:** 22 nodes
 
 ## Members
-- [[.get_pqc_status()]] - code - specs/ermete-mesh-sync/ermete-mesh-sync-1.0.0/src/main.rs
-- [[.get_public_key()]] - code - specs/ermete-mesh-sync/ermete-mesh-sync-1.0.0/src/main.rs
-- [[.initialize_tunnel()]] - code - specs/ermete-mesh-sync/ermete-mesh-sync-1.0.0/src/wg_manager.rs
-- [[.kyber_public_key()]] - code - specs/ermete-mesh-sync/ermete-mesh-sync-1.0.0/src/wg_manager.rs
-- [[.new()_35]] - code - specs/ermete-mesh-sync/ermete-mesh-sync-1.0.0/src/wg_manager.rs
-- [[.status()]] - code - specs/ermete-mesh-sync/ermete-mesh-sync-1.0.0/src/main.rs
-- [[Arc_15]] - code
-- [[Box_6]] - code
-- [[Box_7]] - code
-- [[Error_15]] - code
-- [[Error_16]] - code
-- [[MeshSyncBus]] - code - specs/ermete-mesh-sync/ermete-mesh-sync-1.0.0/src/main.rs
-- [[PqcKeys]] - code
-- [[Result_45]] - code
-- [[Result_46]] - code
-- [[Self_32]] - code
+- [[dot-now()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs
+- [[dot-now()_1]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs
+- [[CrdtDeltaType]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs
+- [[CrdtNetworkPayload]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs
+- [[CrdtSettingPayload]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs
+- [[LwwRegister]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs
+- [[LwwRegisterT]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs
+- [[LwwTimestamp]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs
+- [[Result_38]] - code
+- [[Self_35]] - code
 - [[String_43]] - code
-- [[WgMeshManager]] - code - specs/ermete-mesh-sync/ermete-mesh-sync-1.0.0/src/wg_manager.rs
-- [[main()_12]] - code - specs/ermete-mesh-sync/ermete-mesh-sync-1.0.0/src/main.rs
-- [[main.rs_10]] - code - specs/ermete-mesh-sync/ermete-mesh-sync-1.0.0/src/main.rs
-- [[wg_manager.rs]] - code - specs/ermete-mesh-sync/ermete-mesh-sync-1.0.0/src/wg_manager.rs
+- [[T_4]] - code
+- [[Vec_22]] - code
+- [[crdt_store.rs]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs
+- [[update_accent_color_crdt()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs
+- [[update_audio_crdt()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs
+- [[update_dnd_crdt()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs
+- [[update_layout_crdt()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs
+- [[update_setting_crdt()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs
+- [[update_theme_crdt()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs
+- [[update_wallpaper_crdt()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs
+- [[update_wifi_crdt()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs
 
 ## Live Query (requires Dataview plugin)
 

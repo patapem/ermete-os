@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs"
+source_file: "specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs"
 type: "code"
 community: "Community 17"
 location: "L265"
@@ -12,12 +12,12 @@ tags:
 # LivePreviewPopover
 
 ## Connections
-- [[.new()_27]] - `method` [EXTRACTED]
-- [[.popdown()]] - `method` [EXTRACTED]
-- [[.popup()]] - `method` [EXTRACTED]
+- [[dot-new()_7]] - `method` [EXTRACTED]
+- [[dot-popdown()]] - `method` [EXTRACTED]
+- [[dot-popup()]] - `method` [EXTRACTED]
 - [[Popover]] - `references` [EXTRACTED]
-- [[Rc]] - `references` [EXTRACTED]
-- [[RefCell]] - `references` [EXTRACTED]
+- [[Rc_1]] - `references` [EXTRACTED]
+- [[RefCell_1]] - `references` [EXTRACTED]
 - [[preview_popup.rs]] - `contains` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_17

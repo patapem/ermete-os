@@ -1,39 +1,38 @@
 ---
 type: community
-cohesion: 0.14
-members: 24
+members: 25
 ---
 
 # Community 34
 
-**Cohesion:** 0.14 - loosely connected
-**Members:** 24 nodes
+**Members:** 25 nodes
 
 ## Members
-- [[.get()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/system_proxies.rs
-- [[.get_typed()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/system_proxies.rs
-- [[.new()_47]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/system_proxies.rs
-- [[.register()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/system_proxies.rs
-- [[.register_arc()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/system_proxies.rs
-- [[Any_6]] - code
-- [[Arc_20]] - code
-- [[Box_23]] - code
-- [[ControllerBackend]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/system_proxies.rs
-- [[HashMap_21]] - code
-- [[Mutex_13]] - code
-- [[Option_27]] - code
-- [[ProxyRegistry]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/system_proxies.rs
-- [[Self_55]] - code
-- [[Send]] - code
-- [[T_2]] - code
-- [[Vec_32]] - code
-- [[get_audio_bus()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/system_proxies.rs
-- [[get_hardware_bus()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/system_proxies.rs
-- [[get_mpris_bus()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/system_proxies.rs
-- [[get_net_bus()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/system_proxies.rs
-- [[get_registry()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/system_proxies.rs
-- [[init_system_controller()_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/system_proxies.rs
-- [[system_proxies.rs]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/system_proxies.rs
+- [[dot-apply_anchors()]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/dock.rs
+- [[dot-new()_32]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/dock.rs
+- [[dot-process_event()]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/dock.rs
+- [[dot-refresh_items()]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/dock.rs
+- [[dot-set_anchor_edge()]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/dock.rs
+- [[dot-start_zero_copy_ipc_listener()]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/dock.rs
+- [[AppEntityComponent]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/dock.rs
+- [[Application_22]] - code
+- [[ApplicationWindow_4]] - code
+- [[Arc_8]] - code
+- [[DockTaskbar]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/dock.rs
+- [[EcsWorldState]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/dock.rs
+- [[Edge]] - code
+- [[GtkBox_11]] - code
+- [[HashMap_7]] - code
+- [[Result_31]] - code
+- [[Result_32]] - code
+- [[RwLock_2]] - code
+- [[Self_27]] - code
+- [[String_37]] - code
+- [[ZeroCopyIpcEvent]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/dock.rs
+- [[athanor-dock-1.0.0srclib.rs]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/lib.rs
+- [[athanor-dock-1.0.0srcmain.rs]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/main.rs
+- [[dock.rs]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/dock.rs
+- [[main()_18]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/main.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -43,18 +42,14 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 3 edges to [[_COMMUNITY_Community 25]]
-- 3 edges to [[_COMMUNITY_Community 23]]
-- 2 edges to [[_COMMUNITY_Community 21]]
-- 1 edge to [[_COMMUNITY_Community 97]]
-- 1 edge to [[_COMMUNITY_Community 29]]
-- 1 edge to [[_COMMUNITY_Community 48]]
-- 1 edge to [[_COMMUNITY_Community 4]]
-- 1 edge to [[_COMMUNITY_Community 36]]
+- 1 edge to [[_COMMUNITY_Community 15]]
+- 1 edge to [[_COMMUNITY_Community 17]]
+- 1 edge to [[_COMMUNITY_Community 20]]
+- 1 edge to [[_COMMUNITY_Community 50]]
+- 1 edge to [[_COMMUNITY_Community 46]]
+- 1 edge to [[_COMMUNITY_Community 58]]
+- 1 edge to [[_COMMUNITY_Community 41]]
 
 ## Top bridge nodes
-- [[ControllerBackend]] - degree 15, connects to 6 communities
-- [[system_proxies.rs]] - degree 13, connects to 2 communities
-- [[get_audio_bus()]] - degree 2, connects to 1 community
-- [[get_hardware_bus()]] - degree 2, connects to 1 community
-- [[get_mpris_bus()]] - degree 2, connects to 1 community
+- [[athanor-dock-1.0.0srclib.rs]] - degree 7, connects to 6 communities
+- [[dock.rs]] - degree 7, connects to 1 community

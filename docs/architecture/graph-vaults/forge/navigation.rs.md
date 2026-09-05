@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/navigation.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/navigation.rs"
 type: "code"
 community: "Community 6"
 location: "L1"
@@ -12,9 +12,9 @@ tags:
 # navigation.rs
 
 ## Connections
-- [[Application_29]] - `imports_from` [EXTRACTED]
+- [[Application_27]] - `imports_from` [EXTRACTED]
 - [[NavigationViewModel]] - `contains` [EXTRACTED]
 - [[UiPopoverTarget]] - `contains` [EXTRACTED]
-- [[mod.rs_13]] - `imports_from` [EXTRACTED]
+- [[viewmodelmod.rs]] - `imports_from` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_6

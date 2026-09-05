@@ -1,16 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 61"
+community: "Community 15"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_61
+  - community/Community_15
 ---
 
 # String
 
 ## Connections
-- [[.get_devices()]] - `references` [EXTRACTED]
+- [[DockMonitorInstance]] - `references` [EXTRACTED]
+- [[DockState_1]] - `references` [EXTRACTED]
+- [[format_voice_text()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_61
+#graphify/code #graphify/EXTRACTED #community/Community_15

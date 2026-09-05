@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 78"
+community: "Community 52"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_78
+  - community/Community_52
 ---
 
 # String
 
 ## Connections
-- [[.to_crdt_entries()]] - `references` [EXTRACTED]
-- [[A11yConfigPayload]] - `references` [EXTRACTED]
+- [[dot-load_gguf_weights()]] - `references` [EXTRACTED]
+- [[dot-predict_workload()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_78
+#graphify/code #graphify/EXTRACTED #community/Community_52

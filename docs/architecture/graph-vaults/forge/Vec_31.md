@@ -1,18 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 0"
+community: "Community 63"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_0
+  - community/Community_63
 ---
 
 # Vec
 
 ## Connections
-- [[.get_capabilities()]] - `references` [EXTRACTED]
-- [[.notify()]] - `references` [EXTRACTED]
-- [[NotificationData]] - `references` [EXTRACTED]
+- [[dot-execute_vulkan_compute()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_0
+#graphify/code #graphify/EXTRACTED #community/Community_63

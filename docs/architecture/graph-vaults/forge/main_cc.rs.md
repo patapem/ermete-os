@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/control_center/main_cc.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/main_cc.rs"
 type: "code"
 community: "Community 0"
 location: "L1"

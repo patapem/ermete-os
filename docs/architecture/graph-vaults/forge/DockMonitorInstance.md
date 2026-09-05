@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-dock/ermete-dock-1.0.0/src/ui.rs"
+source_file: "specs/athanor-dock/athanor-dock-1.0.0/src/ui.rs"
 type: "code"
 community: "Community 15"
 location: "L204"
@@ -12,17 +12,17 @@ tags:
 # DockMonitorInstance
 
 ## Connections
-- [[ApplicationWindow_1]] - `references` [EXTRACTED]
+- [[ApplicationWindow_3]] - `references` [EXTRACTED]
 - [[DockEngine]] - `references` [EXTRACTED]
 - [[DockItemWidget]] - `references` [EXTRACTED]
 - [[DockState_1]] - `references` [EXTRACTED]
-- [[GtkBox_2]] - `references` [EXTRACTED]
-- [[Option_15]] - `references` [EXTRACTED]
-- [[Rc_1]] - `references` [EXTRACTED]
-- [[RefCell_1]] - `references` [EXTRACTED]
+- [[GtkBox_8]] - `references` [EXTRACTED]
+- [[Option_11]] - `references` [EXTRACTED]
+- [[Rc]] - `references` [EXTRACTED]
+- [[RefCell]] - `references` [EXTRACTED]
 - [[Separator]] - `references` [EXTRACTED]
-- [[String_33]] - `references` [EXTRACTED]
-- [[Vec_18]] - `references` [EXTRACTED]
+- [[String_20]] - `references` [EXTRACTED]
+- [[Vec_29]] - `references` [EXTRACTED]
 - [[WeakRef]] - `references` [EXTRACTED]
 - [[refresh_monitor_instance()]] - `references` [EXTRACTED]
 - [[ui.rs]] - `contains` [EXTRACTED]

@@ -1,19 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 21"
+community: "Community 41"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_21
+  - community/Community_41
 ---
 
 # Option
 
 ## Connections
-- [[.get_cached_mpris_state()]] - `references` [EXTRACTED]
-- [[MprisActor]] - `references` [EXTRACTED]
-- [[MprisCommand]] - `references` [EXTRACTED]
-- [[MprisController]] - `references` [EXTRACTED]
+- [[fetch_current_active_workspace_id()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_21
+#graphify/code #graphify/EXTRACTED #community/Community_41

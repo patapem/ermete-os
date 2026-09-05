@@ -1,18 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 12"
+community: "Community 68"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_12
+  - community/Community_68
 ---
 
 # Application
 
 ## Connections
-- [[TopbarModel]] - `references` [EXTRACTED]
-- [[handle_command()]] - `references` [EXTRACTED]
-- [[topbar.rs]] - `imports_from` [EXTRACTED]
+- [[show_control_center_panel()]] - `references` [EXTRACTED]
+- [[srccontrol_centermod.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_12
+#graphify/code #graphify/EXTRACTED #community/Community_68

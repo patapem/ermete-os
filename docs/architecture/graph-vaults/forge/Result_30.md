@@ -1,17 +1,20 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 31"
+community: "Community 30"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_31
+  - community/Community_30
 ---
 
 # Result
 
 ## Connections
-- [[main()_6]] - `references` [EXTRACTED]
-- [[main.rs_4]] - `imports_from` [EXTRACTED]
+- [[dot-handle_player_command()]] - `references` [EXTRACTED]
+- [[dot-handle_refresh_mpris()]] - `references` [EXTRACTED]
+- [[dot-player_command()]] - `references` [EXTRACTED]
+- [[dot-refresh_mpris()]] - `references` [EXTRACTED]
+- [[MprisCommand]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_31
+#graphify/code #graphify/EXTRACTED #community/Community_30

@@ -1,18 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 37"
+community: "Community 35"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_37
+  - community/Community_35
 ---
 
 # Vec
 
 ## Connections
-- [[fetch_current_niri_windows()]] - `references` [EXTRACTED]
-- [[fetch_current_workspaces()]] - `references` [EXTRACTED]
-- [[spawn_dock_watchers()]] - `references` [EXTRACTED]
+- [[BftConsensusEngine]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_37
+#graphify/code #graphify/EXTRACTED #community/Community_35

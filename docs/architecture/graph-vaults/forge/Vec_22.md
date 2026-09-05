@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 78"
+community: "Community 43"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_78
+  - community/Community_43
 ---
 
 # Vec
 
 ## Connections
-- [[.to_crdt_entries()]] - `references` [EXTRACTED]
+- [[CrdtNetworkPayload]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_78
+#graphify/code #graphify/EXTRACTED #community/Community_43

@@ -1,20 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 46"
+community: "Community 120"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_46
+  - community/Community_120
 ---
 
 # Result
 
 ## Connections
-- [[.new()_6]] - `references` [EXTRACTED]
-- [[.propose_bft_state_update()]] - `references` [EXTRACTED]
-- [[.send_clipboard()]] - `references` [EXTRACTED]
-- [[.start_discovery()]] - `references` [EXTRACTED]
-- [[sync.rs]] - `imports_from` [EXTRACTED]
+- [[main()_11]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_46
+#graphify/code #graphify/EXTRACTED #community/Community_120

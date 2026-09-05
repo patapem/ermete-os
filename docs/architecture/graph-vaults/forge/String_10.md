@@ -1,21 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 32"
+community: "Community 113"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_32
+  - community/Community_113
 ---
 
 # String
 
 ## Connections
-- [[.get_status()]] - `references` [EXTRACTED]
-- [[.new()_5]] - `references` [EXTRACTED]
-- [[BftConsensusEngine]] - `references` [EXTRACTED]
-- [[BftProposal]] - `references` [EXTRACTED]
-- [[BftProposalRecord]] - `references` [EXTRACTED]
-- [[BftVote]] - `references` [EXTRACTED]
+- [[drop_capabilities()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_32
+#graphify/code #graphify/EXTRACTED #community/Community_113

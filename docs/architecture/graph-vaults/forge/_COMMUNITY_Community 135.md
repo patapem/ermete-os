@@ -1,17 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 2
+members: 3
 ---
 
 # Community 135
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 2 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[clean_ghcr.sh]] - code - scripts/clean_ghcr.sh
-- [[clean_ghcr.sh script]] - code - scripts/clean_ghcr.sh
+- [[SOURCE_DATE_EPOCH_1]] - code - specs/athanor-secure-boot/SOURCES/usr/libexec/athanor-secure-boot-measure.sh
+- [[athanor-secure-boot-measure.sh]] - code - specs/athanor-secure-boot/SOURCES/usr/libexec/athanor-secure-boot-measure.sh
+- [[athanor-secure-boot-measure.sh script]] - code - specs/athanor-secure-boot/SOURCES/usr/libexec/athanor-secure-boot-measure.sh
 
 ## Live Query (requires Dataview plugin)
 

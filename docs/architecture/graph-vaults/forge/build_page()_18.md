@@ -1,18 +1,19 @@
 ---
-source_file: "specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/updates.rs"
+source_file: "specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/privacy.rs"
 type: "code"
-community: "Community 124"
-location: "L5"
+community: "Community 87"
+location: "L50"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_124
+  - community/Community_87
 ---
 
 # build_page()
 
 ## Connections
-- [[Box_20]] - `references` [EXTRACTED]
-- [[updates.rs]] - `contains` [EXTRACTED]
+- [[GtkBox_19]] - `references` [EXTRACTED]
+- [[generate_permission_store_payload()]] - `calls` [EXTRACTED]
+- [[pagesprivacy.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_124
+#graphify/code #graphify/EXTRACTED #community/Community_87

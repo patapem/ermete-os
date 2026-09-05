@@ -1,17 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 2
+members: 3
 ---
 
 # Community 134
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 2 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[build_rolling_local.sh]] - code - scripts/build_rolling_local.sh
-- [[build_rolling_local.sh script]] - code - scripts/build_rolling_local.sh
+- [[Result_16]] - code
+- [[athanor-lvfs-rs-1.0.0srcmain.rs]] - code - specs/athanor-lvfs-rs/athanor-lvfs-rs-1.0.0/src/main.rs
+- [[main()_12]] - code - specs/athanor-lvfs-rs/athanor-lvfs-rs-1.0.0/src/main.rs
 
 ## Live Query (requires Dataview plugin)
 

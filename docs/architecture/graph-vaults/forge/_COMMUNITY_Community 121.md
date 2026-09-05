@@ -1,18 +1,18 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 5
 ---
 
 # Community 121
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 5 nodes
 
 ## Members
-- [[Box_14]] - code
-- [[build_page()_11]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/general.rs
-- [[general.rs]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/general.rs
+- [[agent.py]] - code - specs/athanor-ui-agent/athanor-ui-agent-1.0.0/agent.py
+- [[get_active_app()]] - code - specs/athanor-ui-agent/athanor-ui-agent-1.0.0/agent.py
+- [[get_battery()]] - code - specs/athanor-ui-agent/athanor-ui-agent-1.0.0/agent.py
+- [[get_context()]] - code - specs/athanor-ui-agent/athanor-ui-agent-1.0.0/agent.py
+- [[main()_1]] - code - specs/athanor-ui-agent/athanor-ui-agent-1.0.0/agent.py
 
 ## Live Query (requires Dataview plugin)
 

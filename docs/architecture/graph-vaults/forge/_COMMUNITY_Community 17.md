@@ -1,47 +1,45 @@
 ---
 type: community
-cohesion: 0.13
 members: 32
 ---
 
 # Community 17
 
-**Cohesion:** 0.13 - loosely connected
 **Members:** 32 nodes
 
 ## Members
-- [[.create_texture_from_dmabuf()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[.get_window_dmabuf()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[.global()_1]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[.init_wayland_protocols()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[.new()_25]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[.new()_27]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[.new()_26]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[.popdown()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[.popup()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[.register_toplevel()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[.render_blank_preview_until_dmabuf_ready()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[.update_window_dmabuf()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[Arc_12]] - code
-- [[Button]] - code
-- [[DmaBufBuffer]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[DmaBufPreviewManager]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[ForeignToplevelHandle]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[GtkBox_1]] - code
-- [[HashMap_13]] - code
-- [[LivePreviewPopover]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[Mutex_6]] - code
-- [[Option_14]] - code
-- [[OwnedFd]] - code
+- [[dot-create_texture_from_dmabuf()]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[dot-get_window_dmabuf()]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[dot-global()]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[dot-init_wayland_protocols()]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[dot-new()_6]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[dot-new()_7]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[dot-new()_8]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[dot-popdown()]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[dot-popup()]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[dot-register_toplevel()]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[dot-render_blank_preview_until_dmabuf_ready()]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[dot-update_window_dmabuf()]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[Arc_3]] - code
+- [[Button_3]] - code
+- [[DmaBufBuffer]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[DmaBufPreviewManager]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[ForeignToplevelHandle]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[GtkBox_9]] - code
+- [[HashMap_3]] - code
+- [[LivePreviewPopover]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[Mutex_1]] - code
+- [[Option_13]] - code
+- [[OwnedFd_1]] - code
 - [[Popover]] - code
-- [[Rc]] - code
-- [[RefCell]] - code
-- [[Self_22]] - code
-- [[String_32]] - code
+- [[Rc_1]] - code
+- [[RefCell_1]] - code
+- [[Self_9]] - code
+- [[String_22]] - code
 - [[Texture]] - code
-- [[WindowPreviewCard]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[attach_hover_preview()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
-- [[preview_popup.rs]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/preview_popup.rs
+- [[WindowPreviewCard]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[attach_hover_preview()]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
+- [[preview_popup.rs]] - code - specs/athanor-dock/athanor-dock-1.0.0/src/preview_popup.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -52,10 +50,10 @@ SORT file.name ASC
 
 ## Connections to other communities
 - 3 edges to [[_COMMUNITY_Community 15]]
-- 1 edge to [[_COMMUNITY_Community 31]]
-- 1 edge to [[_COMMUNITY_Community 25]]
+- 1 edge to [[_COMMUNITY_Community 34]]
+- 1 edge to [[_COMMUNITY_Community 50]]
 
 ## Top bridge nodes
 - [[preview_popup.rs]] - degree 13, connects to 3 communities
-- [[.new()_27]] - degree 10, connects to 1 community
+- [[dot-new()_7]] - degree 10, connects to 1 community
 - [[attach_hover_preview()]] - degree 8, connects to 1 community

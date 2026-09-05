@@ -1,19 +1,18 @@
 ---
-source_file: "specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/continuity.rs"
+source_file: "specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/ecosystem.rs"
 type: "code"
-community: "Community 110"
-location: "L6"
+community: "Community 139"
+location: "L5"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_110
+  - community/Community_139
 ---
 
 # build_page()
 
 ## Connections
-- [[GtkBox_7]] - `references` [EXTRACTED]
-- [[continuity.rs]] - `contains` [EXTRACTED]
-- [[test_continuity_page_builds()]] - `calls` [EXTRACTED]
+- [[Box_8]] - `references` [EXTRACTED]
+- [[ecosystem.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_110
+#graphify/code #graphify/EXTRACTED #community/Community_139

@@ -1,17 +1,17 @@
 ---
-source_file: "specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/ecosystem.rs"
+source_file: "specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/ecosystem.rs"
 type: "code"
-community: "Community 119"
+community: "Community 139"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_119
+  - community/Community_139
 ---
 
 # ecosystem.rs
 
 ## Connections
-- [[build_page()_9]] - `contains` [EXTRACTED]
+- [[build_page()_6]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_119
+#graphify/code #graphify/EXTRACTED #community/Community_139

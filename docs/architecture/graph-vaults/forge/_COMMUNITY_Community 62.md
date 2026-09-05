@@ -1,28 +1,26 @@
 ---
 type: community
-cohesion: 0.26
 members: 13
 ---
 
 # Community 62
 
-**Cohesion:** 0.26 - loosely connected
 **Members:** 13 nodes
 
 ## Members
-- [[.new()_13]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal.rs
-- [[.parse_hex_rgb()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal.rs
-- [[.read()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal.rs
-- [[.read_all()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal.rs
-- [[HashMap_9]] - code
-- [[OwnedValue_3]] - code
-- [[PortalSettingsService]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal.rs
-- [[Receiver]] - code
-- [[Result_20]] - code
-- [[Self_14]] - code
-- [[String_23]] - code
-- [[Vec_11]] - code
-- [[portal.rs]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/portal.rs
+- [[dot-perform_backup()]] - code - specs/athanor-backup/athanor-backup-1.0.0/src/main.rs
+- [[BackupService]] - code - specs/athanor-backup/athanor-backup-1.0.0/src/main.rs
+- [[Box_22]] - code
+- [[Command]] - code
+- [[Error_11]] - code
+- [[GtkBox_14]] - code
+- [[Result_48]] - code
+- [[SignalEmitter]] - code
+- [[String_59]] - code
+- [[athanor-backup-1.0.0srcmain.rs]] - code - specs/athanor-backup/athanor-backup-1.0.0/src/main.rs
+- [[build_page()_16]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/security_audit.rs
+- [[main()_20]] - code - specs/athanor-backup/athanor-backup-1.0.0/src/main.rs
+- [[security_audit.rs]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/security_audit.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -32,9 +30,17 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 3 edges to [[_COMMUNITY_Community 40]]
+- 1 edge to [[_COMMUNITY_Community 1]]
+- 1 edge to [[_COMMUNITY_Community 101]]
+- 1 edge to [[_COMMUNITY_Community 109]]
+- 1 edge to [[_COMMUNITY_Community 119]]
+- 1 edge to [[_COMMUNITY_Community 13]]
+- 1 edge to [[_COMMUNITY_Community 14]]
+- 1 edge to [[_COMMUNITY_Community 2]]
+- 1 edge to [[_COMMUNITY_Community 82]]
+- 1 edge to [[_COMMUNITY_Community 71]]
+- 1 edge to [[_COMMUNITY_Community 98]]
 
 ## Top bridge nodes
-- [[PortalSettingsService]] - degree 7, connects to 1 community
-- [[.new()_13]] - degree 5, connects to 1 community
-- [[portal.rs]] - degree 3, connects to 1 community
+- [[Command]] - degree 11, connects to 9 communities
+- [[athanor-backup-1.0.0srcmain.rs]] - degree 4, connects to 1 community

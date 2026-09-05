@@ -11,8 +11,6 @@ tags:
 # Self
 
 ## Connections
-- [[.default()_3]] - `references` [EXTRACTED]
-- [[.new()_4]] - `references` [EXTRACTED]
-- [[.system_bus_name()]] - `references` [EXTRACTED]
+- [[dot-new()_2]] - `references` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_11

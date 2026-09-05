@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/notifications.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/notifications.rs"
 type: "code"
-community: "Community 0"
+community: "Community 2"
 location: "L25"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_0
+  - community/Community_2
 ---
 
 # show_toast_popup()
@@ -14,8 +14,8 @@ tags:
 ## Connections
 - [[Application_18]] - `references` [EXTRACTED]
 - [[NotificationData]] - `references` [EXTRACTED]
-- [[notifications.rs_2]] - `contains` [EXTRACTED]
 - [[send_action_invoked()]] - `calls` [EXTRACTED]
 - [[spawn_notification_daemon()]] - `calls` [EXTRACTED]
+- [[uinotifications.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_0
+#graphify/code #graphify/EXTRACTED #community/Community_2

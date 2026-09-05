@@ -1,25 +1,25 @@
 ---
-source_file: "specs/ermete-recovery/ermete-recovery-1.0.0/src/main.rs"
+source_file: "specs/athanor-recovery/athanor-recovery-1.0.0/src/main.rs"
 type: "code"
-community: "Community 20"
+community: "Community 21"
 location: "L48"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_20
+  - community/Community_21
 ---
 
 # RecoveryModel
 
 ## Connections
-- [[.error_message()]] - `method` [EXTRACTED]
-- [[.init()]] - `method` [EXTRACTED]
-- [[.status_step()]] - `method` [EXTRACTED]
-- [[.success_message()]] - `method` [EXTRACTED]
-- [[.update()_2]] - `method` [EXTRACTED]
+- [[dot-error_message()]] - `method` [EXTRACTED]
+- [[dot-init()_1]] - `method` [EXTRACTED]
+- [[dot-status_step()]] - `method` [EXTRACTED]
+- [[dot-success_message()]] - `method` [EXTRACTED]
+- [[dot-update()_6]] - `method` [EXTRACTED]
 - [[RecoveryState]] - `references` [EXTRACTED]
-- [[SimpleComponent]] - `implements` [EXTRACTED]
+- [[SimpleComponent_2]] - `implements` [EXTRACTED]
+- [[athanor-recovery-1.0.0srcmain.rs]] - `contains` [EXTRACTED]
 - [[execute_rollback_async()]] - `references` [EXTRACTED]
-- [[main.rs_11]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_20
+#graphify/code #graphify/EXTRACTED #community/Community_21

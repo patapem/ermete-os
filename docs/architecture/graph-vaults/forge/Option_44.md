@@ -1,17 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 48"
+community: "Community 8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_48
+  - community/Community_8
 ---
 
 # Option
 
 ## Connections
-- [[.bind_with_channel()]] - `references` [EXTRACTED]
-- [[MeshTunnel]] - `references` [EXTRACTED]
+- [[take_bcachefs_snapshot()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_48
+#graphify/code #graphify/EXTRACTED #community/Community_8

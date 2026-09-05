@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 68"
+community: "Community 79"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_68
+  - community/Community_79
 ---
 
 # String
 
 ## Connections
-- [[run_biometric_scan()]] - `references` [EXTRACTED]
+- [[AppItem]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_68
+#graphify/code #graphify/EXTRACTED #community/Community_79

@@ -1,16 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 43"
+community: "Community 8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_43
+  - community/Community_8
 ---
 
 # Error
 
 ## Connections
-- [[main()_12]] - `references` [EXTRACTED]
+- [[athanor-gatekeeper-rs-1.0.0srcmain.rs]] - `imports_from` [EXTRACTED]
+- [[main()_24]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_43
+#graphify/code #graphify/EXTRACTED #community/Community_8

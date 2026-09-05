@@ -1,17 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 12"
+community: "Community 92"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_12
+  - community/Community_92
 ---
 
 # String
 
 ## Connections
-- [[NiriState]] - `references` [EXTRACTED]
-- [[NiriWorkspace]] - `references` [EXTRACTED]
+- [[dot-apply_firmware()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_12
+#graphify/code #graphify/EXTRACTED #community/Community_92

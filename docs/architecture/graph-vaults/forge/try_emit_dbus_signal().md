@@ -1,18 +1,18 @@
 ---
-source_file: "specs/ermete-recovery/ermete-recovery-1.0.0/src/main.rs"
+source_file: "specs/athanor-recovery/athanor-recovery-1.0.0/src/main.rs"
 type: "code"
-community: "Community 20"
-location: "L570"
+community: "Community 21"
+location: "L583"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_20
+  - community/Community_21
 ---
 
 # try_emit_dbus_signal()
 
 ## Connections
+- [[athanor-recovery-1.0.0srcmain.rs]] - `contains` [EXTRACTED]
 - [[execute_rollback_async()]] - `calls` [EXTRACTED]
-- [[main.rs_11]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_20
+#graphify/code #graphify/EXTRACTED #community/Community_21

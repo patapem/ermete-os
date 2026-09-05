@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 69"
+community: "Community 96"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_69
+  - community/Community_96
 ---
 
 # Default
 
 ## Connections
-- [[SysMonState]] - `implements` [EXTRACTED]
+- [[NetworkModuleData]] - `implements` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_69
+#graphify/code #graphify/EXTRACTED #community/Community_96

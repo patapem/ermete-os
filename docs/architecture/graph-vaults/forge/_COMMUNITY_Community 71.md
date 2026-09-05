@@ -1,26 +1,25 @@
 ---
 type: community
-cohesion: 0.27
-members: 11
+members: 12
 ---
 
 # Community 71
 
-**Cohesion:** 0.27 - loosely connected
-**Members:** 11 nodes
+**Members:** 12 nodes
 
 ## Members
-- [[.classify_workload()]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/main.rs
-- [[.process_query()]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/main.rs
-- [[AiDaemonProxy]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/main.rs
-- [[Arc]] - code
-- [[Box]] - code
-- [[Error]] - code
-- [[Result_1]] - code
-- [[RwLock]] - code
-- [[String_1]] - code
-- [[main()_1]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/main.rs
-- [[main.rs]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/main.rs
+- [[dot-apply_policy()]] - code - specs/athanor-mdm-rs/athanor-mdm-rs-1.0.0/src/main.rs
+- [[dot-disable_usb()]] - code - specs/athanor-mdm-rs/athanor-mdm-rs-1.0.0/src/main.rs
+- [[dot-force_vpn()]] - code - specs/athanor-mdm-rs/athanor-mdm-rs-1.0.0/src/main.rs
+- [[Connection_8]] - code
+- [[Header_5]] - code
+- [[MdmDBusInterface]] - code - specs/athanor-mdm-rs/athanor-mdm-rs-1.0.0/src/main.rs
+- [[MdmPayload]] - code - specs/athanor-mdm-rs/athanor-mdm-rs-1.0.0/src/main.rs
+- [[Result_55]] - code
+- [[SignalEmitter_1]] - code
+- [[String_68]] - code
+- [[athanor-mdm-rs-1.0.0srcmain.rs]] - code - specs/athanor-mdm-rs/athanor-mdm-rs-1.0.0/src/main.rs
+- [[main()_21]] - code - specs/athanor-mdm-rs/athanor-mdm-rs-1.0.0/src/main.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -30,10 +29,7 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 2 edges to [[_COMMUNITY_Community 51]]
-- 2 edges to [[_COMMUNITY_Community 53]]
-- 1 edge to [[_COMMUNITY_Community 97]]
+- 1 edge to [[_COMMUNITY_Community 62]]
 
 ## Top bridge nodes
-- [[main.rs]] - degree 7, connects to 3 communities
-- [[AiDaemonProxy]] - degree 7, connects to 2 communities
+- [[athanor-mdm-rs-1.0.0srcmain.rs]] - degree 4, connects to 1 community

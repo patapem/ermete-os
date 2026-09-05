@@ -1,19 +1,19 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/power.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/power.rs"
 type: "code"
-community: "Community 36"
+community: "Community 40"
 location: "L164"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_36
+  - community/Community_40
 ---
 
 # get_power_controller()
 
 ## Connections
-- [[.new()_46]] - `calls` [EXTRACTED]
+- [[dot-new()_35]] - `calls` [EXTRACTED]
 - [[PowerController]] - `references` [EXTRACTED]
 - [[power.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_36
+#graphify/code #graphify/EXTRACTED #community/Community_40

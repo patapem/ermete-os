@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 10"
+community: "Community 18"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_10
+  - community/Community_18
 ---
 
 # PathBuf
 
 ## Connections
-- [[.get_cgroup_path_for_pid()]] - `references` [EXTRACTED]
+- [[DesktopFileItem]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_10
+#graphify/code #graphify/EXTRACTED #community/Community_18

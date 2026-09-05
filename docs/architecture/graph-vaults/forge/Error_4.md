@@ -1,18 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 72"
+community: "Community 117"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_72
+  - community/Community_117
 ---
 
 # Error
 
 ## Connections
-- [[.authenticate_oauth()]] - `references` [EXTRACTED]
-- [[.mount_fuse()]] - `references` [EXTRACTED]
-- [[check_polkit_auth_zbus()_1]] - `references` [EXTRACTED]
+- [[apply_landlock_sandbox()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_72
+#graphify/code #graphify/EXTRACTED #community/Community_117

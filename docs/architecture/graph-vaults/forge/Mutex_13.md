@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 34"
+community: "Community 91"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_34
+  - community/Community_91
 ---
 
 # Mutex
 
 ## Connections
-- [[ProxyRegistry]] - `references` [EXTRACTED]
-- [[system_proxies.rs]] - `imports_from` [EXTRACTED]
+- [[listener.rs]] - `imports_from` [EXTRACTED]
+- [[start_tcp_listener()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_34
+#graphify/code #graphify/EXTRACTED #community/Community_91

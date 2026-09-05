@@ -11,7 +11,7 @@ tags:
 # Popover
 
 ## Connections
-- [[.new()_26]] - `references` [EXTRACTED]
+- [[dot-new()_8]] - `references` [EXTRACTED]
 - [[LivePreviewPopover]] - `references` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_17

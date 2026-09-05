@@ -1,21 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 24"
+community: "Community 14"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_24
+  - community/Community_14
 ---
 
 # String
 
 ## Connections
-- [[.apply_live_patch()]] - `references` [EXTRACTED]
-- [[.get_live_patch_status()]] - `references` [EXTRACTED]
-- [[.ping()]] - `references` [EXTRACTED]
-- [[.system_bus_name()_2]] - `references` [EXTRACTED]
-- [[PolkitAuthorizationResult_2]] - `references` [EXTRACTED]
-- [[PolkitSubject_2]] - `references` [EXTRACTED]
+- [[dot-to_gtk4_css()]] - `references` [EXTRACTED]
+- [[dot-to_hex()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_24
+#graphify/code #graphify/EXTRACTED #community/Community_14

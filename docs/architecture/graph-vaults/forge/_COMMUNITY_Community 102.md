@@ -1,20 +1,20 @@
 ---
 type: community
-cohesion: 0.50
-members: 5
+members: 7
 ---
 
 # Community 102
 
-**Cohesion:** 0.50 - moderately connected
-**Members:** 5 nodes
+**Members:** 7 nodes
 
 ## Members
-- [[Result_23]] - code
-- [[String_26]] - code
-- [[apply_daemon_hardening()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/security.rs
-- [[drop_capabilities()_1]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/security.rs
-- [[security.rs_1]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/security.rs
+- [[Arc_1]] - code
+- [[HashMap_1]] - code
+- [[Instant]] - code
+- [[Mutex]] - code
+- [[String_5]] - code
+- [[discovery.rs]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/discovery.rs
+- [[start_udp_discovery()]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/discovery.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -22,3 +22,11 @@ members: 5
 TABLE source_file, type FROM #community/Community_102
 SORT file.name ASC
 ```
+
+## Connections to other communities
+- 2 edges to [[_COMMUNITY_Community 56]]
+- 1 edge to [[_COMMUNITY_Community 49]]
+
+## Top bridge nodes
+- [[discovery.rs]] - degree 6, connects to 2 communities
+- [[start_udp_discovery()]] - degree 7, connects to 1 community

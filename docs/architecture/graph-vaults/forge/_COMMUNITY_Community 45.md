@@ -1,35 +1,34 @@
 ---
 type: community
-cohesion: 0.13
-members: 20
+members: 21
 ---
 
 # Community 45
 
-**Cohesion:** 0.13 - loosely connected
-**Members:** 20 nodes
+**Members:** 21 nodes
 
 ## Members
-- [[.init()_1]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/main.rs
-- [[.update()_3]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/main.rs
-- [[AppModel]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/main.rs
-- [[AppMsg]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/main.rs
-- [[ComponentParts_1]] - code
-- [[ComponentSender_1]] - code
-- [[Connection_11]] - code
-- [[Error_17]] - code
-- [[Init_1]] - code
-- [[Input_1]] - code
-- [[Option_22]] - code
-- [[Result_50]] - code
-- [[Root_1]] - code
-- [[Self_36]] - code
-- [[SimpleComponent_1]] - code
-- [[String_49]] - code
-- [[get_connection()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/main.rs
-- [[get_system_connection()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/main.rs
-- [[main()_15]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/main.rs
-- [[main.rs_13]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/main.rs
+- [[dot-from_string()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-scrape()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-scrape_elf()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-scrape_generic()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-scrape_x86()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-sign()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-sign()_1]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-sign()_2]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-sign()_3]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-verify()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-verify()_1]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-verify()_2]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-verify()_3]] - code - specs/uki-tools/SOURCES/ukify
+- [[PeSign]] - code - specs/uki-tools/SOURCES/ukify
+- [[SbSign]] - code - specs/uki-tools/SOURCES/ukify
+- [[SignTool]] - code - specs/uki-tools/SOURCES/ukify
+- [[SystemdSbSign]] - code - specs/uki-tools/SOURCES/ukify
+- [[UkifyConfig]] - code - specs/uki-tools/SOURCES/ukify
+- [[Uname]] - code - specs/uki-tools/SOURCES/ukify
+- [[find_tool()]] - code - specs/uki-tools/SOURCES/ukify
+- [[shell_join()]] - code - specs/uki-tools/SOURCES/ukify
 
 ## Live Query (requires Dataview plugin)
 
@@ -37,3 +36,16 @@ members: 20
 TABLE source_file, type FROM #community/Community_45
 SORT file.name ASC
 ```
+
+## Connections to other communities
+- 14 edges to [[_COMMUNITY_Community 37]]
+- 10 edges to [[_COMMUNITY_Community 53]]
+- 10 edges to [[_COMMUNITY_Community 80]]
+- 1 edge to [[_COMMUNITY_Community 101]]
+
+## Top bridge nodes
+- [[find_tool()]] - degree 11, connects to 3 communities
+- [[shell_join()]] - degree 10, connects to 3 communities
+- [[UkifyConfig]] - degree 24, connects to 2 communities
+- [[dot-scrape()]] - degree 4, connects to 2 communities
+- [[dot-scrape_generic()]] - degree 4, connects to 2 communities

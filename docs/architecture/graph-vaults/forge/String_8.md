@@ -11,9 +11,8 @@ tags:
 # String
 
 ## Connections
-- [[.system_bus_name()]] - `references` [EXTRACTED]
-- [[PolkitAuthorizationResult]] - `references` [EXTRACTED]
-- [[PolkitSubject]] - `references` [EXTRACTED]
-- [[SnapshotInfo]] - `references` [EXTRACTED]
+- [[dot-dilithium_pk_b64()]] - `references` [EXTRACTED]
+- [[dot-kyber_pk_b64()]] - `references` [EXTRACTED]
+- [[dot-x25519_pk_b64()]] - `references` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_11

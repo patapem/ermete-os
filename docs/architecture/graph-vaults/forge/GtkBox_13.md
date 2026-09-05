@@ -1,16 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 79"
+community: "Community 54"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_79
+  - community/Community_54
 ---
 
 # GtkBox
 
 ## Connections
-- [[.build_body()]] - `references` [EXTRACTED]
+- [[dot-build()]] - `references` [EXTRACTED]
+- [[dot-new()_41]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_79
+#graphify/code #graphify/EXTRACTED #community/Community_54

@@ -1,16 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 69"
+community: "Community 9"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_69
+  - community/Community_9
 ---
 
 # String
 
 ## Connections
-- [[SysMonState]] - `references` [EXTRACTED]
+- [[ActiveSnapGroup]] - `references` [EXTRACTED]
+- [[RunningApp]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_69
+#graphify/code #graphify/EXTRACTED #community/Community_9

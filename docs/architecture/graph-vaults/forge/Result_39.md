@@ -1,17 +1,20 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 49"
+community: "Community 46"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_49
+  - community/Community_46
 ---
 
 # Result
 
 ## Connections
-- [[.apply_firmware()]] - `references` [EXTRACTED]
-- [[check_polkit_auth_zbus()_4]] - `references` [EXTRACTED]
+- [[add_pin()]] - `references` [EXTRACTED]
+- [[remove_pin()]] - `references` [EXTRACTED]
+- [[save_dock_config()]] - `references` [EXTRACTED]
+- [[set_dock_mode()]] - `references` [EXTRACTED]
+- [[toggle_dock_mode()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_49
+#graphify/code #graphify/EXTRACTED #community/Community_46

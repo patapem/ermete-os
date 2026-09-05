@@ -1,16 +1,14 @@
 ---
 type: community
-cohesion: 1.00
 members: 1
 ---
 
 # Community 184
 
-**Cohesion:** 1.00 - tightly connected
 **Members:** 1 nodes
 
 ## Members
-- [[types.d.ts]] - code - portal/.astro/types.d.ts
+- [[athanor-doctor]] - code - specs/athanor-doctor/athanor-doctor-1.0.0/Cargo.toml
 
 ## Live Query (requires Dataview plugin)
 

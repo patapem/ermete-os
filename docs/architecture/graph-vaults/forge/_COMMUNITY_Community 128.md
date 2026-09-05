@@ -1,18 +1,17 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 4
 ---
 
 # Community 128
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 4 nodes
 
 ## Members
-- [[Application_22]] - code
-- [[build_ui()_4]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/prompts/gatekeeper.rs
-- [[gatekeeper.rs]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/prompts/gatekeeper.rs
+- [[bench.sh]] - code - specs/azoth/bench.sh
+- [[bench.sh script]] - code - specs/azoth/bench.sh
+- [[die()_1]] - code - specs/azoth/bench.sh
+- [[step()_1]] - code - specs/azoth/bench.sh
 
 ## Live Query (requires Dataview plugin)
 

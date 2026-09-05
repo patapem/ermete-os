@@ -1,18 +1,18 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 5
 ---
 
 # Community 117
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 5 nodes
 
 ## Members
-- [[GtkBox_6]] - code
-- [[battery.rs]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/battery.rs
-- [[build_page()_4]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/battery.rs
+- [[Box_4]] - code
+- [[Error_4]] - code
+- [[Result_11]] - code
+- [[apply_landlock_sandbox()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/sys/sandbox.rs
+- [[sandbox.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/sys/sandbox.rs
 
 ## Live Query (requires Dataview plugin)
 

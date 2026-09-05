@@ -11,8 +11,11 @@ tags:
 # Sender
 
 ## Connections
-- [[.spawn()_1]] - `references` [EXTRACTED]
-- [[BluetoothCommand]] - `references` [EXTRACTED]
-- [[BluetoothController]] - `references` [EXTRACTED]
+- [[dot-new()_19]] - `references` [EXTRACTED]
+- [[dot-new_with_token()]] - `references` [EXTRACTED]
+- [[AppearanceStateStore]] - `references` [EXTRACTED]
+- [[SettingsCommand]] - `references` [EXTRACTED]
+- [[SettingsService]] - `references` [EXTRACTED]
+- [[VoiceOverStateStore]] - `references` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_25

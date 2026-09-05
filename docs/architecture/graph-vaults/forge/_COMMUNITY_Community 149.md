@@ -1,16 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 1
+members: 3
 ---
 
 # Community 149
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 1 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[manifest.json_3]] - code - repo-cache/repo-tier3/manifest.json
+- [[Application_15]] - code
+- [[build_ui()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/prompts/gatekeeper.rs
+- [[gatekeeper.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/prompts/gatekeeper.rs
 
 ## Live Query (requires Dataview plugin)
 

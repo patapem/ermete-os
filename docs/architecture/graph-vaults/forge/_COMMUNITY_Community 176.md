@@ -1,16 +1,15 @@
 ---
 type: community
-cohesion: 1.00
-members: 1
+members: 2
 ---
 
 # Community 176
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 1 nodes
+**Members:** 2 nodes
 
 ## Members
-- [[shaders.rs]] - code - ermete-compositor/src/backend/render/shaders.rs
+- [[athanor-usbguard-hook]] - code - specs/athanor-system-config/SOURCES/usr/bin/athanor-usbguard-hook
+- [[athanor-usbguard-hook script]] - code - specs/athanor-system-config/SOURCES/usr/bin/athanor-usbguard-hook
 
 ## Live Query (requires Dataview plugin)
 

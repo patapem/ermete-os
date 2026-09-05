@@ -1,17 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 10"
+community: "Community 35"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_10
+  - community/Community_35
 ---
 
 # HashSet
 
 ## Connections
-- [[.get_frozen_pids()]] - `references` [EXTRACTED]
-- [[EnergyAwareSchedulerState]] - `references` [EXTRACTED]
+- [[BftProposalRecord]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_10
+#graphify/code #graphify/EXTRACTED #community/Community_35

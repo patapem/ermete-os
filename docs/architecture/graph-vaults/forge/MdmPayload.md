@@ -1,18 +1,18 @@
 ---
-source_file: "specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/main.rs"
+source_file: "specs/athanor-mdm-rs/athanor-mdm-rs-1.0.0/src/main.rs"
 type: "code"
-community: "Community 66"
-location: "L15"
+community: "Community 71"
+location: "L38"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_66
+  - community/Community_71
 ---
 
 # MdmPayload
 
 ## Connections
-- [[String_41]] - `references` [EXTRACTED]
-- [[main.rs_9]] - `contains` [EXTRACTED]
+- [[String_68]] - `references` [EXTRACTED]
+- [[athanor-mdm-rs-1.0.0srcmain.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_66
+#graphify/code #graphify/EXTRACTED #community/Community_71

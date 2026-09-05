@@ -1,17 +1,17 @@
 ---
-source_file: "specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/voiceover.rs"
+source_file: "specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/voiceover.rs"
 type: "code"
-community: "Community 63"
+community: "Community 67"
 location: "L20"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_63
+  - community/Community_67
 ---
 
 # VoiceOverWorker
 
 ## Connections
-- [[voiceover.rs]] - `contains` [EXTRACTED]
+- [[srcvoiceover.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_63
+#graphify/code #graphify/EXTRACTED #community/Community_67

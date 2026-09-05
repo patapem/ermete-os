@@ -1,20 +1,20 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/ebpf.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/ebpf.rs"
 type: "code"
-community: "Community 74"
+community: "Community 78"
 location: "L6"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_74
+  - community/Community_78
 ---
 
 # EbpfMode
 
 ## Connections
-- [[.description()]] - `method` [EXTRACTED]
-- [[.label()]] - `method` [EXTRACTED]
+- [[dot-description()_1]] - `method` [EXTRACTED]
+- [[dot-label()]] - `method` [EXTRACTED]
 - [[EbpfModuleData]] - `references` [EXTRACTED]
-- [[ebpf.rs]] - `contains` [EXTRACTED]
+- [[control_centerebpf.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_74
+#graphify/code #graphify/EXTRACTED #community/Community_78

@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 61"
+community: "Community 134"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_61
+  - community/Community_134
 ---
 
 # Result
 
 ## Connections
-- [[.get_devices()]] - `references` [EXTRACTED]
-- [[.set_power()]] - `references` [EXTRACTED]
+- [[athanor-lvfs-rs-1.0.0srcmain.rs]] - `imports_from` [EXTRACTED]
+- [[main()_12]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_61
+#graphify/code #graphify/EXTRACTED #community/Community_134

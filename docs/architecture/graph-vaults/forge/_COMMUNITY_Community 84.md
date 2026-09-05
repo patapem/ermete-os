@@ -1,24 +1,23 @@
 ---
 type: community
-cohesion: 0.25
-members: 9
+members: 10
 ---
 
 # Community 84
 
-**Cohesion:** 0.25 - loosely connected
-**Members:** 9 nodes
+**Members:** 10 nodes
 
 ## Members
-- [[.default()_15]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/display.rs
-- [[CcPanelInput]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/panel.rs
-- [[Default_11]] - code
-- [[DisplayModuleData]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/display.rs
-- [[GtkBox_11]] - code
-- [[Self_41]] - code
-- [[String_55]] - code
-- [[build_display_widget()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/display.rs
-- [[display.rs]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/display.rs
+- [[dot-build_body()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/module_item.rs
+- [[dot-default()_23]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/display.rs
+- [[Default_16]] - code
+- [[DisplayModuleData]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/display.rs
+- [[GtkBox_17]] - code
+- [[GtkBox_18]] - code
+- [[Self_58]] - code
+- [[String_80]] - code
+- [[build_display_widget()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/display.rs
+- [[control_centerdisplay.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/display.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -28,13 +27,12 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 2 edges to [[_COMMUNITY_Community 79]]
-- 2 edges to [[_COMMUNITY_Community 80]]
-- 1 edge to [[_COMMUNITY_Community 64]]
-- 1 edge to [[_COMMUNITY_Community 74]]
-- 1 edge to [[_COMMUNITY_Community 90]]
+- 2 edges to [[_COMMUNITY_Community 68]]
+- 2 edges to [[_COMMUNITY_Community 88]]
+- 1 edge to [[_COMMUNITY_Community 104]]
+- 1 edge to [[_COMMUNITY_Community 78]]
+- 1 edge to [[_COMMUNITY_Community 96]]
 
 ## Top bridge nodes
-- [[CcPanelInput]] - degree 5, connects to 4 communities
-- [[DisplayModuleData]] - degree 8, connects to 2 communities
-- [[build_display_widget()]] - degree 4, connects to 1 community
+- [[dot-build_body()]] - degree 6, connects to 4 communities
+- [[DisplayModuleData]] - degree 8, connects to 3 communities

@@ -1,23 +1,21 @@
 ---
 type: community
-cohesion: 0.43
 members: 8
 ---
 
 # Community 89
 
-**Cohesion:** 0.43 - moderately connected
 **Members:** 8 nodes
 
 ## Members
-- [[Box_11]] - code
-- [[Path_4]] - code
-- [[PathBuf_9]] - code
-- [[Vec_23]] - code
-- [[build_page()_7]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/desktop.rs
-- [[desktop.rs]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/desktop.rs
-- [[scan_dir_async()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/desktop.rs
-- [[scan_wallpapers_async()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/desktop.rs
+- [[dot-__init__()]] - code - scripts/train_ai_scheduler.py
+- [[dot-forward()]] - code - scripts/train_ai_scheduler.py
+- [[Estrae le stesse feature usate dal demone Rust (f1, f2, f3, f4)]] - rationale - scripts/train_ai_scheduler.py
+- [[SchedModel]] - code - scripts/train_ai_scheduler.py
+- [[extract_features()]] - code - scripts/train_ai_scheduler.py
+- [[main()_7]] - code - scripts/train_ai_scheduler.py
+- [[train_ai_scheduler.py]] - code - scripts/train_ai_scheduler.py
+- [[train_model()]] - code - scripts/train_ai_scheduler.py
 
 ## Live Query (requires Dataview plugin)
 

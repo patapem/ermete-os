@@ -1,18 +1,18 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 5
 ---
 
 # Community 115
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 5 nodes
 
 ## Members
-- [[SOURCE_DATE_EPOCH_2]] - code - specs/ermete-secure-boot/SOURCES/usr/libexec/ermete-secure-boot-measure.sh
-- [[ermete-secure-boot-measure.sh]] - code - specs/ermete-secure-boot/SOURCES/usr/libexec/ermete-secure-boot-measure.sh
-- [[ermete-secure-boot-measure.sh script]] - code - specs/ermete-secure-boot/SOURCES/usr/libexec/ermete-secure-boot-measure.sh
+- [[Box_3]] - code
+- [[String_12]] - code
+- [[build_page()_1]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/wired.rs
+- [[get_ethernet_status_async()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/wired.rs
+- [[wired.rs]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/wired.rs
 
 ## Live Query (requires Dataview plugin)
 

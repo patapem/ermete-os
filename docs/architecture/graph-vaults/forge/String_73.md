@@ -1,21 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 8"
+community: "Community 77"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_8
+  - community/Community_77
 ---
 
 # String
 
 ## Connections
-- [[.dismiss()]] - `references` [EXTRACTED]
-- [[.set_state()]] - `references` [EXTRACTED]
-- [[.update_activity()]] - `references` [EXTRACTED]
-- [[LiveActivityPayload]] - `references` [EXTRACTED]
-- [[MorphicPillInput]] - `references` [EXTRACTED]
-- [[MorphicPillModel]] - `references` [EXTRACTED]
+- [[HealthReport]] - `references` [EXTRACTED]
+- [[get_bcachefs_health()]] - `references` [EXTRACTED]
+- [[get_nvme_health()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_8
+#graphify/code #graphify/EXTRACTED #community/Community_77

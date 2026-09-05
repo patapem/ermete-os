@@ -1,18 +1,18 @@
 ---
-source_file: "specs/ermete-lvfs-rs/ermete-lvfs-rs-1.0.0/src/main.rs"
+source_file: "specs/athanor-secure-boot/athanor-secure-boot-1.0.0/src/main.rs"
 type: "code"
-community: "Community 114"
-location: "L14"
+community: "Community 110"
+location: "L47"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_114
+  - community/Community_110
 ---
 
 # main()
 
 ## Connections
-- [[Result_41]] - `references` [EXTRACTED]
-- [[main.rs_8]] - `contains` [EXTRACTED]
+- [[Result_8]] - `references` [EXTRACTED]
+- [[athanor-secure-boot-1.0.0srcmain.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_114
+#graphify/code #graphify/EXTRACTED #community/Community_110

@@ -1,26 +1,24 @@
 ---
 type: community
-cohesion: 0.22
 members: 11
 ---
 
 # Community 75
 
-**Cohesion:** 0.22 - loosely connected
 **Members:** 11 nodes
 
 ## Members
-- [[.css_class()_1]] - code - specs/ermete-store-rs/ermete-store-rs-1.0.0/src/backend/repository.rs
-- [[.icon_name()]] - code - specs/ermete-store-rs/ermete-store-rs-1.0.0/src/backend/repository.rs
-- [[.label()_1]] - code - specs/ermete-store-rs/ermete-store-rs-1.0.0/src/backend/repository.rs
-- [[.short_label()]] - code - specs/ermete-store-rs/ermete-store-rs-1.0.0/src/backend/repository.rs
-- [[AppItem]] - code - specs/ermete-store-rs/ermete-store-rs-1.0.0/src/backend/repository.rs
-- [[Option_43]] - code
-- [[SandboxTier]] - code - specs/ermete-store-rs/ermete-store-rs-1.0.0/src/backend/repository.rs
-- [[String_90]] - code
-- [[Vec_38]] - code
-- [[get_featured_catalog()]] - code - specs/ermete-store-rs/ermete-store-rs-1.0.0/src/backend/repository.rs
-- [[repository.rs]] - code - specs/ermete-store-rs/ermete-store-rs-1.0.0/src/backend/repository.rs
+- [[Application_30]] - code
+- [[Button_5]] - code
+- [[Fn]] - code
+- [[Option_41]] - code
+- [[Separator_1]] - code
+- [[build_menu_item()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/desktop_canvas/context_menu.rs
+- [[build_menu_separator()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/desktop_canvas/context_menu.rs
+- [[context_menu.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/desktop_canvas/context_menu.rs
+- [[init_context_menu_css()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/desktop_canvas/context_menu.rs
+- [[show_desktop_context_menu()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/desktop_canvas/context_menu.rs
+- [[test_context_menu_instantiation()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/desktop_canvas/context_menu.rs
 
 ## Live Query (requires Dataview plugin)
 

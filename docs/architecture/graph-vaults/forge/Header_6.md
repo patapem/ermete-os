@@ -1,20 +1,20 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 5"
+community: "Community 8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_5
+  - community/Community_8
 ---
 
 # Header
 
 ## Connections
-- [[.approve_execution()]] - `references` [EXTRACTED]
-- [[.deny_execution()]] - `references` [EXTRACTED]
-- [[.request_root_privilege()]] - `references` [EXTRACTED]
-- [[.rollback_snapshot()]] - `references` [EXTRACTED]
-- [[dbus.rs_1]] - `imports_from` [EXTRACTED]
+- [[dot-approve_execution()]] - `references` [EXTRACTED]
+- [[dot-deny_execution()]] - `references` [EXTRACTED]
+- [[dot-request_root_privilege()]] - `references` [EXTRACTED]
+- [[dot-rollback_snapshot()]] - `references` [EXTRACTED]
+- [[athanor-gatekeeper-rs-1.0.0srcdbus.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_5
+#graphify/code #graphify/EXTRACTED #community/Community_8

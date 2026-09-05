@@ -1,16 +1,19 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 1"
+community: "Community 15"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_1
+  - community/Community_15
 ---
 
 # ApplicationWindow
 
 ## Connections
-- [[populate_wifi_list()]] - `references` [EXTRACTED]
+- [[DockMonitorInstance]] - `references` [EXTRACTED]
+- [[apply_dock_mode_layout()]] - `references` [EXTRACTED]
+- [[build_ui()_1]] - `references` [EXTRACTED]
+- [[create_dock_for_monitor()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_1
+#graphify/code #graphify/EXTRACTED #community/Community_15

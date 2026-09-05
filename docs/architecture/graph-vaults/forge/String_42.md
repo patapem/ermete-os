@@ -1,17 +1,19 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 67"
+community: "Community 42"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_67
+  - community/Community_42
 ---
 
 # String
 
 ## Connections
-- [[.detect_target_device()]] - `references` [EXTRACTED]
-- [[.poll_server()]] - `references` [EXTRACTED]
+- [[dot-dock_pinned()]] - `references` [EXTRACTED]
+- [[DockState]] - `references` [EXTRACTED]
+- [[ThemeState]] - `references` [EXTRACTED]
+- [[WallpaperState]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_67
+#graphify/code #graphify/EXTRACTED #community/Community_42

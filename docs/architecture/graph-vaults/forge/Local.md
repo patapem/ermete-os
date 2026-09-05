@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 13"
+community: "Community 3"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_13
+  - community/Community_3
 ---
 
 # Local
@@ -17,4 +17,4 @@ tags:
 - [[stats.rs]] - `imports_from` [EXTRACTED]
 - [[widgets_board.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_13
+#graphify/code #graphify/EXTRACTED #community/Community_3

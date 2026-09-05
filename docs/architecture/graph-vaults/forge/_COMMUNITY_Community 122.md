@@ -1,18 +1,18 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 5
 ---
 
 # Community 122
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 5 nodes
 
 ## Members
-- [[Box_15]] - code
-- [[build_page()_12]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/keyboard.rs
-- [[keyboard.rs]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/keyboard.rs
+- [[results di un run il primo e' il kernel di riferimento (published).]] - rationale - specs/azoth/bench-report.py
+- [[bench-report.py]] - code - specs/azoth/bench-report.py
+- [[fmt()]] - code - specs/azoth/bench-report.py
+- [[load()]] - code - specs/azoth/bench-report.py
+- [[main()_2]] - code - specs/azoth/bench-report.py
 
 ## Live Query (requires Dataview plugin)
 

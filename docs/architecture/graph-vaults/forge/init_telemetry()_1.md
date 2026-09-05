@@ -1,18 +1,18 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/main.rs"
+source_file: "specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/main.rs"
 type: "code"
-community: "Community 93"
-location: "L64"
+community: "Community 26"
+location: "L37"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_93
+  - community/Community_26
 ---
 
 # init_telemetry()
 
 ## Connections
-- [[main()_16]] - `calls` [EXTRACTED]
-- [[main.rs_14]] - `contains` [EXTRACTED]
+- [[athanor-daemon-rs-0.2.1srcmain.rs]] - `contains` [EXTRACTED]
+- [[main()_17]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_93
+#graphify/code #graphify/EXTRACTED #community/Community_26

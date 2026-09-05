@@ -1,16 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 43"
+community: "Community 82"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_43
+  - community/Community_82
 ---
 
 # Error
 
 ## Connections
-- [[.initialize_tunnel()]] - `references` [EXTRACTED]
+- [[dot-authenticate_oauth()]] - `references` [EXTRACTED]
+- [[dot-mount_fuse()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_43
+#graphify/code #graphify/EXTRACTED #community/Community_82

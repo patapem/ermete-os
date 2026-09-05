@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 2"
+community: "Community 95"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_2
+  - community/Community_95
 ---
 
 # PathBuf
 
 ## Connections
-- [[QuickLookFileData]] - `references` [EXTRACTED]
-- [[QuickLookMsg]] - `references` [EXTRACTED]
+- [[scan_dir_async()]] - `references` [EXTRACTED]
+- [[scan_wallpapers_async()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_2
+#graphify/code #graphify/EXTRACTED #community/Community_95

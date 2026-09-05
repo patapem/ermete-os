@@ -1,20 +1,20 @@
 ---
-source_file: "specs/ermete-recovery/ermete-recovery-1.0.0/src/main.rs"
+source_file: "specs/athanor-recovery/athanor-recovery-1.0.0/src/main.rs"
 type: "code"
-community: "Community 20"
+community: "Community 21"
 location: "L12"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_20
+  - community/Community_21
 ---
 
 # SecretRecoveryPassphrase
 
 ## Connections
-- [[.new()_36]] - `method` [EXTRACTED]
-- [[.verify()]] - `method` [EXTRACTED]
-- [[Vec_20]] - `references` [EXTRACTED]
-- [[main.rs_11]] - `contains` [EXTRACTED]
+- [[dot-new()_13]] - `method` [EXTRACTED]
+- [[dot-verify()_4]] - `method` [EXTRACTED]
+- [[Vec_11]] - `references` [EXTRACTED]
+- [[athanor-recovery-1.0.0srcmain.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_20
+#graphify/code #graphify/EXTRACTED #community/Community_21

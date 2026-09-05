@@ -1,16 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 14"
+community: "Community 4"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_14
+  - community/Community_4
 ---
 
 # Path
 
 ## Connections
-- [[apply_dynamic_material3_theme()]] - `references` [EXTRACTED]
+- [[open_file_with_default()]] - `references` [EXTRACTED]
+- [[quicklook.rs]] - `imports_from` [EXTRACTED]
+- [[show_quicklook_modal()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_14
+#graphify/code #graphify/EXTRACTED #community/Community_4

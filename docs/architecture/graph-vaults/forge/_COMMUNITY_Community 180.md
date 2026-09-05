@@ -1,16 +1,14 @@
 ---
 type: community
-cohesion: 1.00
 members: 1
 ---
 
 # Community 180
 
-**Cohesion:** 1.00 - tightly connected
 **Members:** 1 nodes
 
 ## Members
-- [[mod.rs_21]] - code - ermete-shell-rs/src/wayland/mod.rs
+- [[athanor-ai-daemon]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/Cargo.toml
 
 ## Live Query (requires Dataview plugin)
 

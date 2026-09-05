@@ -1,19 +1,18 @@
 ---
-source_file: "specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/desktop.rs"
+source_file: "specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/focus.rs"
 type: "code"
-community: "Community 89"
-location: "L43"
+community: "Community 140"
+location: "L5"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_89
+  - community/Community_140
 ---
 
 # build_page()
 
 ## Connections
-- [[Box_11]] - `references` [EXTRACTED]
-- [[desktop.rs]] - `contains` [EXTRACTED]
-- [[scan_wallpapers_async()]] - `calls` [EXTRACTED]
+- [[GtkBox_7]] - `references` [EXTRACTED]
+- [[focus.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_89
+#graphify/code #graphify/EXTRACTED #community/Community_140

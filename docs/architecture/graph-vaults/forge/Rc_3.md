@@ -1,17 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 18"
+community: "Community 39"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_18
+  - community/Community_39
 ---
 
 # Rc
 
 ## Connections
-- [[DesktopStackWidget]] - `references` [EXTRACTED]
-- [[stacks.rs]] - `imports_from` [EXTRACTED]
+- [[activate_layout()]] - `references` [EXTRACTED]
+- [[activate_layout_ui_only()]] - `references` [EXTRACTED]
+- [[layout_switcher.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_18
+#graphify/code #graphify/EXTRACTED #community/Community_39

@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 98"
+community: "Community 26"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_98
+  - community/Community_26
 ---
 
 # Result
 
 ## Connections
-- [[apply_dynamic_theme()]] - `references` [EXTRACTED]
+- [[main()_17]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_98
+#graphify/code #graphify/EXTRACTED #community/Community_26

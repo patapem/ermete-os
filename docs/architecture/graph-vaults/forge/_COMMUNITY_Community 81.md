@@ -1,25 +1,23 @@
 ---
 type: community
-cohesion: 0.27
 members: 10
 ---
 
 # Community 81
 
-**Cohesion:** 0.27 - loosely connected
 **Members:** 10 nodes
 
 ## Members
-- [[.get_clock_string()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs
-- [[.get_focused_title()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs
-- [[.get_live_state()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs
-- [[.get_network_status()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs
-- [[.subscribe_events()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs
-- [[F_8]] - code
-- [[String_85]] - code
-- [[TopbarState]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs
-- [[TopbarViewModel]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs
-- [[topbar_vm.rs]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs
+- [[BUILDAH_ISOLATION]] - code - scripts/fetch_repo_rpms.sh
+- [[STORAGE_DRIVER]] - code - scripts/fetch_repo_rpms.sh
+- [[XDG_CACHE_HOME]] - code - scripts/fetch_repo_rpms.sh
+- [[XDG_CONFIG_HOME]] - code - scripts/fetch_repo_rpms.sh
+- [[XDG_DATA_HOME]] - code - scripts/fetch_repo_rpms.sh
+- [[_CONTAINERS_USERNS_CONFIGURED]] - code - scripts/fetch_repo_rpms.sh
+- [[count_rpms()]] - code - scripts/fetch_repo_rpms.sh
+- [[fetch_repo_rpms.sh]] - code - scripts/fetch_repo_rpms.sh
+- [[fetch_repo_rpms.sh script]] - code - scripts/fetch_repo_rpms.sh
+- [[pull_and_extract()]] - code - scripts/fetch_repo_rpms.sh
 
 ## Live Query (requires Dataview plugin)
 

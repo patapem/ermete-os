@@ -1,21 +1,25 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/greeter/greeter.rs"
+source_file: "specs/athanor-dock/athanor-dock-1.0.0/src/ui.rs"
 type: "code"
-community: "Community 38"
-location: "L233"
+community: "Community 15"
+location: "L302"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_38
+  - community/Community_15
 ---
 
 # build_ui()
 
 ## Connections
 - [[Application_16]] - `references` [EXTRACTED]
-- [[authenticate()]] - `calls` [INFERRED]
-- [[discover_target_user()]] - `calls` [INFERRED]
-- [[format_italian_date()]] - `calls` [EXTRACTED]
-- [[greeter.rs]] - `contains` [EXTRACTED]
+- [[ApplicationWindow_3]] - `references` [EXTRACTED]
+- [[create_dock_for_monitor()]] - `calls` [EXTRACTED]
+- [[fetch_current_niri_windows()]] - `calls` [INFERRED]
+- [[fetch_current_workspaces()]] - `calls` [INFERRED]
+- [[load_dock_config()]] - `calls` [INFERRED]
+- [[refresh_monitor_instance()]] - `calls` [EXTRACTED]
+- [[spawn_dock_watchers()]] - `calls` [INFERRED]
+- [[ui.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_38
+#graphify/code #graphify/EXTRACTED #community/Community_15

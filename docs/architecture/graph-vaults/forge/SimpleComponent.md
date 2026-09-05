@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 20"
+community: "Community 104"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_20
+  - community/Community_104
 ---
 
 # SimpleComponent
 
 ## Connections
-- [[RecoveryModel]] - `implements` [EXTRACTED]
+- [[ControlCenterPanel]] - `implements` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_20
+#graphify/code #graphify/EXTRACTED #community/Community_104

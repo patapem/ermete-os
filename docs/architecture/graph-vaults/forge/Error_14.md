@@ -1,17 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 50"
+community: "Community 77"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_50
+  - community/Community_77
 ---
 
 # Error
 
 ## Connections
-- [[.trigger_local_wipe()]] - `references` [EXTRACTED]
-- [[check_polkit_auth_zbus()_5]] - `references` [EXTRACTED]
+- [[main()_23]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_50
+#graphify/code #graphify/EXTRACTED #community/Community_77

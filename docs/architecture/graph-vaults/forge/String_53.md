@@ -1,16 +1,20 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 103"
+community: "Community 56"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_103
+  - community/Community_56
 ---
 
 # String
 
 ## Connections
-- [[get_ethernet_status_async()]] - `references` [EXTRACTED]
+- [[dot-compute_commitment()]] - `references` [EXTRACTED]
+- [[dot-new()_44]] - `references` [EXTRACTED]
+- [[dot-to_b64()]] - `references` [EXTRACTED]
+- [[ZkProof]] - `references` [EXTRACTED]
+- [[ZkProofEngine]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_103
+#graphify/code #graphify/EXTRACTED #community/Community_56

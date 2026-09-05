@@ -1,18 +1,18 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs"
 type: "code"
-community: "Community 58"
+community: "Community 44"
 location: "L146"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_58
+  - community/Community_44
 ---
 
 # BluetoothDeviceInfo
 
 ## Connections
-- [[String_63]] - `references` [EXTRACTED]
-- [[types.rs_1]] - `contains` [EXTRACTED]
+- [[String_44]] - `references` [EXTRACTED]
+- [[ipctypes.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_58
+#graphify/code #graphify/EXTRACTED #community/Community_44

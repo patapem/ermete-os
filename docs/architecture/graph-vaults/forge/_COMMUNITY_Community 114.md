@@ -1,18 +1,18 @@
 ---
 type: community
-cohesion: 1.00
-members: 3
+members: 5
 ---
 
 # Community 114
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 3 nodes
+**Members:** 5 nodes
 
 ## Members
-- [[Result_41]] - code
-- [[main()_10]] - code - specs/ermete-lvfs-rs/ermete-lvfs-rs-1.0.0/src/main.rs
-- [[main.rs_8]] - code - specs/ermete-lvfs-rs/ermete-lvfs-rs-1.0.0/src/main.rs
+- [[Result_10]] - code
+- [[String_11]] - code
+- [[apply_daemon_hardening()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/security.rs
+- [[athanor-daemon-rs-0.2.1srcsecurity.rs]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/security.rs
+- [[drop_capabilities()_1]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/security.rs
 
 ## Live Query (requires Dataview plugin)
 

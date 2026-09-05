@@ -1,20 +1,20 @@
 ---
-source_file: "specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/main.rs"
+source_file: "specs/athanor-mdm-rs/athanor-mdm-rs-1.0.0/src/main.rs"
 type: "code"
-community: "Community 66"
-location: "L19"
+community: "Community 71"
+location: "L42"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_66
+  - community/Community_71
 ---
 
 # MdmDBusInterface
 
 ## Connections
-- [[.apply_policy()]] - `method` [EXTRACTED]
-- [[.disable_usb()]] - `method` [EXTRACTED]
-- [[.force_vpn()]] - `method` [EXTRACTED]
-- [[main.rs_9]] - `contains` [EXTRACTED]
+- [[dot-apply_policy()]] - `method` [EXTRACTED]
+- [[dot-disable_usb()]] - `method` [EXTRACTED]
+- [[dot-force_vpn()]] - `method` [EXTRACTED]
+- [[athanor-mdm-rs-1.0.0srcmain.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_66
+#graphify/code #graphify/EXTRACTED #community/Community_71

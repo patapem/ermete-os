@@ -1,27 +1,26 @@
 ---
 type: community
-cohesion: 0.30
-members: 12
+members: 13
 ---
 
 # Community 67
 
-**Cohesion:** 0.30 - loosely connected
-**Members:** 12 nodes
+**Members:** 13 nodes
 
 ## Members
-- [[.detect_target_device()]] - code - specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/wipe.rs
-- [[.execute_cryptsetup_erase()]] - code - specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/wipe.rs
-- [[.native_cryptsetup_erase()]] - code - specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/wipe.rs
-- [[.new()_34]] - code - specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/wipe.rs
-- [[.poll_server()]] - code - specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/wipe.rs
-- [[Option_19]] - code
-- [[Result_44]] - code
-- [[Self_31]] - code
-- [[String_42]] - code
-- [[SystemdManager]] - code - specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/wipe.rs
-- [[WipeEngine]] - code - specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/wipe.rs
-- [[wipe.rs]] - code - specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/wipe.rs
+- [[dot-new()_49]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/voiceover.rs
+- [[dot-speak()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/voiceover.rs
+- [[dot-stop()_2]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/voiceover.rs
+- [[Connection_7]] - code
+- [[Option_38]] - code
+- [[Receiver_9]] - code
+- [[Result_53]] - code
+- [[Self_49]] - code
+- [[String_64]] - code
+- [[VoiceOverService]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/voiceover.rs
+- [[VoiceOverWorker]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/voiceover.rs
+- [[get_session_conn()_1]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/voiceover.rs
+- [[srcvoiceover.rs]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/voiceover.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -29,3 +28,11 @@ members: 12
 TABLE source_file, type FROM #community/Community_67
 SORT file.name ASC
 ```
+
+## Connections to other communities
+- 3 edges to [[_COMMUNITY_Community 25]]
+
+## Top bridge nodes
+- [[VoiceOverService]] - degree 6, connects to 1 community
+- [[dot-new()_49]] - degree 6, connects to 1 community
+- [[srcvoiceover.rs]] - degree 4, connects to 1 community

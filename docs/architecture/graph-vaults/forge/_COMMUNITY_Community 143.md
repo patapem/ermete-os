@@ -1,17 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 2
+members: 3
 ---
 
 # Community 143
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 2 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[ermete-tpm-rollback-update.sh]] - code - specs/ermete-secure-boot/SOURCES/usr/libexec/ermete/ermete-tpm-rollback-update.sh
-- [[ermete-tpm-rollback-update.sh script]] - code - specs/ermete-secure-boot/SOURCES/usr/libexec/ermete/ermete-tpm-rollback-update.sh
+- [[Box_11]] - code
+- [[build_page()_10]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/mouse.rs
+- [[mouse.rs]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/mouse.rs
 
 ## Live Query (requires Dataview plugin)
 

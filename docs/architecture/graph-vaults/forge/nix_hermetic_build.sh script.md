@@ -1,12 +1,12 @@
 ---
 source_file: "scripts/nix_hermetic_build.sh"
 type: "code"
-community: "Community 137"
+community: "Community 162"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_137
+  - community/Community_162
 ---
 
 # nix_hermetic_build.sh script
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[nix_hermetic_build.sh]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_137
+#graphify/code #graphify/EXTRACTED #community/Community_162

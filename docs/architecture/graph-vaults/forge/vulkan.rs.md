@@ -1,12 +1,12 @@
 ---
-source_file: "specs/Static Rules Engine/Static Rules Engine-1.0.0/src/npu/vulkan.rs"
+source_file: "specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/npu/vulkan.rs"
 type: "code"
-community: "Community 59"
+community: "Community 63"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_59
+  - community/Community_63
 ---
 
 # vulkan.rs
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[VulkanTensorEngine]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_59
+#graphify/code #graphify/EXTRACTED #community/Community_63

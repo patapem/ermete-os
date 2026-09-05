@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/theme/mod.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/theme/mod.rs"
 type: "code"
 community: "Community 14"
 location: "L78"
@@ -12,11 +12,11 @@ tags:
 # get_theme_css_path()
 
 ## Connections
-- [[PathBuf_12]] - `references` [EXTRACTED]
+- [[PathBuf_2]] - `references` [EXTRACTED]
 - [[apply_dynamic_material3_theme()]] - `calls` [EXTRACTED]
 - [[init_dynamic_theme_css()]] - `calls` [EXTRACTED]
-- [[mod.rs_8]] - `contains` [EXTRACTED]
 - [[test_apply_dynamic_material3_theme()]] - `calls` [EXTRACTED]
 - [[test_theme_css_path()]] - `calls` [EXTRACTED]
+- [[thememod.rs]] - `contains` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_14

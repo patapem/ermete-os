@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/hypervisor.rs"
+source_file: "specs/athanor-gatekeeper-rs/athanor-gatekeeper-rs-1.0.0/src/hypervisor.rs"
 type: "code"
-community: "Community 3"
+community: "Community 1"
 location: "L247"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_3
+  - community/Community_1
 ---
 
 # test_crosvm_command_memory_and_balloon_args()
@@ -16,4 +16,4 @@ tags:
 - [[hypervisor.rs]] - `contains` [EXTRACTED]
 - [[parse_mem_arg()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_3
+#graphify/code #graphify/EXTRACTED #community/Community_1

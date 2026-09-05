@@ -1,62 +1,62 @@
 ---
 type: community
-cohesion: 0.10
-members: 47
+members: 49
 ---
 
 # Community 5
 
-**Cohesion:** 0.10 - loosely connected
-**Members:** 47 nodes
+**Members:** 49 nodes
 
 ## Members
-- [[.approve_execution()]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/dbus.rs
-- [[.deny_execution()]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/dbus.rs
-- [[.new()_31]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/dbus.rs
-- [[.request_root_privilege()]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/dbus.rs
-- [[.rollback_snapshot()]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/dbus.rs
-- [[.system_bus_name()_3]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/dbus.rs
-- [[Arc_13]] - code
-- [[Arc_14]] - code
-- [[Box_5]] - code
-- [[Connection_6]] - code
-- [[Error_8]] - code
-- [[Error_10]] - code
-- [[GatekeeperManager]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/dbus.rs
-- [[HashMap_14]] - code
-- [[HashMap_15]] - code
-- [[Header_6]] - code
-- [[Into_4]] - code
-- [[Mutex_7]] - code
+- [[dot-as_any()_4]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-connect_wifi()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-delete_wifi()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-disconnect_wifi()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-extract_ssid()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-get_cached_network_status()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-get_network_status_async()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-get_wifi_details()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-handle_connect_wifi()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-handle_delete_wifi()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-handle_disconnect_wifi()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-handle_get_wifi_details()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-handle_is_wifi_enabled()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-handle_list_wifi_networks()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-handle_modify_wifi()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-handle_refresh_network_status()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-handle_set_wifi_powered()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-handle_toggle_wifi()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-is_wifi_enabled()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-list_wifi_networks()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-modify_wifi()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-name()_5]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-new()_38]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-new_disconnected()_1]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-refresh_network_status()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-run()_4]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-set_wifi_powered()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-spawn()_4]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[dot-toggle_wifi()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[Any_7]] - code
+- [[Arc_12]] - code
+- [[ArcSwap_1]] - code
 - [[Mutex_8]] - code
-- [[Option_17]] - code
-- [[OwnedValue_5]] - code
-- [[Path_1]] - code
-- [[PathBuf_7]] - code
-- [[PathBuf_8]] - code
-- [[PolicyKitAuthority_3]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/dbus.rs
-- [[PolkitAuthorizationResult_3]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/dbus.rs
-- [[PolkitSubject_3]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/dbus.rs
-- [[RawFd]] - code
-- [[RawFd_1]] - code
-- [[Result_32]] - code
-- [[Result_33]] - code
-- [[Result_36]] - code
-- [[Self_25]] - code
-- [[String_35]] - code
-- [[String_36]] - code
-- [[bcachefs.rs]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/bcachefs.rs
-- [[bch_ioctl_subvolume_1]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/bcachefs.rs
-- [[check_polkit_auth_zbus()_2]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/dbus.rs
-- [[dbus.rs_1]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/dbus.rs
-- [[fanotify.rs]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/fanotify.rs
-- [[main()_8]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/main.rs
-- [[main.rs_6]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/main.rs
-- [[native_bcachefs_delete()_1]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/bcachefs.rs
-- [[native_bcachefs_snapshot()_1]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/bcachefs.rs
-- [[respond_and_close()]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/fanotify.rs
-- [[restore_bcachefs_snapshot_impl()]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/bcachefs.rs
-- [[take_bcachefs_snapshot()]] - code - specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/bcachefs.rs
+- [[NetworkActor]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[NetworkCommand]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[NetworkController]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[Option_30]] - code
+- [[Receiver_6]] - code
+- [[Result_42]] - code
+- [[Self_39]] - code
+- [[Sender_10]] - code
+- [[String_49]] - code
+- [[Value_5]] - code
+- [[Vec_25]] - code
+- [[WifiNetworkInfo]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs
+- [[check_sysfs_net_status()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[get_net_cache()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[get_network_controller()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
+- [[ipcnetwork.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -66,7 +66,14 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 1 edge to [[_COMMUNITY_Community 3]]
+- 6 edges to [[_COMMUNITY_Community 44]]
+- 3 edges to [[_COMMUNITY_Community 29]]
+- 1 edge to [[_COMMUNITY_Community 38]]
+- 1 edge to [[_COMMUNITY_Community 50]]
 
 ## Top bridge nodes
-- [[.approve_execution()]] - degree 9, connects to 1 community
+- [[NetworkActor]] - degree 20, connects to 2 communities
+- [[dot-new()_38]] - degree 17, connects to 2 communities
+- [[dot-spawn()_4]] - degree 11, connects to 2 communities
+- [[NetworkController]] - degree 25, connects to 1 community
+- [[ipcnetwork.rs]] - degree 9, connects to 1 community

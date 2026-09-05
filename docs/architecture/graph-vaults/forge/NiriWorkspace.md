@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/wayland/niri.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/wayland/niri.rs"
 type: "code"
 community: "Community 12"
 location: "L4"
@@ -12,8 +12,8 @@ tags:
 # NiriWorkspace
 
 ## Connections
-- [[Option_42]] - `references` [EXTRACTED]
-- [[String_87]] - `references` [EXTRACTED]
+- [[Option_7]] - `references` [EXTRACTED]
+- [[String_16]] - `references` [EXTRACTED]
 - [[TopbarInput]] - `references` [EXTRACTED]
 - [[WorkspaceItem]] - `references` [EXTRACTED]
 - [[niri.rs]] - `contains` [EXTRACTED]

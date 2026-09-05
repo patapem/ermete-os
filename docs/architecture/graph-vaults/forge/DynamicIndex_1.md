@@ -11,6 +11,6 @@ tags:
 # DynamicIndex
 
 ## Connections
-- [[.init_model()_1]] - `references` [EXTRACTED]
+- [[dot-init_model()_1]] - `references` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_12

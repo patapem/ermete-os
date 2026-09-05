@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 21"
+community: "Community 63"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_21
+  - community/Community_63
 ---
 
 # String
 
 ## Connections
-- [[MprisCommand]] - `references` [EXTRACTED]
-- [[MprisController]] - `references` [EXTRACTED]
+- [[dot-execute_vulkan_compute()]] - `references` [EXTRACTED]
+- [[VulkanTensorEngine]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_21
+#graphify/code #graphify/EXTRACTED #community/Community_63

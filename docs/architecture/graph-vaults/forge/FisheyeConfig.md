@@ -1,23 +1,23 @@
 ---
-source_file: "specs/ermete-dock/ermete-dock-1.0.0/src/dock_engine.rs"
+source_file: "specs/athanor-dock/athanor-dock-1.0.0/src/dock_engine.rs"
 type: "code"
-community: "Community 19"
+community: "Community 20"
 location: "L35"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_19
+  - community/Community_20
 ---
 
 # FisheyeConfig
 
 ## Connections
-- [[.default()_11]] - `method` [EXTRACTED]
-- [[.with_fisheye_config()]] - `references` [EXTRACTED]
-- [[Default_8]] - `implements` [EXTRACTED]
+- [[dot-default()_3]] - `method` [EXTRACTED]
+- [[dot-with_fisheye_config()]] - `references` [EXTRACTED]
+- [[Default_3]] - `implements` [EXTRACTED]
 - [[DockEngine]] - `references` [EXTRACTED]
 - [[compute_fisheye_scale()]] - `references` [EXTRACTED]
 - [[compute_fisheye_scales()]] - `references` [EXTRACTED]
 - [[dock_engine.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_19
+#graphify/code #graphify/EXTRACTED #community/Community_20

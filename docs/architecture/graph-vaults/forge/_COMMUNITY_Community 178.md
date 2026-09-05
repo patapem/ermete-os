@@ -1,16 +1,15 @@
 ---
 type: community
-cohesion: 1.00
-members: 1
+members: 2
 ---
 
 # Community 178
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 1 nodes
+**Members:** 2 nodes
 
 ## Members
-- [[mod.rs_14]] - code - ermete-shell-rs/src/sys/mod.rs
+- [[build-inputs.py]] - code - specs/azoth/build-inputs.py
+- [[sha()]] - code - specs/azoth/build-inputs.py
 
 ## Live Query (requires Dataview plugin)
 

@@ -1,12 +1,12 @@
 ---
 source_file: "scripts/update_specs.sh"
 type: "code"
-community: "Community 112"
+community: "Community 132"
 location: "L4"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_112
+  - community/Community_132
 ---
 
 # update_spec()
@@ -15,4 +15,4 @@ tags:
 - [[update_specs.sh]] - `defines` [EXTRACTED]
 - [[update_specs.sh script]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_112
+#graphify/code #graphify/EXTRACTED #community/Community_132

@@ -1,18 +1,15 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 2
 ---
 
 # Community 160
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 2 nodes
 
 ## Members
-- [[Application_5]] - code
-- [[clipboard.rs]] - code - ermete-shell-rs/src/ui/clipboard.rs
-- [[show_clipboard_modal()]] - code - ermete-shell-rs/src/ui/clipboard.rs
+- [[dynamic-matrix.sh]] - code - scripts/dynamic-matrix.sh
+- [[dynamic-matrix.sh script]] - code - scripts/dynamic-matrix.sh
 
 ## Live Query (requires Dataview plugin)
 

@@ -1,17 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 44"
+community: "Community 22"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_44
+  - community/Community_22
 ---
 
 # PathBuf
 
 ## Connections
-- [[dock_config.rs]] - `imports_from` [EXTRACTED]
-- [[get_dock_config_path()]] - `references` [EXTRACTED]
+- [[dot-with_output_dir()]] - `references` [EXTRACTED]
+- [[EbpfJitCompiler]] - `references` [EXTRACTED]
+- [[live_patch.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_44
+#graphify/code #graphify/EXTRACTED #community/Community_22

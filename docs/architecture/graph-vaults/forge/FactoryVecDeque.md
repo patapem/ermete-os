@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 80"
+community: "Community 104"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_80
+  - community/Community_104
 ---
 
 # FactoryVecDeque
@@ -14,4 +14,4 @@ tags:
 - [[ControlCenterPanel]] - `references` [EXTRACTED]
 - [[panel.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_80
+#graphify/code #graphify/EXTRACTED #community/Community_104

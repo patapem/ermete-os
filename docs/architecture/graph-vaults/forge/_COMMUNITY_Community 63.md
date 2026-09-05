@@ -1,28 +1,26 @@
 ---
 type: community
-cohesion: 0.23
 members: 13
 ---
 
 # Community 63
 
-**Cohesion:** 0.23 - loosely connected
 **Members:** 13 nodes
 
 ## Members
-- [[.new()_21]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/voiceover.rs
-- [[.speak()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/voiceover.rs
-- [[.stop()_2]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/voiceover.rs
-- [[Connection_5]] - code
-- [[Option_10]] - code
-- [[Receiver_2]] - code
-- [[Result_26]] - code
-- [[Self_18]] - code
-- [[String_28]] - code
-- [[VoiceOverService]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/voiceover.rs
-- [[VoiceOverWorker]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/voiceover.rs
-- [[get_session_conn()_1]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/voiceover.rs
-- [[voiceover.rs]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/voiceover.rs
+- [[dot-default()_18]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/npu/vulkan.rs
+- [[dot-device_name()]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/npu/vulkan.rs
+- [[dot-execute_vulkan_compute()]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/npu/vulkan.rs
+- [[dot-has_tensor_cores()]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/npu/vulkan.rs
+- [[dot-is_available()_1]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/npu/vulkan.rs
+- [[dot-new()_46]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/npu/vulkan.rs
+- [[Default_11]] - code
+- [[Result_49]] - code
+- [[Self_46]] - code
+- [[String_60]] - code
+- [[Vec_31]] - code
+- [[VulkanTensorEngine]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/npu/vulkan.rs
+- [[vulkan.rs]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/npu/vulkan.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -32,9 +30,7 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 3 edges to [[_COMMUNITY_Community 27]]
+- 2 edges to [[_COMMUNITY_Community 55]]
 
 ## Top bridge nodes
-- [[VoiceOverService]] - degree 6, connects to 1 community
-- [[.new()_21]] - degree 6, connects to 1 community
-- [[voiceover.rs]] - degree 4, connects to 1 community
+- [[VulkanTensorEngine]] - degree 11, connects to 1 community

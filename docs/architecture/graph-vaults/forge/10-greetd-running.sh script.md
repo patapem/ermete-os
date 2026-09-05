@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-system-config/SOURCES/etc/greenboot/check/required.d/10-greetd-running.sh"
+source_file: "specs/athanor-system-config/SOURCES/etc/greenboot/check/required.d/10-greetd-running.sh"
 type: "code"
-community: "Community 144"
+community: "Community 173"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_144
+  - community/Community_173
 ---
 
 # 10-greetd-running.sh script
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[10-greetd-running.sh]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_144
+#graphify/code #graphify/EXTRACTED #community/Community_173

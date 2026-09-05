@@ -1,19 +1,19 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/main.rs"
+source_file: "specs/athanor-recovery/athanor-recovery-1.0.0/src/main.rs"
 type: "code"
-community: "Community 93"
-location: "L75"
+community: "Community 21"
+location: "L598"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_93
+  - community/Community_21
 ---
 
 # main()
 
 ## Connections
-- [[ExitCode]] - `references` [EXTRACTED]
-- [[init_telemetry()_1]] - `calls` [EXTRACTED]
-- [[main.rs_14]] - `contains` [EXTRACTED]
+- [[dot-init()_1]] - `calls` [EXTRACTED]
+- [[dot-new()_13]] - `calls` [EXTRACTED]
+- [[athanor-recovery-1.0.0srcmain.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_93
+#graphify/code #graphify/EXTRACTED #community/Community_21

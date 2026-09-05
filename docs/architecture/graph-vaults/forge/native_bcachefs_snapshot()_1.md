@@ -1,21 +1,21 @@
 ---
-source_file: "specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/bcachefs.rs"
+source_file: "specs/athanor-recovery/athanor-recovery-1.0.0/src/main.rs"
 type: "code"
-community: "Community 5"
-location: "L24"
+community: "Community 21"
+location: "L464"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_5
+  - community/Community_21
 ---
 
 # native_bcachefs_snapshot()
 
 ## Connections
-- [[Path_1]] - `references` [EXTRACTED]
-- [[Result_32]] - `references` [EXTRACTED]
-- [[bcachefs.rs]] - `contains` [EXTRACTED]
-- [[restore_bcachefs_snapshot_impl()]] - `calls` [EXTRACTED]
-- [[take_bcachefs_snapshot()]] - `calls` [EXTRACTED]
+- [[dot-new()_13]] - `calls` [EXTRACTED]
+- [[Path_5]] - `references` [EXTRACTED]
+- [[Result_21]] - `references` [EXTRACTED]
+- [[athanor-recovery-1.0.0srcmain.rs]] - `contains` [EXTRACTED]
+- [[execute_rollback_async()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_5
+#graphify/code #graphify/EXTRACTED #community/Community_21

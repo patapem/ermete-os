@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/wayland/niri.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/wayland/niri.rs"
 type: "code"
 community: "Community 12"
 location: "L13"
@@ -13,8 +13,8 @@ tags:
 
 ## Connections
 - [[NiriWorkspace]] - `references` [EXTRACTED]
-- [[Sender_10]] - `references` [EXTRACTED]
-- [[Vec_37]] - `references` [EXTRACTED]
+- [[Sender_1]] - `references` [EXTRACTED]
+- [[Vec_4]] - `references` [EXTRACTED]
 - [[niri.rs]] - `contains` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_12

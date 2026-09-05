@@ -1,24 +1,24 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/network.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/network.rs"
 type: "code"
-community: "Community 90"
+community: "Community 96"
 location: "L6"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_90
+  - community/Community_96
 ---
 
 # NetworkModuleData
 
 ## Connections
-- [[.default()_17]] - `method` [EXTRACTED]
+- [[dot-default()_25]] - `method` [EXTRACTED]
 - [[CcPanelInput]] - `references` [EXTRACTED]
-- [[Default_13]] - `implements` [EXTRACTED]
+- [[Default_18]] - `implements` [EXTRACTED]
 - [[ModuleContent]] - `references` [EXTRACTED]
-- [[String_58]] - `references` [EXTRACTED]
+- [[String_90]] - `references` [EXTRACTED]
 - [[build_network_widget()]] - `references` [EXTRACTED]
-- [[network.rs_2]] - `contains` [EXTRACTED]
+- [[control_centernetwork.rs]] - `contains` [EXTRACTED]
 - [[panel.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_90
+#graphify/code #graphify/EXTRACTED #community/Community_96

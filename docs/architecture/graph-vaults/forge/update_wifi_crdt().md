@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/crdt_store.rs"
+source_file: "specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs"
 type: "code"
-community: "Community 41"
+community: "Community 43"
 location: "L166"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_41
+  - community/Community_43
 ---
 
 # update_wifi_crdt()
@@ -15,4 +15,4 @@ tags:
 - [[crdt_store.rs]] - `contains` [EXTRACTED]
 - [[update_setting_crdt()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_41
+#graphify/code #graphify/EXTRACTED #community/Community_43

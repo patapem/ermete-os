@@ -1,16 +1,19 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 2"
+community: "Community 8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_2
+  - community/Community_8
 ---
 
 # Result
 
 ## Connections
-- [[.fmt()]] - `references` [EXTRACTED]
+- [[dot-approve_execution()]] - `references` [EXTRACTED]
+- [[dot-deny_execution()]] - `references` [EXTRACTED]
+- [[dot-request_root_privilege()]] - `references` [EXTRACTED]
+- [[dot-rollback_snapshot()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_2
+#graphify/code #graphify/EXTRACTED #community/Community_8

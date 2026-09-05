@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-dock/ermete-dock-1.0.0/src/ui.rs"
+source_file: "specs/athanor-dock/athanor-dock-1.0.0/src/ui.rs"
 type: "code"
 community: "Community 15"
 location: "L709"
@@ -12,8 +12,8 @@ tags:
 # show_window_picker_popover()
 
 ## Connections
-- [[.new()_28]] - `calls` [EXTRACTED]
-- [[Button_1]] - `references` [EXTRACTED]
+- [[dot-new()_5]] - `calls` [EXTRACTED]
+- [[Button_2]] - `references` [EXTRACTED]
 - [[DockItem]] - `references` [EXTRACTED]
 - [[ui.rs]] - `contains` [EXTRACTED]
 

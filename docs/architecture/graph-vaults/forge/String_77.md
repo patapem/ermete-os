@@ -1,17 +1,20 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 7"
+community: "Community 8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_7
+  - community/Community_8
 ---
 
 # String
 
 ## Connections
-- [[ActiveSnapGroup]] - `references` [EXTRACTED]
-- [[RunningApp]] - `references` [EXTRACTED]
+- [[dot-approve_execution()]] - `references` [EXTRACTED]
+- [[dot-deny_execution()]] - `references` [EXTRACTED]
+- [[dot-new()_55]] - `references` [EXTRACTED]
+- [[dot-rollback_snapshot()]] - `references` [EXTRACTED]
+- [[GatekeeperManager]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_7
+#graphify/code #graphify/EXTRACTED #community/Community_8

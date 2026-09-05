@@ -1,16 +1,19 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 19"
+community: "Community 42"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_19
+  - community/Community_42
 ---
 
 # Default
 
 ## Connections
-- [[FisheyeConfig]] - `implements` [EXTRACTED]
+- [[DisplayState]] - `implements` [EXTRACTED]
+- [[DockState]] - `implements` [EXTRACTED]
+- [[ThemeState]] - `implements` [EXTRACTED]
+- [[WallpaperState]] - `implements` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_19
+#graphify/code #graphify/EXTRACTED #community/Community_42

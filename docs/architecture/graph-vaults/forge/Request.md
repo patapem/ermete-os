@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 38"
+community: "Community 3"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_38
+  - community/Community_3
 ---
 
 # Request
@@ -13,4 +13,4 @@ tags:
 ## Connections
 - [[send_request()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_38
+#graphify/code #graphify/EXTRACTED #community/Community_3

@@ -1,16 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 87"
+community: "Community 66"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_87
+  - community/Community_66
 ---
 
 # OwnedValue
 
 ## Connections
-- [[PolkitSubject_1]] - `references` [EXTRACTED]
+- [[dot-read()]] - `references` [EXTRACTED]
+- [[dot-read_all()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_87
+#graphify/code #graphify/EXTRACTED #community/Community_66

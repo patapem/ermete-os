@@ -1,19 +1,19 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/control_center/wifi.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/wifi.rs"
 type: "code"
-community: "Community 1"
+community: "Community 0"
 location: "L133"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_1
+  - community/Community_0
 ---
 
 # show_wifi_details_modal()
 
 ## Connections
-- [[Application_14]] - `references` [EXTRACTED]
+- [[Application_6]] - `references` [EXTRACTED]
 - [[setup_popup_autoclose()]] - `calls` [INFERRED]
 - [[wifi.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_1
+#graphify/code #graphify/EXTRACTED #community/Community_0

@@ -1,24 +1,20 @@
 ---
-source_file: "specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/settings.rs"
+source_file: "specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/theme.rs"
 type: "code"
-community: "Community 27"
-location: "L31"
+community: "Community 109"
+location: "L10"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_27
+  - community/Community_109
 ---
 
 # config_dir()
 
 ## Connections
-- [[.ensure_config_file()]] - `calls` [EXTRACTED]
-- [[.ensure_config_file()_1]] - `calls` [EXTRACTED]
-- [[.load()]] - `calls` [EXTRACTED]
-- [[.load()_1]] - `calls` [EXTRACTED]
-- [[.save()]] - `calls` [EXTRACTED]
-- [[.save()_1]] - `calls` [EXTRACTED]
-- [[PathBuf_4]] - `references` [EXTRACTED]
-- [[settings.rs]] - `contains` [EXTRACTED]
+- [[PathBuf_1]] - `references` [EXTRACTED]
+- [[apply_dynamic_theme()]] - `calls` [EXTRACTED]
+- [[test_apply_dynamic_theme_pipeline()]] - `calls` [EXTRACTED]
+- [[theme.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_27
+#graphify/code #graphify/EXTRACTED #community/Community_109

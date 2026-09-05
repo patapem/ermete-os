@@ -1,17 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 2
+members: 3
 ---
 
 # Community 140
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 2 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[ermete-livepatch-injector.sh]] - code - specs/ermete-livepatch/ermete-livepatch-injector.sh
-- [[ermete-livepatch-injector.sh script]] - code - specs/ermete-livepatch/ermete-livepatch-injector.sh
+- [[GtkBox_7]] - code
+- [[build_page()_7]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/focus.rs
+- [[focus.rs]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/focus.rs
 
 ## Live Query (requires Dataview plugin)
 

@@ -1,17 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 65"
+community: "Community 100"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_65
+  - community/Community_100
 ---
 
 # String
 
 ## Connections
-- [[.execute_npu_inference()]] - `references` [EXTRACTED]
-- [[OpenVinoNpuEngine]] - `references` [EXTRACTED]
+- [[Args]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_65
+#graphify/code #graphify/EXTRACTED #community/Community_100

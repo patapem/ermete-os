@@ -1,17 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 20"
+community: "Community 41"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_20
+  - community/Community_41
 ---
 
 # Vec
 
 ## Connections
-- [[.new()_36]] - `references` [EXTRACTED]
-- [[SecretRecoveryPassphrase]] - `references` [EXTRACTED]
+- [[fetch_current_niri_windows()]] - `references` [EXTRACTED]
+- [[fetch_current_workspaces()]] - `references` [EXTRACTED]
+- [[spawn_dock_watchers()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_20
+#graphify/code #graphify/EXTRACTED #community/Community_41

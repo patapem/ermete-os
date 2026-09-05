@@ -1,12 +1,12 @@
 ---
 source_file: "scripts/fetch_repo_rpms.sh"
 type: "code"
-community: "Community 77"
+community: "Community 81"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_77
+  - community/Community_81
 ---
 
 # fetch_repo_rpms.sh
@@ -22,4 +22,4 @@ tags:
 - [[fetch_repo_rpms.sh script]] - `contains` [EXTRACTED]
 - [[pull_and_extract()]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_77
+#graphify/code #graphify/EXTRACTED #community/Community_81

@@ -1,17 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 71"
+community: "Community 1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_71
+  - community/Community_1
 ---
 
 # String
 
 ## Connections
-- [[.classify_workload()]] - `references` [EXTRACTED]
-- [[.process_query()]] - `references` [EXTRACTED]
+- [[ensure_seccomp_policy()]] - `references` [EXTRACTED]
+- [[parse_mem_arg()]] - `references` [EXTRACTED]
+- [[read_seccomp_policy()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_71
+#graphify/code #graphify/EXTRACTED #community/Community_1

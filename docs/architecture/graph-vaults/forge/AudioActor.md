@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs"
 type: "code"
 community: "Community 29"
 location: "L13"
@@ -12,16 +12,16 @@ tags:
 # AudioActor
 
 ## Connections
-- [[.handle_set_source_volume()]] - `method` [EXTRACTED]
-- [[.handle_set_volume()]] - `method` [EXTRACTED]
-- [[.handle_toggle_mute()]] - `method` [EXTRACTED]
-- [[.handle_toggle_source_mute()]] - `method` [EXTRACTED]
-- [[.run()]] - `method` [EXTRACTED]
-- [[.spawn()]] - `method` [EXTRACTED]
+- [[dot-handle_set_source_volume()]] - `method` [EXTRACTED]
+- [[dot-handle_set_volume()]] - `method` [EXTRACTED]
+- [[dot-handle_toggle_mute()]] - `method` [EXTRACTED]
+- [[dot-handle_toggle_source_mute()]] - `method` [EXTRACTED]
+- [[dot-run()_1]] - `method` [EXTRACTED]
+- [[dot-spawn()_1]] - `method` [EXTRACTED]
 - [[AudioBus]] - `references` [EXTRACTED]
 - [[AudioCommand]] - `references` [EXTRACTED]
 - [[IpcBackend]] - `references` [EXTRACTED]
-- [[Receiver_3]] - `references` [EXTRACTED]
-- [[audio.rs_2]] - `contains` [EXTRACTED]
+- [[Receiver_2]] - `references` [EXTRACTED]
+- [[ipcaudio.rs]] - `contains` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_29

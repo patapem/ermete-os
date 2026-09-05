@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-qa/SOURCES/test-nvidia-modules.sh"
+source_file: "specs/athanor-qa/SOURCES/test-nvidia-modules.sh"
 type: "code"
-community: "Community 141"
+community: "Community 167"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_141
+  - community/Community_167
 ---
 
 # test-nvidia-modules.sh
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[test-nvidia-modules.sh script]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_141
+#graphify/code #graphify/EXTRACTED #community/Community_167

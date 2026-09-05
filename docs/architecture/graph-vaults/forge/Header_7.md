@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 47"
+community: "Community 82"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_47
+  - community/Community_82
 ---
 
 # Header
 
 ## Connections
-- [[.apply_kernel_patch()]] - `references` [EXTRACTED]
+- [[dot-mount_fuse()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_47
+#graphify/code #graphify/EXTRACTED #community/Community_82

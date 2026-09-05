@@ -1,18 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 18"
+community: "Community 58"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_18
+  - community/Community_58
 ---
 
 # Vec
 
 ## Connections
-- [[DesktopStack]] - `references` [EXTRACTED]
-- [[DesktopStackWidget]] - `references` [EXTRACTED]
-- [[load_desktop_stacks()]] - `references` [EXTRACTED]
+- [[DockItem]] - `references` [EXTRACTED]
+- [[reconcile_dock_items()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_18
+#graphify/code #graphify/EXTRACTED #community/Community_58

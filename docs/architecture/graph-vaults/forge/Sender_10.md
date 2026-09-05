@@ -1,16 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 12"
+community: "Community 5"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_12
+  - community/Community_5
 ---
 
 # Sender
 
 ## Connections
-- [[spawn_niri_workspace_watcher()]] - `references` [EXTRACTED]
+- [[dot-spawn()_4]] - `references` [EXTRACTED]
+- [[NetworkCommand]] - `references` [EXTRACTED]
+- [[NetworkController]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_12
+#graphify/code #graphify/EXTRACTED #community/Community_5

@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/ipc.rs"
+source_file: "specs/athanor-gatekeeper-rs/athanor-gatekeeper-rs-1.0.0/src/ipc.rs"
 type: "code"
-community: "Community 3"
+community: "Community 1"
 location: "L35"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_3
+  - community/Community_1
 ---
 
 # FanotifyBufferParser
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[ipc.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_3
+#graphify/code #graphify/EXTRACTED #community/Community_1

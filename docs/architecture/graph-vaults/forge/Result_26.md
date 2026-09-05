@@ -1,17 +1,24 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 63"
+community: "Community 27"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_63
+  - community/Community_27
 ---
 
 # Result
 
 ## Connections
-- [[.speak()]] - `references` [EXTRACTED]
-- [[.stop()_2]] - `references` [EXTRACTED]
+- [[dot-handle_is_bluetooth_enabled()]] - `references` [EXTRACTED]
+- [[dot-handle_list_bluetooth_devices()]] - `references` [EXTRACTED]
+- [[dot-handle_set_bluetooth_powered()]] - `references` [EXTRACTED]
+- [[dot-handle_toggle_bluetooth()]] - `references` [EXTRACTED]
+- [[dot-is_bluetooth_enabled()]] - `references` [EXTRACTED]
+- [[dot-list_bluetooth_devices()]] - `references` [EXTRACTED]
+- [[dot-set_bluetooth_powered()]] - `references` [EXTRACTED]
+- [[dot-toggle_bluetooth()]] - `references` [EXTRACTED]
+- [[BluetoothCommand]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_63
+#graphify/code #graphify/EXTRACTED #community/Community_27

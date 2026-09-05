@@ -1,50 +1,48 @@
 ---
 type: community
-cohesion: 0.14
 members: 35
 ---
 
 # Community 11
 
-**Cohesion:** 0.14 - loosely connected
 **Members:** 35 nodes
 
 ## Members
-- [[.create_snapshot()]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
-- [[.default()_3]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
-- [[.delete_snapshot()]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
-- [[.get_manifest_path()]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
-- [[.list_snapshots()]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
-- [[.new()_4]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
-- [[.restore_snapshot()]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
-- [[.system_bus_name()]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
-- [[BackupServer]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
+- [[dot-dilithium_pk_b64()]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/pqc.rs
+- [[dot-get_pqc_status()]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/main.rs
+- [[dot-get_public_key()]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/main.rs
+- [[dot-initialize_tunnel()]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/wg_manager.rs
+- [[dot-kyber_keypair()]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/pqc.rs
+- [[dot-kyber_pk_b64()]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/pqc.rs
+- [[dot-kyber_public_key()]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/wg_manager.rs
+- [[dot-new()_2]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/pqc.rs
+- [[dot-new()_3]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/wg_manager.rs
+- [[dot-status()]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/main.rs
+- [[dot-x25519_pk_b64()]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/pqc.rs
+- [[dot-x25519_sk()]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/pqc.rs
+- [[Arc_2]] - code
+- [[Box]] - code
 - [[Box_1]] - code
-- [[Connection]] - code
-- [[Default_3]] - code
-- [[Error_1]] - code
-- [[HashMap]] - code
-- [[Header]] - code
-- [[Into]] - code
-- [[OwnedValue]] - code
-- [[Path]] - code
-- [[PathBuf_1]] - code
-- [[PolicyKitAuthority]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
-- [[PolkitAuthorizationResult]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
-- [[PolkitSubject]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
+- [[Error_2]] - code
+- [[Error_3]] - code
+- [[KyberKeyPair]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/pqc.rs
+- [[MeshSyncBus]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/main.rs
+- [[Option_6]] - code
+- [[PqcKeys]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/pqc.rs
+- [[PublicKey]] - code
+- [[Result_5]] - code
+- [[Result_6]] - code
 - [[Result_7]] - code
 - [[Self_4]] - code
-- [[SnapshotInfo]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
+- [[Self_5]] - code
+- [[String_7]] - code
 - [[String_8]] - code
-- [[Vec_5]] - code
-- [[bch_ioctl_subvolume]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
-- [[check_polkit_auth_zbus()]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
-- [[daemon.rs]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
-- [[main()_2]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
-- [[native_bcachefs_delete()]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
-- [[native_bcachefs_snapshot()]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
-- [[test_backup_server_init_and_manifest_path()]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
-- [[test_snapshot_lifecycle_and_restore()]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/daemon.rs
+- [[Vec_2]] - code
+- [[WgMeshManager]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/wg_manager.rs
+- [[athanor-mesh-sync-1.0.0srcmain.rs]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/main.rs
+- [[main()_9]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/main.rs
+- [[pqc.rs]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/pqc.rs
+- [[wg_manager.rs]] - code - specs/athanor-mesh-sync/athanor-mesh-sync-1.0.0/src/wg_manager.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -52,9 +50,3 @@ members: 35
 TABLE source_file, type FROM #community/Community_11
 SORT file.name ASC
 ```
-
-## Connections to other communities
-- 1 edge to [[_COMMUNITY_Community 13]]
-
-## Top bridge nodes
-- [[daemon.rs]] - degree 16, connects to 1 community

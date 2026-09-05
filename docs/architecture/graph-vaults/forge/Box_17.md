@@ -1,16 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 123"
+community: "Community 3"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_123
+  - community/Community_3
 ---
 
 # Box
 
 ## Connections
-- [[build_page()_14]] - `references` [EXTRACTED]
+- [[build_clock_widget()]] - `references` [EXTRACTED]
+- [[build_system_widget()]] - `references` [EXTRACTED]
+- [[make_widget_draggable()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_123
+#graphify/code #graphify/EXTRACTED #community/Community_3

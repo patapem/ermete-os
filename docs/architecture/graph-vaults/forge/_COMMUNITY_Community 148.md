@@ -1,16 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 1
+members: 3
 ---
 
 # Community 148
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 1 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[manifest.json_2]] - code - repo-cache/repo-tier2/manifest.json
+- [[Application_14]] - code
+- [[powermenu.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/powermenu.rs
+- [[show_powermenu_modal()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/powermenu.rs
 
 ## Live Query (requires Dataview plugin)
 

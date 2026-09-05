@@ -1,28 +1,28 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs"
 type: "code"
-community: "Community 23"
+community: "Community 31"
 location: "L177"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_23
+  - community/Community_31
 ---
 
 # AudioBus
 
 ## Connections
-- [[.default()_18]] - `method` [EXTRACTED]
-- [[.emit()]] - `method` [EXTRACTED]
-- [[.new()_41]] - `references` [EXTRACTED]
-- [[.new()_48]] - `method` [EXTRACTED]
-- [[.spawn()]] - `references` [EXTRACTED]
-- [[.subscribe()]] - `method` [EXTRACTED]
+- [[dot-default()_6]] - `method` [EXTRACTED]
+- [[dot-emit()]] - `method` [EXTRACTED]
+- [[dot-new()_24]] - `references` [EXTRACTED]
+- [[dot-new()_26]] - `method` [EXTRACTED]
+- [[dot-spawn()_1]] - `references` [EXTRACTED]
+- [[dot-subscribe()]] - `method` [EXTRACTED]
 - [[AudioActor]] - `references` [EXTRACTED]
 - [[AudioEvent]] - `references` [EXTRACTED]
-- [[Default_14]] - `implements` [EXTRACTED]
-- [[Sender_9]] - `references` [EXTRACTED]
+- [[Default_6]] - `implements` [EXTRACTED]
+- [[Sender_7]] - `references` [EXTRACTED]
 - [[get_audio_bus()]] - `references` [EXTRACTED]
-- [[types.rs_1]] - `contains` [EXTRACTED]
+- [[ipctypes.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_23
+#graphify/code #graphify/EXTRACTED #community/Community_31

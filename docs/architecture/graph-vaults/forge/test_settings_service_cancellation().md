@@ -1,20 +1,20 @@
 ---
-source_file: "specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/settings.rs"
+source_file: "specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs"
 type: "code"
-community: "Community 27"
+community: "Community 25"
 location: "L644"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_27
+  - community/Community_25
 ---
 
 # test_settings_service_cancellation()
 
 ## Connections
-- [[.new()_20]] - `calls` [EXTRACTED]
-- [[.new_async()_1]] - `calls` [EXTRACTED]
-- [[.new_with_token()]] - `calls` [EXTRACTED]
+- [[dot-new()_17]] - `calls` [EXTRACTED]
+- [[dot-new_async()_1]] - `calls` [EXTRACTED]
+- [[dot-new_with_token()]] - `calls` [EXTRACTED]
 - [[settings.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_27
+#graphify/code #graphify/EXTRACTED #community/Community_25

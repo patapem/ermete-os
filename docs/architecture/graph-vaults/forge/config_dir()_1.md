@@ -1,20 +1,24 @@
 ---
-source_file: "specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/theme.rs"
+source_file: "specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs"
 type: "code"
-community: "Community 98"
-location: "L10"
+community: "Community 25"
+location: "L31"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_98
+  - community/Community_25
 ---
 
 # config_dir()
 
 ## Connections
-- [[PathBuf_5]] - `references` [EXTRACTED]
-- [[apply_dynamic_theme()]] - `calls` [EXTRACTED]
-- [[test_apply_dynamic_theme_pipeline()]] - `calls` [EXTRACTED]
-- [[theme.rs]] - `contains` [EXTRACTED]
+- [[dot-ensure_config_file()]] - `calls` [EXTRACTED]
+- [[dot-ensure_config_file()_1]] - `calls` [EXTRACTED]
+- [[dot-load()]] - `calls` [EXTRACTED]
+- [[dot-load()_1]] - `calls` [EXTRACTED]
+- [[dot-save()]] - `calls` [EXTRACTED]
+- [[dot-save()_1]] - `calls` [EXTRACTED]
+- [[PathBuf_7]] - `references` [EXTRACTED]
+- [[settings.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_98
+#graphify/code #graphify/EXTRACTED #community/Community_25

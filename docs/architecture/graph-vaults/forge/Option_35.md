@@ -1,16 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 42"
+community: "Community 59"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_42
+  - community/Community_59
 ---
 
 # Option
 
 ## Connections
-- [[WidgetConfig]] - `references` [EXTRACTED]
+- [[dot-poll_passive_status()]] - `references` [EXTRACTED]
+- [[UnikernelNetworkConsumer]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_42
+#graphify/code #graphify/EXTRACTED #community/Community_59

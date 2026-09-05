@@ -1,16 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 1
+members: 3
 ---
 
 # Community 155
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 1 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[mod.rs_12]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/prompts/mod.rs
+- [[prune()]] - code - specs/azoth/retention.sh
+- [[retention.sh]] - code - specs/azoth/retention.sh
+- [[retention.sh script]] - code - specs/azoth/retention.sh
 
 ## Live Query (requires Dataview plugin)
 

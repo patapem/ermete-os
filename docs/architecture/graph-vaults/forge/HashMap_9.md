@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 62"
+community: "Community 38"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_62
+  - community/Community_38
 ---
 
 # HashMap
 
 ## Connections
-- [[.read_all()]] - `references` [EXTRACTED]
-- [[portal.rs]] - `imports_from` [EXTRACTED]
+- [[ProxyRegistry]] - `references` [EXTRACTED]
+- [[system_proxies.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_62
+#graphify/code #graphify/EXTRACTED #community/Community_38

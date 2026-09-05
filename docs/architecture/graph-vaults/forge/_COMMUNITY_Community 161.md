@@ -1,18 +1,15 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 2
 ---
 
 # Community 161
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 2 nodes
 
 ## Members
-- [[Application_18]] - code
-- [[powermenu.rs]] - code - ermete-shell-rs/src/ui/powermenu.rs
-- [[show_powermenu_modal()]] - code - ermete-shell-rs/src/ui/powermenu.rs
+- [[fetch_sources.sh]] - code - scripts/fetch_sources.sh
+- [[fetch_sources.sh script]] - code - scripts/fetch_sources.sh
 
 ## Live Query (requires Dataview plugin)
 

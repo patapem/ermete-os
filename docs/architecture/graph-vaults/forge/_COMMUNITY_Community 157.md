@@ -1,16 +1,15 @@
 ---
 type: community
-cohesion: 1.00
-members: 1
+members: 2
 ---
 
 # Community 157
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 1 nodes
+**Members:** 2 nodes
 
 ## Members
-- [[mod.rs_15]] - code - specs/ermete-store-rs/ermete-store-rs-1.0.0/src/backend/mod.rs
+- [[build-offline.sh]] - code - scripts/build-offline.sh
+- [[build-offline.sh script]] - code - scripts/build-offline.sh
 
 ## Live Query (requires Dataview plugin)
 

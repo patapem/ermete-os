@@ -1,16 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 15"
+community: "Community 0"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_15
+  - community/Community_0
 ---
 
 # Label
 
 ## Connections
-- [[DockItemWidget]] - `references` [EXTRACTED]
+- [[build_focus_mode_widget()]] - `references` [EXTRACTED]
+- [[build_quick_toggle_pill()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_15
+#graphify/code #graphify/EXTRACTED #community/Community_0

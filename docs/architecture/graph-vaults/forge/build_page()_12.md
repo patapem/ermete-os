@@ -1,18 +1,18 @@
 ---
-source_file: "specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/keyboard.rs"
+source_file: "specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/updates.rs"
 type: "code"
-community: "Community 122"
+community: "Community 145"
 location: "L5"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_122
+  - community/Community_145
 ---
 
 # build_page()
 
 ## Connections
-- [[Box_15]] - `references` [EXTRACTED]
-- [[keyboard.rs]] - `contains` [EXTRACTED]
+- [[Box_13]] - `references` [EXTRACTED]
+- [[updates.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_122
+#graphify/code #graphify/EXTRACTED #community/Community_145

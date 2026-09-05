@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-dock/ermete-dock-1.0.0/src/dock_data.rs"
+source_file: "specs/athanor-dock/athanor-dock-1.0.0/src/dock_data.rs"
 type: "code"
 community: "Community 15"
 location: "L35"
@@ -12,12 +12,12 @@ tags:
 # DockItem
 
 ## Connections
-- [[.new()_27]] - `references` [EXTRACTED]
-- [[.new()_28]] - `references` [EXTRACTED]
-- [[.update()_1]] - `references` [EXTRACTED]
+- [[dot-new()_7]] - `references` [EXTRACTED]
+- [[dot-new()_5]] - `references` [EXTRACTED]
+- [[dot-update()_3]] - `references` [EXTRACTED]
 - [[DockItemWidget]] - `references` [EXTRACTED]
-- [[String_31]] - `references` [EXTRACTED]
-- [[Vec_15]] - `references` [EXTRACTED]
+- [[String_54]] - `references` [EXTRACTED]
+- [[Vec_28]] - `references` [EXTRACTED]
 - [[attach_hover_preview()]] - `references` [EXTRACTED]
 - [[dock_data.rs]] - `contains` [EXTRACTED]
 - [[format_voice_text()]] - `references` [EXTRACTED]

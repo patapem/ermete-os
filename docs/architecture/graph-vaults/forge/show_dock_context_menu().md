@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-dock/ermete-dock-1.0.0/src/ui.rs"
+source_file: "specs/athanor-dock/athanor-dock-1.0.0/src/ui.rs"
 type: "code"
 community: "Community 15"
 location: "L738"
@@ -12,8 +12,8 @@ tags:
 # show_dock_context_menu()
 
 ## Connections
-- [[.new()_28]] - `calls` [EXTRACTED]
-- [[Button_1]] - `references` [EXTRACTED]
+- [[dot-new()_5]] - `calls` [EXTRACTED]
+- [[Button_2]] - `references` [EXTRACTED]
 - [[DockItem]] - `references` [EXTRACTED]
 - [[DockMode]] - `references` [EXTRACTED]
 - [[add_pin()]] - `calls` [INFERRED]

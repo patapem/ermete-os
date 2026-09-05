@@ -1,16 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 36"
+community: "Community 66"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_36
+  - community/Community_66
 ---
 
 # Receiver
 
 ## Connections
-- [[PowerActor]] - `references` [EXTRACTED]
+- [[dot-new()_48]] - `references` [EXTRACTED]
+- [[PortalSettingsService]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_36
+#graphify/code #graphify/EXTRACTED #community/Community_66

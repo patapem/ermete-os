@@ -1,18 +1,18 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 5
 ---
 
 # Community 113
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 5 nodes
 
 ## Members
-- [[RestoreVT()]] - code - specs/ermete-base-config/SOURCES/usr/bin/nvidia-sleep.sh
-- [[nvidia-sleep.sh]] - code - specs/ermete-base-config/SOURCES/usr/bin/nvidia-sleep.sh
-- [[nvidia-sleep.sh script]] - code - specs/ermete-base-config/SOURCES/usr/bin/nvidia-sleep.sh
+- [[Result_9]] - code
+- [[String_10]] - code
+- [[apply_ai_hardening()]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/security.rs
+- [[athanor-ai-daemon-1.0.0srcsecurity.rs]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/security.rs
+- [[drop_capabilities()]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/security.rs
 
 ## Live Query (requires Dataview plugin)
 

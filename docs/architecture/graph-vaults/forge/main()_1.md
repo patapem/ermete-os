@@ -1,20 +1,18 @@
 ---
-source_file: "specs/Static Rules Engine/Static Rules Engine-1.0.0/src/main.rs"
+source_file: "specs/athanor-ui-agent/athanor-ui-agent-1.0.0/agent.py"
 type: "code"
-community: "Community 71"
-location: "L101"
+community: "Community 121"
+location: "L32"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_71
+  - community/Community_121
 ---
 
 # main()
 
 ## Connections
-- [[Box]] - `references` [EXTRACTED]
-- [[Error]] - `references` [EXTRACTED]
-- [[Result_1]] - `references` [EXTRACTED]
-- [[main.rs]] - `contains` [EXTRACTED]
+- [[agent.py]] - `contains` [EXTRACTED]
+- [[get_context()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_71
+#graphify/code #graphify/EXTRACTED #community/Community_121

@@ -1,22 +1,18 @@
 ---
-source_file: "specs/ermete-doctor/ermete-doctor-1.0.0/src/main.rs"
+source_file: "scripts/train_ai_scheduler.py"
 type: "code"
-community: "Community 73"
-location: "L42"
+community: "Community 89"
+location: "L84"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_73
+  - community/Community_89
 ---
 
 # main()
 
 ## Connections
-- [[Box_4]] - `references` [EXTRACTED]
-- [[Error_7]] - `references` [EXTRACTED]
-- [[Result_31]] - `references` [EXTRACTED]
-- [[get_bcachefs_health()]] - `calls` [EXTRACTED]
-- [[get_nvme_health()]] - `calls` [EXTRACTED]
-- [[main.rs_5]] - `contains` [EXTRACTED]
+- [[train_ai_scheduler.py]] - `contains` [EXTRACTED]
+- [[train_model()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_73
+#graphify/code #graphify/EXTRACTED #community/Community_89

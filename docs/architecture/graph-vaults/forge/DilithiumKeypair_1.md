@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 54"
+community: "Community 56"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_54
+  - community/Community_56
 ---
 
 # DilithiumKeypair
@@ -13,4 +13,4 @@ tags:
 ## Connections
 - [[ZkProofEngine]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_54
+#graphify/code #graphify/EXTRACTED #community/Community_56

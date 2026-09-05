@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/qos.rs"
+source_file: "specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/qos.rs"
 type: "code"
 community: "Community 10"
 location: "L1"
@@ -12,13 +12,14 @@ tags:
 # qos.rs
 
 ## Connections
-- [[Arc_10]] - `imports_from` [EXTRACTED]
+- [[Arc]] - `imports_from` [EXTRACTED]
 - [[CancellationToken]] - `imports_from` [EXTRACTED]
 - [[CgroupFreezer]] - `contains` [EXTRACTED]
 - [[EbpfFreezerHook]] - `contains` [EXTRACTED]
 - [[EnergyAwareScheduler]] - `contains` [EXTRACTED]
 - [[EnergyAwareSchedulerState]] - `contains` [EXTRACTED]
-- [[RwLock_2]] - `imports_from` [EXTRACTED]
+- [[IO]] - `imports_from` [EXTRACTED]
+- [[RwLock]] - `imports_from` [EXTRACTED]
 - [[UnixStream]] - `imports_from` [EXTRACTED]
 - [[listen_niri_wayland_events()]] - `contains` [EXTRACTED]
 - [[start_qos_observer()]] - `contains` [EXTRACTED]

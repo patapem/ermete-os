@@ -1,17 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 17"
+community: "Community 0"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_17
+  - community/Community_0
 ---
 
 # Button
 
 ## Connections
-- [[.new()_27]] - `references` [EXTRACTED]
-- [[attach_hover_preview()]] - `references` [EXTRACTED]
+- [[build_focus_mode_widget()]] - `references` [EXTRACTED]
+- [[build_quick_action_btn()]] - `references` [EXTRACTED]
+- [[build_quick_toggle_pill()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_17
+#graphify/code #graphify/EXTRACTED #community/Community_0

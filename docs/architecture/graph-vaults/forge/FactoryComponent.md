@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 64"
+community: "Community 12"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_64
+  - community/Community_12
 ---
 
 # FactoryComponent
 
 ## Connections
-- [[CcModuleItem]] - `implements` [EXTRACTED]
+- [[WorkspaceItem]] - `implements` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_64
+#graphify/code #graphify/EXTRACTED #community/Community_12

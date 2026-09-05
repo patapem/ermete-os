@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-niri-ipc/src/async_client.rs"
+source_file: "specs/athanor-niri-ipc/src/async_client.rs"
 type: "code"
 community: "Community 16"
 location: "L1"
@@ -12,6 +12,7 @@ tags:
 # async_client.rs
 
 ## Connections
+- [[IO]] - `imports_from` [EXTRACTED]
 - [[UnixStream]] - `imports_from` [EXTRACTED]
 - [[Value_1]] - `imports_from` [EXTRACTED]
 - [[close_window()]] - `contains` [EXTRACTED]

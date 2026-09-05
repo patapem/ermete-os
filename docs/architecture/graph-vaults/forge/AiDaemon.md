@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/panel.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/panel.rs"
 type: "code"
-community: "Community 80"
+community: "Community 104"
 location: "L38"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_80
+  - community/Community_104
 ---
 
 # AiDaemon
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[panel.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_80
+#graphify/code #graphify/EXTRACTED #community/Community_104

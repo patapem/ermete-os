@@ -1,20 +1,20 @@
 ---
 type: community
-cohesion: 0.50
-members: 5
+members: 7
 ---
 
 # Community 103
 
-**Cohesion:** 0.50 - moderately connected
-**Members:** 5 nodes
+**Members:** 7 nodes
 
 ## Members
-- [[Box_21]] - code
-- [[String_53]] - code
-- [[build_page()_19]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/wired.rs
-- [[get_ethernet_status_async()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/wired.rs
-- [[wired.rs]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/wired.rs
+- [[dot-init_model()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/module_item.rs
+- [[dot-update()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/module_item.rs
+- [[DynamicIndex]] - code
+- [[FactorySender]] - code
+- [[Init]] - code
+- [[Input]] - code
+- [[Self_3]] - code
 
 ## Live Query (requires Dataview plugin)
 
@@ -22,3 +22,10 @@ members: 5
 TABLE source_file, type FROM #community/Community_103
 SORT file.name ASC
 ```
+
+## Connections to other communities
+- 2 edges to [[_COMMUNITY_Community 68]]
+
+## Top bridge nodes
+- [[dot-init_model()]] - degree 5, connects to 1 community
+- [[dot-update()]] - degree 4, connects to 1 community

@@ -1,18 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 14"
+community: "Community 8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_14
+  - community/Community_8
 ---
 
 # Path
 
 ## Connections
-- [[.extract_from_wallpaper()]] - `references` [EXTRACTED]
-- [[.write_to_file()]] - `references` [EXTRACTED]
-- [[palette.rs]] - `imports_from` [EXTRACTED]
+- [[bcachefs.rs]] - `imports_from` [EXTRACTED]
+- [[native_bcachefs_delete()_1]] - `references` [EXTRACTED]
+- [[native_bcachefs_snapshot()_2]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_14
+#graphify/code #graphify/EXTRACTED #community/Community_8

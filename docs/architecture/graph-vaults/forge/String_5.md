@@ -1,17 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 59"
+community: "Community 102"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_59
+  - community/Community_102
 ---
 
 # String
 
 ## Connections
-- [[.execute_vulkan_compute()]] - `references` [EXTRACTED]
-- [[VulkanTensorEngine]] - `references` [EXTRACTED]
+- [[start_udp_discovery()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_59
+#graphify/code #graphify/EXTRACTED #community/Community_102

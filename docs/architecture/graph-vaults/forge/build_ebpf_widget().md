@@ -1,22 +1,22 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/ebpf.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/ebpf.rs"
 type: "code"
-community: "Community 74"
+community: "Community 78"
 location: "L54"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_74
+  - community/Community_78
 ---
 
 # build_ebpf_widget()
 
 ## Connections
-- [[.build_body()]] - `calls` [INFERRED]
-- [[.description()]] - `calls` [EXTRACTED]
-- [[.label()]] - `calls` [EXTRACTED]
+- [[dot-build_body()]] - `calls` [INFERRED]
+- [[dot-description()_1]] - `calls` [EXTRACTED]
+- [[dot-label()]] - `calls` [EXTRACTED]
 - [[EbpfModuleData]] - `references` [EXTRACTED]
-- [[GtkBox_12]] - `references` [EXTRACTED]
-- [[ebpf.rs]] - `contains` [EXTRACTED]
+- [[GtkBox_15]] - `references` [EXTRACTED]
+- [[control_centerebpf.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_74
+#graphify/code #graphify/EXTRACTED #community/Community_78

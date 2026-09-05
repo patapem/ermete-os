@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 98"
+community: "Community 2"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_98
+  - community/Community_2
 ---
 
 # PathBuf
 
 ## Connections
-- [[config_dir()_1]] - `references` [EXTRACTED]
-- [[theme.rs]] - `imports_from` [EXTRACTED]
+- [[dirs_next_or_home()]] - `references` [EXTRACTED]
+- [[get_notifications_file_path()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_98
+#graphify/code #graphify/EXTRACTED #community/Community_2

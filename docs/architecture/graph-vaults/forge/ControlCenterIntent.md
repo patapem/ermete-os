@@ -1,20 +1,20 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs"
 type: "code"
-community: "Community 0"
+community: "Community 2"
 location: "L43"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_0
+  - community/Community_2
 ---
 
 # ControlCenterIntent
 
 ## Connections
-- [[.execute_intent()_2]] - `references` [EXTRACTED]
+- [[dot-execute_intent()]] - `references` [EXTRACTED]
 - [[FocusMode]] - `references` [EXTRACTED]
-- [[String_82]] - `references` [EXTRACTED]
+- [[String_27]] - `references` [EXTRACTED]
 - [[control_center_vm.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_0
+#graphify/code #graphify/EXTRACTED #community/Community_2

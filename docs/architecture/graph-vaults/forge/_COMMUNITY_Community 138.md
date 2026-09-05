@@ -1,17 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 2
+members: 3
 ---
 
 # Community 138
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 2 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[run_fuzz.sh]] - code - scripts/run_fuzz.sh
-- [[run_fuzz.sh script]] - code - scripts/run_fuzz.sh
+- [[Box_7]] - code
+- [[build_page()_5]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/displays.rs
+- [[displays.rs]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/displays.rs
 
 ## Live Query (requires Dataview plugin)
 

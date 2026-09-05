@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 42"
+community: "Community 70"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_42
+  - community/Community_70
 ---
 
 # Vec
 
 ## Connections
-- [[DesktopConfig]] - `references` [EXTRACTED]
+- [[dot-execute_npu_inference()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_42
+#graphify/code #graphify/EXTRACTED #community/Community_70

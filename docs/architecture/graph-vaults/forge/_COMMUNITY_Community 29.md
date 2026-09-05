@@ -1,41 +1,40 @@
 ---
 type: community
-cohesion: 0.17
-members: 26
+members: 27
 ---
 
 # Community 29
 
-**Cohesion:** 0.17 - loosely connected
-**Members:** 26 nodes
+**Members:** 27 nodes
 
 ## Members
-- [[.as_any()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[.get_cached_volume()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[.handle_set_source_volume()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[.handle_set_volume()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[.handle_toggle_mute()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[.handle_toggle_source_mute()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[.name()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[.new()_41]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[.run()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[.set_source_volume()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[.set_volume()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[.spawn()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[.toggle_mute()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[.toggle_source_mute()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[Any]] - code
-- [[Arc_17]] - code
-- [[AudioActor]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[AudioCommand]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[AudioController]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[Mutex_10]] - code
-- [[Receiver_3]] - code
-- [[Result_52]] - code
-- [[Self_48]] - code
-- [[Sender_2]] - code
-- [[audio.rs_2]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
-- [[get_audio_controller()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/audio.rs
+- [[dot-as_any()_1]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[dot-get_cached_volume()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[dot-handle_set_source_volume()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[dot-handle_set_volume()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[dot-handle_toggle_mute()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[dot-handle_toggle_source_mute()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[dot-name()_2]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[dot-new()_24]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[dot-run()_1]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[dot-set_source_volume()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[dot-set_volume()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[dot-spawn()_1]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[dot-toggle_mute()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[dot-toggle_source_mute()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[Any_2]] - code
+- [[Arc_6]] - code
+- [[AudioActor]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[AudioCommand]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[AudioController]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[IpcBackend]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs
+- [[Mutex_3]] - code
+- [[Receiver_2]] - code
+- [[Result_28]] - code
+- [[Self_23]] - code
+- [[Sender_5]] - code
+- [[get_audio_controller()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
+- [[ipcaudio.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/audio.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -45,15 +44,18 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 3 edges to [[_COMMUNITY_Community 23]]
-- 3 edges to [[_COMMUNITY_Community 21]]
-- 1 edge to [[_COMMUNITY_Community 97]]
-- 1 edge to [[_COMMUNITY_Community 25]]
-- 1 edge to [[_COMMUNITY_Community 34]]
+- 4 edges to [[_COMMUNITY_Community 50]]
+- 3 edges to [[_COMMUNITY_Community 27]]
+- 3 edges to [[_COMMUNITY_Community 31]]
+- 3 edges to [[_COMMUNITY_Community 30]]
+- 3 edges to [[_COMMUNITY_Community 5]]
+- 3 edges to [[_COMMUNITY_Community 40]]
+- 2 edges to [[_COMMUNITY_Community 44]]
+- 1 edge to [[_COMMUNITY_Community 38]]
 
 ## Top bridge nodes
-- [[AudioActor]] - degree 11, connects to 2 communities
-- [[.new()_41]] - degree 10, connects to 2 communities
-- [[audio.rs_2]] - degree 8, connects to 2 communities
-- [[.spawn()]] - degree 7, connects to 2 communities
+- [[IpcBackend]] - degree 20, connects to 6 communities
 - [[AudioController]] - degree 15, connects to 1 community
+- [[AudioActor]] - degree 11, connects to 1 community
+- [[dot-new()_24]] - degree 10, connects to 1 community
+- [[ipcaudio.rs]] - degree 7, connects to 1 community

@@ -1,12 +1,12 @@
 ---
 source_file: "scripts/dag_orchestrator.py"
 type: "rationale"
-community: "Community 55"
-location: "L28"
+community: "Community 57"
+location: "L33"
 tags:
   - graphify/rationale
   - graphify/EXTRACTED
-  - community/Community_55
+  - community/Community_57
 ---
 
 # Calculates deterministic SHA256 for a directory.
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[compute_dir_hash()]] - `rationale_for` [EXTRACTED]
 
-#graphify/rationale #graphify/EXTRACTED #community/Community_55
+#graphify/rationale #graphify/EXTRACTED #community/Community_57

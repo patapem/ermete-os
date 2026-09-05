@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 12"
+community: "Community 7"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_12
+  - community/Community_7
 ---
 
 # SimpleComponent
 
 ## Connections
-- [[TopbarModel]] - `implements` [EXTRACTED]
+- [[MorphicPillModel]] - `implements` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_12
+#graphify/code #graphify/EXTRACTED #community/Community_7

@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 43"
+community: "Community 76"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_43
+  - community/Community_76
 ---
 
 # Arc
 
 ## Connections
-- [[MeshSyncBus]] - `references` [EXTRACTED]
-- [[main.rs_10]] - `imports_from` [EXTRACTED]
+- [[AiDaemonProxy]] - `references` [EXTRACTED]
+- [[athanor-ai-daemon-1.0.0srcmain.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_43
+#graphify/code #graphify/EXTRACTED #community/Community_76

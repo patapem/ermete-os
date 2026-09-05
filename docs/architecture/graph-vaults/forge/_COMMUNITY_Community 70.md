@@ -1,26 +1,25 @@
 ---
 type: community
-cohesion: 0.24
-members: 11
+members: 12
 ---
 
 # Community 70
 
-**Cohesion:** 0.24 - loosely connected
-**Members:** 11 nodes
+**Members:** 12 nodes
 
 ## Members
-- [[Application_4]] - code
-- [[Button_3]] - code
-- [[Fn]] - code
-- [[Option_24]] - code
-- [[Separator_1]] - code
-- [[build_menu_item()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/desktop_canvas/context_menu.rs
-- [[build_menu_separator()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/desktop_canvas/context_menu.rs
-- [[context_menu.rs]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/desktop_canvas/context_menu.rs
-- [[init_context_menu_css()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/desktop_canvas/context_menu.rs
-- [[show_desktop_context_menu()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/desktop_canvas/context_menu.rs
-- [[test_menu_item_shortcuts()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/desktop_canvas/context_menu.rs
+- [[dot-default()_20]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/npu/openvino.rs
+- [[dot-device_name()_1]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/npu/openvino.rs
+- [[dot-execute_npu_inference()]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/npu/openvino.rs
+- [[dot-is_available()_2]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/npu/openvino.rs
+- [[dot-new()_52]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/npu/openvino.rs
+- [[Default_13]] - code
+- [[OpenVinoNpuEngine]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/npu/openvino.rs
+- [[Result_54]] - code
+- [[Self_51]] - code
+- [[String_67]] - code
+- [[Vec_34]] - code
+- [[openvino.rs]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/npu/openvino.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -28,3 +27,9 @@ members: 11
 TABLE source_file, type FROM #community/Community_70
 SORT file.name ASC
 ```
+
+## Connections to other communities
+- 2 edges to [[_COMMUNITY_Community 55]]
+
+## Top bridge nodes
+- [[OpenVinoNpuEngine]] - degree 10, connects to 1 community

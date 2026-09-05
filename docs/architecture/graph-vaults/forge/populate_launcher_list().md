@@ -1,19 +1,19 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/spotlight.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/spotlight.rs"
 type: "code"
-community: "Community 1"
+community: "Community 0"
 location: "L475"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_1
+  - community/Community_0
 ---
 
 # populate_launcher_list()
 
 ## Connections
-- [[ApplicationWindow_5]] - `references` [EXTRACTED]
-- [[GtkBox_19]] - `references` [EXTRACTED]
+- [[ApplicationWindow_1]] - `references` [EXTRACTED]
+- [[GtkBox_2]] - `references` [EXTRACTED]
 - [[_legacy_start_menu()]] - `calls` [INFERRED]
 - [[populate_indexed_items()]] - `calls` [EXTRACTED]
 - [[run_fuzzy_file_search()]] - `calls` [EXTRACTED]
@@ -25,4 +25,4 @@ tags:
 - [[try_parse_terminal_command()]] - `calls` [EXTRACTED]
 - [[try_parse_web_search()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_1
+#graphify/code #graphify/EXTRACTED #community/Community_0

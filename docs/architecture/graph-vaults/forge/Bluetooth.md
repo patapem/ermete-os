@@ -1,22 +1,17 @@
 ---
-source_file: "specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/bluetooth.rs"
+source_file: "specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/bluetooth.rs"
 type: "code"
-community: "Community 61"
-location: "L4"
+community: "Community 111"
+location: "L11"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_61
+  - community/Community_111
 ---
 
 # Bluetooth
 
 ## Connections
-- [[.get_devices()]] - `method` [EXTRACTED]
-- [[.new()_10]] - `method` [EXTRACTED]
-- [[.power()]] - `method` [EXTRACTED]
-- [[.set_power()]] - `method` [EXTRACTED]
-- [[Connection_3]] - `references` [EXTRACTED]
-- [[bluetooth.rs]] - `contains` [EXTRACTED]
+- [[pagesbluetooth.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_61
+#graphify/code #graphify/EXTRACTED #community/Community_111

@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 5"
+community: "Community 47"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_5
+  - community/Community_47
 ---
 
 # Error
 
 ## Connections
-- [[main()_8]] - `references` [EXTRACTED]
-- [[main.rs_6]] - `imports_from` [EXTRACTED]
+- [[get_connection()]] - `references` [EXTRACTED]
+- [[get_system_connection()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_5
+#graphify/code #graphify/EXTRACTED #community/Community_47

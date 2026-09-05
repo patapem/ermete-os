@@ -1,21 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 27"
+community: "Community 119"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_27
+  - community/Community_119
 ---
 
 # Sender
 
 ## Connections
-- [[.new()_19]] - `references` [EXTRACTED]
-- [[.new_with_token()]] - `references` [EXTRACTED]
-- [[AppearanceStateStore]] - `references` [EXTRACTED]
-- [[SettingsCommand]] - `references` [EXTRACTED]
-- [[SettingsService]] - `references` [EXTRACTED]
-- [[VoiceOverStateStore]] - `references` [EXTRACTED]
+- [[flatpak.rs]] - `imports_from` [EXTRACTED]
+- [[install_app()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_27
+#graphify/code #graphify/EXTRACTED #community/Community_119

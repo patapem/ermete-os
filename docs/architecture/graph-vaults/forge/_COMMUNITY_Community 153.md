@@ -1,16 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 1
+members: 3
 ---
 
 # Community 153
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 1 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[morphic_pill.rs]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/morphic_pill.rs
+- [[Result_19]] - code
+- [[main()_14]] - code - specs/athanor-xdg-desktop-portal-athanor/xdg-desktop-portal-athanor-1.0.0/src/main.rs
+- [[xdg-desktop-portal-athanor-1.0.0srcmain.rs]] - code - specs/athanor-xdg-desktop-portal-athanor/xdg-desktop-portal-athanor-1.0.0/src/main.rs
 
 ## Live Query (requires Dataview plugin)
 

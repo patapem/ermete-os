@@ -1,18 +1,16 @@
 ---
 type: community
-cohesion: 1.00
 members: 3
 ---
 
 # Community 130
 
-**Cohesion:** 1.00 - tightly connected
 **Members:** 3 nodes
 
 ## Members
-- [[Result_65]] - code
-- [[main()_17]] - code - specs/ermete-store-rs/ermete-store-rs-1.0.0/src/main.rs
-- [[main.rs_15]] - code - specs/ermete-store-rs/ermete-store-rs-1.0.0/src/main.rs
+- [[SOURCE_DATE_EPOCH]] - code - scripts/check_idempotency.sh
+- [[check_idempotency.sh]] - code - scripts/check_idempotency.sh
+- [[check_idempotency.sh script]] - code - scripts/check_idempotency.sh
 
 ## Live Query (requires Dataview plugin)
 

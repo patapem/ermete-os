@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 0"
+community: "Community 2"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_0
+  - community/Community_2
 ---
 
 # AtomicU32
@@ -13,4 +13,4 @@ tags:
 ## Connections
 - [[NotificationServer]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_0
+#graphify/code #graphify/EXTRACTED #community/Community_2

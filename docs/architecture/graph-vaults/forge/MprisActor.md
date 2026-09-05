@@ -1,27 +1,27 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/mpris.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/mpris.rs"
 type: "code"
-community: "Community 21"
+community: "Community 30"
 location: "L27"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_21
+  - community/Community_30
 ---
 
 # MprisActor
 
 ## Connections
-- [[.handle_player_command()]] - `method` [EXTRACTED]
-- [[.handle_refresh_mpris()]] - `method` [EXTRACTED]
-- [[.run()_3]] - `method` [EXTRACTED]
-- [[.spawn()_3]] - `method` [EXTRACTED]
+- [[dot-handle_player_command()]] - `method` [EXTRACTED]
+- [[dot-handle_refresh_mpris()]] - `method` [EXTRACTED]
+- [[dot-run()_2]] - `method` [EXTRACTED]
+- [[dot-spawn()_2]] - `method` [EXTRACTED]
 - [[IpcBackend]] - `references` [EXTRACTED]
 - [[MprisBus]] - `references` [EXTRACTED]
 - [[MprisCommand]] - `references` [EXTRACTED]
 - [[MprisState]] - `references` [EXTRACTED]
-- [[Option_25]] - `references` [EXTRACTED]
-- [[Receiver_6]] - `references` [EXTRACTED]
+- [[Option_19]] - `references` [EXTRACTED]
+- [[Receiver_3]] - `references` [EXTRACTED]
 - [[mpris.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_21
+#graphify/code #graphify/EXTRACTED #community/Community_30

@@ -1,19 +1,19 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/control_center/bluetooth.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/bluetooth.rs"
 type: "code"
-community: "Community 1"
+community: "Community 0"
 location: "L7"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_1
+  - community/Community_0
 ---
 
 # show_bluetooth_popover()
 
 ## Connections
-- [[Application_9]] - `references` [EXTRACTED]
-- [[bluetooth.rs_3]] - `contains` [EXTRACTED]
+- [[Application_1]] - `references` [EXTRACTED]
+- [[control_centerbluetooth.rs]] - `contains` [EXTRACTED]
 - [[setup_popup_autoclose()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_1
+#graphify/code #graphify/EXTRACTED #community/Community_0

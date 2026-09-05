@@ -1,17 +1,17 @@
 ---
-source_file: "specs/ermete-kernel/prepare-chimera.sh"
+source_file: "specs/athanor-secure-boot/SOURCES/usr/libexec/athanor-secure-boot-measure.sh"
 type: "code"
-community: "Community 95"
+community: "Community 135"
 location: "L4"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_95
+  - community/Community_135
 ---
 
 # SOURCE_DATE_EPOCH
 
 ## Connections
-- [[prepare-chimera.sh]] - `defines` [EXTRACTED]
+- [[athanor-secure-boot-measure.sh]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_95
+#graphify/code #graphify/EXTRACTED #community/Community_135

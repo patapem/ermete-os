@@ -1,25 +1,24 @@
 ---
 type: community
-cohesion: 0.24
-members: 10
+members: 11
 ---
 
 # Community 80
 
-**Cohesion:** 0.24 - loosely connected
-**Members:** 10 nodes
+**Members:** 11 nodes
 
 ## Members
-- [[AiDaemon]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/panel.rs
-- [[Application_2]] - code
-- [[Application_3]] - code
-- [[ControlCenterPanel]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/panel.rs
-- [[FactoryVecDeque]] - code
-- [[MeshSync]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/panel.rs
-- [[SimpleComponent_2]] - code
-- [[mod.rs_3]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/mod.rs
-- [[panel.rs]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/panel.rs
-- [[show_control_center_panel()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/mod.rs
+- [[dot-add_section()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-check_name()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-create()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-parse_input()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-parse_output()]] - code - specs/uki-tools/SOURCES/ukify
+- [[Path_8]] - code
+- [[Section]] - code - specs/uki-tools/SOURCES/ukify
+- [[finalize_options()]] - code - specs/uki-tools/SOURCES/ukify
+- [[guess_efi_arch()]] - code - specs/uki-tools/SOURCES/ukify
+- [[parse_efifw_dir()]] - code - specs/uki-tools/SOURCES/ukify
+- [[resolve_at_path()]] - code - specs/uki-tools/SOURCES/ukify
 
 ## Live Query (requires Dataview plugin)
 
@@ -29,18 +28,15 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 3 edges to [[_COMMUNITY_Community 64]]
-- 2 edges to [[_COMMUNITY_Community 84]]
-- 2 edges to [[_COMMUNITY_Community 74]]
-- 2 edges to [[_COMMUNITY_Community 1]]
-- 2 edges to [[_COMMUNITY_Community 91]]
-- 1 edge to [[_COMMUNITY_Community 79]]
-- 1 edge to [[_COMMUNITY_Community 4]]
-- 1 edge to [[_COMMUNITY_Community 6]]
-- 1 edge to [[_COMMUNITY_Community 90]]
+- 10 edges to [[_COMMUNITY_Community 45]]
+- 9 edges to [[_COMMUNITY_Community 37]]
+- 7 edges to [[_COMMUNITY_Community 53]]
+- 4 edges to [[_COMMUNITY_Community 32]]
+- 1 edge to [[_COMMUNITY_Community 101]]
 
 ## Top bridge nodes
-- [[panel.rs]] - degree 11, connects to 5 communities
-- [[mod.rs_3]] - degree 8, connects to 4 communities
-- [[ControlCenterPanel]] - degree 7, connects to 2 communities
-- [[show_control_center_panel()]] - degree 3, connects to 1 community
+- [[Path_8]] - degree 26, connects to 5 communities
+- [[dot-create()]] - degree 7, connects to 2 communities
+- [[finalize_options()]] - degree 6, connects to 2 communities
+- [[parse_efifw_dir()]] - degree 3, connects to 2 communities
+- [[Section]] - degree 6, connects to 1 community

@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 71"
+community: "Community 10"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_71
+  - community/Community_10
 ---
 
 # RwLock
 
 ## Connections
-- [[AiDaemonProxy]] - `references` [EXTRACTED]
-- [[main.rs]] - `imports_from` [EXTRACTED]
+- [[EnergyAwareScheduler]] - `references` [EXTRACTED]
+- [[qos.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_71
+#graphify/code #graphify/EXTRACTED #community/Community_10

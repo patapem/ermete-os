@@ -1,22 +1,21 @@
 ---
 type: community
-cohesion: 0.33
-members: 7
+members: 8
 ---
 
 # Community 95
 
-**Cohesion:** 0.33 - loosely connected
-**Members:** 7 nodes
+**Members:** 8 nodes
 
 ## Members
-- [[LLVM]] - code - specs/ermete-kernel/prepare-chimera.sh
-- [[MAKEFLAGS]] - code - specs/ermete-kernel/prepare-chimera.sh
-- [[SOURCE_DATE_EPOCH_1]] - code - specs/ermete-kernel/prepare-chimera.sh
-- [[fetch_pinned()]] - code - specs/ermete-kernel/prepare-chimera.sh
-- [[prepare-chimera.sh]] - code - specs/ermete-kernel/prepare-chimera.sh
-- [[prepare-chimera.sh script]] - code - specs/ermete-kernel/prepare-chimera.sh
-- [[route_patch()]] - code - specs/ermete-kernel/prepare-chimera.sh
+- [[Box_27]] - code
+- [[Path_9]] - code
+- [[PathBuf_14]] - code
+- [[Vec_39]] - code
+- [[build_page()_20]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/desktop.rs
+- [[desktop.rs]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/desktop.rs
+- [[scan_dir_async()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/desktop.rs
+- [[scan_wallpapers_async()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/desktop.rs
 
 ## Live Query (requires Dataview plugin)
 

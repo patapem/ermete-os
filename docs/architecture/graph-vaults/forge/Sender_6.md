@@ -1,18 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 4"
+community: "Community 30"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_4
+  - community/Community_30
 ---
 
 # Sender
 
 ## Connections
-- [[.spawn()_4]] - `references` [EXTRACTED]
-- [[NetworkCommand]] - `references` [EXTRACTED]
-- [[NetworkController]] - `references` [EXTRACTED]
+- [[dot-spawn()_2]] - `references` [EXTRACTED]
+- [[MprisCommand]] - `references` [EXTRACTED]
+- [[MprisController]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_4
+#graphify/code #graphify/EXTRACTED #community/Community_30

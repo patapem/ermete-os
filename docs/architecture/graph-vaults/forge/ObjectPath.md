@@ -1,23 +1,25 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 26"
+community: "Community 13"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_26
+  - community/Community_13
 ---
 
 # ObjectPath
 
 ## Connections
-- [[.create_session()_1]] - `references` [EXTRACTED]
-- [[.create_session()]] - `references` [EXTRACTED]
-- [[.select_devices()]] - `references` [EXTRACTED]
-- [[.select_sources()]] - `references` [EXTRACTED]
-- [[.start()_1]] - `references` [EXTRACTED]
-- [[.start()]] - `references` [EXTRACTED]
-- [[.stop()_1]] - `references` [EXTRACTED]
-- [[.stop()]] - `references` [EXTRACTED]
+- [[dot-access_camera()]] - `references` [EXTRACTED]
+- [[dot-access_microphone()]] - `references` [EXTRACTED]
+- [[dot-create_session()]] - `references` [EXTRACTED]
+- [[dot-create_session()_1]] - `references` [EXTRACTED]
+- [[dot-open_file()]] - `references` [EXTRACTED]
+- [[dot-open_pipewire_remote()]] - `references` [EXTRACTED]
+- [[dot-save_file()]] - `references` [EXTRACTED]
+- [[dot-save_files()]] - `references` [EXTRACTED]
+- [[dot-select_sources()]] - `references` [EXTRACTED]
+- [[dot-start()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_26
+#graphify/code #graphify/EXTRACTED #community/Community_13

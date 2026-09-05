@@ -1,82 +1,72 @@
 ---
 type: community
-cohesion: 0.05
-members: 67
+members: 59
 ---
 
 # Community 0
 
-**Cohesion:** 0.05 - loosely connected
-**Members:** 67 nodes
+**Members:** 59 nodes
 
 ## Members
-- [[.close_notification()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[.default()_24]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
-- [[.description()_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[.execute_intent()_2]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
-- [[.from_u8()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[.get_capabilities()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[.get_initial_state()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
-- [[.get_server_information()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[.icon()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[.is_active()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[.name()_5]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[.notify()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[.should_allow_notification()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[.subscribe_audio()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
-- [[.subscribe_hardware()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
-- [[.subscribe_mpris()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
-- [[.subscribe_network()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
-- [[.to_u8()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[Application_11]] - code
-- [[Application_18]] - code
-- [[AtomicU32]] - code
-- [[Button_4]] - code
-- [[ControlCenterIntent]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
-- [[ControlCenterState]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
-- [[ControlCenterViewModel]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
-- [[Default_17]] - code
-- [[F_5]] - code
-- [[FocusMode]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[GtkBox_15]] - code
-- [[HashMap_20]] - code
-- [[Label_2]] - code
-- [[NotificationData]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[NotificationServer]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[Option_34]] - code
-- [[PathBuf_11]] - code
-- [[Self_53]] - code
-- [[Self_64]] - code
-- [[Sender_7]] - code
-- [[String_62]] - code
-- [[String_74]] - code
-- [[String_82]] - code
-- [[Value_3]] - code
-- [[Vec_31]] - code
-- [[build_focus_mode_widget()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/control_center/main_cc.rs
-- [[build_quick_action_btn()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/control_center/main_cc.rs
-- [[build_quick_toggle_pill()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/control_center/main_cc.rs
-- [[control_center_vm.rs]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
-- [[default_timestamp()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[dirs_next_or_home()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[format_action_invoked_payload()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/notifications.rs
-- [[get_focus_mode()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[get_notifications_file_path()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[load_notification_history()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[main_cc.rs]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/control_center/main_cc.rs
-- [[notifications.rs_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[notifications.rs_2]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/notifications.rs
-- [[save_notification_history()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[send_action_invoked()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/notifications.rs
-- [[set_focus_mode()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[show_control_center_popover()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/control_center/main_cc.rs
-- [[show_notification_center()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/notifications.rs
-- [[show_toast_popup()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/notifications.rs
-- [[spawn_notification_daemon()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/notifications.rs
-- [[test_focus_mode_conversions_and_state()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[test_focus_mode_notification_filtering()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
-- [[test_inline_reply_payload_structure()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/notifications.rs
-- [[validate_zvariant_value_depth()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[AppInfo]] - code
+- [[Application]] - code
+- [[Application_1]] - code
+- [[Application_2]] - code
+- [[Application_3]] - code
+- [[Application_4]] - code
+- [[Application_5]] - code
+- [[Application_6]] - code
+- [[Application_7]] - code
+- [[ApplicationWindow]] - code
+- [[ApplicationWindow_1]] - code
+- [[ApplicationWindow_2]] - code
+- [[Button]] - code
+- [[GtkBox]] - code
+- [[GtkBox_1]] - code
+- [[GtkBox_2]] - code
+- [[Label]] - code
+- [[Option]] - code
+- [[Option_1]] - code
+- [[SpotlightAction]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/spotlight.rs
+- [[SpotlightItem]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/spotlight.rs
+- [[String]] - code
+- [[_legacy_start_menu()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/start_menu.rs
+- [[build_focus_mode_widget()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/main_cc.rs
+- [[build_quick_action_btn()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/main_cc.rs
+- [[build_quick_toggle_pill()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/main_cc.rs
+- [[calendar.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/calendar.rs
+- [[control_centerbluetooth.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/bluetooth.rs
+- [[ensure_index_loaded()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/spotlight.rs
+- [[main_cc.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/main_cc.rs
+- [[populate_indexed_items()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/spotlight.rs
+- [[populate_launcher_list()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/spotlight.rs
+- [[populate_wifi_list()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/wifi.rs
+- [[popup.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/wayland/popup.rs
+- [[run_fuzzy_file_search()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/spotlight.rs
+- [[setup_popup_autoclose()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/wayland/popup.rs
+- [[show_audio_mixer_popover()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/audio.rs
+- [[show_bluetooth_popover()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/bluetooth.rs
+- [[show_calendar_popover()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/calendar.rs
+- [[show_control_center_popover()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/main_cc.rs
+- [[show_spotlight_modal()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/spotlight.rs
+- [[show_start_menu_popover()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/start_menu.rs
+- [[show_system_monitor_modal()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/sysmon.rs
+- [[show_wifi_details_modal()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/wifi.rs
+- [[show_wifi_password_modal()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/wifi.rs
+- [[show_wifi_popover()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/wifi.rs
+- [[spotlight.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/spotlight.rs
+- [[start_menu.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/start_menu.rs
+- [[sysmon.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/sysmon.rs
+- [[try_eval_math()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/spotlight.rs
+- [[try_parse_ai_suggestion()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/spotlight.rs
+- [[try_parse_conversions()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/spotlight.rs
+- [[try_parse_inline_action()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/spotlight.rs
+- [[try_parse_system_actions()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/spotlight.rs
+- [[try_parse_terminal_command()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/spotlight.rs
+- [[try_parse_web_search()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/spotlight.rs
+- [[uicontrol_centeraudio.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/audio.rs
+- [[uicontrol_centermod.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/mod.rs
+- [[wifi.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/wifi.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -86,10 +76,9 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 1 edge to [[_COMMUNITY_Community 76]]
-- 1 edge to [[_COMMUNITY_Community 1]]
-- 1 edge to [[_COMMUNITY_Community 6]]
+- 1 edge to [[_COMMUNITY_Community 2]]
+- 1 edge to [[_COMMUNITY_Community 41]]
 
 ## Top bridge nodes
-- [[control_center_vm.rs]] - degree 5, connects to 2 communities
-- [[show_control_center_popover()]] - degree 6, connects to 1 community
+- [[setup_popup_autoclose()]] - degree 13, connects to 1 community
+- [[build_focus_mode_widget()]] - degree 7, connects to 1 community

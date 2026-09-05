@@ -1,16 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 1
+members: 3
 ---
 
 # Community 146
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 1 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[manifest.json]] - code - repo-cache/repo-tier0/manifest.json
+- [[UPower]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/sys/battery.rs
+- [[UPowerDevice]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/sys/battery.rs
+- [[sysbattery.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/sys/battery.rs
 
 ## Live Query (requires Dataview plugin)
 

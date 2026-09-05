@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 86"
+community: "Community 26"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_86
+  - community/Community_26
 ---
 
 # Arc
 
 ## Connections
-- [[listener.rs]] - `imports_from` [EXTRACTED]
-- [[start_tcp_listener()]] - `references` [EXTRACTED]
+- [[Bedrock_1]] - `references` [EXTRACTED]
+- [[bedrock.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_86
+#graphify/code #graphify/EXTRACTED #community/Community_26

@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs"
+source_file: "specs/athanor-dock/athanor-dock-1.0.0/src/dock_config.rs"
 type: "code"
-community: "Community 44"
+community: "Community 46"
 location: "L142"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_44
+  - community/Community_46
 ---
 
 # test_api_add_remove_and_is_pinned()
@@ -17,4 +17,4 @@ tags:
 - [[load_dock_config()]] - `calls` [EXTRACTED]
 - [[remove_pin()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_44
+#graphify/code #graphify/EXTRACTED #community/Community_46

@@ -1,17 +1,22 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/mod.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/system_proxies.rs"
 type: "code"
-community: "Community 1"
-location: "L22"
+community: "Community 38"
+location: "L82"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_1
+  - community/Community_38
 ---
 
 # init_system_controller()
 
 ## Connections
-- [[mod.rs_6]] - `contains` [EXTRACTED]
+- [[dot-register()]] - `calls` [EXTRACTED]
+- [[Box_19]] - `references` [EXTRACTED]
+- [[ControllerBackend]] - `references` [EXTRACTED]
+- [[Vec_18]] - `references` [EXTRACTED]
+- [[get_registry()]] - `calls` [EXTRACTED]
+- [[system_proxies.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_1
+#graphify/code #graphify/EXTRACTED #community/Community_38

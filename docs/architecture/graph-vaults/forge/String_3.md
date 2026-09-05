@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 53"
+community: "Community 10"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_53
+  - community/Community_10
 ---
 
 # String
 
 ## Connections
-- [[.process_inference()]] - `references` [EXTRACTED]
-- [[HardwareDeviceInfo]] - `references` [EXTRACTED]
+- [[dot-on_window_focused()]] - `references` [EXTRACTED]
+- [[EnergyAwareSchedulerState]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_53
+#graphify/code #graphify/EXTRACTED #community/Community_10

@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/theme/palette.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/theme/palette.rs"
 type: "code"
 community: "Community 14"
 location: "L6"
@@ -12,11 +12,11 @@ tags:
 # ColorRgb
 
 ## Connections
-- [[.from_hsl()]] - `method` [EXTRACTED]
-- [[.from_seed_color()]] - `references` [EXTRACTED]
-- [[.new()_52]] - `method` [EXTRACTED]
-- [[.to_hex()]] - `method` [EXTRACTED]
-- [[.to_hsl()]] - `method` [EXTRACTED]
+- [[dot-from_hsl()]] - `method` [EXTRACTED]
+- [[dot-from_seed_color()]] - `references` [EXTRACTED]
+- [[dot-new()_4]] - `method` [EXTRACTED]
+- [[dot-to_hex()]] - `method` [EXTRACTED]
+- [[dot-to_hsl()]] - `method` [EXTRACTED]
 - [[Material3Palette]] - `references` [EXTRACTED]
 - [[palette.rs]] - `contains` [EXTRACTED]
 

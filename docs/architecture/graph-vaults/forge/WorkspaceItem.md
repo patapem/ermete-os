@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/topbar.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/topbar.rs"
 type: "code"
 community: "Community 12"
 location: "L8"
@@ -12,9 +12,9 @@ tags:
 # WorkspaceItem
 
 ## Connections
-- [[.init_model()_1]] - `method` [EXTRACTED]
-- [[.update()_11]] - `method` [EXTRACTED]
-- [[FactoryComponent_1]] - `implements` [EXTRACTED]
+- [[dot-init_model()_1]] - `method` [EXTRACTED]
+- [[dot-update()_2]] - `method` [EXTRACTED]
+- [[FactoryComponent]] - `implements` [EXTRACTED]
 - [[NiriWorkspace]] - `references` [EXTRACTED]
 - [[TopbarModel]] - `references` [EXTRACTED]
 - [[topbar.rs]] - `contains` [EXTRACTED]

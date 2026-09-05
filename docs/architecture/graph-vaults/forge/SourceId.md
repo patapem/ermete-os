@@ -1,11 +1,11 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 8"
+community: "Community 7"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_8
+  - community/Community_7
 ---
 
 # SourceId
@@ -13,4 +13,4 @@ tags:
 ## Connections
 - [[MorphicPillModel]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_8
+#graphify/code #graphify/EXTRACTED #community/Community_7

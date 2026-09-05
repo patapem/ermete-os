@@ -1,19 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 9"
+community: "Community 2"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_9
+  - community/Community_2
 ---
 
 # Vec
 
 ## Connections
-- [[.extract_ebpf_instructions()]] - `references` [EXTRACTED]
-- [[BufferOverflowValidation]] - `references` [EXTRACTED]
-- [[LivePatchManager]] - `references` [EXTRACTED]
-- [[LivePatchStatus]] - `references` [EXTRACTED]
+- [[dot-get_capabilities()]] - `references` [EXTRACTED]
+- [[dot-notify()]] - `references` [EXTRACTED]
+- [[NotificationData]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_9
+#graphify/code #graphify/EXTRACTED #community/Community_2

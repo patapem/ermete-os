@@ -1,18 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 17"
+community: "Community 13"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_17
+  - community/Community_13
 ---
 
 # OwnedFd
 
 ## Connections
-- [[.new()_25]] - `references` [EXTRACTED]
-- [[DmaBufBuffer]] - `references` [EXTRACTED]
-- [[preview_popup.rs]] - `imports_from` [EXTRACTED]
+- [[dot-open_pipewire_remote()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_17
+#graphify/code #graphify/EXTRACTED #community/Community_13

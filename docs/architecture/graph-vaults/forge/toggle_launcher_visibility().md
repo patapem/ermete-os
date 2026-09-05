@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/launcher.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/launcher.rs"
 type: "code"
-community: "Community 39"
+community: "Community 48"
 location: "L49"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_39
+  - community/Community_48
 ---
 
 # toggle_launcher_visibility()
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[launcher.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_39
+#graphify/code #graphify/EXTRACTED #community/Community_48

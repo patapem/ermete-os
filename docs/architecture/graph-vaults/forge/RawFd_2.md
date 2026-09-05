@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 23"
+community: "Community 8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_23
+  - community/Community_8
 ---
 
 # RawFd
 
 ## Connections
-- [[ebpf.rs_1]] - `imports_from` [EXTRACTED]
-- [[start_ebpf_dbus_listener_with_fd()]] - `references` [EXTRACTED]
+- [[fanotify.rs]] - `imports_from` [EXTRACTED]
+- [[respond_and_close()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_23
+#graphify/code #graphify/EXTRACTED #community/Community_8

@@ -1,24 +1,24 @@
 ---
-source_file: "specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/network.rs"
+source_file: "specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/network.rs"
 type: "code"
-community: "Community 57"
+community: "Community 59"
 location: "L26"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_57
+  - community/Community_59
 ---
 
 # UnikernelNetworkConsumer
 
 ## Connections
-- [[.new()_39]] - `method` [EXTRACTED]
-- [[.poll_passive_status()]] - `method` [EXTRACTED]
-- [[.submit_event()]] - `method` [EXTRACTED]
-- [[Arc_16]] - `references` [EXTRACTED]
+- [[dot-new()_45]] - `method` [EXTRACTED]
+- [[dot-poll_passive_status()]] - `method` [EXTRACTED]
+- [[dot-submit_event()]] - `method` [EXTRACTED]
+- [[Arc_13]] - `references` [EXTRACTED]
 - [[Mutex_9]] - `references` [EXTRACTED]
-- [[Option_23]] - `references` [EXTRACTED]
+- [[Option_35]] - `references` [EXTRACTED]
 - [[ZeroCopyRingBuffer]] - `references` [EXTRACTED]
-- [[network.rs_1]] - `contains` [EXTRACTED]
+- [[pagesnetwork.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_57
+#graphify/code #graphify/EXTRACTED #community/Community_59

@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 57"
+community: "Community 65"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_57
+  - community/Community_65
 ---
 
 # Result
 
 ## Connections
-- [[.poll_passive_status()]] - `references` [EXTRACTED]
-- [[.submit_event()]] - `references` [EXTRACTED]
+- [[dot-get_devices()]] - `references` [EXTRACTED]
+- [[dot-set_power()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_57
+#graphify/code #graphify/EXTRACTED #community/Community_65

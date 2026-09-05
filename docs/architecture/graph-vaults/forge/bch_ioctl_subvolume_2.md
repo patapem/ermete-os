@@ -1,17 +1,17 @@
 ---
-source_file: "specs/ermete-recovery/ermete-recovery-1.0.0/src/main.rs"
+source_file: "specs/athanor-gatekeeper-rs/athanor-gatekeeper-rs-1.0.0/src/bcachefs.rs"
 type: "code"
-community: "Community 20"
-location: "L452"
+community: "Community 8"
+location: "L11"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_20
+  - community/Community_8
 ---
 
 # bch_ioctl_subvolume
 
 ## Connections
-- [[main.rs_11]] - `contains` [EXTRACTED]
+- [[bcachefs.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_20
+#graphify/code #graphify/EXTRACTED #community/Community_8

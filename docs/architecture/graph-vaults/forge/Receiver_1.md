@@ -11,7 +11,6 @@ tags:
 # Receiver
 
 ## Connections
-- [[AppearanceStateStore]] - `references` [EXTRACTED]
-- [[VoiceOverStateStore]] - `references` [EXTRACTED]
+- [[BluetoothActor]] - `references` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_27

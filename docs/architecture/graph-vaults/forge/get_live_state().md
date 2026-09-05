@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/sys/live_state.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/sys/live_state.rs"
 type: "code"
-community: "Community 13"
+community: "Community 1"
 location: "L61"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_13
+  - community/Community_1
 ---
 
 # get_live_state()
@@ -16,4 +16,4 @@ tags:
 - [[get_cache()]] - `calls` [EXTRACTED]
 - [[live_state.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_13
+#graphify/code #graphify/EXTRACTED #community/Community_1

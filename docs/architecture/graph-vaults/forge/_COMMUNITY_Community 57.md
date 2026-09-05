@@ -1,29 +1,27 @@
 ---
 type: community
-cohesion: 0.23
 members: 14
 ---
 
 # Community 57
 
-**Cohesion:** 0.23 - loosely connected
 **Members:** 14 nodes
 
 ## Members
-- [[.new()_39]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/network.rs
-- [[.poll_passive_status()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/network.rs
-- [[.submit_event()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/network.rs
-- [[Arc_16]] - code
-- [[Box_18]] - code
-- [[Mutex_9]] - code
-- [[Option_23]] - code
-- [[Result_51]] - code
-- [[Self_39]] - code
-- [[UnikernelNetworkConsumer]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/network.rs
-- [[Vec_25]] - code
-- [[ZeroCopyRingBuffer]] - code
-- [[build_page()_15]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/network.rs
-- [[network.rs_1]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/network.rs
+- [[Calculates deterministic SHA256 for a directory.]] - rationale - scripts/dag_orchestrator.py
+- [[Constructs the dependency graph and node metadata.]] - rationale - scripts/dag_orchestrator.py
+- [[Extracts BuildRequires and Requires from a .spec file.]] - rationale - scripts/dag_orchestrator.py
+- [[Groups dirty nodes into topological execution levels (Level 0, Level 1, Level…]] - rationale - scripts/dag_orchestrator.py
+- [[Loads packages.json single source of truth.]] - rationale - scripts/dag_orchestrator.py
+- [[Reads local file cache for previous hashes. Marks node DIRTY if content hash…]] - rationale - scripts/dag_orchestrator.py
+- [[build_dag()]] - code - scripts/dag_orchestrator.py
+- [[compute_dir_hash()]] - code - scripts/dag_orchestrator.py
+- [[dag_orchestrator.py]] - code - scripts/dag_orchestrator.py
+- [[evaluate_dirty_nodes()]] - code - scripts/dag_orchestrator.py
+- [[load_package_manifest()]] - code - scripts/dag_orchestrator.py
+- [[main()_5]] - code - scripts/dag_orchestrator.py
+- [[parse_spec_dependencies()]] - code - scripts/dag_orchestrator.py
+- [[partition_dag_levels()]] - code - scripts/dag_orchestrator.py
 
 ## Live Query (requires Dataview plugin)
 

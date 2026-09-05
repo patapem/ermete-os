@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/topbar.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/topbar.rs"
 type: "code"
 community: "Community 12"
 location: "L1"
@@ -12,7 +12,7 @@ tags:
 # topbar.rs
 
 ## Connections
-- [[Application_28]] - `imports_from` [EXTRACTED]
+- [[Application_12]] - `imports_from` [EXTRACTED]
 - [[TopbarInput]] - `contains` [EXTRACTED]
 - [[TopbarModel]] - `contains` [EXTRACTED]
 - [[WorkspaceItem]] - `contains` [EXTRACTED]

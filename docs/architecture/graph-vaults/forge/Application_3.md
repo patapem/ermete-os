@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 80"
+community: "Community 0"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_80
+  - community/Community_0
 ---
 
 # Application
 
 ## Connections
-- [[ControlCenterPanel]] - `references` [EXTRACTED]
+- [[show_control_center_popover()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_80
+#graphify/code #graphify/EXTRACTED #community/Community_0

@@ -1,20 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 87"
+community: "Community 12"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_87
+  - community/Community_12
 ---
 
 # String
 
 ## Connections
-- [[.authenticate_oauth()]] - `references` [EXTRACTED]
-- [[.mount_fuse()]] - `references` [EXTRACTED]
-- [[.system_bus_name()_1]] - `references` [EXTRACTED]
-- [[PolkitAuthorizationResult_1]] - `references` [EXTRACTED]
-- [[PolkitSubject_1]] - `references` [EXTRACTED]
+- [[TopbarModel]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_87
+#graphify/code #graphify/EXTRACTED #community/Community_12

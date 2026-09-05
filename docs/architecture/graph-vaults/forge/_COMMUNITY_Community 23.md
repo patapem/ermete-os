@@ -1,45 +1,42 @@
 ---
 type: community
-cohesion: 0.13
-members: 30
+members: 29
 ---
 
 # Community 23
 
-**Cohesion:** 0.13 - loosely connected
-**Members:** 30 nodes
+**Members:** 29 nodes
 
 ## Members
-- [[.default()_18]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[.default()_20]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[.default()_21]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[.default()_19]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[.emit()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[.emit()_2]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[.emit()_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[.new()_48]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[.new()_50]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[.new()_51]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[.new()_49]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[.subscribe()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[.subscribe()_2]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[.subscribe()_3]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[.subscribe()_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[AudioBus]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[AudioEvent]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[Default_14]] - code
-- [[HardwareBus]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[HardwareEvent]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[NetBus]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[NetEvent]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/types.rs
-- [[Option_31]] - code
-- [[RawFd_2]] - code
-- [[Receiver_9]] - code
-- [[Self_56]] - code
-- [[Sender_9]] - code
-- [[ebpf.rs_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/sys/ebpf.rs
-- [[start_ebpf_dbus_listener()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/sys/ebpf.rs
-- [[start_ebpf_dbus_listener_with_fd()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/sys/ebpf.rs
+- [[(tag, commit) piu' alto di NVIDIAopen-gpu-kernel-modules nel ramo (major)…]] - rationale - specs/azoth/bump.py
+- [[(versione, NVR Fedora, tag CachyOS, data della release) della coppia scelta, o…]] - rationale - specs/azoth/bump.py
+- [[Gli elementi di un endpoint lista, pagina dopo pagina.]] - rationale - specs/azoth/bump.py
+- [[Il digest che `podman pull imagetag` risolve quello del manifest (index) del…]] - rationale - specs/azoth/bump.py
+- [[La versione piu' alta del ramo pinnato nell'indice di download di NVIDIA.]] - rationale - specs/azoth/bump.py
+- [[Una richiesta all'API GitHub, con il token del job se c'e' (60ora senza).]] - rationale - specs/azoth/bump.py
+- [[apply()]] - code - specs/azoth/bump.py
+- [[base_images()]] - code - specs/azoth/bump.py
+- [[body()]] - code - specs/azoth/bump.py
+- [[bump.py]] - code - specs/azoth/bump.py
+- [[cachyos_releases()]] - code - specs/azoth/bump.py
+- [[compute()]] - code - specs/azoth/bump.py
+- [[fedora_kernels()]] - code - specs/azoth/bump.py
+- [[gh()]] - code - specs/azoth/bump.py
+- [[github()]] - code - specs/azoth/bump.py
+- [[head_commit()]] - code - specs/azoth/bump.py
+- [[http()]] - code - specs/azoth/bump.py
+- [[image_digest()]] - code - specs/azoth/bump.py
+- [[kernel_pair()]] - code - specs/azoth/bump.py
+- [[main()_3]] - code - specs/azoth/bump.py
+- [[nvidia_legacy()]] - code - specs/azoth/bump.py
+- [[nvidia_open()]] - code - specs/azoth/bump.py
+- [[pins_table()]] - code - specs/azoth/bump.py
+- [[read_pins()]] - code - specs/azoth/bump.py
+- [[series()]] - code - specs/azoth/bump.py
+- [[vtuple()]] - code - specs/azoth/bump.py
+- [[{immaginetag digest pinnato} dai FROM dei Containerfile.]] - rationale - specs/azoth/bump.py
+- [[{patch level (tag, published_at)} dell'ultima release di CachyOSlinux per…]] - rationale - specs/azoth/bump.py
+- [[{patch level NVR} delle build kernel stable; F43 prima di F44 a parita' di…]] - rationale - specs/azoth/bump.py
 
 ## Live Query (requires Dataview plugin)
 
@@ -47,20 +44,3 @@ members: 30
 TABLE source_file, type FROM #community/Community_23
 SORT file.name ASC
 ```
-
-## Connections to other communities
-- 7 edges to [[_COMMUNITY_Community 58]]
-- 6 edges to [[_COMMUNITY_Community 21]]
-- 4 edges to [[_COMMUNITY_Community 25]]
-- 4 edges to [[_COMMUNITY_Community 4]]
-- 3 edges to [[_COMMUNITY_Community 29]]
-- 3 edges to [[_COMMUNITY_Community 48]]
-- 3 edges to [[_COMMUNITY_Community 36]]
-- 3 edges to [[_COMMUNITY_Community 34]]
-
-## Top bridge nodes
-- [[NetBus]] - degree 20, connects to 4 communities
-- [[HardwareBus]] - degree 15, connects to 4 communities
-- [[AudioBus]] - degree 12, connects to 3 communities
-- [[.new()_51]] - degree 6, connects to 1 community
-- [[.subscribe()_3]] - degree 6, connects to 1 community

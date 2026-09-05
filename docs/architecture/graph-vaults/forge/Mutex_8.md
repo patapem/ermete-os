@@ -11,7 +11,7 @@ tags:
 # Mutex
 
 ## Connections
-- [[.new()_31]] - `references` [EXTRACTED]
-- [[GatekeeperManager]] - `references` [EXTRACTED]
+- [[NetworkController]] - `references` [EXTRACTED]
+- [[ipcnetwork.rs]] - `imports_from` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_5

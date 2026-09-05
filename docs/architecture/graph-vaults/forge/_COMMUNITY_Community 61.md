@@ -1,28 +1,27 @@
 ---
 type: community
-cohesion: 0.19
-members: 13
+members: 14
 ---
 
 # Community 61
 
-**Cohesion:** 0.19 - loosely connected
-**Members:** 13 nodes
+**Members:** 14 nodes
 
 ## Members
-- [[.get_devices()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/bluetooth.rs
-- [[.new()_10]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/bluetooth.rs
-- [[.power()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/bluetooth.rs
-- [[.set_power()]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/bluetooth.rs
-- [[Bluetooth]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/bluetooth.rs
-- [[Connection_3]] - code
-- [[Header_3]] - code
-- [[Option_6]] - code
-- [[Result_16]] - code
-- [[Self_11]] - code
-- [[String_20]] - code
-- [[Vec_8]] - code
-- [[bluetooth.rs]] - code - specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/bluetooth.rs
+- [[Il modulo decompresso (Fedora spedisce .ko.xz la firma sta dentro il flusso).]] - rationale - specs/azoth/repro.py
+- [[Il modulo senza la firma payloadsignerkey idfirmastruct 12marker.]] - rationale - specs/azoth/repro.py
+- [[extract()]] - code - specs/azoth/repro.py
+- [[kver()]] - code - specs/azoth/repro.py
+- [[main()_6]] - code - specs/azoth/repro.py
+- [[module_bytes()]] - code - specs/azoth/repro.py
+- [[module_payload()]] - code - specs/azoth/repro.py
+- [[modules()]] - code - specs/azoth/repro.py
+- [[repro.py]] - code - specs/azoth/repro.py
+- [[rpm2cpio  cpio dei soli percorsi che servono, da ogni RPM che li ha.]] - rationale - specs/azoth/repro.py
+- [[run()]] - code - specs/azoth/repro.py
+- [[sections()]] - code - specs/azoth/repro.py
+- [[sha()_1]] - code - specs/azoth/repro.py
+- [[{sezione sha256 del contenuto} offset e size da llvm-readelf, byte dal file.]] - rationale - specs/azoth/repro.py
 
 ## Live Query (requires Dataview plugin)
 

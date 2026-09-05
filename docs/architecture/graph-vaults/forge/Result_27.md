@@ -1,18 +1,21 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 31"
+community: "Community 28"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_31
+  - community/Community_28
 ---
 
 # Result
 
 ## Connections
-- [[.new()_22]] - `references` [EXTRACTED]
-- [[.refresh_items()]] - `references` [EXTRACTED]
-- [[.start_zero_copy_ipc_listener()]] - `references` [EXTRACTED]
+- [[dot-add_vpn_tunnel()]] - `references` [EXTRACTED]
+- [[dot-check_connectivity()]] - `references` [EXTRACTED]
+- [[dot-connect_enterprise_wifi()]] - `references` [EXTRACTED]
+- [[dot-extract_setting()]] - `references` [EXTRACTED]
+- [[dot-extract_setting_value()]] - `references` [EXTRACTED]
+- [[dot-scan_networks()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_31
+#graphify/code #graphify/EXTRACTED #community/Community_28

@@ -1,18 +1,15 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 2
 ---
 
 # Community 159
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 2 nodes
 
 ## Members
-- [[UPower]] - code - ermete-shell-rs/src/sys/battery.rs
-- [[UPowerDevice]] - code - ermete-shell-rs/src/sys/battery.rs
-- [[battery.rs]] - code - ermete-shell-rs/src/sys/battery.rs
+- [[clean_ghcr.sh]] - code - scripts/clean_ghcr.sh
+- [[clean_ghcr.sh script]] - code - scripts/clean_ghcr.sh
 
 ## Live Query (requires Dataview plugin)
 

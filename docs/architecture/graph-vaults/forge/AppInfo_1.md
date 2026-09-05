@@ -1,17 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 1"
+community: "Community 48"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_1
+  - community/Community_48
 ---
 
 # AppInfo
 
 ## Connections
-- [[SpotlightAction]] - `references` [EXTRACTED]
-- [[spotlight.rs]] - `imports_from` [EXTRACTED]
+- [[LauncherItemKind]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_1
+#graphify/code #graphify/EXTRACTED #community/Community_48

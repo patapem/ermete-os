@@ -1,16 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 5"
+community: "Community 49"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_5
+  - community/Community_49
 ---
 
 # Mutex
 
 ## Connections
-- [[restore_bcachefs_snapshot_impl()]] - `references` [EXTRACTED]
+- [[SyncEngine]] - `references` [EXTRACTED]
+- [[sync.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_5
+#graphify/code #graphify/EXTRACTED #community/Community_49

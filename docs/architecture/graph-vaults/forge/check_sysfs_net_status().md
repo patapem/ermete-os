@@ -1,18 +1,18 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/network.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/network.rs"
 type: "code"
-community: "Community 4"
+community: "Community 5"
 location: "L594"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_4
+  - community/Community_5
 ---
 
 # check_sysfs_net_status()
 
 ## Connections
-- [[String_61]] - `references` [EXTRACTED]
-- [[network.rs_3]] - `contains` [EXTRACTED]
+- [[String_49]] - `references` [EXTRACTED]
+- [[ipcnetwork.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_4
+#graphify/code #graphify/EXTRACTED #community/Community_5

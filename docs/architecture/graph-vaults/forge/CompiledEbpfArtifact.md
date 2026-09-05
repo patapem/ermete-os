@@ -1,21 +1,21 @@
 ---
-source_file: "specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/live_patch.rs"
+source_file: "specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/live_patch.rs"
 type: "code"
-community: "Community 9"
-location: "L80"
+community: "Community 22"
+location: "L22"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_9
+  - community/Community_22
 ---
 
 # CompiledEbpfArtifact
 
 ## Connections
-- [[.compile_and_validate()]] - `references` [EXTRACTED]
-- [[.jit_compile_patch()]] - `references` [EXTRACTED]
+- [[dot-compile_and_validate()]] - `references` [EXTRACTED]
+- [[dot-jit_compile_patch()]] - `references` [EXTRACTED]
 - [[BufferOverflowValidation]] - `references` [EXTRACTED]
-- [[String_21]] - `references` [EXTRACTED]
+- [[String_29]] - `references` [EXTRACTED]
 - [[live_patch.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_9
+#graphify/code #graphify/EXTRACTED #community/Community_22

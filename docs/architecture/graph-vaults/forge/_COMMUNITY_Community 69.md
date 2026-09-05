@@ -1,27 +1,25 @@
 ---
 type: community
-cohesion: 0.21
 members: 12
 ---
 
 # Community 69
 
-**Cohesion:** 0.21 - loosely connected
 **Members:** 12 nodes
 
 ## Members
-- [[.default()_25]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/sysmon_vm.rs
-- [[.execute_intent()_3]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/sysmon_vm.rs
-- [[.get_initial_state()_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/sysmon_vm.rs
-- [[.subscribe_metrics()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/sysmon_vm.rs
-- [[Default_18]] - code
-- [[F_7]] - code
-- [[Self_65]] - code
-- [[String_84]] - code
-- [[SysMonIntent]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/sysmon_vm.rs
-- [[SysMonState]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/sysmon_vm.rs
-- [[SysMonViewModel]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/sysmon_vm.rs
-- [[sysmon_vm.rs]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/sysmon_vm.rs
+- [[Adds a relationship (edge) between two nodes.]] - rationale - scripts/graphify_mcp.py
+- [[Adds a system component or node to the Graphify database.]] - rationale - scripts/graphify_mcp.py
+- [[Finds the shortest topological path between two nodes in the system.]] - rationale - scripts/graphify_mcp.py
+- [[Queries the graph for nodes and edges matching a specific term.]] - rationale - scripts/graphify_mcp.py
+- [[add_edge()]] - code - scripts/graphify_mcp.py
+- [[add_node()]] - code - scripts/graphify_mcp.py
+- [[graphify_mcp.py]] - code - scripts/graphify_mcp.py
+- [[load_graph()]] - code - scripts/graphify_mcp.py
+- [[query_graph()]] - code - scripts/graphify_mcp.py
+- [[save_graph()_1]] - code - scripts/graphify_mcp.py
+- [[shortest_path()]] - code - scripts/graphify_mcp.py
+- [[tool]] - code
 
 ## Live Query (requires Dataview plugin)
 

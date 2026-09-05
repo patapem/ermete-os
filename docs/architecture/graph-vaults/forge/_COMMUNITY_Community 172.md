@@ -1,17 +1,15 @@
 ---
 type: community
-cohesion: 1.00
 members: 2
 ---
 
 # Community 172
 
-**Cohesion:** 1.00 - tightly connected
 **Members:** 2 nodes
 
 ## Members
-- [[build_container.sh]] - code - scripts/build_container.sh
-- [[build_container.sh script]] - code - scripts/build_container.sh
+- [[render_frame()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/snap_overlay_render.rs
+- [[snap_overlay_render.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/snap_overlay_render.rs
 
 ## Live Query (requires Dataview plugin)
 

@@ -1,23 +1,23 @@
 ---
 type: community
-cohesion: 0.39
-members: 8
+members: 10
 ---
 
 # Community 85
 
-**Cohesion:** 0.39 - loosely connected
-**Members:** 8 nodes
+**Members:** 10 nodes
 
 ## Members
-- [[Arc_2]] - code
-- [[HashMap_2]] - code
-- [[Instant_1]] - code
-- [[Mutex_1]] - code
-- [[Result_10]] - code
-- [[String_11]] - code
-- [[broadcast_clipboard()]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/clipboard.rs
-- [[clipboard.rs]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/clipboard.rs
+- [[dot-get_clock_string()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs
+- [[dot-get_focused_title()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs
+- [[dot-get_live_state()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs
+- [[dot-get_network_status()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs
+- [[dot-subscribe_events()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs
+- [[F_9]] - code
+- [[String_81]] - code
+- [[TopbarState]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs
+- [[TopbarViewModel]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs
+- [[topbar_vm.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -25,11 +25,3 @@ members: 8
 TABLE source_file, type FROM #community/Community_85
 SORT file.name ASC
 ```
-
-## Connections to other communities
-- 2 edges to [[_COMMUNITY_Community 32]]
-- 1 edge to [[_COMMUNITY_Community 46]]
-
-## Top bridge nodes
-- [[clipboard.rs]] - degree 7, connects to 2 communities
-- [[broadcast_clipboard()]] - degree 8, connects to 1 community

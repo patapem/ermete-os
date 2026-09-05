@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 70"
+community: "Community 4"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_70
+  - community/Community_4
 ---
 
 # Option
 
 ## Connections
-- [[build_menu_item()]] - `references` [EXTRACTED]
+- [[QuickLookModel]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_70
+#graphify/code #graphify/EXTRACTED #community/Community_4

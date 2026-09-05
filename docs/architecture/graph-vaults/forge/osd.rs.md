@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/osd.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/osd.rs"
 type: "code"
-community: "Community 105"
+community: "Community 118"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_105
+  - community/Community_118
 ---
 
 # osd.rs
@@ -14,6 +14,6 @@ tags:
 ## Connections
 - [[init_osd_css()]] - `contains` [EXTRACTED]
 - [[spawn_osd()]] - `contains` [EXTRACTED]
-- [[test_bezier_curve_definition()]] - `contains` [EXTRACTED]
+- [[test_osd_ui_instantiation()]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_105
+#graphify/code #graphify/EXTRACTED #community/Community_118

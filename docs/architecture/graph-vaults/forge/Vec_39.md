@@ -1,18 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 1"
+community: "Community 95"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_1
+  - community/Community_95
 ---
 
 # Vec
 
 ## Connections
-- [[.reclaim()]] - `references` [EXTRACTED]
-- [[.recv_burst()]] - `references` [EXTRACTED]
-- [[Umem]] - `references` [EXTRACTED]
+- [[scan_dir_async()]] - `references` [EXTRACTED]
+- [[scan_wallpapers_async()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_1
+#graphify/code #graphify/EXTRACTED #community/Community_95

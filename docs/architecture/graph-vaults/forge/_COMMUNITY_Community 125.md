@@ -1,18 +1,17 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 4
 ---
 
 # Community 125
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 4 nodes
 
 ## Members
-- [[UPower]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/sys/battery.rs
-- [[UPowerDevice]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/sys/battery.rs
-- [[battery.rs_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/sys/battery.rs
+- [[Result_14]] - code
+- [[String_17]] - code
+- [[acquire_drm_lease()]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/drm_lease.rs
+- [[drm_lease.rs]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/drm_lease.rs
 
 ## Live Query (requires Dataview plugin)
 

@@ -1,18 +1,19 @@
 ---
 type: community
-cohesion: 1.00
-members: 3
+members: 6
 ---
 
 # Community 112
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 3 nodes
+**Members:** 6 nodes
 
 ## Members
-- [[update_spec()]] - code - scripts/update_specs.sh
-- [[update_specs.sh]] - code - scripts/update_specs.sh
-- [[update_specs.sh script]] - code - scripts/update_specs.sh
+- [[Button_1]] - code
+- [[GtkBox_4]] - code
+- [[build_cc_compact_tile()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/widgets.rs
+- [[build_cc_row()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/widgets.rs
+- [[build_cc_row_content()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/widgets.rs
+- [[widgets.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/widgets.rs
 
 ## Live Query (requires Dataview plugin)
 

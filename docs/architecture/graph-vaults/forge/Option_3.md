@@ -1,16 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 46"
+community: "Community 10"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_46
+  - community/Community_10
 ---
 
 # Option
 
 ## Connections
-- [[SyncEngine]] - `references` [EXTRACTED]
+- [[dot-get_cgroup_path_for_pid()]] - `references` [EXTRACTED]
+- [[dot-on_window_focused()]] - `references` [EXTRACTED]
+- [[EnergyAwareSchedulerState]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_46
+#graphify/code #graphify/EXTRACTED #community/Community_10

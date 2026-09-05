@@ -1,18 +1,18 @@
 ---
-source_file: "specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/general.rs"
+source_file: "specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/notifications.rs"
 type: "code"
-community: "Community 121"
+community: "Community 144"
 location: "L5"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_121
+  - community/Community_144
 ---
 
 # build_page()
 
 ## Connections
-- [[Box_14]] - `references` [EXTRACTED]
-- [[general.rs]] - `contains` [EXTRACTED]
+- [[Box_12]] - `references` [EXTRACTED]
+- [[pagesnotifications.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_121
+#graphify/code #graphify/EXTRACTED #community/Community_144

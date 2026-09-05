@@ -1,19 +1,19 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/control_center/calendar.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/control_center/calendar.rs"
 type: "code"
-community: "Community 1"
+community: "Community 0"
 location: "L7"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_1
+  - community/Community_0
 ---
 
 # show_calendar_popover()
 
 ## Connections
-- [[Application_10]] - `references` [EXTRACTED]
+- [[Application_2]] - `references` [EXTRACTED]
 - [[calendar.rs]] - `contains` [EXTRACTED]
 - [[setup_popup_autoclose()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_1
+#graphify/code #graphify/EXTRACTED #community/Community_0

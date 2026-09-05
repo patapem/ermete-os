@@ -1,18 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 15"
+community: "Community 22"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_15
+  - community/Community_22
 ---
 
 # Option
 
 ## Connections
-- [[DockItemWidget]] - `references` [EXTRACTED]
-- [[DockMonitorInstance]] - `references` [EXTRACTED]
-- [[create_dock_for_monitor()]] - `references` [EXTRACTED]
+- [[dot-dispatch()]] - `references` [EXTRACTED]
+- [[dot-dispatch()_1]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_15
+#graphify/code #graphify/EXTRACTED #community/Community_22

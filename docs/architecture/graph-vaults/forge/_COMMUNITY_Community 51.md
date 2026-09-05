@@ -1,31 +1,30 @@
 ---
 type: community
-cohesion: 0.17
-members: 16
+members: 17
 ---
 
 # Community 51
 
-**Cohesion:** 0.17 - loosely connected
-**Members:** 16 nodes
+**Members:** 17 nodes
 
 ## Members
-- [[.infer()]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/model_loader.rs
-- [[.is_loaded()]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/model_loader.rs
-- [[.load_onnx_model()]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/model_loader.rs
-- [[.load_safetensors_weights()]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/model_loader.rs
-- [[.new()]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/model_loader.rs
-- [[Device]] - code
-- [[Linear]] - code
-- [[NeuralModelEngine]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/model_loader.rs
-- [[Option]] - code
-- [[P]] - code
-- [[PathBuf]] - code
-- [[Result_2]] - code
-- [[Self]] - code
-- [[String_2]] - code
-- [[Vec]] - code
-- [[model_loader.rs]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/model_loader.rs
+- [[GIT_AUTHOR_EMAIL]] - code - specs/azoth/build.sh
+- [[GIT_AUTHOR_NAME]] - code - specs/azoth/build.sh
+- [[GIT_COMMITTER_EMAIL]] - code - specs/azoth/build.sh
+- [[GIT_COMMITTER_NAME]] - code - specs/azoth/build.sh
+- [[KBUILD_BUILD_HOST]] - code - specs/azoth/build.sh
+- [[KBUILD_BUILD_USER]] - code - specs/azoth/build.sh
+- [[build.sh]] - code - specs/azoth/build.sh
+- [[build.sh script]] - code - specs/azoth/build.sh
+- [[check_delta()]] - code - specs/azoth/build.sh
+- [[die()_3]] - code - specs/azoth/build.sh
+- [[fedora_wins()]] - code - specs/azoth/build.sh
+- [[fetch()]] - code - specs/azoth/build.sh
+- [[g()]] - code - specs/azoth/build.sh
+- [[patch_file()]] - code - specs/azoth/build.sh
+- [[step()_3]] - code - specs/azoth/build.sh
+- [[usage()]] - code - specs/azoth/build.sh
+- [[verify_gpg()]] - code - specs/azoth/build.sh
 
 ## Live Query (requires Dataview plugin)
 
@@ -33,9 +32,3 @@ members: 16
 TABLE source_file, type FROM #community/Community_51
 SORT file.name ASC
 ```
-
-## Connections to other communities
-- 2 edges to [[_COMMUNITY_Community 71]]
-
-## Top bridge nodes
-- [[NeuralModelEngine]] - degree 12, connects to 1 community

@@ -1,27 +1,26 @@
 ---
 type: community
-cohesion: 0.23
-members: 12
+members: 13
 ---
 
 # Community 65
 
-**Cohesion:** 0.23 - loosely connected
-**Members:** 12 nodes
+**Members:** 13 nodes
 
 ## Members
-- [[.default()_1]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/npu/openvino.rs
-- [[.device_name()]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/npu/openvino.rs
-- [[.execute_npu_inference()]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/npu/openvino.rs
-- [[.is_available()]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/npu/openvino.rs
-- [[.new()_2]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/npu/openvino.rs
-- [[Default_1]] - code
-- [[OpenVinoNpuEngine]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/npu/openvino.rs
-- [[Result_4]] - code
-- [[Self_2]] - code
-- [[String_4]] - code
-- [[Vec_2]] - code
-- [[openvino.rs]] - code - specs/Static Rules Engine/Static Rules Engine-1.0.0/src/npu/openvino.rs
+- [[dot-get_devices()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bluetooth.rs
+- [[dot-new()_47]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bluetooth.rs
+- [[dot-power()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bluetooth.rs
+- [[dot-set_power()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bluetooth.rs
+- [[Bluetooth_1]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bluetooth.rs
+- [[Connection_6]] - code
+- [[Header_4]] - code
+- [[Option_37]] - code
+- [[Result_51]] - code
+- [[Self_47]] - code
+- [[String_62]] - code
+- [[Vec_32]] - code
+- [[srcbluetooth.rs]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/bluetooth.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -29,9 +28,3 @@ members: 12
 TABLE source_file, type FROM #community/Community_65
 SORT file.name ASC
 ```
-
-## Connections to other communities
-- 2 edges to [[_COMMUNITY_Community 53]]
-
-## Top bridge nodes
-- [[OpenVinoNpuEngine]] - degree 10, connects to 1 community

@@ -1,23 +1,23 @@
 ---
-source_file: "specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs"
+source_file: "specs/athanor-dock/athanor-dock-1.0.0/src/dock_config.rs"
 type: "code"
-community: "Community 44"
+community: "Community 46"
 location: "L8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_44
+  - community/Community_46
 ---
 
 # DockConfig
 
 ## Connections
-- [[.default()_10]] - `method` [EXTRACTED]
-- [[.is_pinned()]] - `method` [EXTRACTED]
-- [[Default_7]] - `implements` [EXTRACTED]
+- [[dot-default()_16]] - `method` [EXTRACTED]
+- [[dot-is_pinned()]] - `method` [EXTRACTED]
+- [[Default_9]] - `implements` [EXTRACTED]
 - [[DockMode]] - `references` [EXTRACTED]
-- [[String_30]] - `references` [EXTRACTED]
-- [[Vec_14]] - `references` [EXTRACTED]
+- [[String_45]] - `references` [EXTRACTED]
+- [[Vec_23]] - `references` [EXTRACTED]
 - [[add_pin()]] - `references` [EXTRACTED]
 - [[create_dock_for_monitor()]] - `references` [EXTRACTED]
 - [[dock_config.rs]] - `contains` [EXTRACTED]
@@ -28,4 +28,4 @@ tags:
 - [[spawn_dock_watchers()]] - `references` [EXTRACTED]
 - [[toggle_dock_mode()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_44
+#graphify/code #graphify/EXTRACTED #community/Community_46

@@ -1,16 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 1
+members: 3
 ---
 
 # Community 151
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 1 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[mod.rs_1]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/components/mod.rs
+- [[Result_18]] - code
+- [[athanor-store-rs-1.0.0srcmain.rs]] - code - specs/athanor-store-rs/athanor-store-rs-1.0.0/src/main.rs
+- [[main()_13]] - code - specs/athanor-store-rs/athanor-store-rs-1.0.0/src/main.rs
 
 ## Live Query (requires Dataview plugin)
 

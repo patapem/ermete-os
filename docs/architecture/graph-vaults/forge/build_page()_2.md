@@ -1,19 +1,18 @@
 ---
-source_file: "specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/appearance.rs"
+source_file: "specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/audio.rs"
 type: "code"
-community: "Community 30"
-location: "L6"
+community: "Community 126"
+location: "L18"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_30
+  - community/Community_126
 ---
 
 # build_page()
 
 ## Connections
-- [[Box_8]] - `references` [EXTRACTED]
-- [[appearance.rs]] - `contains` [EXTRACTED]
-- [[with_settings_proxy()]] - `calls` [INFERRED]
+- [[Box_6]] - `references` [EXTRACTED]
+- [[pagesaudio.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_30
+#graphify/code #graphify/EXTRACTED #community/Community_126

@@ -1,37 +1,37 @@
 ---
 type: community
-cohesion: 0.16
-members: 22
+members: 24
 ---
 
 # Community 38
 
-**Cohesion:** 0.16 - loosely connected
-**Members:** 22 nodes
+**Members:** 24 nodes
 
 ## Members
-- [[Application_16]] - code
-- [[DateTime]] - code
-- [[F_2]] - code
-- [[Option_30]] - code
-- [[Request]] - code
-- [[Response]] - code
-- [[Result_58]] - code
-- [[String_67]] - code
-- [[String_72]] - code
-- [[UnixStream]] - code
-- [[UserInfo]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/sys/auth.rs
-- [[auth.rs]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/sys/auth.rs
-- [[authenticate()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/sys/auth.rs
-- [[authenticate_interactive()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/sys/auth.rs
-- [[build_ui()_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/greeter/greeter.rs
-- [[capitalize_first()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/sys/auth.rs
-- [[discover_target_user()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/sys/auth.rs
-- [[format_italian_date()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/greeter/greeter.rs
-- [[greeter.rs]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/greeter/greeter.rs
-- [[mod.rs_10]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/greeter/mod.rs
-- [[send_request()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/sys/auth.rs
-- [[unlock_keyring_automatic()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/sys/auth.rs
+- [[dot-get()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/system_proxies.rs
+- [[dot-get_typed()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/system_proxies.rs
+- [[dot-new()_34]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/system_proxies.rs
+- [[dot-register()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/system_proxies.rs
+- [[dot-register_arc()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/system_proxies.rs
+- [[Any_5]] - code
+- [[Arc_10]] - code
+- [[Box_19]] - code
+- [[ControllerBackend]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/system_proxies.rs
+- [[HashMap_9]] - code
+- [[Mutex_6]] - code
+- [[Option_23]] - code
+- [[ProxyRegistry]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/system_proxies.rs
+- [[Self_29]] - code
+- [[Send]] - code
+- [[T_3]] - code
+- [[Vec_18]] - code
+- [[get_audio_bus()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/system_proxies.rs
+- [[get_hardware_bus()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/system_proxies.rs
+- [[get_mpris_bus()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/system_proxies.rs
+- [[get_net_bus()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/system_proxies.rs
+- [[get_registry()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/system_proxies.rs
+- [[init_system_controller()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/system_proxies.rs
+- [[system_proxies.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/system_proxies.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -41,11 +41,18 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 1 edge to [[_COMMUNITY_Community 26]]
-- 1 edge to [[_COMMUNITY_Community 10]]
-- 1 edge to [[_COMMUNITY_Community 16]]
-- 1 edge to [[_COMMUNITY_Community 13]]
+- 3 edges to [[_COMMUNITY_Community 31]]
+- 3 edges to [[_COMMUNITY_Community 50]]
+- 1 edge to [[_COMMUNITY_Community 27]]
+- 1 edge to [[_COMMUNITY_Community 29]]
+- 1 edge to [[_COMMUNITY_Community 30]]
+- 1 edge to [[_COMMUNITY_Community 5]]
+- 1 edge to [[_COMMUNITY_Community 40]]
+- 1 edge to [[_COMMUNITY_Community 44]]
 
 ## Top bridge nodes
-- [[UnixStream]] - degree 5, connects to 3 communities
-- [[format_italian_date()]] - degree 5, connects to 1 community
+- [[ControllerBackend]] - degree 15, connects to 6 communities
+- [[system_proxies.rs]] - degree 12, connects to 1 community
+- [[get_audio_bus()]] - degree 2, connects to 1 community
+- [[get_hardware_bus()]] - degree 2, connects to 1 community
+- [[get_mpris_bus()]] - degree 2, connects to 1 community

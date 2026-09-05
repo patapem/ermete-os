@@ -1,17 +1,21 @@
 ---
-source_file: "specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/main.rs"
+source_file: "specs/athanor-backup/athanor-backup-1.0.0/src/daemon.rs"
 type: "code"
-community: "Community 45"
-location: "L200"
+community: "Community 19"
+location: "L416"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_45
+  - community/Community_19
 ---
 
 # main()
 
 ## Connections
-- [[main.rs_13]] - `contains` [EXTRACTED]
+- [[dot-new()_10]] - `calls` [EXTRACTED]
+- [[Box_15]] - `references` [EXTRACTED]
+- [[Error_7]] - `references` [EXTRACTED]
+- [[Result_20]] - `references` [EXTRACTED]
+- [[daemon.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_45
+#graphify/code #graphify/EXTRACTED #community/Community_19

@@ -1,23 +1,22 @@
 ---
-source_file: "specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/allocator.rs"
+source_file: "specs/athanor-gatekeeper-rs/athanor-gatekeeper-rs-1.0.0/src/allocator.rs"
 type: "code"
-community: "Community 30"
+community: "Community 33"
 location: "L21"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_30
+  - community/Community_33
 ---
 
 # BumpArenaAllocator
 
 ## Connections
-- [[.default()_12]] - `method` [EXTRACTED]
-- [[.new()_29]] - `method` [EXTRACTED]
-- [[.reset()]] - `method` [EXTRACTED]
+- [[dot-default()_11]] - `method` [EXTRACTED]
+- [[dot-new()_31]] - `method` [EXTRACTED]
+- [[dot-reset()]] - `method` [EXTRACTED]
 - [[AtomicUsize]] - `references` [EXTRACTED]
-- [[BareMetalScudoAllocator]] - `references` [EXTRACTED]
-- [[Default_9]] - `implements` [EXTRACTED]
+- [[Default_7]] - `implements` [EXTRACTED]
 - [[allocator.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_30
+#graphify/code #graphify/EXTRACTED #community/Community_33

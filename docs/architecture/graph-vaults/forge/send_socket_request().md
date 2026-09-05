@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-niri-ipc/src/async_client.rs"
+source_file: "specs/athanor-niri-ipc/src/async_client.rs"
 type: "code"
 community: "Community 16"
 location: "L22"
@@ -12,8 +12,8 @@ tags:
 # send_socket_request()
 
 ## Connections
-- [[Option_20]] - `references` [EXTRACTED]
-- [[String_44]] - `references` [EXTRACTED]
+- [[Option_12]] - `references` [EXTRACTED]
+- [[String_21]] - `references` [EXTRACTED]
 - [[async_client.rs]] - `contains` [EXTRACTED]
 - [[get_niri_socket_path()]] - `calls` [EXTRACTED]
 - [[get_outputs()]] - `calls` [EXTRACTED]

@@ -1,25 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 33"
+community: "Community 14"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_33
+  - community/Community_14
 ---
 
 # Option
 
 ## Connections
-- [[.set_accent_color()_1]] - `references` [EXTRACTED]
-- [[.set_accent_color()]] - `references` [EXTRACTED]
-- [[.set_color_scheme()_1]] - `references` [EXTRACTED]
-- [[.set_color_scheme()]] - `references` [EXTRACTED]
-- [[.set_true_tone_enabled()]] - `references` [EXTRACTED]
-- [[.set_true_tone_temperature()]] - `references` [EXTRACTED]
-- [[.set_voiceover_enabled()]] - `references` [EXTRACTED]
-- [[.set_wallpaper()_1]] - `references` [EXTRACTED]
-- [[.set_wallpaper()]] - `references` [EXTRACTED]
-- [[SettingsCommand]] - `references` [EXTRACTED]
+- [[apply_dynamic_material3_theme()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_33
+#graphify/code #graphify/EXTRACTED #community/Community_14

@@ -1,18 +1,18 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 5
 ---
 
 # Community 119
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 5 nodes
 
 ## Members
-- [[Box_13]] - code
-- [[build_page()_9]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/ecosystem.rs
-- [[ecosystem.rs]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/ecosystem.rs
+- [[Result_12]] - code
+- [[Sender]] - code
+- [[String_14]] - code
+- [[flatpak.rs]] - code - specs/athanor-store-rs/athanor-store-rs-1.0.0/src/backend/flatpak.rs
+- [[install_app()]] - code - specs/athanor-store-rs/athanor-store-rs-1.0.0/src/backend/flatpak.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -20,3 +20,10 @@ members: 3
 TABLE source_file, type FROM #community/Community_119
 SORT file.name ASC
 ```
+
+## Connections to other communities
+- 1 edge to [[_COMMUNITY_Community 101]]
+- 1 edge to [[_COMMUNITY_Community 62]]
+
+## Top bridge nodes
+- [[flatpak.rs]] - degree 4, connects to 2 communities

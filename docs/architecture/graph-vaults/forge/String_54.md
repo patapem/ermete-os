@@ -1,16 +1,21 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 79"
+community: "Community 58"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_79
+  - community/Community_58
 ---
 
 # String
 
 ## Connections
-- [[AudioModuleData]] - `references` [EXTRACTED]
+- [[DockItem]] - `references` [EXTRACTED]
+- [[NiriWindowInfo]] - `references` [EXTRACTED]
+- [[NiriWorkspaceInfo]] - `references` [EXTRACTED]
+- [[capitalize()]] - `references` [EXTRACTED]
+- [[derive_display_name_and_icon()]] - `references` [EXTRACTED]
+- [[reconcile_dock_items()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_79
+#graphify/code #graphify/EXTRACTED #community/Community_58

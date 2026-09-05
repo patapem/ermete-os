@@ -1,25 +1,24 @@
 ---
 type: community
-cohesion: 0.20
-members: 10
+members: 11
 ---
 
 # Community 76
 
-**Cohesion:** 0.20 - loosely connected
-**Members:** 10 nodes
+**Members:** 11 nodes
 
 ## Members
-- [[.perform_backup()]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/main.rs
-- [[BackupService]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/main.rs
-- [[Box_2]] - code
-- [[Command]] - code
-- [[Error_2]] - code
-- [[Result_8]] - code
-- [[SignalEmitter]] - code
-- [[String_9]] - code
-- [[main()_3]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/main.rs
-- [[main.rs_1]] - code - specs/ermete-backup/ermete-backup-1.0.0/src/main.rs
+- [[dot-classify_workload()]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/main.rs
+- [[dot-process_query()]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/main.rs
+- [[AiDaemonProxy]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/main.rs
+- [[Arc_15]] - code
+- [[Box_23]] - code
+- [[Error_13]] - code
+- [[Result_58]] - code
+- [[RwLock_3]] - code
+- [[String_72]] - code
+- [[athanor-ai-daemon-1.0.0srcmain.rs]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/main.rs
+- [[main()_22]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/main.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -29,16 +28,9 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 1 edge to [[_COMMUNITY_Community 72]]
-- 1 edge to [[_COMMUNITY_Community 98]]
-- 1 edge to [[_COMMUNITY_Community 3]]
-- 1 edge to [[_COMMUNITY_Community 47]]
-- 1 edge to [[_COMMUNITY_Community 66]]
-- 1 edge to [[_COMMUNITY_Community 14]]
-- 1 edge to [[_COMMUNITY_Community 0]]
-- 1 edge to [[_COMMUNITY_Community 92]]
-- 1 edge to [[_COMMUNITY_Community 106]]
-- 1 edge to [[_COMMUNITY_Community 22]]
+- 2 edges to [[_COMMUNITY_Community 52]]
+- 2 edges to [[_COMMUNITY_Community 55]]
 
 ## Top bridge nodes
-- [[Command]] - degree 11, connects to 10 communities
+- [[AiDaemonProxy]] - degree 7, connects to 2 communities
+- [[athanor-ai-daemon-1.0.0srcmain.rs]] - degree 6, connects to 2 communities

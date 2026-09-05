@@ -1,23 +1,21 @@
 ---
 type: community
-cohesion: 0.29
 members: 8
 ---
 
 # Community 91
 
-**Cohesion:** 0.29 - loosely connected
 **Members:** 8 nodes
 
 ## Members
-- [[.init()_2]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/panel.rs
-- [[.update()_5]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/panel.rs
-- [[ComponentParts_2]] - code
-- [[ComponentSender_2]] - code
-- [[Init_3]] - code
-- [[Input_3]] - code
-- [[Root_2]] - code
-- [[Self_45]] - code
+- [[Arc_19]] - code
+- [[HashMap_16]] - code
+- [[Instant_4]] - code
+- [[Mutex_13]] - code
+- [[Option_46]] - code
+- [[String_86]] - code
+- [[listener.rs]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/listener.rs
+- [[start_tcp_listener()]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/listener.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -27,8 +25,10 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 2 edges to [[_COMMUNITY_Community 80]]
+- 2 edges to [[_COMMUNITY_Community 35]]
+- 2 edges to [[_COMMUNITY_Community 56]]
+- 1 edge to [[_COMMUNITY_Community 49]]
 
 ## Top bridge nodes
-- [[.init()_2]] - degree 6, connects to 1 community
-- [[.update()_5]] - degree 4, connects to 1 community
+- [[listener.rs]] - degree 8, connects to 3 communities
+- [[start_tcp_listener()]] - degree 9, connects to 2 communities

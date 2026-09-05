@@ -1,18 +1,18 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 5
 ---
 
 # Community 116
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 5 nodes
 
 ## Members
-- [[SOURCE_DATE_EPOCH_3]] - code - specs/ermete-secure-boot/SOURCES/usr/libexec/ermete-tpm-luks-seal.sh
-- [[ermete-tpm-luks-seal.sh]] - code - specs/ermete-secure-boot/SOURCES/usr/libexec/ermete-tpm-luks-seal.sh
-- [[ermete-tpm-luks-seal.sh script]] - code - specs/ermete-secure-boot/SOURCES/usr/libexec/ermete-tpm-luks-seal.sh
+- [[String_13]] - code
+- [[W]] - code
+- [[attach_voiceover_hover()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/voiceover.rs
+- [[ipcvoiceover.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/voiceover.rs
+- [[speak_text()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/voiceover.rs
 
 ## Live Query (requires Dataview plugin)
 

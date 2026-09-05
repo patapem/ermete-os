@@ -1,18 +1,22 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/prompts/privacy.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/mission_control.rs"
 type: "code"
-community: "Community 129"
-location: "L5"
+community: "Community 41"
+location: "L129"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_129
+  - community/Community_41
 ---
 
 # build_ui()
 
 ## Connections
-- [[Application_23]] - `references` [EXTRACTED]
-- [[privacy.rs_1]] - `contains` [EXTRACTED]
+- [[Application_25]] - `references` [EXTRACTED]
+- [[fetch_current_niri_windows()]] - `calls` [INFERRED]
+- [[fetch_current_workspaces()]] - `calls` [INFERRED]
+- [[fetch_window_thumbnail()]] - `calls` [EXTRACTED]
+- [[mission_control.rs]] - `contains` [EXTRACTED]
+- [[setup_popup_autoclose()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_129
+#graphify/code #graphify/EXTRACTED #community/Community_41

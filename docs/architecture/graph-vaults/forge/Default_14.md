@@ -1,19 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 23"
+community: "Community 74"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_23
+  - community/Community_74
 ---
 
 # Default
 
 ## Connections
-- [[AudioBus]] - `implements` [EXTRACTED]
-- [[HardwareBus]] - `implements` [EXTRACTED]
-- [[MprisBus]] - `implements` [EXTRACTED]
-- [[NetBus]] - `implements` [EXTRACTED]
+- [[SysMonState]] - `implements` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_23
+#graphify/code #graphify/EXTRACTED #community/Community_74

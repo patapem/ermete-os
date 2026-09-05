@@ -1,18 +1,18 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/spotlight.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/spotlight.rs"
 type: "code"
-community: "Community 1"
+community: "Community 0"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_1
+  - community/Community_0
 ---
 
 # spotlight.rs
 
 ## Connections
-- [[AppInfo_1]] - `imports_from` [EXTRACTED]
+- [[AppInfo]] - `imports_from` [EXTRACTED]
 - [[SpotlightAction]] - `contains` [EXTRACTED]
 - [[SpotlightItem]] - `contains` [EXTRACTED]
 - [[ensure_index_loaded()]] - `contains` [EXTRACTED]
@@ -28,4 +28,4 @@ tags:
 - [[try_parse_terminal_command()]] - `contains` [EXTRACTED]
 - [[try_parse_web_search()]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_1
+#graphify/code #graphify/EXTRACTED #community/Community_0

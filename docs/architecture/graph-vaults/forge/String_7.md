@@ -1,18 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 97"
+community: "Community 11"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_97
+  - community/Community_11
 ---
 
 # String
 
 ## Connections
-- [[AiIntent]] - `references` [EXTRACTED]
-- [[WorkloadClassificationRequest]] - `references` [EXTRACTED]
-- [[WorkloadClassificationResponse]] - `references` [EXTRACTED]
+- [[dot-get_pqc_status()]] - `references` [EXTRACTED]
+- [[dot-get_public_key()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_97
+#graphify/code #graphify/EXTRACTED #community/Community_11

@@ -1,24 +1,24 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs"
 type: "code"
-community: "Community 0"
+community: "Community 2"
 location: "L222"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_0
+  - community/Community_2
 ---
 
 # NotificationServer
 
 ## Connections
-- [[.close_notification()]] - `method` [EXTRACTED]
-- [[.get_capabilities()]] - `method` [EXTRACTED]
-- [[.get_server_information()]] - `method` [EXTRACTED]
-- [[.notify()]] - `method` [EXTRACTED]
+- [[dot-close_notification()]] - `method` [EXTRACTED]
+- [[dot-get_capabilities()]] - `method` [EXTRACTED]
+- [[dot-get_server_information()]] - `method` [EXTRACTED]
+- [[dot-notify()]] - `method` [EXTRACTED]
 - [[AtomicU32]] - `references` [EXTRACTED]
 - [[NotificationData]] - `references` [EXTRACTED]
-- [[Sender_7]] - `references` [EXTRACTED]
-- [[notifications.rs_1]] - `contains` [EXTRACTED]
+- [[Sender_2]] - `references` [EXTRACTED]
+- [[ipcnotifications.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_0
+#graphify/code #graphify/EXTRACTED #community/Community_2

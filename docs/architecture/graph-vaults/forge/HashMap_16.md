@@ -1,18 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 47"
+community: "Community 91"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_47
+  - community/Community_91
 ---
 
 # HashMap
 
 ## Connections
-- [[PolkitAuthorizationResult_4]] - `references` [EXTRACTED]
-- [[PolkitSubject_4]] - `references` [EXTRACTED]
-- [[main.rs_7]] - `imports_from` [EXTRACTED]
+- [[listener.rs]] - `imports_from` [EXTRACTED]
+- [[start_tcp_listener()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_47
+#graphify/code #graphify/EXTRACTED #community/Community_91

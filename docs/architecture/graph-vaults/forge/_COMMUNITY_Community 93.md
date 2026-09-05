@@ -1,22 +1,21 @@
 ---
 type: community
-cohesion: 0.33
-members: 7
+members: 8
 ---
 
 # Community 93
 
-**Cohesion:** 0.33 - loosely connected
-**Members:** 7 nodes
+**Members:** 8 nodes
 
 ## Members
-- [[Args]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/main.rs
-- [[ExitCode]] - code
-- [[Option_29]] - code
-- [[String_66]] - code
-- [[init_telemetry()_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/main.rs
-- [[main()_16]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/main.rs
-- [[main.rs_14]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/main.rs
+- [[dot-trigger_local_wipe()]] - code - specs/athanor-mdm-rs/athanor-mdm-rs-1.0.0/src/dbus.rs
+- [[Connection_12]] - code
+- [[Error_18]] - code
+- [[Header_9]] - code
+- [[MdmIface]] - code - specs/athanor-mdm-rs/athanor-mdm-rs-1.0.0/src/dbus.rs
+- [[Result_67]] - code
+- [[String_88]] - code
+- [[athanor-mdm-rs-1.0.0srcdbus.rs]] - code - specs/athanor-mdm-rs/athanor-mdm-rs-1.0.0/src/dbus.rs
 
 ## Live Query (requires Dataview plugin)
 

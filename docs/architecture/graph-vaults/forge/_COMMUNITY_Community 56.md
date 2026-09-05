@@ -1,29 +1,28 @@
 ---
 type: community
-cohesion: 0.27
-members: 14
+members: 15
 ---
 
 # Community 56
 
-**Cohesion:** 0.27 - loosely connected
-**Members:** 14 nodes
+**Members:** 15 nodes
 
 ## Members
-- [[DockState_1]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/ui.rs
-- [[NiriWindowInfo]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_data.rs
-- [[NiriWorkspaceInfo]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_data.rs
-- [[Option_11]] - code
-- [[String_31]] - code
-- [[Vec_15]] - code
-- [[Vec_18]] - code
-- [[WindowLayout]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_data.rs
-- [[capitalize()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_data.rs
-- [[derive_display_name_and_icon()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_data.rs
-- [[dock_data.rs]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_data.rs
-- [[matches_desktop_or_app_id()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_data.rs
-- [[reconcile_dock_items()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_data.rs
-- [[test_reconcile_dock_items_merging()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_data.rs
+- [[dot-compute_commitment()]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/zk.rs
+- [[dot-from_b64()]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/zk.rs
+- [[dot-generate_proof()]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/zk.rs
+- [[dot-get_node_id()]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/zk.rs
+- [[dot-new()_44]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/zk.rs
+- [[dot-to_b64()]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/zk.rs
+- [[dot-verify_proof()]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/zk.rs
+- [[DilithiumKeypair_1]] - code
+- [[Option_33]] - code
+- [[Result_46]] - code
+- [[Self_44]] - code
+- [[String_53]] - code
+- [[ZkProof]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/zk.rs
+- [[ZkProofEngine]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/zk.rs
+- [[zk.rs]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/zk.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -33,14 +32,13 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 13 edges to [[_COMMUNITY_Community 15]]
-- 5 edges to [[_COMMUNITY_Community 37]]
-- 1 edge to [[_COMMUNITY_Community 31]]
-- 1 edge to [[_COMMUNITY_Community 19]]
+- 5 edges to [[_COMMUNITY_Community 35]]
+- 2 edges to [[_COMMUNITY_Community 102]]
+- 2 edges to [[_COMMUNITY_Community 49]]
+- 2 edges to [[_COMMUNITY_Community 91]]
+- 1 edge to [[_COMMUNITY_Community 64]]
 
 ## Top bridge nodes
-- [[dock_data.rs]] - degree 12, connects to 3 communities
-- [[NiriWindowInfo]] - degree 9, connects to 2 communities
-- [[DockState_1]] - degree 8, connects to 2 communities
-- [[NiriWorkspaceInfo]] - degree 7, connects to 2 communities
-- [[reconcile_dock_items()]] - degree 8, connects to 1 community
+- [[ZkProofEngine]] - degree 14, connects to 4 communities
+- [[zk.rs]] - degree 6, connects to 3 communities
+- [[ZkProof]] - degree 9, connects to 2 communities

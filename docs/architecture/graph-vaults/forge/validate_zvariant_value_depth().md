@@ -1,19 +1,19 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/notifications.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs"
 type: "code"
-community: "Community 0"
+community: "Community 2"
 location: "L173"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_0
+  - community/Community_2
 ---
 
 # validate_zvariant_value_depth()
 
 ## Connections
-- [[.notify()]] - `calls` [EXTRACTED]
-- [[Value_3]] - `references` [EXTRACTED]
-- [[notifications.rs_1]] - `contains` [EXTRACTED]
+- [[dot-notify()]] - `calls` [EXTRACTED]
+- [[Value_2]] - `references` [EXTRACTED]
+- [[ipcnotifications.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_0
+#graphify/code #graphify/EXTRACTED #community/Community_2

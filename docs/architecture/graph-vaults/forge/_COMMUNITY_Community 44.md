@@ -1,35 +1,35 @@
 ---
 type: community
-cohesion: 0.28
-members: 20
+members: 22
 ---
 
 # Community 44
 
-**Cohesion:** 0.28 - loosely connected
-**Members:** 20 nodes
+**Members:** 22 nodes
 
 ## Members
-- [[.default()_10]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs
-- [[.is_pinned()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs
-- [[Default_7]] - code
-- [[DockConfig]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs
-- [[PathBuf_6]] - code
-- [[Result_28]] - code
-- [[Self_20]] - code
-- [[String_30]] - code
-- [[Vec_14]] - code
-- [[add_pin()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs
-- [[dock_config.rs]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs
-- [[get_dock_config_path()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs
-- [[is_pinned()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs
-- [[load_dock_config()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs
-- [[remove_pin()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs
-- [[save_dock_config()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs
-- [[set_dock_mode()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs
-- [[test_add_and_remove_pin_logic()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs
-- [[test_api_add_remove_and_is_pinned()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs
-- [[toggle_dock_mode()]] - code - specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs
+- [[dot-emit()_3]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs
+- [[BedrockAudio]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs
+- [[BluetoothDeviceInfo_1]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs
+- [[Connection_4]] - code
+- [[NetBus]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs
+- [[NetEvent]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs
+- [[NetworkManager_1]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs
+- [[NmAccessPoint_1]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs
+- [[NmActiveConnection]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs
+- [[NmDevice_1]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs
+- [[NmIP4Config]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs
+- [[NmSettings_1]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs
+- [[NmSettingsConnection]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs
+- [[NmWireless_1]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs
+- [[Option_27]] - code
+- [[RawFd]] - code
+- [[SecretEnroller]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs
+- [[String_44]] - code
+- [[ipctypes.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/types.rs
+- [[start_ebpf_dbus_listener()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/sys/ebpf.rs
+- [[start_ebpf_dbus_listener_with_fd()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/sys/ebpf.rs
+- [[sysebpf.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/sys/ebpf.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -39,14 +39,16 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 7 edges to [[_COMMUNITY_Community 15]]
-- 4 edges to [[_COMMUNITY_Community 37]]
-- 3 edges to [[_COMMUNITY_Community 19]]
-- 1 edge to [[_COMMUNITY_Community 31]]
+- 12 edges to [[_COMMUNITY_Community 31]]
+- 6 edges to [[_COMMUNITY_Community 5]]
+- 4 edges to [[_COMMUNITY_Community 27]]
+- 2 edges to [[_COMMUNITY_Community 29]]
+- 2 edges to [[_COMMUNITY_Community 30]]
+- 1 edge to [[_COMMUNITY_Community 38]]
 
 ## Top bridge nodes
-- [[dock_config.rs]] - degree 16, connects to 4 communities
-- [[DockConfig]] - degree 15, connects to 3 communities
-- [[load_dock_config()]] - degree 14, connects to 2 communities
-- [[add_pin()]] - degree 9, connects to 1 community
-- [[remove_pin()]] - degree 8, connects to 1 community
+- [[ipctypes.rs]] - degree 23, connects to 4 communities
+- [[NetBus]] - degree 20, connects to 4 communities
+- [[String_44]] - degree 4, connects to 2 communities
+- [[NetEvent]] - degree 5, connects to 1 community
+- [[Connection_4]] - degree 2, connects to 1 community

@@ -1,18 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 24"
+community: "Community 34"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_24
+  - community/Community_34
 ---
 
 # HashMap
 
 ## Connections
-- [[PolkitAuthorizationResult_2]] - `references` [EXTRACTED]
-- [[PolkitSubject_2]] - `references` [EXTRACTED]
-- [[bedrock.rs]] - `imports_from` [EXTRACTED]
+- [[EcsWorldState]] - `references` [EXTRACTED]
+- [[dock.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_24
+#graphify/code #graphify/EXTRACTED #community/Community_34

@@ -1,20 +1,20 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 31"
+community: "Community 34"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_31
+  - community/Community_34
 ---
 
 # Edge
 
 ## Connections
-- [[.apply_anchors()]] - `references` [EXTRACTED]
-- [[.new()_22]] - `references` [EXTRACTED]
-- [[.set_anchor_edge()]] - `references` [EXTRACTED]
+- [[dot-apply_anchors()]] - `references` [EXTRACTED]
+- [[dot-new()_32]] - `references` [EXTRACTED]
+- [[dot-set_anchor_edge()]] - `references` [EXTRACTED]
 - [[DockTaskbar]] - `references` [EXTRACTED]
-- [[main.rs_4]] - `imports_from` [EXTRACTED]
+- [[athanor-dock-1.0.0srcmain.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_31
+#graphify/code #graphify/EXTRACTED #community/Community_34

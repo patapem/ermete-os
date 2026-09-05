@@ -1,66 +1,70 @@
 ---
 type: community
-cohesion: 0.06
-members: 51
+members: 57
 ---
 
 # Community 2
 
-**Cohesion:** 0.06 - loosely connected
-**Members:** 51 nodes
+**Members:** 57 nodes
 
 ## Members
-- [[.css_class()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/forge_widget.rs
-- [[.fmt()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/forge_widget.rs
-- [[.from_path()_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/quicklook.rs
-- [[.icon()_1]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/forge_widget.rs
-- [[.init()_3]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/forge_widget.rs
-- [[.init()_5]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/quicklook.rs
-- [[.status_text()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/forge_widget.rs
-- [[.update()_7]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/forge_widget.rs
-- [[.update()_10]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/quicklook.rs
-- [[Application_24]] - code
-- [[ComponentParts_3]] - code
-- [[ComponentParts_5]] - code
-- [[ComponentSender_3]] - code
-- [[ComponentSender_5]] - code
-- [[FalState]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/forge_widget.rs
-- [[ForgeMode]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/forge_widget.rs
-- [[ForgeWidgetInput]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/forge_widget.rs
-- [[ForgeWidgetModel]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/forge_widget.rs
-- [[Formatter]] - code
-- [[GtkBox_18]] - code
-- [[Init_4]] - code
-- [[Init_6]] - code
-- [[Input_4]] - code
-- [[Input_6]] - code
-- [[Option_38]] - code
-- [[P_1]] - code
-- [[Path_8]] - code
-- [[PathBuf_14]] - code
-- [[QuickLookContentType]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/quicklook.rs
-- [[QuickLookFileData]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/quicklook.rs
-- [[QuickLookModel]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/quicklook.rs
-- [[QuickLookMsg]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/quicklook.rs
-- [[Result_61]] - code
-- [[Root_3]] - code
-- [[Root_5]] - code
-- [[Self_59]] - code
-- [[Self_62]] - code
-- [[SimpleComponent_3]] - code
-- [[SimpleComponent_5]] - code
-- [[String_71]] - code
-- [[String_76]] - code
-- [[create_forge_cc_tile()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/forge_widget.rs
-- [[detect_hardware_hash()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/forge_widget.rs
-- [[ensure_forge_css()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/forge_widget.rs
-- [[ensure_quicklook_css()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/quicklook.rs
-- [[forge_widget.rs]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/forge_widget.rs
-- [[format_file_size()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/quicklook.rs
-- [[mod.rs_11]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/mod.rs
-- [[open_file_with_default()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/quicklook.rs
-- [[quicklook.rs]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/quicklook.rs
-- [[show_quicklook_modal()]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/quicklook.rs
+- [[dot-close_notification()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[dot-default()_2]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
+- [[dot-description()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[dot-execute_intent()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
+- [[dot-from_u8()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[dot-get_capabilities()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[dot-get_initial_state()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
+- [[dot-get_server_information()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[dot-icon()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[dot-is_active()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[dot-name()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[dot-notify()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[dot-should_allow_notification()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[dot-subscribe_audio()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
+- [[dot-subscribe_hardware()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
+- [[dot-subscribe_mpris()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
+- [[dot-subscribe_network()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
+- [[dot-to_u8()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[Application_18]] - code
+- [[AtomicU32]] - code
+- [[ControlCenterIntent]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
+- [[ControlCenterState]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
+- [[ControlCenterViewModel]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
+- [[Default_2]] - code
+- [[F_1]] - code
+- [[FocusMode]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[HashMap_4]] - code
+- [[NotificationData]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[NotificationServer]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[PathBuf_5]] - code
+- [[Self_13]] - code
+- [[Self_14]] - code
+- [[Sender_2]] - code
+- [[String_25]] - code
+- [[String_26]] - code
+- [[String_27]] - code
+- [[Value_2]] - code
+- [[Vec_9]] - code
+- [[control_center_vm.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/control_center_vm.rs
+- [[default_timestamp()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[dirs_next_or_home()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[format_action_invoked_payload()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/notifications.rs
+- [[get_focus_mode()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[get_notifications_file_path()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[ipcnotifications.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[load_notification_history()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[save_notification_history()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[send_action_invoked()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/notifications.rs
+- [[set_focus_mode()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[show_notification_center()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/notifications.rs
+- [[show_toast_popup()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/notifications.rs
+- [[spawn_notification_daemon()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/notifications.rs
+- [[test_focus_mode_conversions_and_state()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[test_focus_mode_notification_filtering()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
+- [[test_inline_reply_payload_structure()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/notifications.rs
+- [[uinotifications.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/notifications.rs
+- [[validate_zvariant_value_depth()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/notifications.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -70,7 +74,10 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 1 edge to [[_COMMUNITY_Community 1]]
+- 1 edge to [[_COMMUNITY_Community 0]]
+- 1 edge to [[_COMMUNITY_Community 62]]
+- 1 edge to [[_COMMUNITY_Community 6]]
 
 ## Top bridge nodes
-- [[ForgeMode]] - degree 5, connects to 1 community
+- [[control_center_vm.rs]] - degree 5, connects to 2 communities
+- [[FocusMode]] - degree 13, connects to 1 community

@@ -1,17 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 34"
+community: "Community 44"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_34
+  - community/Community_44
 ---
 
 # Option
 
 ## Connections
-- [[.get()]] - `references` [EXTRACTED]
-- [[.get_typed()]] - `references` [EXTRACTED]
+- [[start_ebpf_dbus_listener_with_fd()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_34
+#graphify/code #graphify/EXTRACTED #community/Community_44

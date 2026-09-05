@@ -11,7 +11,8 @@ tags:
 # String
 
 ## Connections
-- [[.get_pqc_status()]] - `references` [EXTRACTED]
-- [[.get_public_key()]] - `references` [EXTRACTED]
+- [[CrdtNetworkPayload]] - `references` [EXTRACTED]
+- [[CrdtSettingPayload]] - `references` [EXTRACTED]
+- [[LwwTimestamp]] - `references` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_43

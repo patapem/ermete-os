@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs"
+source_file: "specs/athanor-dock/athanor-dock-1.0.0/src/dock_config.rs"
 type: "code"
-community: "Community 44"
+community: "Community 46"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_44
+  - community/Community_46
 ---
 
 # dock_config.rs
@@ -14,12 +14,12 @@ tags:
 ## Connections
 - [[DockConfig]] - `contains` [EXTRACTED]
 - [[DockMode]] - `imports_from` [EXTRACTED]
-- [[PathBuf_6]] - `imports_from` [EXTRACTED]
+- [[PathBuf_10]] - `imports_from` [EXTRACTED]
 - [[add_pin()]] - `contains` [EXTRACTED]
+- [[athanor-dock-1.0.0srclib.rs]] - `imports_from` [EXTRACTED]
 - [[dock_watcher.rs]] - `imports_from` [EXTRACTED]
 - [[get_dock_config_path()]] - `contains` [EXTRACTED]
 - [[is_pinned()]] - `contains` [EXTRACTED]
-- [[lib.rs]] - `imports_from` [EXTRACTED]
 - [[load_dock_config()]] - `contains` [EXTRACTED]
 - [[remove_pin()]] - `contains` [EXTRACTED]
 - [[save_dock_config()]] - `contains` [EXTRACTED]
@@ -29,4 +29,4 @@ tags:
 - [[toggle_dock_mode()]] - `contains` [EXTRACTED]
 - [[ui.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_44
+#graphify/code #graphify/EXTRACTED #community/Community_46

@@ -1,27 +1,26 @@
 ---
 type: community
-cohesion: 0.23
-members: 12
+members: 13
 ---
 
 # Community 66
 
-**Cohesion:** 0.23 - loosely connected
-**Members:** 12 nodes
+**Members:** 13 nodes
 
 ## Members
-- [[.apply_policy()]] - code - specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/main.rs
-- [[.disable_usb()]] - code - specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/main.rs
-- [[.force_vpn()]] - code - specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/main.rs
-- [[Connection_10]] - code
-- [[Header_10]] - code
-- [[MdmDBusInterface]] - code - specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/main.rs
-- [[MdmPayload]] - code - specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/main.rs
-- [[Result_43]] - code
-- [[SignalEmitter_1]] - code
-- [[String_41]] - code
-- [[main()_11]] - code - specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/main.rs
-- [[main.rs_9]] - code - specs/ermete-mdm-rs/ermete-mdm-rs-1.0.0/src/main.rs
+- [[dot-new()_48]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/portal.rs
+- [[dot-parse_hex_rgb()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/portal.rs
+- [[dot-read()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/portal.rs
+- [[dot-read_all()]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/portal.rs
+- [[HashMap_11]] - code
+- [[OwnedValue_1]] - code
+- [[PortalSettingsService]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/portal.rs
+- [[Receiver_8]] - code
+- [[Result_52]] - code
+- [[Self_48]] - code
+- [[String_63]] - code
+- [[Vec_33]] - code
+- [[athanor-daemon-rs-0.2.1srcportal.rs]] - code - specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/portal.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -31,7 +30,9 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 1 edge to [[_COMMUNITY_Community 76]]
+- 3 edges to [[_COMMUNITY_Community 42]]
 
 ## Top bridge nodes
-- [[main.rs_9]] - degree 4, connects to 1 community
+- [[PortalSettingsService]] - degree 7, connects to 1 community
+- [[dot-new()_48]] - degree 5, connects to 1 community
+- [[athanor-daemon-rs-0.2.1srcportal.rs]] - degree 3, connects to 1 community

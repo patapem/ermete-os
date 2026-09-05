@@ -1,40 +1,38 @@
 ---
 type: community
-cohesion: 0.17
 members: 25
 ---
 
 # Community 32
 
-**Cohesion:** 0.17 - loosely connected
 **Members:** 25 nodes
 
 ## Members
-- [[.calculate_quorum()]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/bft.rs
-- [[.create_proposal()]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/bft.rs
-- [[.get_status()]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/bft.rs
-- [[.handle_proposal()]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/bft.rs
-- [[.handle_vote()]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/bft.rs
-- [[.is_committed()]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/bft.rs
-- [[.new()_5]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/bft.rs
-- [[.spawn_proposal_pruner()]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/bft.rs
-- [[Arc_1]] - code
-- [[BftConsensusEngine]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/bft.rs
-- [[BftProposal]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/bft.rs
-- [[BftProposalRecord]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/bft.rs
-- [[BftProposalState]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/bft.rs
-- [[BftVote]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/bft.rs
-- [[BftVoteType]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/bft.rs
-- [[HashMap_1]] - code
-- [[HashSet]] - code
-- [[Instant]] - code
-- [[Mutex]] - code
-- [[Option_1]] - code
-- [[Result_9]] - code
-- [[Self_5]] - code
-- [[String_10]] - code
-- [[Vec_6]] - code
-- [[bft.rs]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/bft.rs
+- [[dot-__call__()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-_names()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-add_to()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-apply_config()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-argparse_dest()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-config_example()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-config_list_prepend()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-config_set()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-config_set_group()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-config_set_if_unset()]] - code - specs/uki-tools/SOURCES/ukify
+- [[dot-parse_boolean()]] - code - specs/uki-tools/SOURCES/ukify
+- [[Any_4]] - code
+- [[ArgumentParser]] - code
+- [[ConfigItem]] - code - specs/uki-tools/SOURCES/ukify
+- [[Namespace]] - code
+- [[PagerHelpAction]] - code - specs/uki-tools/SOURCES/ukify
+- [[Parse 1trueyesyton as true and 0falsenonfoffNone as false]] - rationale - specs/uki-tools/SOURCES/ukify
+- [[Prepend value to namespace.dest]] - rationale - specs/uki-tools/SOURCES/ukify
+- [[Set namespace.dest to value only if it was None]] - rationale - specs/uki-tools/SOURCES/ukify
+- [[Set namespace.destidx to value, with idx derived from group]] - rationale - specs/uki-tools/SOURCES/ukify
+- [[apply_config()]] - code - specs/uki-tools/SOURCES/ukify
+- [[config_example()]] - code - specs/uki-tools/SOURCES/ukify
+- [[create_parser()]] - code - specs/uki-tools/SOURCES/ukify
+- [[page()]] - code - specs/uki-tools/SOURCES/ukify
+- [[parse_args()]] - code - specs/uki-tools/SOURCES/ukify
 
 ## Live Query (requires Dataview plugin)
 
@@ -44,14 +42,12 @@ SORT file.name ASC
 ```
 
 ## Connections to other communities
-- 5 edges to [[_COMMUNITY_Community 54]]
-- 2 edges to [[_COMMUNITY_Community 85]]
-- 2 edges to [[_COMMUNITY_Community 86]]
-- 2 edges to [[_COMMUNITY_Community 46]]
+- 9 edges to [[_COMMUNITY_Community 37]]
+- 4 edges to [[_COMMUNITY_Community 80]]
 
 ## Top bridge nodes
-- [[BftConsensusEngine]] - degree 20, connects to 4 communities
-- [[bft.rs]] - degree 13, connects to 3 communities
-- [[.new()_5]] - degree 7, connects to 1 community
-- [[BftProposal]] - degree 6, connects to 1 community
-- [[BftVote]] - degree 6, connects to 1 community
+- [[Namespace]] - degree 10, connects to 2 communities
+- [[parse_args()]] - degree 6, connects to 2 communities
+- [[apply_config()]] - degree 4, connects to 2 communities
+- [[ConfigItem]] - degree 11, connects to 1 community
+- [[Any_4]] - degree 7, connects to 1 community

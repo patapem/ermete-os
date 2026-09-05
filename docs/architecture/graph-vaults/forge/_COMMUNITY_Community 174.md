@@ -1,17 +1,15 @@
 ---
 type: community
-cohesion: 1.00
 members: 2
 ---
 
 # Community 174
 
-**Cohesion:** 1.00 - tightly connected
 **Members:** 2 nodes
 
 ## Members
-- [[provision_flatpak.sh]] - code - scripts/provision_flatpak.sh
-- [[provision_flatpak.sh script]] - code - scripts/provision_flatpak.sh
+- [[athanor-session]] - code - specs/athanor-system-config/SOURCES/usr/bin/athanor-session
+- [[athanor-session script]] - code - specs/athanor-system-config/SOURCES/usr/bin/athanor-session
 
 ## Live Query (requires Dataview plugin)
 

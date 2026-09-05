@@ -1,18 +1,18 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/topbar_vm.rs"
 type: "code"
-community: "Community 81"
+community: "Community 85"
 location: "L2"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_81
+  - community/Community_85
 ---
 
 # TopbarState
 
 ## Connections
-- [[String_85]] - `references` [EXTRACTED]
+- [[String_81]] - `references` [EXTRACTED]
 - [[topbar_vm.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_81
+#graphify/code #graphify/EXTRACTED #community/Community_85

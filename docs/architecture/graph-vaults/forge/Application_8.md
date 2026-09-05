@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 1"
+community: "Community 104"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_1
+  - community/Community_104
 ---
 
 # Application
 
 ## Connections
-- [[show_audio_mixer_popover()]] - `references` [EXTRACTED]
+- [[ControlCenterPanel]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_1
+#graphify/code #graphify/EXTRACTED #community/Community_104

@@ -1,17 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 28"
+community: "Community 65"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_28
+  - community/Community_65
 ---
 
 # Header
 
 ## Connections
-- [[.add_vpn_tunnel()]] - `references` [EXTRACTED]
-- [[.connect_enterprise_wifi()]] - `references` [EXTRACTED]
+- [[dot-set_power()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_28
+#graphify/code #graphify/EXTRACTED #community/Community_65

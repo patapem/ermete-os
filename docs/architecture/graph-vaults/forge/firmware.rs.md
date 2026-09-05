@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-lvfs-rs/ermete-lvfs-rs-1.0.0/src/firmware.rs"
+source_file: "specs/athanor-lvfs-rs/athanor-lvfs-rs-1.0.0/src/firmware.rs"
 type: "code"
-community: "Community 82"
+community: "Community 86"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_82
+  - community/Community_86
 ---
 
 # firmware.rs
@@ -15,4 +15,4 @@ tags:
 - [[FirmwareEngine]] - `contains` [EXTRACTED]
 - [[Fwupd]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_82
+#graphify/code #graphify/EXTRACTED #community/Community_86

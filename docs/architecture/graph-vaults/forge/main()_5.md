@@ -1,21 +1,21 @@
 ---
-source_file: "specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/main.rs"
+source_file: "scripts/dag_orchestrator.py"
 type: "code"
-community: "Community 1"
-location: "L49"
+community: "Community 57"
+location: "L297"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_1
+  - community/Community_57
 ---
 
 # main()
 
 ## Connections
-- [[Box_3]] - `references` [EXTRACTED]
-- [[Error_5]] - `references` [EXTRACTED]
-- [[Result_18]] - `references` [EXTRACTED]
-- [[init_telemetry()]] - `calls` [EXTRACTED]
-- [[main.rs_3]] - `contains` [EXTRACTED]
+- [[build_dag()]] - `calls` [EXTRACTED]
+- [[dag_orchestrator.py]] - `contains` [EXTRACTED]
+- [[evaluate_dirty_nodes()]] - `calls` [EXTRACTED]
+- [[load_package_manifest()]] - `calls` [EXTRACTED]
+- [[partition_dag_levels()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_1
+#graphify/code #graphify/EXTRACTED #community/Community_57

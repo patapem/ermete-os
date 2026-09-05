@@ -1,21 +1,21 @@
 ---
-source_file: "specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/desktop.rs"
+source_file: "specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/desktop.rs"
 type: "code"
-community: "Community 89"
+community: "Community 95"
 location: "L6"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_89
+  - community/Community_95
 ---
 
 # scan_dir_async()
 
 ## Connections
-- [[Path_4]] - `references` [EXTRACTED]
-- [[PathBuf_9]] - `references` [EXTRACTED]
-- [[Vec_23]] - `references` [EXTRACTED]
+- [[Path_9]] - `references` [EXTRACTED]
+- [[PathBuf_14]] - `references` [EXTRACTED]
+- [[Vec_39]] - `references` [EXTRACTED]
 - [[desktop.rs]] - `contains` [EXTRACTED]
 - [[scan_wallpapers_async()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_89
+#graphify/code #graphify/EXTRACTED #community/Community_95

@@ -1,18 +1,20 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 15"
+community: "Community 3"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_15
+  - community/Community_3
 ---
 
 # String
 
 ## Connections
-- [[DockMonitorInstance]] - `references` [EXTRACTED]
-- [[DockState_1]] - `references` [EXTRACTED]
-- [[format_voice_text()]] - `references` [EXTRACTED]
+- [[UserInfo]] - `references` [EXTRACTED]
+- [[authenticate()]] - `references` [EXTRACTED]
+- [[authenticate_interactive()]] - `references` [EXTRACTED]
+- [[capitalize_first()]] - `references` [EXTRACTED]
+- [[send_request()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_15
+#graphify/code #graphify/EXTRACTED #community/Community_3

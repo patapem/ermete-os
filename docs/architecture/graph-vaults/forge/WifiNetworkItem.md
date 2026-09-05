@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/wifi_vm.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/wifi_vm.rs"
 type: "code"
 community: "Community 6"
 location: "L2"
@@ -12,7 +12,7 @@ tags:
 # WifiNetworkItem
 
 ## Connections
-- [[String_86]] - `references` [EXTRACTED]
+- [[String_58]] - `references` [EXTRACTED]
 - [[wifi_vm.rs]] - `contains` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_6

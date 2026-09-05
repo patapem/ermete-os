@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 42"
+community: "Community 8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_42
+  - community/Community_8
 ---
 
 # PathBuf
 
 ## Connections
-- [[desktop_widgets.rs]] - `imports_from` [EXTRACTED]
-- [[get_config_path()]] - `references` [EXTRACTED]
+- [[dot-new()_55]] - `references` [EXTRACTED]
+- [[GatekeeperManager]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_42
+#graphify/code #graphify/EXTRACTED #community/Community_8

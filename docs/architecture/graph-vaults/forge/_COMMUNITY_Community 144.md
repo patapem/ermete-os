@@ -1,17 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 2
+members: 3
 ---
 
 # Community 144
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 2 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[10-greetd-running.sh]] - code - specs/ermete-system-config/SOURCES/etc/greenboot/check/required.d/10-greetd-running.sh
-- [[10-greetd-running.sh script]] - code - specs/ermete-system-config/SOURCES/etc/greenboot/check/required.d/10-greetd-running.sh
+- [[Box_12]] - code
+- [[build_page()_11]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/notifications.rs
+- [[pagesnotifications.rs]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/notifications.rs
 
 ## Live Query (requires Dataview plugin)
 

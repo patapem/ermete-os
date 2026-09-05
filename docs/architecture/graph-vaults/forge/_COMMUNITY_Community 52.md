@@ -1,30 +1,28 @@
 ---
 type: community
-cohesion: 0.25
 members: 15
 ---
 
 # Community 52
 
-**Cohesion:** 0.25 - loosely connected
 **Members:** 15 nodes
 
 ## Members
-- [[.build()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/components/action_row.rs
-- [[.builder()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/components/action_row.rs
-- [[.new()_37]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/components/action_row.rs
-- [[.new()_38]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/components/action_row.rs
-- [[.subtitle()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/components/action_row.rs
-- [[.suffix()]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/components/action_row.rs
-- [[ActionRow]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/components/action_row.rs
-- [[ActionRowBuilder]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/components/action_row.rs
-- [[GtkBox_3]] - code
-- [[IsA]] - code
-- [[Option_21]] - code
-- [[Self_34]] - code
-- [[String_47]] - code
-- [[Widget]] - code
-- [[action_row.rs]] - code - specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/components/action_row.rs
+- [[dot-is_loaded()]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/model_loader.rs
+- [[dot-load_gguf_weights()]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/model_loader.rs
+- [[dot-new()_40]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/model_loader.rs
+- [[dot-predict_workload()]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/model_loader.rs
+- [[Device]] - code
+- [[InferenceEngine]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/model_loader.rs
+- [[Option_31]] - code
+- [[P_1]] - code
+- [[PathBuf_11]] - code
+- [[QMatMul]] - code
+- [[Result_44]] - code
+- [[Self_41]] - code
+- [[String_50]] - code
+- [[Vec_26]] - code
+- [[model_loader.rs]] - code - specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/model_loader.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -32,3 +30,9 @@ members: 15
 TABLE source_file, type FROM #community/Community_52
 SORT file.name ASC
 ```
+
+## Connections to other communities
+- 2 edges to [[_COMMUNITY_Community 76]]
+
+## Top bridge nodes
+- [[InferenceEngine]] - degree 11, connects to 1 community

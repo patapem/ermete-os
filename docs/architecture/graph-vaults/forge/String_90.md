@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 75"
+community: "Community 96"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_75
+  - community/Community_96
 ---
 
 # String
 
 ## Connections
-- [[AppItem]] - `references` [EXTRACTED]
+- [[NetworkModuleData]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_75
+#graphify/code #graphify/EXTRACTED #community/Community_96

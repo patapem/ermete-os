@@ -1,16 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 1
+members: 3
 ---
 
 # Community 150
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 1 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[lib.rs_2]] - code - specs/ermete-niri-ipc/src/lib.rs
+- [[Application_17]] - code
+- [[build_ui()_2]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/prompts/privacy.rs
+- [[promptsprivacy.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/prompts/privacy.rs
 
 ## Live Query (requires Dataview plugin)
 

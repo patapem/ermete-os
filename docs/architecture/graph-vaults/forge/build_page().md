@@ -1,18 +1,18 @@
 ---
-source_file: "specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/pages/a11y.rs"
+source_file: "specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/bluetooth.rs"
 type: "code"
-community: "Community 78"
-location: "L72"
+community: "Community 111"
+location: "L29"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_78
+  - community/Community_111
 ---
 
 # build_page()
 
 ## Connections
-- [[GtkBox_4]] - `references` [EXTRACTED]
-- [[a11y.rs]] - `contains` [EXTRACTED]
+- [[Box_2]] - `references` [EXTRACTED]
+- [[pagesbluetooth.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_78
+#graphify/code #graphify/EXTRACTED #community/Community_111

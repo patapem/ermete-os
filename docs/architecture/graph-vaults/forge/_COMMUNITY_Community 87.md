@@ -1,23 +1,22 @@
 ---
 type: community
-cohesion: 0.32
-members: 8
+members: 9
 ---
 
 # Community 87
 
-**Cohesion:** 0.32 - loosely connected
-**Members:** 8 nodes
+**Members:** 9 nodes
 
 ## Members
-- [[.system_bus_name()_1]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/main.rs
-- [[HashMap_5]] - code
-- [[Into_1]] - code
-- [[OwnedValue_1]] - code
-- [[PolkitAuthorizationResult_1]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/main.rs
-- [[PolkitSubject_1]] - code - specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0/src/main.rs
-- [[Self_6]] - code
-- [[String_15]] - code
+- [[GtkBox_19]] - code
+- [[HashMap_14]] - code
+- [[PermissionStore]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/privacy.rs
+- [[String_82]] - code
+- [[Vec_37]] - code
+- [[build_page()_18]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/privacy.rs
+- [[generate_permission_store_payload()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/privacy.rs
+- [[pagesprivacy.rs]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/privacy.rs
+- [[test_permission_store_key_generation()]] - code - specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/pages/privacy.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -25,13 +24,3 @@ members: 8
 TABLE source_file, type FROM #community/Community_87
 SORT file.name ASC
 ```
-
-## Connections to other communities
-- 6 edges to [[_COMMUNITY_Community 72]]
-
-## Top bridge nodes
-- [[PolkitSubject_1]] - degree 5, connects to 1 community
-- [[.system_bus_name()_1]] - degree 5, connects to 1 community
-- [[String_15]] - degree 5, connects to 1 community
-- [[PolkitAuthorizationResult_1]] - degree 3, connects to 1 community
-- [[HashMap_5]] - degree 3, connects to 1 community

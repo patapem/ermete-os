@@ -1,18 +1,15 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 2
 ---
 
 # Community 158
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 2 nodes
 
 ## Members
-- [[Result_46]] - code
-- [[auth.rs]] - code - ermete-greeter/src/auth.rs
-- [[authenticate_user()]] - code - ermete-greeter/src/auth.rs
+- [[build_rolling_local.sh]] - code - scripts/build_rolling_local.sh
+- [[build_rolling_local.sh script]] - code - scripts/build_rolling_local.sh
 
 ## Live Query (requires Dataview plugin)
 
@@ -20,9 +17,3 @@ members: 3
 TABLE source_file, type FROM #community/Community_158
 SORT file.name ASC
 ```
-
-## Connections to other communities
-- 1 edge to [[_COMMUNITY_Community 4]]
-
-## Top bridge nodes
-- [[auth.rs]] - degree 2, connects to 1 community

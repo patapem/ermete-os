@@ -1,27 +1,27 @@
 ---
-source_file: "specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/settings.rs"
+source_file: "specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/settings.rs"
 type: "code"
-community: "Community 27"
+community: "Community 25"
 location: "L139"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_27
+  - community/Community_25
 ---
 
 # VoiceOverStateStore
 
 ## Connections
-- [[.ensure_config_file()_1]] - `method` [EXTRACTED]
-- [[.load()_1]] - `method` [EXTRACTED]
-- [[.load_async()_1]] - `method` [EXTRACTED]
-- [[.new()_18]] - `method` [EXTRACTED]
-- [[.new_async()_1]] - `method` [EXTRACTED]
-- [[.save()_1]] - `method` [EXTRACTED]
-- [[.save_async()_1]] - `method` [EXTRACTED]
-- [[Receiver_1]] - `references` [EXTRACTED]
-- [[Sender]] - `references` [EXTRACTED]
+- [[dot-ensure_config_file()_1]] - `method` [EXTRACTED]
+- [[dot-load()_1]] - `method` [EXTRACTED]
+- [[dot-load_async()]] - `method` [EXTRACTED]
+- [[dot-new()_20]] - `method` [EXTRACTED]
+- [[dot-new_async()_1]] - `method` [EXTRACTED]
+- [[dot-save()_1]] - `method` [EXTRACTED]
+- [[dot-save_async()_1]] - `method` [EXTRACTED]
+- [[Receiver]] - `references` [EXTRACTED]
+- [[Sender_3]] - `references` [EXTRACTED]
 - [[VoiceOverDomainState]] - `references` [EXTRACTED]
 - [[settings.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_27
+#graphify/code #graphify/EXTRACTED #community/Community_25

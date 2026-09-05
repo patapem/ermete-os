@@ -1,16 +1,19 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 0"
+community: "Community 31"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_0
+  - community/Community_31
 ---
 
 # Sender
 
 ## Connections
-- [[NotificationServer]] - `references` [EXTRACTED]
+- [[AudioBus]] - `references` [EXTRACTED]
+- [[HardwareBus]] - `references` [EXTRACTED]
+- [[MprisBus]] - `references` [EXTRACTED]
+- [[NetBus]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_0
+#graphify/code #graphify/EXTRACTED #community/Community_31

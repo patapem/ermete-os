@@ -1,12 +1,12 @@
 ---
 source_file: "scripts/check_idempotency.sh"
 type: "code"
-community: "Community 111"
+community: "Community 130"
 location: "L1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_111
+  - community/Community_130
 ---
 
 # check_idempotency.sh
@@ -15,4 +15,4 @@ tags:
 - [[SOURCE_DATE_EPOCH]] - `defines` [EXTRACTED]
 - [[check_idempotency.sh script]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_111
+#graphify/code #graphify/EXTRACTED #community/Community_130

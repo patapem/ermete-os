@@ -1,16 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 108"
+community: "Community 1"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_108
+  - community/Community_1
 ---
 
 # Result
 
 ## Connections
-- [[acquire_drm_lease()]] - `references` [EXTRACTED]
+- [[parse_mem_arg()]] - `references` [EXTRACTED]
+- [[read_seccomp_policy()]] - `references` [EXTRACTED]
+- [[spawn_microvm_isolated_app()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_108
+#graphify/code #graphify/EXTRACTED #community/Community_1

@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-daemon-rs/ermete-daemon-rs-0.2.1/src/qos.rs"
+source_file: "specs/athanor-daemon-rs/athanor-daemon-rs-0.2.1/src/qos.rs"
 type: "code"
 community: "Community 10"
 location: "L289"
@@ -12,8 +12,8 @@ tags:
 # listen_niri_wayland_events()
 
 ## Connections
-- [[.new()_16]] - `calls` [EXTRACTED]
-- [[Arc_10]] - `references` [EXTRACTED]
+- [[dot-new()_1]] - `calls` [EXTRACTED]
+- [[Arc]] - `references` [EXTRACTED]
 - [[CancellationToken]] - `references` [EXTRACTED]
 - [[EnergyAwareScheduler]] - `references` [EXTRACTED]
 - [[qos.rs]] - `contains` [EXTRACTED]

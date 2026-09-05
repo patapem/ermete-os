@@ -1,17 +1,20 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 98"
+community: "Community 9"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_98
+  - community/Community_9
 ---
 
 # Option
 
 ## Connections
-- [[.receive()]] - `references` [EXTRACTED]
-- [[.transmit()]] - `references` [EXTRACTED]
+- [[dot-set_snap_zone()]] - `references` [EXTRACTED]
+- [[PendingAssistSession]] - `references` [EXTRACTED]
+- [[detect_slot()]] - `references` [EXTRACTED]
+- [[render_layout_vector_card()]] - `references` [EXTRACTED]
+- [[show_snap_overlay()_1]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_98
+#graphify/code #graphify/EXTRACTED #community/Community_9

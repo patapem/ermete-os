@@ -1,18 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 24"
+community: "Community 105"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_24
+  - community/Community_105
 ---
 
 # Option
 
 ## Connections
-- [[.set_audio_volume()]] - `references` [EXTRACTED]
-- [[check_polkit_auth()]] - `references` [EXTRACTED]
-- [[get_session_conn()]] - `references` [EXTRACTED]
+- [[show_snap_overlay()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_24
+#graphify/code #graphify/EXTRACTED #community/Community_105

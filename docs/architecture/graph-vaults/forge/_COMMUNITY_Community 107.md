@@ -1,20 +1,19 @@
 ---
 type: community
-cohesion: 0.40
-members: 5
+members: 6
 ---
 
 # Community 107
 
-**Cohesion:** 0.40 - moderately connected
-**Members:** 5 nodes
+**Members:** 6 nodes
 
 ## Members
-- [[Box_27]] - code
-- [[Error_19]] - code
-- [[Result_66]] - code
-- [[main()_18]] - code - specs/ermete-sysmon-ebpf/ermete-sysmon-ebpf-1.0.0/src/main.rs
-- [[main.rs_16]] - code - specs/ermete-sysmon-ebpf/ermete-sysmon-ebpf-1.0.0/src/main.rs
+- [[Any]] - code
+- [[download_and_hash()]] - code - scripts/zero_trust_updater.py
+- [[fetch_latest_release()]] - code - scripts/zero_trust_updater.py
+- [[main()]] - code - scripts/zero_trust_updater.py
+- [[update_spec_file()]] - code - scripts/zero_trust_updater.py
+- [[zero_trust_updater.py]] - code - scripts/zero_trust_updater.py
 
 ## Live Query (requires Dataview plugin)
 
@@ -22,9 +21,3 @@ members: 5
 TABLE source_file, type FROM #community/Community_107
 SORT file.name ASC
 ```
-
-## Connections to other communities
-- 1 edge to [[_COMMUNITY_Community 74]]
-
-## Top bridge nodes
-- [[main.rs_16]] - degree 2, connects to 1 community

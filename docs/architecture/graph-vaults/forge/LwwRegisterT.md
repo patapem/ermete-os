@@ -1,17 +1,17 @@
 ---
-source_file: "specs/ermete-settings-rs/ermete-settings-rs-1.0.0/src/crdt_store.rs"
+source_file: "specs/athanor-settings-rs/athanor-settings-rs-1.0.0/src/crdt_store.rs"
 type: "code"
-community: "Community 41"
+community: "Community 43"
 location: "L49"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_41
+  - community/Community_43
 ---
 
 # LwwRegister<T>
 
 ## Connections
-- [[.now()_1]] - `method` [EXTRACTED]
+- [[dot-now()]] - `method` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_41
+#graphify/code #graphify/EXTRACTED #community/Community_43

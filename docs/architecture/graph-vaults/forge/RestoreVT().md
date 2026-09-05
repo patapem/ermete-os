@@ -1,12 +1,12 @@
 ---
-source_file: "specs/ermete-base-config/SOURCES/usr/bin/nvidia-sleep.sh"
+source_file: "specs/athanor-base-config/SOURCES/usr/bin/nvidia-sleep.sh"
 type: "code"
-community: "Community 113"
+community: "Community 133"
 location: "L12"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_113
+  - community/Community_133
 ---
 
 # RestoreVT()
@@ -14,4 +14,4 @@ tags:
 ## Connections
 - [[nvidia-sleep.sh]] - `defines` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_113
+#graphify/code #graphify/EXTRACTED #community/Community_133

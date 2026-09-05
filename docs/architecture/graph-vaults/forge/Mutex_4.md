@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 46"
+community: "Community 30"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_46
+  - community/Community_30
 ---
 
 # Mutex
 
 ## Connections
-- [[SyncEngine]] - `references` [EXTRACTED]
-- [[sync.rs]] - `imports_from` [EXTRACTED]
+- [[MprisController]] - `references` [EXTRACTED]
+- [[mpris.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_46
+#graphify/code #graphify/EXTRACTED #community/Community_30

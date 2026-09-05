@@ -1,20 +1,20 @@
 ---
-source_file: "specs/ermete-backup/ermete-backup-1.0.0/src/main.rs"
+source_file: "specs/azoth/bump.py"
 type: "code"
-community: "Community 76"
-location: "L76"
+community: "Community 23"
+location: "L302"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_76
+  - community/Community_23
 ---
 
 # main()
 
 ## Connections
-- [[Box_2]] - `references` [EXTRACTED]
-- [[Error_2]] - `references` [EXTRACTED]
-- [[Result_8]] - `references` [EXTRACTED]
-- [[main.rs_1]] - `contains` [EXTRACTED]
+- [[apply()]] - `calls` [EXTRACTED]
+- [[body()]] - `calls` [EXTRACTED]
+- [[bump.py]] - `contains` [EXTRACTED]
+- [[compute()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_76
+#graphify/code #graphify/EXTRACTED #community/Community_23

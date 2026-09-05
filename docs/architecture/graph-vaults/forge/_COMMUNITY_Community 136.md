@@ -1,17 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 2
+members: 3
 ---
 
 # Community 136
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 2 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[dynamic-matrix.sh]] - code - scripts/dynamic-matrix.sh
-- [[dynamic-matrix.sh script]] - code - scripts/dynamic-matrix.sh
+- [[SOURCE_DATE_EPOCH_2]] - code - specs/athanor-secure-boot/SOURCES/usr/libexec/athanor-tpm-luks-seal.sh
+- [[athanor-tpm-luks-seal.sh]] - code - specs/athanor-secure-boot/SOURCES/usr/libexec/athanor-tpm-luks-seal.sh
+- [[athanor-tpm-luks-seal.sh script]] - code - specs/athanor-secure-boot/SOURCES/usr/libexec/athanor-tpm-luks-seal.sh
 
 ## Live Query (requires Dataview plugin)
 

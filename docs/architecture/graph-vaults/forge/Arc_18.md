@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 21"
+community: "Community 90"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_21
+  - community/Community_90
 ---
 
 # Arc
 
 ## Connections
-- [[MprisController]] - `references` [EXTRACTED]
-- [[mpris.rs]] - `imports_from` [EXTRACTED]
+- [[broadcast_clipboard()]] - `references` [EXTRACTED]
+- [[srcclipboard.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_21
+#graphify/code #graphify/EXTRACTED #community/Community_90

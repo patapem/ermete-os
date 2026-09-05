@@ -1,17 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 2
+members: 3
 ---
 
 # Community 133
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 2 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[build-offline.sh]] - code - scripts/build-offline.sh
-- [[build-offline.sh script]] - code - scripts/build-offline.sh
+- [[RestoreVT()]] - code - specs/athanor-base-config/SOURCES/usr/bin/nvidia-sleep.sh
+- [[nvidia-sleep.sh]] - code - specs/athanor-base-config/SOURCES/usr/bin/nvidia-sleep.sh
+- [[nvidia-sleep.sh script]] - code - specs/athanor-base-config/SOURCES/usr/bin/nvidia-sleep.sh
 
 ## Live Query (requires Dataview plugin)
 

@@ -1,20 +1,20 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/wayland/popup.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/wayland/popup.rs"
 type: "code"
-community: "Community 1"
+community: "Community 0"
 location: "L10"
 tags:
   - graphify/code
   - graphify/INFERRED
-  - community/Community_1
+  - community/Community_0
 ---
 
 # setup_popup_autoclose()
 
 ## Connections
-- [[ApplicationWindow_6]] - `references` [EXTRACTED]
+- [[ApplicationWindow_2]] - `references` [EXTRACTED]
 - [[_legacy_start_menu()]] - `calls` [INFERRED]
-- [[build_ui()_2]] - `calls` [INFERRED]
+- [[build_ui()_5]] - `calls` [INFERRED]
 - [[popup.rs]] - `contains` [EXTRACTED]
 - [[show_audio_mixer_popover()]] - `calls` [INFERRED]
 - [[show_bluetooth_popover()]] - `calls` [INFERRED]
@@ -26,4 +26,4 @@ tags:
 - [[show_wifi_password_modal()]] - `calls` [INFERRED]
 - [[show_wifi_popover()]] - `calls` [INFERRED]
 
-#graphify/code #graphify/INFERRED #community/Community_1
+#graphify/code #graphify/INFERRED #community/Community_0

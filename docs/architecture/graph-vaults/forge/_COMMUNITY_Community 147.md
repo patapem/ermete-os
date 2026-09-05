@@ -1,16 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 1
+members: 3
 ---
 
 # Community 147
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 1 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[manifest.json_1]] - code - repo-cache/repo-tier1/manifest.json
+- [[Application_13]] - code
+- [[show_clipboard_modal()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/clipboard.rs
+- [[uiclipboard.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/clipboard.rs
 
 ## Live Query (requires Dataview plugin)
 

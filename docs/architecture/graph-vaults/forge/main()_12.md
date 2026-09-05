@@ -1,20 +1,18 @@
 ---
-source_file: "specs/ermete-mesh-sync/ermete-mesh-sync-1.0.0/src/main.rs"
+source_file: "specs/athanor-lvfs-rs/athanor-lvfs-rs-1.0.0/src/main.rs"
 type: "code"
-community: "Community 43"
-location: "L31"
+community: "Community 134"
+location: "L14"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_43
+  - community/Community_134
 ---
 
 # main()
 
 ## Connections
-- [[Box_6]] - `references` [EXTRACTED]
-- [[Error_15]] - `references` [EXTRACTED]
-- [[Result_45]] - `references` [EXTRACTED]
-- [[main.rs_10]] - `contains` [EXTRACTED]
+- [[Result_16]] - `references` [EXTRACTED]
+- [[athanor-lvfs-rs-1.0.0srcmain.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_43
+#graphify/code #graphify/EXTRACTED #community/Community_134

@@ -1,17 +1,15 @@
 ---
 type: community
-cohesion: 1.00
 members: 2
 ---
 
 # Community 171
 
-**Cohesion:** 1.00 - tightly connected
 **Members:** 2 nodes
 
 ## Members
-- [[build_bib.sh]] - code - scripts/build_bib.sh
-- [[build_bib.sh script]] - code - scripts/build_bib.sh
+- [[calculate_bounds()]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/snap_overlay_geometry.rs
+- [[snap_overlay_geometry.rs]] - code - specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/snap_overlay_geometry.rs
 
 ## Live Query (requires Dataview plugin)
 

@@ -1,18 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 56"
+community: "Community 15"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_56
+  - community/Community_15
 ---
 
 # Option
 
 ## Connections
-- [[NiriWindowInfo]] - `references` [EXTRACTED]
-- [[NiriWorkspaceInfo]] - `references` [EXTRACTED]
-- [[WindowLayout]] - `references` [EXTRACTED]
+- [[DockItemWidget]] - `references` [EXTRACTED]
+- [[DockMonitorInstance]] - `references` [EXTRACTED]
+- [[create_dock_for_monitor()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_56
+#graphify/code #graphify/EXTRACTED #community/Community_15

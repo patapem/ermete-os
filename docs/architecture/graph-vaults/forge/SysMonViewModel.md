@@ -1,20 +1,20 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/sysmon_vm.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/sysmon_vm.rs"
 type: "code"
-community: "Community 69"
+community: "Community 74"
 location: "L26"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_69
+  - community/Community_74
 ---
 
 # SysMonViewModel
 
 ## Connections
-- [[.execute_intent()_3]] - `method` [EXTRACTED]
-- [[.get_initial_state()_1]] - `method` [EXTRACTED]
-- [[.subscribe_metrics()]] - `method` [EXTRACTED]
+- [[dot-execute_intent()_4]] - `method` [EXTRACTED]
+- [[dot-get_initial_state()_1]] - `method` [EXTRACTED]
+- [[dot-subscribe_metrics()]] - `method` [EXTRACTED]
 - [[sysmon_vm.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_69
+#graphify/code #graphify/EXTRACTED #community/Community_74

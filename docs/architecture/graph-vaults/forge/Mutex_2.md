@@ -1,17 +1,17 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 94"
+community: "Community 24"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_94
+  - community/Community_24
 ---
 
 # Mutex
 
 ## Connections
-- [[discovery.rs]] - `imports_from` [EXTRACTED]
-- [[start_udp_discovery()]] - `references` [EXTRACTED]
+- [[PortalScreenCastService]] - `references` [EXTRACTED]
+- [[portal_screencast.rs]] - `imports_from` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_94
+#graphify/code #graphify/EXTRACTED #community/Community_24

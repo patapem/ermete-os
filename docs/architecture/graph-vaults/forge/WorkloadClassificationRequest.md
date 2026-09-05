@@ -1,18 +1,18 @@
 ---
-source_file: "specs/Static Rules Engine/Static Rules Engine-1.0.0/src/types.rs"
+source_file: "specs/athanor-ai-daemon/athanor-ai-daemon-1.0.0/src/types.rs"
 type: "code"
-community: "Community 97"
+community: "Community 108"
 location: "L10"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_97
+  - community/Community_108
 ---
 
 # WorkloadClassificationRequest
 
 ## Connections
-- [[String_7]] - `references` [EXTRACTED]
-- [[types.rs]] - `contains` [EXTRACTED]
+- [[String_6]] - `references` [EXTRACTED]
+- [[srctypes.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_97
+#graphify/code #graphify/EXTRACTED #community/Community_108

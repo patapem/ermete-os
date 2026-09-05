@@ -1,20 +1,20 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/control_center/audio.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/control_center/audio.rs"
 type: "code"
-community: "Community 79"
+community: "Community 88"
 location: "L30"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_79
+  - community/Community_88
 ---
 
 # build_audio_widget()
 
 ## Connections
-- [[.build_body()]] - `calls` [INFERRED]
+- [[dot-build_body()]] - `calls` [INFERRED]
 - [[AudioModuleData]] - `references` [EXTRACTED]
-- [[GtkBox_10]] - `references` [EXTRACTED]
-- [[audio.rs_1]] - `contains` [EXTRACTED]
+- [[GtkBox_20]] - `references` [EXTRACTED]
+- [[srccontrol_centeraudio.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_79
+#graphify/code #graphify/EXTRACTED #community/Community_88

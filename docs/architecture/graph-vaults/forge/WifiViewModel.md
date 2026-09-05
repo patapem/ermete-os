@@ -1,5 +1,5 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ui/viewmodel/wifi_vm.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ui/viewmodel/wifi_vm.rs"
 type: "code"
 community: "Community 6"
 location: "L19"
@@ -12,10 +12,10 @@ tags:
 # WifiViewModel
 
 ## Connections
-- [[.execute_intent()_4]] - `method` [EXTRACTED]
-- [[.fetch_details()]] - `method` [EXTRACTED]
-- [[.fetch_initial_state()_1]] - `method` [EXTRACTED]
-- [[.fetch_networks()]] - `method` [EXTRACTED]
+- [[dot-execute_intent()_3]] - `method` [EXTRACTED]
+- [[dot-fetch_details()]] - `method` [EXTRACTED]
+- [[dot-fetch_initial_state()_1]] - `method` [EXTRACTED]
+- [[dot-fetch_networks()]] - `method` [EXTRACTED]
 - [[wifi_vm.rs]] - `contains` [EXTRACTED]
 
 #graphify/code #graphify/EXTRACTED #community/Community_6

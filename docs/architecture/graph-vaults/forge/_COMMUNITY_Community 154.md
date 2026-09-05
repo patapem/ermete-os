@@ -1,16 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 1
+members: 3
 ---
 
 # Community 154
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 1 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[mod.rs_7]] - code - specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/sys/mod.rs
+- [[check()]] - code - specs/azoth/microvm/init
+- [[init script]] - code - specs/azoth/microvm/init
+- [[microvminit]] - code - specs/azoth/microvm/init
 
 ## Live Query (requires Dataview plugin)
 

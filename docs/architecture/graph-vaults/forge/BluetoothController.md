@@ -1,29 +1,29 @@
 ---
-source_file: "specs/ermete-shell-rs/ermete-shell-rs-1.0.0/src/ipc/bluetooth.rs"
+source_file: "specs/athanor-shell-rs/athanor-shell-rs-1.0.0/src/ipc/bluetooth.rs"
 type: "code"
-community: "Community 25"
+community: "Community 27"
 location: "L145"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_25
+  - community/Community_27
 ---
 
 # BluetoothController
 
 ## Connections
-- [[.as_any()_1]] - `method` [EXTRACTED]
-- [[.is_bluetooth_enabled()]] - `method` [EXTRACTED]
-- [[.list_bluetooth_devices()]] - `method` [EXTRACTED]
-- [[.name()_1]] - `method` [EXTRACTED]
-- [[.new()_42]] - `method` [EXTRACTED]
-- [[.new_disconnected()]] - `method` [EXTRACTED]
-- [[.set_bluetooth_powered()]] - `method` [EXTRACTED]
-- [[.toggle_bluetooth()]] - `method` [EXTRACTED]
+- [[dot-as_any()]] - `method` [EXTRACTED]
+- [[dot-is_bluetooth_enabled()]] - `method` [EXTRACTED]
+- [[dot-list_bluetooth_devices()]] - `method` [EXTRACTED]
+- [[dot-name()_1]] - `method` [EXTRACTED]
+- [[dot-new()_22]] - `method` [EXTRACTED]
+- [[dot-new_disconnected()]] - `method` [EXTRACTED]
+- [[dot-set_bluetooth_powered()]] - `method` [EXTRACTED]
+- [[dot-toggle_bluetooth()]] - `method` [EXTRACTED]
 - [[BluetoothCommand]] - `references` [EXTRACTED]
 - [[ControllerBackend]] - `implements` [EXTRACTED]
-- [[Sender_3]] - `references` [EXTRACTED]
-- [[bluetooth.rs_2]] - `contains` [EXTRACTED]
+- [[Sender_4]] - `references` [EXTRACTED]
 - [[get_bluetooth_controller()]] - `references` [EXTRACTED]
+- [[ipcbluetooth.rs]] - `contains` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_25
+#graphify/code #graphify/EXTRACTED #community/Community_27

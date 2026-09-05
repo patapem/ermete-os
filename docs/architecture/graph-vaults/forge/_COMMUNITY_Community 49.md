@@ -1,32 +1,32 @@
 ---
 type: community
-cohesion: 0.19
-members: 17
+members: 19
 ---
 
 # Community 49
 
-**Cohesion:** 0.19 - loosely connected
-**Members:** 17 nodes
+**Members:** 19 nodes
 
 ## Members
-- [[.apply_firmware()]] - code - specs/ermete-lvfs-rs/ermete-lvfs-rs-1.0.0/src/dbus.rs
-- [[.system_bus_name()_5]] - code - specs/ermete-lvfs-rs/ermete-lvfs-rs-1.0.0/src/dbus.rs
-- [[Connection_8]] - code
-- [[Error_13]] - code
-- [[HashMap_17]] - code
-- [[Header_8]] - code
-- [[Into_6]] - code
-- [[LvfsIface]] - code - specs/ermete-lvfs-rs/ermete-lvfs-rs-1.0.0/src/dbus.rs
-- [[OwnedValue_7]] - code
-- [[PolicyKitAuthority_5]] - code - specs/ermete-lvfs-rs/ermete-lvfs-rs-1.0.0/src/dbus.rs
-- [[PolkitAuthorizationResult_5]] - code - specs/ermete-lvfs-rs/ermete-lvfs-rs-1.0.0/src/dbus.rs
-- [[PolkitSubject_5]] - code - specs/ermete-lvfs-rs/ermete-lvfs-rs-1.0.0/src/dbus.rs
-- [[Result_39]] - code
-- [[Self_28]] - code
-- [[String_39]] - code
-- [[check_polkit_auth_zbus()_4]] - code - specs/ermete-lvfs-rs/ermete-lvfs-rs-1.0.0/src/dbus.rs
-- [[dbus.rs_2]] - code - specs/ermete-lvfs-rs/ermete-lvfs-rs-1.0.0/src/dbus.rs
+- [[dot-get_dilithium_public_key_b64()]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/sync.rs
+- [[dot-get_kyber_public_key_b64()]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/sync.rs
+- [[dot-get_zk_identity_info()]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/sync.rs
+- [[dot-new()_37]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/sync.rs
+- [[dot-propose_bft_state_update()]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/sync.rs
+- [[dot-send_clipboard()]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/sync.rs
+- [[dot-start_discovery()]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/sync.rs
+- [[Arc_11]] - code
+- [[DilithiumKeypair]] - code
+- [[HashMap_10]] - code
+- [[Instant_2]] - code
+- [[KyberKeypair_1]] - code
+- [[Mutex_7]] - code
+- [[Option_29]] - code
+- [[Result_41]] - code
+- [[Self_38]] - code
+- [[String_48]] - code
+- [[SyncEngine]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/sync.rs
+- [[sync.rs]] - code - specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0/src/sync.rs
 
 ## Live Query (requires Dataview plugin)
 
@@ -34,3 +34,14 @@ members: 17
 TABLE source_file, type FROM #community/Community_49
 SORT file.name ASC
 ```
+
+## Connections to other communities
+- 2 edges to [[_COMMUNITY_Community 35]]
+- 2 edges to [[_COMMUNITY_Community 56]]
+- 2 edges to [[_COMMUNITY_Community 64]]
+- 1 edge to [[_COMMUNITY_Community 102]]
+- 1 edge to [[_COMMUNITY_Community 91]]
+
+## Top bridge nodes
+- [[sync.rs]] - degree 10, connects to 4 communities
+- [[SyncEngine]] - degree 20, connects to 3 communities

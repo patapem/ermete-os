@@ -1,16 +1,18 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 14"
+community: "Community 8"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_14
+  - community/Community_8
 ---
 
 # Result
 
 ## Connections
-- [[.write_to_file()]] - `references` [EXTRACTED]
+- [[native_bcachefs_delete()_1]] - `references` [EXTRACTED]
+- [[native_bcachefs_snapshot()_2]] - `references` [EXTRACTED]
+- [[restore_bcachefs_snapshot_impl()]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_14
+#graphify/code #graphify/EXTRACTED #community/Community_8

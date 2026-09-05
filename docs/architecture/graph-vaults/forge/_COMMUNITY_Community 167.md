@@ -1,18 +1,15 @@
 ---
 type: community
-cohesion: 0.67
-members: 3
+members: 2
 ---
 
 # Community 167
 
-**Cohesion:** 0.67 - moderately connected
-**Members:** 3 nodes
+**Members:** 2 nodes
 
 ## Members
-- [[default_55]] - code - portal/.astro/collections/docs.schema.json
-- [[pagefind]] - code - portal/.astro/collections/docs.schema.json
-- [[type_18]] - code - portal/.astro/collections/docs.schema.json
+- [[test-nvidia-modules.sh]] - code - specs/athanor-qa/SOURCES/test-nvidia-modules.sh
+- [[test-nvidia-modules.sh script]] - code - specs/athanor-qa/SOURCES/test-nvidia-modules.sh
 
 ## Live Query (requires Dataview plugin)
 
@@ -20,9 +17,3 @@ members: 3
 TABLE source_file, type FROM #community/Community_167
 SORT file.name ASC
 ```
-
-## Connections to other communities
-- 1 edge to [[_COMMUNITY_Community 76]]
-
-## Top bridge nodes
-- [[pagefind]] - degree 3, connects to 1 community

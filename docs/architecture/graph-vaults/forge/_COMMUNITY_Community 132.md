@@ -1,17 +1,16 @@
 ---
 type: community
-cohesion: 1.00
-members: 2
+members: 3
 ---
 
 # Community 132
 
-**Cohesion:** 1.00 - tightly connected
-**Members:** 2 nodes
+**Members:** 3 nodes
 
 ## Members
-- [[verify_compilers.sh]] - code - builder/verify_compilers.sh
-- [[verify_compilers.sh script]] - code - builder/verify_compilers.sh
+- [[update_spec()]] - code - scripts/update_specs.sh
+- [[update_specs.sh]] - code - scripts/update_specs.sh
+- [[update_specs.sh script]] - code - scripts/update_specs.sh
 
 ## Live Query (requires Dataview plugin)
 

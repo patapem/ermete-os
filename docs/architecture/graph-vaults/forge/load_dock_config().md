@@ -1,22 +1,22 @@
 ---
-source_file: "specs/ermete-dock/ermete-dock-1.0.0/src/dock_config.rs"
+source_file: "specs/athanor-dock/athanor-dock-1.0.0/src/dock_config.rs"
 type: "code"
-community: "Community 44"
+community: "Community 46"
 location: "L39"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_44
+  - community/Community_46
 ---
 
 # load_dock_config()
 
 ## Connections
-- [[.default()_10]] - `calls` [EXTRACTED]
-- [[.new()_28]] - `calls` [INFERRED]
+- [[dot-default()_16]] - `calls` [EXTRACTED]
+- [[dot-new()_5]] - `calls` [INFERRED]
 - [[DockConfig]] - `references` [EXTRACTED]
 - [[add_pin()]] - `calls` [EXTRACTED]
-- [[build_ui()]] - `calls` [INFERRED]
+- [[build_ui()_1]] - `calls` [INFERRED]
 - [[dock_config.rs]] - `contains` [EXTRACTED]
 - [[get_dock_config_path()]] - `calls` [EXTRACTED]
 - [[is_pinned()]] - `calls` [EXTRACTED]
@@ -27,4 +27,4 @@ tags:
 - [[test_api_add_remove_and_is_pinned()]] - `calls` [EXTRACTED]
 - [[toggle_dock_mode()]] - `calls` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_44
+#graphify/code #graphify/EXTRACTED #community/Community_46

@@ -1,18 +1,19 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 16"
+community: "Community 44"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_16
+  - community/Community_44
 ---
 
 # String
 
 ## Connections
-- [[get_niri_socket_path()]] - `references` [EXTRACTED]
-- [[get_outputs()]] - `references` [EXTRACTED]
-- [[send_socket_request()]] - `references` [EXTRACTED]
+- [[BluetoothDeviceInfo_1]] - `references` [EXTRACTED]
+- [[MprisState]] - `references` [EXTRACTED]
+- [[NetEvent]] - `references` [EXTRACTED]
+- [[WifiNetworkInfo]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_16
+#graphify/code #graphify/EXTRACTED #community/Community_44

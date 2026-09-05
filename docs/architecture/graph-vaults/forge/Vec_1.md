@@ -1,16 +1,16 @@
 ---
 source_file: ""
 type: "code"
-community: "Community 53"
+community: "Community 108"
 tags:
   - graphify/code
   - graphify/EXTRACTED
-  - community/Community_53
+  - community/Community_108
 ---
 
 # Vec
 
 ## Connections
-- [[.process_inference()]] - `references` [EXTRACTED]
+- [[WorkloadClassificationResponse]] - `references` [EXTRACTED]
 
-#graphify/code #graphify/EXTRACTED #community/Community_53
+#graphify/code #graphify/EXTRACTED #community/Community_108
