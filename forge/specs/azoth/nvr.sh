@@ -6,4 +6,4 @@ set -euo pipefail
 # shellcheck source=pins.env
 source "${1:-$(dirname "${BASH_SOURCE[0]}")/pins.env}"
 rel=${FEDORA_KERNEL_NVR#*-}
-echo "${FEDORA_KERNEL_NVR%%-*}-${rel%%.*}.athanor.${rel#*.}"
+echo "${FEDORA_KERNEL_NVR%%-*}-${rel%%.*}.azoth.${rel#*.}"

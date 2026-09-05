@@ -321,7 +321,7 @@ tabella, confronto e un grafico Mermaid per metrica. I runner GitHub cambiano
 CPU da un run all'altro: l'andamento è indicativo, la decisione sta nel
 confronto A/B nello stesso run, con l'input `variant`: `build.sh --variant
 <nome>` fonde `variants/<nome>` sopra `kernel-local` (le righe con lo stesso
-simbolo vengono sostituite), buildid `.athanor.<nome>`, mai pubblicato, misurato
+simbolo vengono sostituite), buildid `.azoth.<nome>`, mai pubblicato, misurato
 accanto al kernel pubblicato. `o3` rimisura `-O3` contro il default `-O2`.
 
 **Riuso.** Il job `inputs` calcola `build-inputs.py` (pin, manifest delle
