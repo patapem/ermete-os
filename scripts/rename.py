@@ -185,7 +185,8 @@ def main():
     args = ap.parse_args()
     root = args.root.resolve()
 
-    if git(root, "status", "--porcelain").strip():
+    # I file non tracciati non contano: lo script tocca solo i file tracciati.
+    if git(root, "status", "--porcelain", "--untracked-files=no").strip():
         sys.exit("working tree non pulito: commit o stash prima della rinomina")
     before = verify_report(root)
     lint_before = (
