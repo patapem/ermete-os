@@ -4,11 +4,11 @@ import glob
 def translate(text, lang):
     # Fix relative asset paths
     text = text.replace('../../assets/', '../../../assets/')
-    # Simulate connection to ermete-ai-daemon local NPU
-    return f"{text}\n\n> Translated to {lang} via ermete-ai-daemon\n"
+    # Simulate connection to athanor-ai-daemon local NPU
+    return f"{text}\n\n> Translated to {lang} via athanor-ai-daemon\n"
 
 def main():
-    docs_dir = "/var/home/ermete/GEMINI/ermete-os/system/portal/src/content/docs"
+    docs_dir = "/var/home/athanor/GEMINI/athanor/system/portal/src/content/docs"
     langs = ["es", "zh", "fr"]
     
     # Get all markdown files in root docs dir

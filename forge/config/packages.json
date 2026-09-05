@@ -24,7 +24,7 @@
     "cliphist",
     "backup",
     "gatekeeper-rs",
-    "xdg-desktop-portal-ermete",
+    "xdg-desktop-portal-athanor",
     "secure-boot",
     "lvfs-rs",
     "ui-agent",
@@ -48,7 +48,7 @@
     "git-native",
     "openssl-native",
     "ripgrep-native",
-    "ermete-semantic-db"
+    "athanor-semantic-db"
   ],
   "custom_tier0": [
     "stage0-bootstrap",
@@ -101,11 +101,11 @@
     "system-config",
     "backup",
     "gatekeeper-rs",
-    "xdg-desktop-portal-ermete",
+    "xdg-desktop-portal-athanor",
     "lvfs-rs",
     "ui-agent",
     "qa",
-    "ermete-semantic-db"
+    "athanor-semantic-db"
   ],
   "cachyos_addons": [],
   "upstream_core": [

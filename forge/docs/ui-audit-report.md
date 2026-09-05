@@ -1,13 +1,13 @@
-# Ermete OS UI Audit Report
+# Athanor OS UI Audit Report
 **Date:** 2026-07-22
-**Target Projects:** `ermete-shell-rs`, `ermete-settings-rs`
+**Target Projects:** `athanor-shell-rs`, `athanor-settings-rs`
 
-This document outlines the identified vulnerabilities, bugs, and architectural flaws across the Ermete OS Rust UI stack.
+This document outlines the identified vulnerabilities, bugs, and architectural flaws across the Athanor OS Rust UI stack.
 
 ## 1. Hardcoded Panics and Unsafe Result Unwrapping
 The codebase relies heavily on `.unwrap()` and `.expect()` calls, creating significant risks for UI crashes during runtime.
 
-**ermete-shell-rs:**
+**athanor-shell-rs:**
 * **`src/core/system_proxies.rs`:** Widespread use of `state.lock().unwrap()`. If a mutex is poisoned by a panic in a concurrent thread, it will crash the entire proxy backend. Furthermore, DBus interface string conversions (e.g., `try_into().unwrap()` on line 805) are hardcoded to panic.
 * **`src/core/dock_config.rs`:** File I/O operations are unsafe. `add_pin("...").expect(...)` and `remove_pin("...").expect(...)` will crash the UI if disk permissions are wrong or the drive is read-only.
 * **`src/ui/topbar.rs`:** Missing environment variables or Wayland disconnections will trigger panics. Uses `std::env::var("HOME").unwrap()` and `gtk4::gdk::Display::default().unwrap()`.
@@ -23,7 +23,7 @@ The Wayland/DBus integration has significant flaws that can cause hanging and un
 ## 3. GTK4/Relm4 UI Vulnerabilities and Logic Dead Ends
 Multiple structural flaws in the UI layer impact stability and styling.
 
-* **Missing CSS Watcher Dead End (`src/ui/topbar.rs`):** The app hardcodes CSS paths (`~/.config/ermete-shell/colors.css`). While it implements a string fallback if missing, the `watcher.watch(&path)` call silently drops errors if the directory itself doesn't exist. This silently breaks live-reloading logic, leaving the user with a stale UI.
+* **Missing CSS Watcher Dead End (`src/ui/topbar.rs`):** The app hardcodes CSS paths (`~/.config/athanor-shell/colors.css`). While it implements a string fallback if missing, the `watcher.watch(&path)` call silently drops errors if the directory itself doesn't exist. This silently breaks live-reloading logic, leaving the user with a stale UI.
 * **Orphaned Widgets (`src/ui/dock.rs`):** Event handlers aggressively use `popover.connect_closed(|p| p.unparent());`. In complex GTK4 layouts, unparenting a widget without proper cleanup or un-referencing from internal vectors leads to memory leaks or orphaned visual artifacts.
-* **Shell Injection Risks (`ermete-settings-rs/src/pages/focus.rs`):** System actions are performed via direct `Command::new("sh")` and `Command::new("systemctl")` calls. This poses a severe logic dead end if the specific shell is missing and prevents safe input sanitization.
+* **Shell Injection Risks (`athanor-settings-rs/src/pages/focus.rs`):** System actions are performed via direct `Command::new("sh")` and `Command::new("systemctl")` calls. This poses a severe logic dead end if the specific shell is missing and prevents safe input sanitization.
 

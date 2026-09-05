@@ -1,0 +1,35 @@
+[Unit]
+Description=Athanor OS Glassmorphic Dock (Pure Rust Native UI)
+Documentation=https://github.com/hr-mes/athanor-forge
+BindsTo=graphical-session.target
+After=graphical-session.target athanor-shell.service
+PartOf=graphical-session.target
+
+[Service]
+MemoryDenyWriteExecute=true
+CPUWeight=150
+MemoryHigh=384M
+MemoryMax=512M
+OOMScoreAdjust=-300
+Type=simple
+Slice=session.slice
+ExecStart=/usr/bin/athanor-shell-rs --dock
+Restart=on-failure
+RestartSec=2s
+
+# Extreme Sandboxing
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+NoNewPrivileges=true
+SystemCallFilter=@system-service
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+LockPersonality=true
+
+[Install]
+WantedBy=graphical-session.target

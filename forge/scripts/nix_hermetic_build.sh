@@ -2,15 +2,15 @@
 set -euo pipefail
 
 # ==============================================================================
-# 🌋 Ermete Forge - Deterministic Hermetic Build Script (Nix-Paradigm)
+# 🌋 Athanor Forge - Deterministic Hermetic Build Script (Nix-Paradigm)
 # ==============================================================================
 # Forces builds into a hermetic environment without network access using bwrap.
 # All downloaded dependencies must be pre-fetched and verified against a lockfile (sha256).
 
-LOCKFILE="${1:-ermete-build.lock}"
+LOCKFILE="${1:-athanor-build.lock}"
 WORKSPACE_DIR="$(pwd)"
 
-echo "=> 🌋 Ermete Hermetic Build System (Nix-Paradigm)"
+echo "=> 🌋 Athanor Hermetic Build System (Nix-Paradigm)"
 
 if [ ! -f "$LOCKFILE" ]; then
     echo "ERROR: Lockfile '$LOCKFILE' not found."

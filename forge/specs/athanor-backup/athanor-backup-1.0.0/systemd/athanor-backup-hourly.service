@@ -1,0 +1,25 @@
+[Unit]
+Description=Athanor OS Hourly Bcachefs Home Snapshot Trigger
+Documentation=https://github.com/hr-mes/athanor-forge
+
+[Service]
+MemoryDenyWriteExecute=true
+CPUWeight=50
+MemoryHigh=48M
+MemoryMax=64M
+Type=oneshot
+ExecStart=/usr/bin/dbus-send --system --dest=org.athanor.Backup1 --type=method_call /org/athanor/Backup1 org.athanor.Backup1.CreateSnapshot string:"Istantanea oraria automatica"
+
+# Extreme Sandboxing
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=true
+NoNewPrivileges=yes
+SystemCallFilter=@system-service
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+LockPersonality=true

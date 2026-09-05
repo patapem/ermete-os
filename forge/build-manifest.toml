@@ -1,4 +1,4 @@
-# Ermete Forge - Nix-Paradigm Deterministic Build Manifest
+# Athanor Forge - Nix-Paradigm Deterministic Build Manifest
 
 [toolchain]
 channel = "stable"

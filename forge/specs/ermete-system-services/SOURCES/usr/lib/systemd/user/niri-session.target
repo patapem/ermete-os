@@ -1,6 +1,0 @@
-[Unit]
-Description=Ermete OS Niri Desktop Session
-Documentation=https://github.com/hr-mes/ermete-forge
-BindsTo=graphical-session.target
-Wants=graphical-session.target xdg-desktop-autostart.target
-After=graphical-session.target xdg-desktop-autostart.target

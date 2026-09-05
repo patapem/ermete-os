@@ -1,9 +1,0 @@
-enable greetd.service
-enable firewalld.service
-enable nix-daemon.socket
-enable bootc-fetch-apply.timer
-enable fstrim.timer
-enable ermete-timewarp.timer
-enable ermete-backup-hourly.timer
-enable usbguard.service
-enable boltd.service

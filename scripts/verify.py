@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Controlli strutturali di Ermete OS.
+Controlli strutturali di Athanor OS.
 
 Ogni controllo qui corrisponde a un difetto trovato in ANALISI_2026-09-02.md.
 Non sono test di stile: sono le sei domande che nessuno stava ponendo, e che
@@ -165,7 +165,7 @@ def check_polkit():
     used = {}   # action -> {file:riga}
     for p in rust_files():
         for i, line in enumerate(read(p).split("\n"), 1):
-            for a in re.findall(r"os\.ermete\.[a-z0-9_]+\.[a-z0-9_]+", line):
+            for a in re.findall(r"os\.athanor\.[a-z0-9_]+\.[a-z0-9_]+", line):
                 used.setdefault(a, set()).add(f"{rel(p)}:{i}")
 
     declared = {}   # action -> file .policy
@@ -216,7 +216,7 @@ def check_paths():
                 r.fail(f"{rel(p)}:{i} carica un artefatto da target/ — percorso dell'albero "
                        f"di build, inesistente su un sistema installato")
             if re.search(r'"/tmp/', code):
-                r.fail(f"{rel(p)}:{i} percorso hard-coded in /tmp — usa /run/ermete (0700) "
+                r.fail(f"{rel(p)}:{i} percorso hard-coded in /tmp — usa /run/athanor (0700) "
                        f"per stato privilegiato")
     return r
 
@@ -274,8 +274,8 @@ def check_shipped():
         if not has_binary_target(ROOT / m):
             # Un crate libreria finisce dentro i binari che lo usano: niente da spedire.
             continue
-        short = name.replace("ermete-", "")
-        has_spec = name in spec_dirs or f"ermete-{short}" in spec_dirs
+        short = name.replace("athanor-", "")
+        has_spec = name in spec_dirs or f"athanor-{short}" in spec_dirs
         in_dag = name in dag or short in dag
         if not (has_spec and in_dag):
             why = []
@@ -394,7 +394,7 @@ def check_polkit_subject():
 
     for p in rust_files():
         for i, line in enumerate(read(p).split("\n"), 1):
-            m = re.search(r'"(os\.ermete\.[a-z0-9_.]+)"\s*,\s*(true|false)\s*\)', line)
+            m = re.search(r'"(os\.athanor\.[a-z0-9_.]+)"\s*,\s*(true|false)\s*\)', line)
             if not m:
                 continue
             action, interactive = m.group(1), m.group(2) == "true"
@@ -505,7 +505,7 @@ def main(argv):
 
     failed = 0
     problems = 0
-    print(f"{BOLD}Ermete OS — controlli strutturali{OFF}  {DIM}({ROOT}){OFF}\n")
+    print(f"{BOLD}Athanor OS — controlli strutturali{OFF}  {DIM}({ROOT}){OFF}\n")
 
     for name in wanted:
         fn = CHECKS[name]

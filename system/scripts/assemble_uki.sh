@@ -5,7 +5,7 @@ export SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH:-1723320000}
 set -euo pipefail
 
 # ==============================================================================
-# 🌋 Ermete OS - UKI Secure Boot Assembly & Key Isolation Engine
+# 🌋 Athanor OS - UKI Secure Boot Assembly & Key Isolation Engine
 # ==============================================================================
 # Strictly isolates Secure Boot signing keys (KEK, PK, db, UKI key).
 # Private keys are read from secret mounts (/run/secrets) or isolated storage,
@@ -139,8 +139,8 @@ fi
 
 if [ -f "/usr/lib/modules/${QUALIFIED_KERNEL}/vmlinuz.efi" ]; then
     chmod 0755 "/usr/lib/modules/${QUALIFIED_KERNEL}/vmlinuz.efi"
-    cp "/usr/lib/modules/${QUALIFIED_KERNEL}/vmlinuz.efi" /boot/efi/EFI/Linux/ermete-chimera-uki.efi
-    cp "/usr/lib/modules/${QUALIFIED_KERNEL}/vmlinuz.efi" /boot/efi/EFI/Linux/ErmeteOS.efi
+    cp "/usr/lib/modules/${QUALIFIED_KERNEL}/vmlinuz.efi" /boot/efi/EFI/Linux/athanor-chimera-uki.efi
+    cp "/usr/lib/modules/${QUALIFIED_KERNEL}/vmlinuz.efi" /boot/efi/EFI/Linux/AthanorOS.efi
     cp "/usr/lib/modules/${QUALIFIED_KERNEL}/vmlinuz.efi" "/usr/lib/modules/${QUALIFIED_KERNEL}/uki.efi"
 else
     echo "ERROR: Failed to generate UKI EFI binary!" >&2

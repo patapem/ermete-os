@@ -19,7 +19,7 @@ jobs:
     name: Enforce Safety & Cargo Vet Audit
     runs-on: ubuntu-24.04
     container:
-      image: ghcr.io/hr-mes/ermete-os-builder:${{ vars.BUILDER_STABLE_TAG || 'latest' }}
+      image: ghcr.io/hr-mes/athanor-builder:${{ vars.BUILDER_STABLE_TAG || 'latest' }}
     timeout-minutes: 20
     env:
       RUSTC_WRAPPER: sccache
@@ -64,7 +64,7 @@ jobs:
       - name: Check Unsafe Code & Clippy Policies
         run: |
           set -euo pipefail
-          cargo clippy --workspace --exclude ebpf-core --exclude ermete-sysmon-ebpf --exclude ermete-greeter --all-targets --all-features -- \
+          cargo clippy --workspace --exclude ebpf-core --exclude athanor-sysmon-ebpf --exclude athanor-greeter --all-targets --all-features -- \
             -A clippy::undocumented_unsafe_blocks \
             -A clippy::multiple_unsafe_ops_per_block \
             -A dead_code -A unused_variables 2>&1 | tee clippy.log
@@ -113,7 +113,7 @@ jobs:
     name: ???? Kani Formal Verification (${{ matrix.module }} - Shard ${{ matrix.shard }})
     runs-on: ubuntu-24.04
     container:
-      image: ghcr.io/hr-mes/ermete-os-builder:${{ vars.BUILDER_STABLE_TAG || 'latest' }}
+      image: ghcr.io/hr-mes/athanor-builder:${{ vars.BUILDER_STABLE_TAG || 'latest' }}
     timeout-minutes: 20
     env:
       RUSTC_WRAPPER: sccache
@@ -127,23 +127,23 @@ jobs:
         include:
           - module: security-ct-eq
             shard: 1
-            dir: forge/specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0
+            dir: forge/specs/athanor-gatekeeper-rs/athanor-gatekeeper-rs-1.0.0
             harness: proof_constant_time_eq_no_panic
           - module: security-auth-token
             shard: 2
-            dir: forge/specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0
+            dir: forge/specs/athanor-gatekeeper-rs/athanor-gatekeeper-rs-1.0.0
             harness: proof_verify_auth_token_no_panic
           - module: security-fanotify-bounds
             shard: 3
-            dir: forge/specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0
+            dir: forge/specs/athanor-gatekeeper-rs/athanor-gatekeeper-rs-1.0.0
             harness: proof_parse_next_fanotify_offset_bounds_safety
           - module: security-rate-limit
             shard: 4
-            dir: forge/specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0
+            dir: forge/specs/athanor-gatekeeper-rs/athanor-gatekeeper-rs-1.0.0
             harness: proof_evaluate_execution_rate_limit_no_overflow
           - module: security-key-perms
             shard: 5
-            dir: forge/specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0
+            dir: forge/specs/athanor-gatekeeper-rs/athanor-gatekeeper-rs-1.0.0
             harness: proof_verify_key_permissions
     steps:
       - name: Checkout Code
@@ -210,7 +210,7 @@ jobs:
     if: github.event_name == 'push' || github.event_name == 'pull_request'
     runs-on: ubuntu-24.04
     container:
-      image: ghcr.io/hr-mes/ermete-os-builder:${{ vars.BUILDER_STABLE_TAG || 'latest' }}
+      image: ghcr.io/hr-mes/athanor-builder:${{ vars.BUILDER_STABLE_TAG || 'latest' }}
     timeout-minutes: 20
     env:
       CARGO_NET_RETRY: 10
@@ -240,15 +240,15 @@ jobs:
           set -euo pipefail
           for i in {1..5}; do if cargo kani setup; then break; fi; sleep 2; done
 
-      - name: ???? Formal Verification - PQC Mesh Bus (system/ermete-mesh-bus)
+      - name: ???? Formal Verification - PQC Mesh Bus (system/athanor-mesh-bus)
         run: |
           set -euo pipefail
-          RUSTFLAGS='--cfg curve25519_dalek_backend="serial"' cargo kani -p ermete-mesh-bus
+          RUSTFLAGS='--cfg curve25519_dalek_backend="serial"' cargo kani -p athanor-mesh-bus
 
-      - name: ??????? Formal Verification - Hypervisor Daemon (system/ermete-hypervisor-daemon)
+      - name: ??????? Formal Verification - Hypervisor Daemon (system/athanor-hypervisor-daemon)
         run: |
           set -euo pipefail
-          RUSTFLAGS='--cfg curve25519_dalek_backend="serial"' cargo kani -p ermete-hypervisor-daemon
+          RUSTFLAGS='--cfg curve25519_dalek_backend="serial"' cargo kani -p athanor-hypervisor-daemon
 
       - name: ???? Fix Workspace Permissions (GH Actions Cleanup)
         if: always()
@@ -264,7 +264,7 @@ jobs:
     name: ??? eBPF & Bare-Metal Build Verification (${{ matrix.target_name }})
     runs-on: ubuntu-24.04
     container:
-      image: ghcr.io/hr-mes/ermete-os-builder:${{ vars.BUILDER_STABLE_TAG || 'latest' }}
+      image: ghcr.io/hr-mes/athanor-builder:${{ vars.BUILDER_STABLE_TAG || 'latest' }}
     timeout-minutes: 20
     env:
       RUSTC_WRAPPER: sccache
@@ -282,15 +282,15 @@ jobs:
             cmd: RUSTC_WRAPPER="" RUSTFLAGS="" cargo build --target bpfel-unknown-none -Z build-std=core --release
           - target_name: gatekeeper-baremetal
             component: gatekeeper
-            dir: forge/specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0
+            dir: forge/specs/athanor-gatekeeper-rs/athanor-gatekeeper-rs-1.0.0
             cmd: cargo build --release
           - target_name: attestation-baremetal
             component: attestation
-            dir: system/confidential_computing/ermete-attestation
+            dir: system/confidential_computing/athanor-attestation
             cmd: cargo build --release
           - target_name: cloud-zk-baremetal
             component: cloud
-            dir: forge/specs/ermete-cloud-rs/ermete-cloud-rs-1.0.0
+            dir: forge/specs/athanor-cloud-rs/athanor-cloud-rs-1.0.0
             cmd: cargo build --release
     steps:
       - name: Checkout Code

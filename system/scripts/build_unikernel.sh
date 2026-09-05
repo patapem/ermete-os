@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# 🌌 Ermete OS - Level 12 Unikernel Runtime Engine Build System (RustyHermit)
+# 🌌 Athanor OS - Level 12 Unikernel Runtime Engine Build System (RustyHermit)
 # Compiles Rust microservices into bare-metal Ring-0 Unikernel binaries,
 # bypassing the POSIX userland stack for zero-latency execution.
 # ==============================================================================
 
 set -euo pipefail
 
-COMPONENT="${1:-ermete-unikernel-daemon}"
+COMPONENT="${1:-athanor-unikernel-daemon}"
 MODE="${2:-release}"
 TARGET="x86_64-unknown-hermit"
 
@@ -18,19 +18,19 @@ YELLOW='\033[0;33m'
 NC='\033[0m'
 
 log_info() {
-	echo -e "${BLUE}[Ermete Unikernel Engine]${NC} $1"
+	echo -e "${BLUE}[Athanor Unikernel Engine]${NC} $1"
 }
 
 log_success() {
-	echo -e "${GREEN}[Ermete Unikernel Engine]${NC} $1"
+	echo -e "${GREEN}[Athanor Unikernel Engine]${NC} $1"
 }
 
 log_warn() {
-	echo -e "${YELLOW}[Ermete Unikernel Engine]${NC} $1"
+	echo -e "${YELLOW}[Athanor Unikernel Engine]${NC} $1"
 }
 
 log_error() {
-	echo -e "${RED}[Ermete Unikernel Engine]${NC} $1" >&2
+	echo -e "${RED}[Athanor Unikernel Engine]${NC} $1" >&2
 }
 
 log_info "Initializing Level 12 Singularity Unikernel Builder..."

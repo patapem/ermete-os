@@ -5,8 +5,8 @@
   "nodes": [
     {
       "type": "root",
-      "description": "Ermete OS Core Repository",
-      "id": "ermete-os"
+      "description": "Athanor OS Core Repository",
+      "id": "athanor"
     },
     {
       "type": "module",
@@ -25,18 +25,18 @@
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-config\\SOURCES\\usr\\lib\\systemd\\system",
+      "path": "forge\\specs\\athanor-system-config\\SOURCES\\usr\\lib\\systemd\\system",
       "id": "system"
     },
     {
       "type": "file",
       "path": ".\\Justfile",
-      "id": "ermete-os/Justfile"
+      "id": "athanor/Justfile"
     },
     {
       "type": "file",
       "path": ".\\README.md",
-      "id": "ermete-os/README.md"
+      "id": "athanor/README.md"
     },
     {
       "type": "module",
@@ -95,7 +95,7 @@
     },
     {
       "type": "module",
-      "path": "system\\ermete-cluster-mesh\\tests",
+      "path": "system\\athanor-cluster-mesh\\tests",
       "id": "tests"
     },
     {
@@ -3955,88 +3955,88 @@
     },
     {
       "type": "file",
-      "path": "docs\\architecture\\graph-vaults\\forge\\ermete-livepatch-injector.sh script.md",
-      "id": "forge/ermete-livepatch-injector.sh script.md"
+      "path": "docs\\architecture\\graph-vaults\\forge\\athanor-livepatch-injector.sh script.md",
+      "id": "forge/athanor-livepatch-injector.sh script.md"
     },
     {
       "type": "file",
-      "path": "docs\\architecture\\graph-vaults\\forge\\ermete-livepatch-injector.sh.md",
-      "id": "forge/ermete-livepatch-injector.sh.md"
+      "path": "docs\\architecture\\graph-vaults\\forge\\athanor-livepatch-injector.sh.md",
+      "id": "forge/athanor-livepatch-injector.sh.md"
     },
     {
       "type": "file",
-      "path": "docs\\architecture\\graph-vaults\\forge\\ermete-secure-boot-measure.sh script.md",
-      "id": "forge/ermete-secure-boot-measure.sh script.md"
+      "path": "docs\\architecture\\graph-vaults\\forge\\athanor-secure-boot-measure.sh script.md",
+      "id": "forge/athanor-secure-boot-measure.sh script.md"
     },
     {
       "type": "file",
-      "path": "docs\\architecture\\graph-vaults\\forge\\ermete-secure-boot-measure.sh.md",
-      "id": "forge/ermete-secure-boot-measure.sh.md"
+      "path": "docs\\architecture\\graph-vaults\\forge\\athanor-secure-boot-measure.sh.md",
+      "id": "forge/athanor-secure-boot-measure.sh.md"
     },
     {
       "type": "file",
-      "path": "docs\\architecture\\graph-vaults\\forge\\ermete-snapshot-trigger.sh script.md",
-      "id": "forge/ermete-snapshot-trigger.sh script.md"
+      "path": "docs\\architecture\\graph-vaults\\forge\\athanor-snapshot-trigger.sh script.md",
+      "id": "forge/athanor-snapshot-trigger.sh script.md"
     },
     {
       "type": "file",
-      "path": "docs\\architecture\\graph-vaults\\forge\\ermete-snapshot-trigger.sh.md",
-      "id": "forge/ermete-snapshot-trigger.sh.md"
+      "path": "docs\\architecture\\graph-vaults\\forge\\athanor-snapshot-trigger.sh.md",
+      "id": "forge/athanor-snapshot-trigger.sh.md"
     },
     {
       "type": "file",
-      "path": "docs\\architecture\\graph-vaults\\forge\\ermete-theme-generator.sh script.md",
-      "id": "forge/ermete-theme-generator.sh script.md"
+      "path": "docs\\architecture\\graph-vaults\\forge\\athanor-theme-generator.sh script.md",
+      "id": "forge/athanor-theme-generator.sh script.md"
     },
     {
       "type": "file",
-      "path": "docs\\architecture\\graph-vaults\\forge\\ermete-theme-generator.sh.md",
-      "id": "forge/ermete-theme-generator.sh.md"
+      "path": "docs\\architecture\\graph-vaults\\forge\\athanor-theme-generator.sh.md",
+      "id": "forge/athanor-theme-generator.sh.md"
     },
     {
       "type": "file",
-      "path": "docs\\architecture\\graph-vaults\\forge\\ermete-tpm-luks-seal.sh script.md",
-      "id": "forge/ermete-tpm-luks-seal.sh script.md"
+      "path": "docs\\architecture\\graph-vaults\\forge\\athanor-tpm-luks-seal.sh script.md",
+      "id": "forge/athanor-tpm-luks-seal.sh script.md"
     },
     {
       "type": "file",
-      "path": "docs\\architecture\\graph-vaults\\forge\\ermete-tpm-luks-seal.sh.md",
-      "id": "forge/ermete-tpm-luks-seal.sh.md"
+      "path": "docs\\architecture\\graph-vaults\\forge\\athanor-tpm-luks-seal.sh.md",
+      "id": "forge/athanor-tpm-luks-seal.sh.md"
     },
     {
       "type": "file",
-      "path": "docs\\architecture\\graph-vaults\\forge\\ermete-tpm-rollback-check.sh script.md",
-      "id": "forge/ermete-tpm-rollback-check.sh script.md"
+      "path": "docs\\architecture\\graph-vaults\\forge\\athanor-tpm-rollback-check.sh script.md",
+      "id": "forge/athanor-tpm-rollback-check.sh script.md"
     },
     {
       "type": "file",
-      "path": "docs\\architecture\\graph-vaults\\forge\\ermete-tpm-rollback-check.sh.md",
-      "id": "forge/ermete-tpm-rollback-check.sh.md"
+      "path": "docs\\architecture\\graph-vaults\\forge\\athanor-tpm-rollback-check.sh.md",
+      "id": "forge/athanor-tpm-rollback-check.sh.md"
     },
     {
       "type": "file",
-      "path": "docs\\architecture\\graph-vaults\\forge\\ermete-tpm-rollback-update.sh script.md",
-      "id": "forge/ermete-tpm-rollback-update.sh script.md"
+      "path": "docs\\architecture\\graph-vaults\\forge\\athanor-tpm-rollback-update.sh script.md",
+      "id": "forge/athanor-tpm-rollback-update.sh script.md"
     },
     {
       "type": "file",
-      "path": "docs\\architecture\\graph-vaults\\forge\\ermete-tpm-rollback-update.sh.md",
-      "id": "forge/ermete-tpm-rollback-update.sh.md"
+      "path": "docs\\architecture\\graph-vaults\\forge\\athanor-tpm-rollback-update.sh.md",
+      "id": "forge/athanor-tpm-rollback-update.sh.md"
     },
     {
       "type": "file",
-      "path": "docs\\architecture\\graph-vaults\\forge\\ErmeteGreeter.md",
-      "id": "forge/ErmeteGreeter.md"
+      "path": "docs\\architecture\\graph-vaults\\forge\\AthanorGreeter.md",
+      "id": "forge/AthanorGreeter.md"
     },
     {
       "type": "file",
-      "path": "docs\\architecture\\graph-vaults\\forge\\ErmetePortal.md",
-      "id": "forge/ErmetePortal.md"
+      "path": "docs\\architecture\\graph-vaults\\forge\\AthanorPortal.md",
+      "id": "forge/AthanorPortal.md"
     },
     {
       "type": "file",
-      "path": "docs\\architecture\\graph-vaults\\forge\\ermete_free_c_string().md",
-      "id": "forge/ermete_free_c_string().md"
+      "path": "docs\\architecture\\graph-vaults\\forge\\athanor_free_c_string().md",
+      "id": "forge/athanor_free_c_string().md"
     },
     {
       "type": "file",
@@ -15030,13 +15030,13 @@
     },
     {
       "type": "file",
-      "path": "forge\\docs\\superpowers\\plans\\2026-07-22-ermete-ui-overhaul.md",
-      "id": "plans/2026-07-22-ermete-ui-overhaul.md"
+      "path": "forge\\docs\\superpowers\\plans\\2026-07-22-athanor-ui-overhaul.md",
+      "id": "plans/2026-07-22-athanor-ui-overhaul.md"
     },
     {
       "type": "file",
-      "path": "forge\\docs\\superpowers\\specs\\2026-07-22-ermete-ui-overhaul-design.md",
-      "id": "specs/2026-07-22-ermete-ui-overhaul-design.md"
+      "path": "forge\\docs\\superpowers\\specs\\2026-07-22-athanor-ui-overhaul-design.md",
+      "id": "specs/2026-07-22-athanor-ui-overhaul-design.md"
     },
     {
       "type": "module",
@@ -15160,308 +15160,308 @@
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-ai-daemon",
-      "id": "ermete-ai-daemon"
+      "path": "forge\\specs\\athanor-ai-daemon",
+      "id": "athanor-ai-daemon"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-ananicy",
-      "id": "ermete-ananicy"
+      "path": "forge\\specs\\athanor-ananicy",
+      "id": "athanor-ananicy"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-antigravity",
-      "id": "ermete-antigravity"
+      "path": "forge\\specs\\athanor-antigravity",
+      "id": "athanor-antigravity"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-astro-toolchain",
-      "id": "ermete-astro-toolchain"
+      "path": "forge\\specs\\athanor-astro-toolchain",
+      "id": "athanor-astro-toolchain"
     },
     {
       "type": "module",
-      "path": "system\\ermete-audio-bus",
-      "id": "ermete-audio-bus"
+      "path": "system\\athanor-audio-bus",
+      "id": "athanor-audio-bus"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-backup",
-      "id": "ermete-backup"
+      "path": "forge\\specs\\athanor-backup",
+      "id": "athanor-backup"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config",
-      "id": "ermete-base-config"
+      "path": "forge\\specs\\athanor-base-config",
+      "id": "athanor-base-config"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-bat",
-      "id": "ermete-bat"
+      "path": "forge\\specs\\athanor-bat",
+      "id": "athanor-bat"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-bibata",
-      "id": "ermete-bibata"
+      "path": "forge\\specs\\athanor-bibata",
+      "id": "athanor-bibata"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-bpf-linker",
-      "id": "ermete-bpf-linker"
+      "path": "forge\\specs\\athanor-bpf-linker",
+      "id": "athanor-bpf-linker"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-cargo-tools",
-      "id": "ermete-cargo-tools"
+      "path": "forge\\specs\\athanor-cargo-tools",
+      "id": "athanor-cargo-tools"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-cliphist",
-      "id": "ermete-cliphist"
+      "path": "forge\\specs\\athanor-cliphist",
+      "id": "athanor-cliphist"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-cloud-rs",
-      "id": "ermete-cloud-rs"
+      "path": "forge\\specs\\athanor-cloud-rs",
+      "id": "athanor-cloud-rs"
     },
     {
       "type": "module",
-      "path": "system\\ermete-cluster-mesh",
-      "id": "ermete-cluster-mesh"
+      "path": "system\\athanor-cluster-mesh",
+      "id": "athanor-cluster-mesh"
     },
     {
       "type": "module",
-      "path": "system\\ermete-compositor",
-      "id": "ermete-compositor"
+      "path": "system\\athanor-compositor",
+      "id": "athanor-compositor"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-cosign",
-      "id": "ermete-cosign"
+      "path": "forge\\specs\\athanor-cosign",
+      "id": "athanor-cosign"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-daemon-rs",
-      "id": "ermete-daemon-rs"
+      "path": "forge\\specs\\athanor-daemon-rs",
+      "id": "athanor-daemon-rs"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-dart-sass",
-      "id": "ermete-dart-sass"
+      "path": "forge\\specs\\athanor-dart-sass",
+      "id": "athanor-dart-sass"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-desktop-ui",
-      "id": "ermete-desktop-ui"
+      "path": "forge\\specs\\athanor-desktop-ui",
+      "id": "athanor-desktop-ui"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-dock",
-      "id": "ermete-dock"
+      "path": "forge\\specs\\athanor-dock",
+      "id": "athanor-dock"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-doctor",
-      "id": "ermete-doctor"
+      "path": "forge\\specs\\athanor-doctor",
+      "id": "athanor-doctor"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-gatekeeper-rs",
-      "id": "ermete-gatekeeper-rs"
+      "path": "forge\\specs\\athanor-gatekeeper-rs",
+      "id": "athanor-gatekeeper-rs"
     },
     {
       "type": "module",
-      "path": "system\\ermete-greeter",
-      "id": "ermete-greeter"
+      "path": "system\\athanor-greeter",
+      "id": "athanor-greeter"
     },
     {
       "type": "module",
-      "path": "system\\ermete-hypervisor-daemon",
-      "id": "ermete-hypervisor-daemon"
+      "path": "system\\athanor-hypervisor-daemon",
+      "id": "athanor-hypervisor-daemon"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-ide-bootstrap",
-      "id": "ermete-ide-bootstrap"
+      "path": "forge\\specs\\athanor-ide-bootstrap",
+      "id": "athanor-ide-bootstrap"
     },
     {
       "type": "module",
-      "path": "system\\ermete-init-oracle",
-      "id": "ermete-init-oracle"
+      "path": "system\\athanor-init-oracle",
+      "id": "athanor-init-oracle"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel",
-      "id": "ermete-kernel"
+      "path": "forge\\specs\\azoth",
+      "id": "azoth"
     },
     {
       "type": "module",
-      "path": "system\\ermete-kernel-forge",
-      "id": "ermete-kernel-forge"
+      "path": "system\\azoth-forge",
+      "id": "azoth-forge"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-keylime",
-      "id": "ermete-keylime"
+      "path": "forge\\specs\\athanor-keylime",
+      "id": "athanor-keylime"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-livepatch",
-      "id": "ermete-livepatch"
+      "path": "forge\\specs\\athanor-livepatch",
+      "id": "athanor-livepatch"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-lvfs-rs",
-      "id": "ermete-lvfs-rs"
+      "path": "forge\\specs\\athanor-lvfs-rs",
+      "id": "athanor-lvfs-rs"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-matugen",
-      "id": "ermete-matugen"
+      "path": "forge\\specs\\athanor-matugen",
+      "id": "athanor-matugen"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-mdm-rs",
-      "id": "ermete-mdm-rs"
+      "path": "forge\\specs\\athanor-mdm-rs",
+      "id": "athanor-mdm-rs"
     },
     {
       "type": "module",
-      "path": "system\\ermete-mesh-bus",
-      "id": "ermete-mesh-bus"
+      "path": "system\\athanor-mesh-bus",
+      "id": "athanor-mesh-bus"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-mesh-sync",
-      "id": "ermete-mesh-sync"
+      "path": "forge\\specs\\athanor-mesh-sync",
+      "id": "athanor-mesh-sync"
     },
     {
       "type": "module",
-      "path": "system\\ermete-net-unikernel",
-      "id": "ermete-net-unikernel"
+      "path": "system\\athanor-net-unikernel",
+      "id": "athanor-net-unikernel"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-niri",
-      "id": "ermete-niri"
+      "path": "forge\\specs\\athanor-niri",
+      "id": "athanor-niri"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-niri-ipc",
-      "id": "ermete-niri-ipc"
+      "path": "forge\\specs\\athanor-niri-ipc",
+      "id": "athanor-niri-ipc"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-nix-support",
-      "id": "ermete-nix-support"
+      "path": "forge\\specs\\athanor-nix-support",
+      "id": "athanor-nix-support"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-qa",
-      "id": "ermete-qa"
+      "path": "forge\\specs\\athanor-qa",
+      "id": "athanor-qa"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-recovery",
-      "id": "ermete-recovery"
+      "path": "forge\\specs\\athanor-recovery",
+      "id": "athanor-recovery"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-rosenpass",
-      "id": "ermete-rosenpass"
+      "path": "forge\\specs\\athanor-rosenpass",
+      "id": "athanor-rosenpass"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-rust-toolchain",
-      "id": "ermete-rust-toolchain"
+      "path": "forge\\specs\\athanor-rust-toolchain",
+      "id": "athanor-rust-toolchain"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-scudo",
-      "id": "ermete-scudo"
+      "path": "forge\\specs\\athanor-scudo",
+      "id": "athanor-scudo"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-secure-boot",
-      "id": "ermete-secure-boot"
+      "path": "forge\\specs\\athanor-secure-boot",
+      "id": "athanor-secure-boot"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-selinux",
-      "id": "ermete-selinux"
+      "path": "forge\\specs\\athanor-selinux",
+      "id": "athanor-selinux"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-semantic-db",
-      "id": "ermete-semantic-db"
+      "path": "forge\\specs\\athanor-semantic-db",
+      "id": "athanor-semantic-db"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-settings-rs",
-      "id": "ermete-settings-rs"
+      "path": "forge\\specs\\athanor-settings-rs",
+      "id": "athanor-settings-rs"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-shell-rs",
-      "id": "ermete-shell-rs"
+      "path": "forge\\specs\\athanor-shell-rs",
+      "id": "athanor-shell-rs"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-starship",
-      "id": "ermete-starship"
+      "path": "forge\\specs\\athanor-starship",
+      "id": "athanor-starship"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-store-rs",
-      "id": "ermete-store-rs"
+      "path": "forge\\specs\\athanor-store-rs",
+      "id": "athanor-store-rs"
     },
     {
       "type": "module",
-      "path": "system\\ermete-style",
-      "id": "ermete-style"
+      "path": "system\\athanor-style",
+      "id": "athanor-style"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-syft",
-      "id": "ermete-syft"
+      "path": "forge\\specs\\athanor-syft",
+      "id": "athanor-syft"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-sysmon-ebpf",
-      "id": "ermete-sysmon-ebpf"
+      "path": "forge\\specs\\athanor-sysmon-ebpf",
+      "id": "athanor-sysmon-ebpf"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-config\\SOURCES\\usr\\share\\ermete-system-config",
-      "id": "ermete-system-config"
+      "path": "forge\\specs\\athanor-system-config\\SOURCES\\usr\\share\\athanor-system-config",
+      "id": "athanor-system-config"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-services",
-      "id": "ermete-system-services"
+      "path": "forge\\specs\\athanor-system-services",
+      "id": "athanor-system-services"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-tweaks",
-      "id": "ermete-system-tweaks"
+      "path": "forge\\specs\\athanor-system-tweaks",
+      "id": "athanor-system-tweaks"
     },
     {
       "type": "module",
-      "path": "system\\ermete-telemetry",
-      "id": "ermete-telemetry"
+      "path": "system\\athanor-telemetry",
+      "id": "athanor-telemetry"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-tetragon",
-      "id": "ermete-tetragon"
+      "path": "forge\\specs\\athanor-tetragon",
+      "id": "athanor-tetragon"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-ui-agent",
-      "id": "ermete-ui-agent"
+      "path": "forge\\specs\\athanor-ui-agent",
+      "id": "athanor-ui-agent"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-xdg-desktop-portal-ermete",
-      "id": "ermete-xdg-desktop-portal-ermete"
+      "path": "forge\\specs\\athanor-xdg-desktop-portal-athanor",
+      "id": "athanor-xdg-desktop-portal-athanor"
     },
     {
       "type": "module",
@@ -15515,12 +15515,12 @@
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-ai-daemon\\ermete-ai-daemon-1.0.0",
-      "id": "ermete-ai-daemon-1.0.0"
+      "path": "forge\\specs\\athanor-ai-daemon\\athanor-ai-daemon-1.0.0",
+      "id": "athanor-ai-daemon-1.0.0"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-ai-daemon\\ermete-ai-daemon-1.0.0\\models",
+      "path": "forge\\specs\\athanor-ai-daemon\\athanor-ai-daemon-1.0.0\\models",
       "id": "models"
     },
     {
@@ -15530,67 +15530,67 @@
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-ai-daemon\\ermete-ai-daemon-1.0.0\\src\\npu",
+      "path": "forge\\specs\\athanor-ai-daemon\\athanor-ai-daemon-1.0.0\\src\\npu",
       "id": "npu"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-ai-daemon\\ermete-ai-daemon-1.0.0\\src\\drm_lease.rs",
+      "path": "forge\\specs\\athanor-ai-daemon\\athanor-ai-daemon-1.0.0\\src\\drm_lease.rs",
       "id": "src/drm_lease.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-updater-rs\\src\\main.rs",
+      "path": "system\\athanor-updater-rs\\src\\main.rs",
       "id": "src/main.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-ai-daemon\\ermete-ai-daemon-1.0.0\\src\\model_loader.rs",
+      "path": "forge\\specs\\athanor-ai-daemon\\athanor-ai-daemon-1.0.0\\src\\model_loader.rs",
       "id": "src/model_loader.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-telemetry\\src\\security.rs",
+      "path": "system\\athanor-telemetry\\src\\security.rs",
       "id": "src/security.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-cluster-mesh\\src\\types.rs",
+      "path": "system\\athanor-cluster-mesh\\src\\types.rs",
       "id": "src/types.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-ai-daemon\\ermete-ai-daemon-1.0.0\\src\\npu\\mod.rs",
+      "path": "forge\\specs\\athanor-ai-daemon\\athanor-ai-daemon-1.0.0\\src\\npu\\mod.rs",
       "id": "npu/mod.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-ai-daemon\\ermete-ai-daemon-1.0.0\\src\\npu\\offloader.rs",
+      "path": "forge\\specs\\athanor-ai-daemon\\athanor-ai-daemon-1.0.0\\src\\npu\\offloader.rs",
       "id": "npu/offloader.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-ai-daemon\\ermete-ai-daemon-1.0.0\\src\\npu\\openvino.rs",
+      "path": "forge\\specs\\athanor-ai-daemon\\athanor-ai-daemon-1.0.0\\src\\npu\\openvino.rs",
       "id": "npu/openvino.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-ai-daemon\\ermete-ai-daemon-1.0.0\\src\\npu\\vulkan.rs",
+      "path": "forge\\specs\\athanor-ai-daemon\\athanor-ai-daemon-1.0.0\\src\\npu\\vulkan.rs",
       "id": "npu/vulkan.rs"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-backup\\ermete-backup-1.0.0",
-      "id": "ermete-backup-1.0.0"
+      "path": "forge\\specs\\athanor-backup\\athanor-backup-1.0.0",
+      "id": "athanor-backup-1.0.0"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-tweaks\\SOURCES\\etc\\systemd",
+      "path": "forge\\specs\\athanor-system-tweaks\\SOURCES\\etc\\systemd",
       "id": "systemd"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-backup\\ermete-backup-1.0.0\\src\\daemon.rs",
+      "path": "forge\\specs\\athanor-backup\\athanor-backup-1.0.0\\src\\daemon.rs",
       "id": "src/daemon.rs"
     },
     {
@@ -15600,287 +15600,287 @@
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-tweaks\\SOURCES\\etc",
+      "path": "forge\\specs\\athanor-system-tweaks\\SOURCES\\etc",
       "id": "etc"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-tweaks\\SOURCES\\usr",
+      "path": "forge\\specs\\athanor-system-tweaks\\SOURCES\\usr",
       "id": "usr"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\etc\\grub.d",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\etc\\grub.d",
       "id": "grub.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\etc\\pki",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\etc\\pki",
       "id": "pki"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\etc\\selinux",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\etc\\selinux",
       "id": "selinux"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\etc\\ssh",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\etc\\ssh",
       "id": "ssh"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-tweaks\\SOURCES\\usr\\lib\\tmpfiles.d",
+      "path": "forge\\specs\\athanor-system-tweaks\\SOURCES\\usr\\lib\\tmpfiles.d",
       "id": "tmpfiles.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-config\\SOURCES\\etc\\yum.repos.d",
+      "path": "forge\\specs\\athanor-system-config\\SOURCES\\etc\\yum.repos.d",
       "id": "yum.repos.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\etc\\pki\\rpm-gpg",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\etc\\pki\\rpm-gpg",
       "id": "rpm-gpg"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\etc\\ssh\\sshd_config.d",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\etc\\ssh\\sshd_config.d",
       "id": "sshd_config.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\etc\\systemd\\coredump.conf.d",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\etc\\systemd\\coredump.conf.d",
       "id": "coredump.conf.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-config\\SOURCES\\usr\\bin",
+      "path": "forge\\specs\\athanor-system-config\\SOURCES\\usr\\bin",
       "id": "bin"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-tweaks\\SOURCES\\usr\\lib",
+      "path": "forge\\specs\\athanor-system-tweaks\\SOURCES\\usr\\lib",
       "id": "lib"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-tweaks\\SOURCES\\usr\\share",
+      "path": "forge\\specs\\athanor-system-tweaks\\SOURCES\\usr\\share",
       "id": "share"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\bin\\nvidia-sleep.sh",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\bin\\nvidia-sleep.sh",
       "id": "bin/nvidia-sleep.sh"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\lib\\bootc",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\lib\\bootc",
       "id": "bootc"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\lib\\dracut",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\lib\\dracut",
       "id": "dracut"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\lib\\modprobe.d",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\lib\\modprobe.d",
       "id": "modprobe.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\lib\\modules-load.d",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\lib\\modules-load.d",
       "id": "modules-load.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\lib\\sysusers.d",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\lib\\sysusers.d",
       "id": "sysusers.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-desktop-ui\\SOURCES\\etc\\udev",
+      "path": "forge\\specs\\athanor-desktop-ui\\SOURCES\\etc\\udev",
       "id": "udev"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\lib\\bootc\\kargs.d",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\lib\\bootc\\kargs.d",
       "id": "kargs.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\lib\\dracut\\dracut.conf.d",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\lib\\dracut\\dracut.conf.d",
       "id": "dracut.conf.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\lib\\systemd\\journald.conf.d",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\lib\\systemd\\journald.conf.d",
       "id": "journald.conf.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-config\\SOURCES\\usr\\lib\\systemd\\system-preset",
+      "path": "forge\\specs\\athanor-system-config\\SOURCES\\usr\\lib\\systemd\\system-preset",
       "id": "system-preset"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\lib\\systemd\\system-sleep",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\lib\\systemd\\system-sleep",
       "id": "system-sleep"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\lib\\systemd\\system\\bootc-fetch-apply-updates.service.d",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\lib\\systemd\\system\\bootc-fetch-apply-updates.service.d",
       "id": "bootc-fetch-apply-updates.service.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\lib\\systemd\\system\\nvidia-powerd.service.d",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\lib\\systemd\\system\\nvidia-powerd.service.d",
       "id": "nvidia-powerd.service.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\lib\\systemd\\system\\scx_loader.service.d",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\lib\\systemd\\system\\scx_loader.service.d",
       "id": "scx_loader.service.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-tweaks\\SOURCES\\etc\\polkit-1\\rules.d",
+      "path": "forge\\specs\\athanor-system-tweaks\\SOURCES\\etc\\polkit-1\\rules.d",
       "id": "rules.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\share\\pixmaps",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\share\\pixmaps",
       "id": "pixmaps"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\share\\plymouth",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\share\\plymouth",
       "id": "plymouth"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-tweaks\\SOURCES\\etc\\polkit-1",
+      "path": "forge\\specs\\athanor-system-tweaks\\SOURCES\\etc\\polkit-1",
       "id": "polkit-1"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\share\\pixmaps\\bootloader",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\share\\pixmaps\\bootloader",
       "id": "bootloader"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\share\\plymouth\\themes",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\share\\plymouth\\themes",
       "id": "themes"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-base-config\\SOURCES\\usr\\share\\plymouth\\themes\\spinner",
+      "path": "forge\\specs\\athanor-base-config\\SOURCES\\usr\\share\\plymouth\\themes\\spinner",
       "id": "spinner"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-cloud-rs\\ermete-cloud-rs-1.0.0",
-      "id": "ermete-cloud-rs-1.0.0"
+      "path": "forge\\specs\\athanor-cloud-rs\\athanor-cloud-rs-1.0.0",
+      "id": "athanor-cloud-rs-1.0.0"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-cloud-rs\\ermete-cloud-rs-1.0.0\\src\\bft.rs",
+      "path": "forge\\specs\\athanor-cloud-rs\\athanor-cloud-rs-1.0.0\\src\\bft.rs",
       "id": "src/bft.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-cloud-rs\\ermete-cloud-rs-1.0.0\\src\\clipboard.rs",
+      "path": "forge\\specs\\athanor-cloud-rs\\athanor-cloud-rs-1.0.0\\src\\clipboard.rs",
       "id": "src/clipboard.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-telemetry\\src\\dbus.rs",
+      "path": "system\\athanor-telemetry\\src\\dbus.rs",
       "id": "src/dbus.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-cluster-mesh\\src\\discovery.rs",
+      "path": "system\\athanor-cluster-mesh\\src\\discovery.rs",
       "id": "src/discovery.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-cloud-rs\\ermete-cloud-rs-1.0.0\\src\\listener.rs",
+      "path": "forge\\specs\\athanor-cloud-rs\\athanor-cloud-rs-1.0.0\\src\\listener.rs",
       "id": "src/listener.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-cloud-rs\\ermete-cloud-rs-1.0.0\\src\\sync.rs",
+      "path": "forge\\specs\\athanor-cloud-rs\\athanor-cloud-rs-1.0.0\\src\\sync.rs",
       "id": "src/sync.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-cloud-rs\\ermete-cloud-rs-1.0.0\\src\\zk.rs",
+      "path": "forge\\specs\\athanor-cloud-rs\\athanor-cloud-rs-1.0.0\\src\\zk.rs",
       "id": "src/zk.rs"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-daemon-rs\\ermete-daemon-rs-0.2.1",
-      "id": "ermete-daemon-rs-0.2.1"
+      "path": "forge\\specs\\athanor-daemon-rs\\athanor-daemon-rs-0.2.1",
+      "id": "athanor-daemon-rs-0.2.1"
     },
     {
       "type": "file",
-      "path": "system\\ermete-style\\src\\accent_engine.rs",
+      "path": "system\\athanor-style\\src\\accent_engine.rs",
       "id": "src/accent_engine.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-daemon-rs\\ermete-daemon-rs-0.2.1\\src\\appearance_domain.rs",
+      "path": "forge\\specs\\athanor-daemon-rs\\athanor-daemon-rs-0.2.1\\src\\appearance_domain.rs",
       "id": "src/appearance_domain.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-daemon-rs\\ermete-daemon-rs-0.2.1\\src\\bedrock.rs",
+      "path": "forge\\specs\\athanor-daemon-rs\\athanor-daemon-rs-0.2.1\\src\\bedrock.rs",
       "id": "src/bedrock.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-daemon-rs\\ermete-daemon-rs-0.2.1\\src\\bluetooth.rs",
+      "path": "forge\\specs\\athanor-daemon-rs\\athanor-daemon-rs-0.2.1\\src\\bluetooth.rs",
       "id": "src/bluetooth.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-daemon-rs\\ermete-daemon-rs-0.2.1\\src\\live_patch.rs",
+      "path": "forge\\specs\\athanor-daemon-rs\\athanor-daemon-rs-0.2.1\\src\\live_patch.rs",
       "id": "src/live_patch.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-daemon-rs\\ermete-daemon-rs-0.2.1\\src\\network.rs",
+      "path": "forge\\specs\\athanor-daemon-rs\\athanor-daemon-rs-0.2.1\\src\\network.rs",
       "id": "src/network.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-xdg-desktop-portal-ermete\\xdg-desktop-portal-ermete-1.0.0\\src\\portal.rs",
+      "path": "forge\\specs\\athanor-xdg-desktop-portal-athanor\\xdg-desktop-portal-athanor-1.0.0\\src\\portal.rs",
       "id": "src/portal.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-daemon-rs\\ermete-daemon-rs-0.2.1\\src\\portal_screencast.rs",
+      "path": "forge\\specs\\athanor-daemon-rs\\athanor-daemon-rs-0.2.1\\src\\portal_screencast.rs",
       "id": "src/portal_screencast.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-daemon-rs\\ermete-daemon-rs-0.2.1\\src\\qos.rs",
+      "path": "forge\\specs\\athanor-daemon-rs\\athanor-daemon-rs-0.2.1\\src\\qos.rs",
       "id": "src/qos.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-daemon-rs\\ermete-daemon-rs-0.2.1\\src\\settings.rs",
+      "path": "forge\\specs\\athanor-daemon-rs\\athanor-daemon-rs-0.2.1\\src\\settings.rs",
       "id": "src/settings.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-daemon-rs\\ermete-daemon-rs-0.2.1\\src\\theme.rs",
+      "path": "forge\\specs\\athanor-daemon-rs\\athanor-daemon-rs-0.2.1\\src\\theme.rs",
       "id": "src/theme.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-daemon-rs\\ermete-daemon-rs-0.2.1\\src\\voiceover.rs",
+      "path": "forge\\specs\\athanor-daemon-rs\\athanor-daemon-rs-0.2.1\\src\\voiceover.rs",
       "id": "src/voiceover.rs"
     },
     {
@@ -15890,1132 +15890,1132 @@
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-starship\\SOURCES\\etc\\skel",
+      "path": "forge\\specs\\athanor-starship\\SOURCES\\etc\\skel",
       "id": "skel"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-dock\\ermete-dock-1.0.0",
-      "id": "ermete-dock-1.0.0"
+      "path": "forge\\specs\\athanor-dock\\athanor-dock-1.0.0",
+      "id": "athanor-dock-1.0.0"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-dock\\ermete-dock-1.0.0\\src\\controller.rs",
+      "path": "forge\\specs\\athanor-dock\\athanor-dock-1.0.0\\src\\controller.rs",
       "id": "src/controller.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-dock\\ermete-dock-1.0.0\\src\\dock.rs",
+      "path": "forge\\specs\\athanor-dock\\athanor-dock-1.0.0\\src\\dock.rs",
       "id": "src/dock.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-dock\\ermete-dock-1.0.0\\src\\dock_config.rs",
+      "path": "forge\\specs\\athanor-dock\\athanor-dock-1.0.0\\src\\dock_config.rs",
       "id": "src/dock_config.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-dock\\ermete-dock-1.0.0\\src\\dock_data.rs",
+      "path": "forge\\specs\\athanor-dock\\athanor-dock-1.0.0\\src\\dock_data.rs",
       "id": "src/dock_data.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-dock\\ermete-dock-1.0.0\\src\\dock_engine.rs",
+      "path": "forge\\specs\\athanor-dock\\athanor-dock-1.0.0\\src\\dock_engine.rs",
       "id": "src/dock_engine.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-dock\\ermete-dock-1.0.0\\src\\dock_watcher.rs",
+      "path": "forge\\specs\\athanor-dock\\athanor-dock-1.0.0\\src\\dock_watcher.rs",
       "id": "src/dock_watcher.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-style\\src\\lib.rs",
+      "path": "system\\athanor-style\\src\\lib.rs",
       "id": "src/lib.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-dock\\ermete-dock-1.0.0\\src\\preview_popup.rs",
+      "path": "forge\\specs\\athanor-dock\\athanor-dock-1.0.0\\src\\preview_popup.rs",
       "id": "src/preview_popup.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-dock\\ermete-dock-1.0.0\\src\\ui.rs",
+      "path": "forge\\specs\\athanor-dock\\athanor-dock-1.0.0\\src\\ui.rs",
       "id": "src/ui.rs"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-doctor\\ermete-doctor-1.0.0",
-      "id": "ermete-doctor-1.0.0"
+      "path": "forge\\specs\\athanor-doctor\\athanor-doctor-1.0.0",
+      "id": "athanor-doctor-1.0.0"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-gatekeeper-rs\\ermete-gatekeeper-rs-1.0.0",
-      "id": "ermete-gatekeeper-rs-1.0.0"
+      "path": "forge\\specs\\athanor-gatekeeper-rs\\athanor-gatekeeper-rs-1.0.0",
+      "id": "athanor-gatekeeper-rs-1.0.0"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-gatekeeper-rs\\ermete-gatekeeper-rs-1.0.0\\src\\allocator.rs",
+      "path": "forge\\specs\\athanor-gatekeeper-rs\\athanor-gatekeeper-rs-1.0.0\\src\\allocator.rs",
       "id": "src/allocator.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-gatekeeper-rs\\ermete-gatekeeper-rs-1.0.0\\src\\bcachefs.rs",
+      "path": "forge\\specs\\athanor-gatekeeper-rs\\athanor-gatekeeper-rs-1.0.0\\src\\bcachefs.rs",
       "id": "src/bcachefs.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-gatekeeper-rs\\ermete-gatekeeper-rs-1.0.0\\src\\fanotify.rs",
+      "path": "forge\\specs\\athanor-gatekeeper-rs\\athanor-gatekeeper-rs-1.0.0\\src\\fanotify.rs",
       "id": "src/fanotify.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-gatekeeper-rs\\ermete-gatekeeper-rs-1.0.0\\src\\hypervisor.rs",
+      "path": "forge\\specs\\athanor-gatekeeper-rs\\athanor-gatekeeper-rs-1.0.0\\src\\hypervisor.rs",
       "id": "src/hypervisor.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-net-unikernel\\src\\ipc.rs",
+      "path": "system\\athanor-net-unikernel\\src\\ipc.rs",
       "id": "src/ipc.rs"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches",
+      "path": "forge\\specs\\azoth\\cachyos-patches",
       "id": "cachyos-patches"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-kernel\\build-local.sh",
-      "id": "ermete-kernel/build-local.sh"
+      "path": "forge\\specs\\azoth\\build-local.sh",
+      "id": "azoth/build-local.sh"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-kernel\\prepare-chimera.sh",
-      "id": "ermete-kernel/prepare-chimera.sh"
+      "path": "forge\\specs\\azoth\\prepare-chimera.sh",
+      "id": "azoth/prepare-chimera.sh"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-kernel\\README.md",
-      "id": "ermete-kernel/README.md"
+      "path": "forge\\specs\\azoth\\README.md",
+      "id": "azoth/README.md"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\5.15",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\5.15",
       "id": "5.15"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\5.17",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\5.17",
       "id": "5.17"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\5.18",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\5.18",
       "id": "5.18"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\5.19",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\5.19",
       "id": "5.19"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.0",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.0",
       "id": "6.0"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.1",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.1",
       "id": "6.1"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.10",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.10",
       "id": "6.10"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.11",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.11",
       "id": "6.11"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.12",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.12",
       "id": "6.12"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.13",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.13",
       "id": "6.13"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.14",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.14",
       "id": "6.14"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.15",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.15",
       "id": "6.15"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.16",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.16",
       "id": "6.16"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.17",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.17",
       "id": "6.17"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.18",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.18",
       "id": "6.18"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.19",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.19",
       "id": "6.19"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.2",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.2",
       "id": "6.2"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.3",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.3",
       "id": "6.3"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.4",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.4",
       "id": "6.4"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.5",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.5",
       "id": "6.5"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.6",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.6",
       "id": "6.6"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.7",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.7",
       "id": "6.7"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.8",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.8",
       "id": "6.8"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.9",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.9",
       "id": "6.9"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\7.0",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\7.0",
       "id": "7.0"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\7.1",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\7.1",
       "id": "7.1"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\7.2",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\7.2",
       "id": "7.2"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\README.md",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\README.md",
       "id": "cachyos-patches/README.md"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\5.15\\AMD",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\5.15\\AMD",
       "id": "AMD"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\5.15\\android-patches",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\5.15\\android-patches",
       "id": "android-patches"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\5.15\\arch-patches",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\5.15\\arch-patches",
       "id": "arch-patches"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\5.15\\bore",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\5.15\\bore",
       "id": "bore"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\5.15\\cacule",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\5.15\\cacule",
       "id": "cacule"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\7.2\\misc",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\7.2\\misc",
       "id": "misc"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\7.2\\sched",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\7.2\\sched",
       "id": "sched"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\5.15\\TT",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\5.15\\TT",
       "id": "TT"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\5.17\\dev",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\5.17\\dev",
       "id": "dev"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.9\\all",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.9\\all",
       "id": "all"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\5.18\\trunk",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\5.18\\trunk",
       "id": "trunk"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\5.18\\trunk\\kbuild-modules-patches",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\5.18\\trunk\\kbuild-modules-patches",
       "id": "kbuild-modules-patches"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\5.18\\trunk\\modules-patches",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\5.18\\trunk\\modules-patches",
       "id": "modules-patches"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\5.19\\misc\\sched-next",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\5.19\\misc\\sched-next",
       "id": "sched-next"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.1\\queue-for-6.1.68",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.1\\queue-for-6.1.68",
       "id": "queue-for-6.1.68"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\7.1\\sched-dev",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\7.1\\sched-dev",
       "id": "sched-dev"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.1\\misc\\crypto-patches",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.1\\misc\\crypto-patches",
       "id": "crypto-patches"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.5\\misc\\gcc-lto",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.5\\misc\\gcc-lto",
       "id": "gcc-lto"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.1\\queue-for-6.1.68\\zstd-cachyos-patches",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.1\\queue-for-6.1.68\\zstd-cachyos-patches",
       "id": "zstd-cachyos-patches"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\7.2\\misc\\nvidia",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\7.2\\misc\\nvidia",
       "id": "nvidia"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.13\\misc\\nvidia\\565",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.13\\misc\\nvidia\\565",
       "id": "565"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-kernel\\cachyos-patches\\6.9\\misc\\intel",
+      "path": "forge\\specs\\azoth\\cachyos-patches\\6.9\\misc\\intel",
       "id": "intel"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-livepatch\\ermete-livepatch-injector.sh",
-      "id": "ermete-livepatch/ermete-livepatch-injector.sh"
+      "path": "forge\\specs\\athanor-livepatch\\athanor-livepatch-injector.sh",
+      "id": "athanor-livepatch/athanor-livepatch-injector.sh"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-lvfs-rs\\ermete-lvfs-rs-1.0.0",
-      "id": "ermete-lvfs-rs-1.0.0"
+      "path": "forge\\specs\\athanor-lvfs-rs\\athanor-lvfs-rs-1.0.0",
+      "id": "athanor-lvfs-rs-1.0.0"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-lvfs-rs\\ermete-lvfs-rs-1.0.0\\src\\firmware.rs",
+      "path": "forge\\specs\\athanor-lvfs-rs\\athanor-lvfs-rs-1.0.0\\src\\firmware.rs",
       "id": "src/firmware.rs"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-mdm-rs\\ermete-mdm-rs-1.0.0",
-      "id": "ermete-mdm-rs-1.0.0"
+      "path": "forge\\specs\\athanor-mdm-rs\\athanor-mdm-rs-1.0.0",
+      "id": "athanor-mdm-rs-1.0.0"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-mdm-rs\\ermete-mdm-rs-1.0.0\\src\\wipe.rs",
+      "path": "forge\\specs\\athanor-mdm-rs\\athanor-mdm-rs-1.0.0\\src\\wipe.rs",
       "id": "src/wipe.rs"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-mesh-sync\\ermete-mesh-sync-1.0.0",
-      "id": "ermete-mesh-sync-1.0.0"
+      "path": "forge\\specs\\athanor-mesh-sync\\athanor-mesh-sync-1.0.0",
+      "id": "athanor-mesh-sync-1.0.0"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-mesh-sync\\ermete-mesh-sync-1.0.0\\src\\wg_manager.rs",
+      "path": "forge\\specs\\athanor-mesh-sync\\athanor-mesh-sync-1.0.0\\src\\wg_manager.rs",
       "id": "src/wg_manager.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-niri-ipc\\src\\async_client.rs",
+      "path": "forge\\specs\\athanor-niri-ipc\\src\\async_client.rs",
       "id": "src/async_client.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-qa\\SOURCES\\test-nvidia-modules.sh",
+      "path": "forge\\specs\\athanor-qa\\SOURCES\\test-nvidia-modules.sh",
       "id": "SOURCES/test-nvidia-modules.sh"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-recovery\\ermete-recovery-1.0.0",
-      "id": "ermete-recovery-1.0.0"
+      "path": "forge\\specs\\athanor-recovery\\athanor-recovery-1.0.0",
+      "id": "athanor-recovery-1.0.0"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-secure-boot\\ermete-secure-boot-1.0.0",
-      "id": "ermete-secure-boot-1.0.0"
+      "path": "forge\\specs\\athanor-secure-boot\\athanor-secure-boot-1.0.0",
+      "id": "athanor-secure-boot-1.0.0"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-config\\SOURCES\\usr\\libexec",
+      "path": "forge\\specs\\athanor-system-config\\SOURCES\\usr\\libexec",
       "id": "libexec"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-secure-boot\\SOURCES\\usr\\lib\\systemd\\system\\systemd-pcrphase-sysinit.service.d",
+      "path": "forge\\specs\\athanor-secure-boot\\SOURCES\\usr\\lib\\systemd\\system\\systemd-pcrphase-sysinit.service.d",
       "id": "systemd-pcrphase-sysinit.service.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-secure-boot\\SOURCES\\usr\\libexec\\ermete",
-      "id": "ermete"
+      "path": "forge\\specs\\athanor-secure-boot\\SOURCES\\usr\\libexec\\athanor",
+      "id": "athanor"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-secure-boot\\SOURCES\\usr\\libexec\\ermete-secure-boot-measure.sh",
-      "id": "libexec/ermete-secure-boot-measure.sh"
+      "path": "forge\\specs\\athanor-secure-boot\\SOURCES\\usr\\libexec\\athanor-secure-boot-measure.sh",
+      "id": "libexec/athanor-secure-boot-measure.sh"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-secure-boot\\SOURCES\\usr\\libexec\\ermete-tpm-luks-seal.sh",
-      "id": "libexec/ermete-tpm-luks-seal.sh"
+      "path": "forge\\specs\\athanor-secure-boot\\SOURCES\\usr\\libexec\\athanor-tpm-luks-seal.sh",
+      "id": "libexec/athanor-tpm-luks-seal.sh"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-secure-boot\\SOURCES\\usr\\libexec\\ermete\\ermete-tpm-rollback-check.sh",
-      "id": "ermete/ermete-tpm-rollback-check.sh"
+      "path": "forge\\specs\\athanor-secure-boot\\SOURCES\\usr\\libexec\\athanor\\athanor-tpm-rollback-check.sh",
+      "id": "athanor/athanor-tpm-rollback-check.sh"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-secure-boot\\SOURCES\\usr\\libexec\\ermete\\ermete-tpm-rollback-update.sh",
-      "id": "ermete/ermete-tpm-rollback-update.sh"
+      "path": "forge\\specs\\athanor-secure-boot\\SOURCES\\usr\\libexec\\athanor\\athanor-tpm-rollback-update.sh",
+      "id": "athanor/athanor-tpm-rollback-update.sh"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0",
-      "id": "ermete-settings-rs-1.0.0"
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0",
+      "id": "athanor-settings-rs-1.0.0"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\components",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\components",
       "id": "components"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages",
       "id": "pages"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\crdt_store.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\crdt_store.rs",
       "id": "src/crdt_store.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\settings_proxy.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\settings_proxy.rs",
       "id": "src/settings_proxy.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\components\\action_row.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\components\\action_row.rs",
       "id": "components/action_row.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\components\\mod.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\components\\mod.rs",
       "id": "components/mod.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\a11y.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\a11y.rs",
       "id": "pages/a11y.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\accounts.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\accounts.rs",
       "id": "pages/accounts.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\appearance.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\appearance.rs",
       "id": "pages/appearance.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\audio.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\audio.rs",
       "id": "pages/audio.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\battery.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\battery.rs",
       "id": "pages/battery.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\bluetooth.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\bluetooth.rs",
       "id": "pages/bluetooth.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\continuity.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\continuity.rs",
       "id": "pages/continuity.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\desktop.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\desktop.rs",
       "id": "pages/desktop.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\displays.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\displays.rs",
       "id": "pages/displays.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\ecosystem.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\ecosystem.rs",
       "id": "pages/ecosystem.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\focus.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\focus.rs",
       "id": "pages/focus.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\general.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\general.rs",
       "id": "pages/general.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\keyboard.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\keyboard.rs",
       "id": "pages/keyboard.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\layout_switcher.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\layout_switcher.rs",
       "id": "pages/layout_switcher.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\mod.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\mod.rs",
       "id": "pages/mod.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\mouse.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\mouse.rs",
       "id": "pages/mouse.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\network.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\network.rs",
       "id": "pages/network.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\notifications.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\notifications.rs",
       "id": "pages/notifications.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\privacy.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\privacy.rs",
       "id": "pages/privacy.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\updates.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\updates.rs",
       "id": "pages/updates.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-settings-rs\\ermete-settings-rs-1.0.0\\src\\pages\\wired.rs",
+      "path": "forge\\specs\\athanor-settings-rs\\athanor-settings-rs-1.0.0\\src\\pages\\wired.rs",
       "id": "pages/wired.rs"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0",
-      "id": "ermete-shell-rs-1.0.0"
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0",
+      "id": "athanor-shell-rs-1.0.0"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\control_center",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\control_center",
       "id": "control_center"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\core",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\core",
       "id": "core"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\desktop_canvas",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\desktop_canvas",
       "id": "desktop_canvas"
     },
     {
       "type": "module",
-      "path": "system\\ermete-mesh-bus\\src\\ipc",
+      "path": "system\\athanor-mesh-bus\\src\\ipc",
       "id": "ipc"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\sys",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\sys",
       "id": "sys"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\theme",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\theme",
       "id": "theme"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui",
       "id": "ui"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\wayland",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\wayland",
       "id": "wayland"
     },
     {
       "type": "file",
-      "path": "system\\ermete-style\\src\\appearance_engine.rs",
+      "path": "system\\athanor-style\\src\\appearance_engine.rs",
       "id": "src/appearance_engine.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\launcher.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\launcher.rs",
       "id": "src/launcher.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\morphic_pill.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\morphic_pill.rs",
       "id": "src/morphic_pill.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\control_center\\audio.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\control_center\\audio.rs",
       "id": "control_center/audio.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\control_center\\display.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\control_center\\display.rs",
       "id": "control_center/display.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\control_center\\ebpf.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\control_center\\ebpf.rs",
       "id": "control_center/ebpf.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\control_center\\mod.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\control_center\\mod.rs",
       "id": "control_center/mod.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\control_center\\module_item.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\control_center\\module_item.rs",
       "id": "control_center/module_item.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\control_center\\network.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\control_center\\network.rs",
       "id": "control_center/network.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\control_center\\panel.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\control_center\\panel.rs",
       "id": "control_center/panel.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\core\\mod.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\core\\mod.rs",
       "id": "core/mod.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\desktop_canvas\\context_menu.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\desktop_canvas\\context_menu.rs",
       "id": "desktop_canvas/context_menu.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\desktop_canvas\\mod.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\desktop_canvas\\mod.rs",
       "id": "desktop_canvas/mod.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\desktop_canvas\\physics.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\desktop_canvas\\physics.rs",
       "id": "desktop_canvas/physics.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\desktop_canvas\\stacks.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\desktop_canvas\\stacks.rs",
       "id": "desktop_canvas/stacks.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ipc\\audio.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ipc\\audio.rs",
       "id": "ipc/audio.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ipc\\bluetooth.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ipc\\bluetooth.rs",
       "id": "ipc/bluetooth.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ipc\\display.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ipc\\display.rs",
       "id": "ipc/display.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-mesh-bus\\src\\ipc\\mod.rs",
+      "path": "system\\athanor-mesh-bus\\src\\ipc\\mod.rs",
       "id": "ipc/mod.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ipc\\mpris.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ipc\\mpris.rs",
       "id": "ipc/mpris.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ipc\\network.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ipc\\network.rs",
       "id": "ipc/network.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ipc\\notifications.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ipc\\notifications.rs",
       "id": "ipc/notifications.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ipc\\power.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ipc\\power.rs",
       "id": "ipc/power.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ipc\\system_proxies.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ipc\\system_proxies.rs",
       "id": "ipc/system_proxies.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ipc\\types.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ipc\\types.rs",
       "id": "ipc/types.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ipc\\voiceover.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ipc\\voiceover.rs",
       "id": "ipc/voiceover.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\sys\\auth.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\sys\\auth.rs",
       "id": "sys/auth.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\sys\\battery.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\sys\\battery.rs",
       "id": "sys/battery.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\sys\\ebpf.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\sys\\ebpf.rs",
       "id": "sys/ebpf.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\sys\\live_state.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\sys\\live_state.rs",
       "id": "sys/live_state.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\sys\\mod.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\sys\\mod.rs",
       "id": "sys/mod.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\sys\\sandbox.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\sys\\sandbox.rs",
       "id": "sys/sandbox.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\sys\\stats.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\sys\\stats.rs",
       "id": "sys/stats.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\theme\\mod.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\theme\\mod.rs",
       "id": "theme/mod.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\theme\\palette.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\theme\\palette.rs",
       "id": "theme/palette.rs"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\greeter",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\greeter",
       "id": "greeter"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\prompts",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\prompts",
       "id": "prompts"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\viewmodel",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\viewmodel",
       "id": "viewmodel"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\clipboard.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\clipboard.rs",
       "id": "ui/clipboard.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\desktop_widgets.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\desktop_widgets.rs",
       "id": "ui/desktop_widgets.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\forge_widget.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\forge_widget.rs",
       "id": "ui/forge_widget.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\mission_control.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\mission_control.rs",
       "id": "ui/mission_control.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\mod.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\mod.rs",
       "id": "ui/mod.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\morphic_pill.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\morphic_pill.rs",
       "id": "ui/morphic_pill.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\notifications.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\notifications.rs",
       "id": "ui/notifications.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\osd.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\osd.rs",
       "id": "ui/osd.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\powermenu.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\powermenu.rs",
       "id": "ui/powermenu.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\quicklook.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\quicklook.rs",
       "id": "ui/quicklook.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\snap_overlay.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\snap_overlay.rs",
       "id": "ui/snap_overlay.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\spotlight.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\spotlight.rs",
       "id": "ui/spotlight.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\store.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\store.rs",
       "id": "ui/store.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\topbar.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\topbar.rs",
       "id": "ui/topbar.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\widgets_board.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\widgets_board.rs",
       "id": "ui/widgets_board.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\control_center\\bluetooth.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\control_center\\bluetooth.rs",
       "id": "control_center/bluetooth.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\control_center\\calendar.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\control_center\\calendar.rs",
       "id": "control_center/calendar.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\control_center\\main_cc.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\control_center\\main_cc.rs",
       "id": "control_center/main_cc.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\control_center\\start_menu.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\control_center\\start_menu.rs",
       "id": "control_center/start_menu.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\control_center\\sysmon.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\control_center\\sysmon.rs",
       "id": "control_center/sysmon.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\control_center\\widgets.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\control_center\\widgets.rs",
       "id": "control_center/widgets.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\control_center\\wifi.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\control_center\\wifi.rs",
       "id": "control_center/wifi.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\greeter\\greeter.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\greeter\\greeter.rs",
       "id": "greeter/greeter.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\greeter\\mod.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\greeter\\mod.rs",
       "id": "greeter/mod.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\prompts\\biometrics.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\prompts\\biometrics.rs",
       "id": "prompts/biometrics.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\prompts\\gatekeeper.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\prompts\\gatekeeper.rs",
       "id": "prompts/gatekeeper.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\prompts\\mod.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\prompts\\mod.rs",
       "id": "prompts/mod.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\prompts\\privacy.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\prompts\\privacy.rs",
       "id": "prompts/privacy.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\viewmodel\\audio_vm.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\viewmodel\\audio_vm.rs",
       "id": "viewmodel/audio_vm.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\viewmodel\\bluetooth_vm.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\viewmodel\\bluetooth_vm.rs",
       "id": "viewmodel/bluetooth_vm.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\viewmodel\\control_center_vm.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\viewmodel\\control_center_vm.rs",
       "id": "viewmodel/control_center_vm.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\viewmodel\\mod.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\viewmodel\\mod.rs",
       "id": "viewmodel/mod.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\viewmodel\\navigation.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\viewmodel\\navigation.rs",
       "id": "viewmodel/navigation.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\viewmodel\\osd_vm.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\viewmodel\\osd_vm.rs",
       "id": "viewmodel/osd_vm.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\viewmodel\\sysmon_vm.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\viewmodel\\sysmon_vm.rs",
       "id": "viewmodel/sysmon_vm.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\viewmodel\\topbar_vm.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\viewmodel\\topbar_vm.rs",
       "id": "viewmodel/topbar_vm.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\ui\\viewmodel\\wifi_vm.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\ui\\viewmodel\\wifi_vm.rs",
       "id": "viewmodel/wifi_vm.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\wayland\\mod.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\wayland\\mod.rs",
       "id": "wayland/mod.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\wayland\\niri.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\wayland\\niri.rs",
       "id": "wayland/niri.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-shell-rs\\ermete-shell-rs-1.0.0\\src\\wayland\\popup.rs",
+      "path": "forge\\specs\\athanor-shell-rs\\athanor-shell-rs-1.0.0\\src\\wayland\\popup.rs",
       "id": "wayland/popup.rs"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-store-rs\\ermete-store-rs-1.0.0",
-      "id": "ermete-store-rs-1.0.0"
+      "path": "forge\\specs\\athanor-store-rs\\athanor-store-rs-1.0.0",
+      "id": "athanor-store-rs-1.0.0"
     },
     {
       "type": "module",
-      "path": "system\\ermete-compositor\\src\\backend",
+      "path": "system\\athanor-compositor\\src\\backend",
       "id": "backend"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-store-rs\\ermete-store-rs-1.0.0\\src\\backend\\dbus.rs",
+      "path": "forge\\specs\\athanor-store-rs\\athanor-store-rs-1.0.0\\src\\backend\\dbus.rs",
       "id": "backend/dbus.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-store-rs\\ermete-store-rs-1.0.0\\src\\backend\\flatpak.rs",
+      "path": "forge\\specs\\athanor-store-rs\\athanor-store-rs-1.0.0\\src\\backend\\flatpak.rs",
       "id": "backend/flatpak.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\backend\\mod.rs",
+      "path": "system\\athanor-compositor\\src\\backend\\mod.rs",
       "id": "backend/mod.rs"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-store-rs\\ermete-store-rs-1.0.0\\src\\backend\\repository.rs",
+      "path": "forge\\specs\\athanor-store-rs\\athanor-store-rs-1.0.0\\src\\backend\\repository.rs",
       "id": "backend/repository.rs"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-sysmon-ebpf\\ermete-sysmon-ebpf-1.0.0",
-      "id": "ermete-sysmon-ebpf-1.0.0"
+      "path": "forge\\specs\\athanor-sysmon-ebpf\\athanor-sysmon-ebpf-1.0.0",
+      "id": "athanor-sysmon-ebpf-1.0.0"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-config\\SOURCES\\etc\\greenboot",
+      "path": "forge\\specs\\athanor-system-config\\SOURCES\\etc\\greenboot",
       "id": "greenboot"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-config\\SOURCES\\etc\\security",
+      "path": "forge\\specs\\athanor-system-config\\SOURCES\\etc\\security",
       "id": "security"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-config\\SOURCES\\etc\\usbguard",
+      "path": "forge\\specs\\athanor-system-config\\SOURCES\\etc\\usbguard",
       "id": "usbguard"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-config\\SOURCES\\etc\\greenboot\\check",
+      "path": "forge\\specs\\athanor-system-config\\SOURCES\\etc\\greenboot\\check",
       "id": "check"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-config\\SOURCES\\etc\\greenboot\\check\\required.d",
+      "path": "forge\\specs\\athanor-system-config\\SOURCES\\etc\\greenboot\\check\\required.d",
       "id": "required.d"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-system-config\\SOURCES\\etc\\greenboot\\check\\required.d\\10-greetd-running.sh",
+      "path": "forge\\specs\\athanor-system-config\\SOURCES\\etc\\greenboot\\check\\required.d\\10-greetd-running.sh",
       "id": "required.d/10-greetd-running.sh"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-config\\SOURCES\\etc\\security\\limits.d",
+      "path": "forge\\specs\\athanor-system-config\\SOURCES\\etc\\security\\limits.d",
       "id": "limits.d"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-system-config\\SOURCES\\usr\\libexec\\ermete-snapshot-trigger.sh",
-      "id": "libexec/ermete-snapshot-trigger.sh"
+      "path": "forge\\specs\\athanor-system-config\\SOURCES\\usr\\libexec\\athanor-snapshot-trigger.sh",
+      "id": "libexec/athanor-snapshot-trigger.sh"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-services\\SOURCES\\usr\\lib\\systemd\\user",
+      "path": "forge\\specs\\athanor-system-services\\SOURCES\\usr\\lib\\systemd\\user",
       "id": "user"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-services\\SOURCES\\usr\\lib\\systemd\\user-preset",
+      "path": "forge\\specs\\athanor-system-services\\SOURCES\\usr\\lib\\systemd\\user-preset",
       "id": "user-preset"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-tweaks\\SOURCES\\etc\\NetworkManager",
+      "path": "forge\\specs\\athanor-system-tweaks\\SOURCES\\etc\\NetworkManager",
       "id": "NetworkManager"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-tweaks\\SOURCES\\etc\\NetworkManager\\conf.d",
+      "path": "forge\\specs\\athanor-system-tweaks\\SOURCES\\etc\\NetworkManager\\conf.d",
       "id": "conf.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-tweaks\\SOURCES\\etc\\systemd\\resolved.conf.d",
+      "path": "forge\\specs\\athanor-system-tweaks\\SOURCES\\etc\\systemd\\resolved.conf.d",
       "id": "resolved.conf.d"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-tweaks\\SOURCES\\usr\\lib\\environment.d",
+      "path": "forge\\specs\\athanor-system-tweaks\\SOURCES\\usr\\lib\\environment.d",
       "id": "environment.d"
     },
     {
@@ -17025,38 +17025,38 @@
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-tweaks\\SOURCES\\usr\\share\\pipewire",
+      "path": "forge\\specs\\athanor-system-tweaks\\SOURCES\\usr\\share\\pipewire",
       "id": "pipewire"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-system-tweaks\\SOURCES\\usr\\share\\pipewire\\pipewire.conf.d",
+      "path": "forge\\specs\\athanor-system-tweaks\\SOURCES\\usr\\share\\pipewire\\pipewire.conf.d",
       "id": "pipewire.conf.d"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-tetragon\\SOURCES\\tetragon.json",
+      "path": "forge\\specs\\athanor-tetragon\\SOURCES\\tetragon.json",
       "id": "SOURCES/tetragon.json"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-ui-agent\\ermete-ui-agent-1.0.0",
-      "id": "ermete-ui-agent-1.0.0"
+      "path": "forge\\specs\\athanor-ui-agent\\athanor-ui-agent-1.0.0",
+      "id": "athanor-ui-agent-1.0.0"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-ui-agent\\ermete-ui-agent-1.0.0\\README.md",
-      "id": "ermete-ui-agent-1.0.0/README.md"
+      "path": "forge\\specs\\athanor-ui-agent\\athanor-ui-agent-1.0.0\\README.md",
+      "id": "athanor-ui-agent-1.0.0/README.md"
     },
     {
       "type": "file",
-      "path": "forge\\specs\\ermete-ui-agent\\ermete-ui-agent-1.0.0\\SYSTEM_PROMPT.md",
-      "id": "ermete-ui-agent-1.0.0/SYSTEM_PROMPT.md"
+      "path": "forge\\specs\\athanor-ui-agent\\athanor-ui-agent-1.0.0\\SYSTEM_PROMPT.md",
+      "id": "athanor-ui-agent-1.0.0/SYSTEM_PROMPT.md"
     },
     {
       "type": "module",
-      "path": "forge\\specs\\ermete-xdg-desktop-portal-ermete\\xdg-desktop-portal-ermete-1.0.0",
-      "id": "xdg-desktop-portal-ermete-1.0.0"
+      "path": "forge\\specs\\athanor-xdg-desktop-portal-athanor\\xdg-desktop-portal-athanor-1.0.0",
+      "id": "xdg-desktop-portal-athanor-1.0.0"
     },
     {
       "type": "module",
@@ -17070,43 +17070,43 @@
     },
     {
       "type": "module",
-      "path": "system\\ermete-ebpf-sched\\ebpf",
+      "path": "system\\athanor-ebpf-sched\\ebpf",
       "id": "ebpf"
     },
     {
       "type": "module",
-      "path": "system\\ermete-agentic-kernel",
-      "id": "ermete-agentic-kernel"
+      "path": "system\\athanor-agentic-kernel",
+      "id": "athanor-agentic-kernel"
     },
     {
       "type": "module",
-      "path": "system\\ermete-bus-api",
-      "id": "ermete-bus-api"
+      "path": "system\\athanor-bus-api",
+      "id": "athanor-bus-api"
     },
     {
       "type": "module",
-      "path": "system\\ermete-ebpf-sched",
-      "id": "ermete-ebpf-sched"
+      "path": "system\\athanor-ebpf-sched",
+      "id": "athanor-ebpf-sched"
     },
     {
       "type": "module",
-      "path": "system\\ermete-oobe",
-      "id": "ermete-oobe"
+      "path": "system\\athanor-oobe",
+      "id": "athanor-oobe"
     },
     {
       "type": "module",
-      "path": "system\\ermete-store",
-      "id": "ermete-store"
+      "path": "system\\athanor-store",
+      "id": "athanor-store"
     },
     {
       "type": "module",
-      "path": "system\\ermete-tetragon-injector",
-      "id": "ermete-tetragon-injector"
+      "path": "system\\athanor-tetragon-injector",
+      "id": "athanor-tetragon-injector"
     },
     {
       "type": "module",
-      "path": "system\\ermete-updater-rs",
-      "id": "ermete-updater-rs"
+      "path": "system\\athanor-updater-rs",
+      "id": "athanor-updater-rs"
     },
     {
       "type": "module",
@@ -17130,37 +17130,37 @@
     },
     {
       "type": "module",
-      "path": "system\\confidential_computing\\ermete-attestation",
-      "id": "ermete-attestation"
+      "path": "system\\confidential_computing\\athanor-attestation",
+      "id": "athanor-attestation"
     },
     {
       "type": "file",
-      "path": "system\\confidential_computing\\ermete-attestation\\src\\config.rs",
+      "path": "system\\confidential_computing\\athanor-attestation\\src\\config.rs",
       "id": "src/config.rs"
     },
     {
       "type": "file",
-      "path": "system\\confidential_computing\\ermete-attestation\\src\\cvm_manager.rs",
+      "path": "system\\confidential_computing\\athanor-attestation\\src\\cvm_manager.rs",
       "id": "src/cvm_manager.rs"
     },
     {
       "type": "file",
-      "path": "system\\confidential_computing\\ermete-attestation\\src\\key_release.rs",
+      "path": "system\\confidential_computing\\athanor-attestation\\src\\key_release.rs",
       "id": "src/key_release.rs"
     },
     {
       "type": "file",
-      "path": "system\\confidential_computing\\ermete-attestation\\src\\sev_snp.rs",
+      "path": "system\\confidential_computing\\athanor-attestation\\src\\sev_snp.rs",
       "id": "src/sev_snp.rs"
     },
     {
       "type": "file",
-      "path": "system\\confidential_computing\\ermete-attestation\\src\\tdx.rs",
+      "path": "system\\confidential_computing\\athanor-attestation\\src\\tdx.rs",
       "id": "src/tdx.rs"
     },
     {
       "type": "file",
-      "path": "system\\confidential_computing\\ermete-attestation\\src\\verifier.rs",
+      "path": "system\\confidential_computing\\athanor-attestation\\src\\verifier.rs",
       "id": "src/verifier.rs"
     },
     {
@@ -17180,437 +17180,437 @@
     },
     {
       "type": "module",
-      "path": "system\\ermete-agentic-kernel\\src\\bpf",
+      "path": "system\\athanor-agentic-kernel\\src\\bpf",
       "id": "bpf"
     },
     {
       "type": "file",
-      "path": "system\\ermete-agentic-kernel\\src\\auto_healer.rs",
+      "path": "system\\athanor-agentic-kernel\\src\\auto_healer.rs",
       "id": "src/auto_healer.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-agentic-kernel\\src\\ebpf_monitor.rs",
+      "path": "system\\athanor-agentic-kernel\\src\\ebpf_monitor.rs",
       "id": "src/ebpf_monitor.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-agentic-kernel\\src\\hot_patcher.rs",
+      "path": "system\\athanor-agentic-kernel\\src\\hot_patcher.rs",
       "id": "src/hot_patcher.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-audio-bus\\src\\node_tree.rs",
+      "path": "system\\athanor-audio-bus\\src\\node_tree.rs",
       "id": "src/node_tree.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-audio-bus\\src\\pipewire_manager.rs",
+      "path": "system\\athanor-audio-bus\\src\\pipewire_manager.rs",
       "id": "src/pipewire_manager.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-audio-bus\\src\\routing.rs",
+      "path": "system\\athanor-audio-bus\\src\\routing.rs",
       "id": "src/routing.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-bus-api\\src\\shm_ring.rs",
+      "path": "system\\athanor-bus-api\\src\\shm_ring.rs",
       "id": "src/shm_ring.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-bus-api\\src\\socket.rs",
+      "path": "system\\athanor-bus-api\\src\\socket.rs",
       "id": "src/socket.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-cluster-mesh\\src\\npu_scheduler.rs",
+      "path": "system\\athanor-cluster-mesh\\src\\npu_scheduler.rs",
       "id": "src/npu_scheduler.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-cluster-mesh\\src\\pqc_mesh_client.rs",
+      "path": "system\\athanor-cluster-mesh\\src\\pqc_mesh_client.rs",
       "id": "src/pqc_mesh_client.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-cluster-mesh\\src\\swarm_ipc.rs",
+      "path": "system\\athanor-cluster-mesh\\src\\swarm_ipc.rs",
       "id": "src/swarm_ipc.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-cluster-mesh\\src\\swarm_manager.rs",
+      "path": "system\\athanor-cluster-mesh\\src\\swarm_manager.rs",
       "id": "src/swarm_manager.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-cluster-mesh\\tests\\cluster_mesh_test.rs",
+      "path": "system\\athanor-cluster-mesh\\tests\\cluster_mesh_test.rs",
       "id": "tests/cluster_mesh_test.rs"
     },
     {
       "type": "module",
-      "path": "system\\ermete-compositor\\protocols",
+      "path": "system\\athanor-compositor\\protocols",
       "id": "protocols"
     },
     {
       "type": "module",
-      "path": "system\\ermete-compositor\\src\\animation",
+      "path": "system\\athanor-compositor\\src\\animation",
       "id": "animation"
     },
     {
       "type": "module",
-      "path": "system\\ermete-compositor\\src\\tiling",
+      "path": "system\\athanor-compositor\\src\\tiling",
       "id": "tiling"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\dbus_listener.rs",
+      "path": "system\\athanor-compositor\\src\\dbus_listener.rs",
       "id": "src/dbus_listener.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\desktop_state.rs",
+      "path": "system\\athanor-compositor\\src\\desktop_state.rs",
       "id": "src/desktop_state.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\input_routing.rs",
+      "path": "system\\athanor-compositor\\src\\input_routing.rs",
       "id": "src/input_routing.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\screencopy.rs",
+      "path": "system\\athanor-compositor\\src\\screencopy.rs",
       "id": "src/screencopy.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\state.rs",
+      "path": "system\\athanor-compositor\\src\\state.rs",
       "id": "src/state.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\animation\\magic_lamp.rs",
+      "path": "system\\athanor-compositor\\src\\animation\\magic_lamp.rs",
       "id": "animation/magic_lamp.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\animation\\manager.rs",
+      "path": "system\\athanor-compositor\\src\\animation\\manager.rs",
       "id": "animation/manager.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\animation\\mod.rs",
+      "path": "system\\athanor-compositor\\src\\animation\\mod.rs",
       "id": "animation/mod.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\animation\\solver.rs",
+      "path": "system\\athanor-compositor\\src\\animation\\solver.rs",
       "id": "animation/solver.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\animation\\spring.rs",
+      "path": "system\\athanor-compositor\\src\\animation\\spring.rs",
       "id": "animation/spring.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\animation\\wobbly.rs",
+      "path": "system\\athanor-compositor\\src\\animation\\wobbly.rs",
       "id": "animation/wobbly.rs"
     },
     {
       "type": "module",
-      "path": "system\\ermete-compositor\\src\\backend\\render",
+      "path": "system\\athanor-compositor\\src\\backend\\render",
       "id": "render"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\backend\\drm.rs",
+      "path": "system\\athanor-compositor\\src\\backend\\drm.rs",
       "id": "backend/drm.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\backend\\shm.rs",
+      "path": "system\\athanor-compositor\\src\\backend\\shm.rs",
       "id": "backend/shm.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\backend\\render\\kawase.rs",
+      "path": "system\\athanor-compositor\\src\\backend\\render\\kawase.rs",
       "id": "render/kawase.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\backend\\render\\mod.rs",
+      "path": "system\\athanor-compositor\\src\\backend\\render\\mod.rs",
       "id": "render/mod.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\backend\\render\\shaders.rs",
+      "path": "system\\athanor-compositor\\src\\backend\\render\\shaders.rs",
       "id": "render/shaders.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\ipc\\protocol.rs",
+      "path": "system\\athanor-compositor\\src\\ipc\\protocol.rs",
       "id": "ipc/protocol.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\ipc\\server.rs",
+      "path": "system\\athanor-compositor\\src\\ipc\\server.rs",
       "id": "ipc/server.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\tiling\\engine.rs",
+      "path": "system\\athanor-compositor\\src\\tiling\\engine.rs",
       "id": "tiling/engine.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\tiling\\mod.rs",
+      "path": "system\\athanor-compositor\\src\\tiling\\mod.rs",
       "id": "tiling/mod.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\tiling\\overview.rs",
+      "path": "system\\athanor-compositor\\src\\tiling\\overview.rs",
       "id": "tiling/overview.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-compositor\\src\\tiling\\snap_engine.rs",
+      "path": "system\\athanor-compositor\\src\\tiling\\snap_engine.rs",
       "id": "tiling/snap_engine.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-ebpf-sched\\build.rs",
-      "id": "ermete-ebpf-sched/build.rs"
+      "path": "system\\athanor-ebpf-sched\\build.rs",
+      "id": "athanor-ebpf-sched/build.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-ebpf-sched\\src\\ai_bridge.rs",
+      "path": "system\\athanor-ebpf-sched\\src\\ai_bridge.rs",
       "id": "src/ai_bridge.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-ebpf-sched\\src\\bpf_trace.rs",
+      "path": "system\\athanor-ebpf-sched\\src\\bpf_trace.rs",
       "id": "src/bpf_trace.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-ebpf-sched\\src\\cgroup_manager.rs",
+      "path": "system\\athanor-ebpf-sched\\src\\cgroup_manager.rs",
       "id": "src/cgroup_manager.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-ebpf-sched\\src\\dbus_interface.rs",
+      "path": "system\\athanor-ebpf-sched\\src\\dbus_interface.rs",
       "id": "src/dbus_interface.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-ebpf-sched\\src\\sched_ext.rs",
+      "path": "system\\athanor-ebpf-sched\\src\\sched_ext.rs",
       "id": "src/sched_ext.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-hypervisor-daemon\\src\\attestation.rs",
+      "path": "system\\athanor-hypervisor-daemon\\src\\attestation.rs",
       "id": "src/attestation.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-greeter\\src\\auth.rs",
+      "path": "system\\athanor-greeter\\src\\auth.rs",
       "id": "src/auth.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-greeter\\src\\tpm.rs",
+      "path": "system\\athanor-greeter\\src\\tpm.rs",
       "id": "src/tpm.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-hypervisor-daemon\\src\\crosvm.rs",
+      "path": "system\\athanor-hypervisor-daemon\\src\\crosvm.rs",
       "id": "src/crosvm.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-hypervisor-daemon\\src\\enclave.rs",
+      "path": "system\\athanor-hypervisor-daemon\\src\\enclave.rs",
       "id": "src/enclave.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-hypervisor-daemon\\src\\kvm.rs",
+      "path": "system\\athanor-hypervisor-daemon\\src\\kvm.rs",
       "id": "src/kvm.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-hypervisor-daemon\\src\\sandbox.rs",
+      "path": "system\\athanor-hypervisor-daemon\\src\\sandbox.rs",
       "id": "src/sandbox.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-init-oracle\\src\\systemd_manager.rs",
+      "path": "system\\athanor-init-oracle\\src\\systemd_manager.rs",
       "id": "src/systemd_manager.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-kernel-forge\\src\\builder.rs",
+      "path": "system\\azoth-forge\\src\\builder.rs",
       "id": "src/builder.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-kernel-forge\\src\\fal_client.rs",
+      "path": "system\\azoth-forge\\src\\fal_client.rs",
       "id": "src/fal_client.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-kernel-forge\\src\\hardware.rs",
+      "path": "system\\azoth-forge\\src\\hardware.rs",
       "id": "src/hardware.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-kernel-forge\\src\\hw_scanner.rs",
+      "path": "system\\azoth-forge\\src\\hw_scanner.rs",
       "id": "src/hw_scanner.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-kernel-forge\\src\\ostree_hook.rs",
+      "path": "system\\azoth-forge\\src\\ostree_hook.rs",
       "id": "src/ostree_hook.rs"
     },
     {
       "type": "module",
-      "path": "system\\ermete-mesh-bus\\src\\network",
+      "path": "system\\athanor-mesh-bus\\src\\network",
       "id": "network"
     },
     {
       "type": "module",
-      "path": "system\\ermete-mesh-bus\\src\\protocol",
+      "path": "system\\athanor-mesh-bus\\src\\protocol",
       "id": "protocol"
     },
     {
       "type": "module",
-      "path": "system\\ermete-mesh-bus\\src\\sync",
+      "path": "system\\athanor-mesh-bus\\src\\sync",
       "id": "sync"
     },
     {
       "type": "file",
-      "path": "system\\ermete-mesh-bus\\src\\peer.rs",
+      "path": "system\\athanor-mesh-bus\\src\\peer.rs",
       "id": "src/peer.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-mesh-bus\\src\\tunnel.rs",
+      "path": "system\\athanor-mesh-bus\\src\\tunnel.rs",
       "id": "src/tunnel.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-mesh-bus\\src\\network\\af_xdp.rs",
+      "path": "system\\athanor-mesh-bus\\src\\network\\af_xdp.rs",
       "id": "network/af_xdp.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-mesh-bus\\src\\network\\mod.rs",
+      "path": "system\\athanor-mesh-bus\\src\\network\\mod.rs",
       "id": "network/mod.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-mesh-bus\\src\\protocol\\mod.rs",
+      "path": "system\\athanor-mesh-bus\\src\\protocol\\mod.rs",
       "id": "protocol/mod.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-mesh-bus\\src\\protocol\\zero_copy.rs",
+      "path": "system\\athanor-mesh-bus\\src\\protocol\\zero_copy.rs",
       "id": "protocol/zero_copy.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-mesh-bus\\src\\sync\\crdt_broadcaster.rs",
+      "path": "system\\athanor-mesh-bus\\src\\sync\\crdt_broadcaster.rs",
       "id": "sync/crdt_broadcaster.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-mesh-bus\\src\\sync\\crdt_delta.rs",
+      "path": "system\\athanor-mesh-bus\\src\\sync\\crdt_delta.rs",
       "id": "sync/crdt_delta.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-mesh-bus\\src\\sync\\mod.rs",
+      "path": "system\\athanor-mesh-bus\\src\\sync\\mod.rs",
       "id": "sync/mod.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-mesh-bus\\src\\sync\\storage_bridge.rs",
+      "path": "system\\athanor-mesh-bus\\src\\sync\\storage_bridge.rs",
       "id": "sync/storage_bridge.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-net-unikernel\\src\\device.rs",
+      "path": "system\\athanor-net-unikernel\\src\\device.rs",
       "id": "src/device.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-net-unikernel\\src\\metrics.rs",
+      "path": "system\\athanor-net-unikernel\\src\\metrics.rs",
       "id": "src/metrics.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-net-unikernel\\src\\router.rs",
+      "path": "system\\athanor-net-unikernel\\src\\router.rs",
       "id": "src/router.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-net-unikernel\\src\\stack.rs",
+      "path": "system\\athanor-net-unikernel\\src\\stack.rs",
       "id": "src/stack.rs"
     },
     {
       "type": "module",
-      "path": "system\\ermete-store\\src\\crdt",
+      "path": "system\\athanor-store\\src\\crdt",
       "id": "crdt"
     },
     {
       "type": "module",
-      "path": "system\\ermete-store\\src\\storage",
+      "path": "system\\athanor-store\\src\\storage",
       "id": "storage"
     },
     {
       "type": "file",
-      "path": "system\\ermete-store\\src\\crdt\\mod.rs",
+      "path": "system\\athanor-store\\src\\crdt\\mod.rs",
       "id": "crdt/mod.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-store\\src\\crdt\\types.rs",
+      "path": "system\\athanor-store\\src\\crdt\\types.rs",
       "id": "crdt/types.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-store\\src\\storage\\db_engine.rs",
+      "path": "system\\athanor-store\\src\\storage\\db_engine.rs",
       "id": "storage/db_engine.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-store\\src\\storage\\io_uring_engine.rs",
+      "path": "system\\athanor-store\\src\\storage\\io_uring_engine.rs",
       "id": "storage/io_uring_engine.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-store\\src\\storage\\mod.rs",
+      "path": "system\\athanor-store\\src\\storage\\mod.rs",
       "id": "storage/mod.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-style\\src\\glass.rs",
+      "path": "system\\athanor-style\\src\\glass.rs",
       "id": "src/glass.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-telemetry\\src\\aggregator.rs",
+      "path": "system\\athanor-telemetry\\src\\aggregator.rs",
       "id": "src/aggregator.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-telemetry\\src\\collector.rs",
+      "path": "system\\athanor-telemetry\\src\\collector.rs",
       "id": "src/collector.rs"
     },
     {
       "type": "file",
-      "path": "system\\ermete-telemetry\\src\\oracle_bridge.rs",
+      "path": "system\\athanor-telemetry\\src\\oracle_bridge.rs",
       "id": "src/oracle_bridge.rs"
     },
     {
@@ -17710,8 +17710,8 @@
     },
     {
       "type": "file",
-      "path": "system\\scripts\\ermete-theme-generator.sh",
-      "id": "scripts/ermete-theme-generator.sh"
+      "path": "system\\scripts\\athanor-theme-generator.sh",
+      "id": "scripts/athanor-theme-generator.sh"
     },
     {
       "type": "file",
@@ -17722,33 +17722,33 @@
   "edges": [
     {
       "relation": "contains",
-      "source": "ermete-os",
+      "source": "athanor",
       "target": "docs"
     },
     {
       "relation": "contains",
-      "source": "ermete-os",
+      "source": "athanor",
       "target": "forge"
     },
     {
       "relation": "contains",
-      "source": "ermete-os",
+      "source": "athanor",
       "target": "supply-chain"
     },
     {
       "relation": "contains",
-      "source": "ermete-os",
+      "source": "athanor",
       "target": "system"
     },
     {
       "relation": "implements",
-      "source": "ermete-os",
-      "target": "ermete-os/Justfile"
+      "source": "athanor",
+      "target": "athanor/Justfile"
     },
     {
       "relation": "implements",
-      "source": "ermete-os",
-      "target": "ermete-os/README.md"
+      "source": "athanor",
+      "target": "athanor/README.md"
     },
     {
       "relation": "contains",
@@ -21683,87 +21683,87 @@
     {
       "relation": "implements",
       "source": "forge",
-      "target": "forge/ermete-livepatch-injector.sh script.md"
+      "target": "forge/athanor-livepatch-injector.sh script.md"
     },
     {
       "relation": "implements",
       "source": "forge",
-      "target": "forge/ermete-livepatch-injector.sh.md"
+      "target": "forge/athanor-livepatch-injector.sh.md"
     },
     {
       "relation": "implements",
       "source": "forge",
-      "target": "forge/ermete-secure-boot-measure.sh script.md"
+      "target": "forge/athanor-secure-boot-measure.sh script.md"
     },
     {
       "relation": "implements",
       "source": "forge",
-      "target": "forge/ermete-secure-boot-measure.sh.md"
+      "target": "forge/athanor-secure-boot-measure.sh.md"
     },
     {
       "relation": "implements",
       "source": "forge",
-      "target": "forge/ermete-snapshot-trigger.sh script.md"
+      "target": "forge/athanor-snapshot-trigger.sh script.md"
     },
     {
       "relation": "implements",
       "source": "forge",
-      "target": "forge/ermete-snapshot-trigger.sh.md"
+      "target": "forge/athanor-snapshot-trigger.sh.md"
     },
     {
       "relation": "implements",
       "source": "forge",
-      "target": "forge/ermete-theme-generator.sh script.md"
+      "target": "forge/athanor-theme-generator.sh script.md"
     },
     {
       "relation": "implements",
       "source": "forge",
-      "target": "forge/ermete-theme-generator.sh.md"
+      "target": "forge/athanor-theme-generator.sh.md"
     },
     {
       "relation": "implements",
       "source": "forge",
-      "target": "forge/ermete-tpm-luks-seal.sh script.md"
+      "target": "forge/athanor-tpm-luks-seal.sh script.md"
     },
     {
       "relation": "implements",
       "source": "forge",
-      "target": "forge/ermete-tpm-luks-seal.sh.md"
+      "target": "forge/athanor-tpm-luks-seal.sh.md"
     },
     {
       "relation": "implements",
       "source": "forge",
-      "target": "forge/ermete-tpm-rollback-check.sh script.md"
+      "target": "forge/athanor-tpm-rollback-check.sh script.md"
     },
     {
       "relation": "implements",
       "source": "forge",
-      "target": "forge/ermete-tpm-rollback-check.sh.md"
+      "target": "forge/athanor-tpm-rollback-check.sh.md"
     },
     {
       "relation": "implements",
       "source": "forge",
-      "target": "forge/ermete-tpm-rollback-update.sh script.md"
+      "target": "forge/athanor-tpm-rollback-update.sh script.md"
     },
     {
       "relation": "implements",
       "source": "forge",
-      "target": "forge/ermete-tpm-rollback-update.sh.md"
+      "target": "forge/athanor-tpm-rollback-update.sh.md"
     },
     {
       "relation": "implements",
       "source": "forge",
-      "target": "forge/ErmeteGreeter.md"
+      "target": "forge/AthanorGreeter.md"
     },
     {
       "relation": "implements",
       "source": "forge",
-      "target": "forge/ErmetePortal.md"
+      "target": "forge/AthanorPortal.md"
     },
     {
       "relation": "implements",
       "source": "forge",
-      "target": "forge/ermete_free_c_string().md"
+      "target": "forge/athanor_free_c_string().md"
     },
     {
       "relation": "implements",
@@ -32718,92 +32718,92 @@
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-agentic-kernel"
+      "target": "athanor-agentic-kernel"
     },
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-audio-bus"
+      "target": "athanor-audio-bus"
     },
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-bus-api"
+      "target": "athanor-bus-api"
     },
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-cluster-mesh"
+      "target": "athanor-cluster-mesh"
     },
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-compositor"
+      "target": "athanor-compositor"
     },
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-ebpf-sched"
+      "target": "athanor-ebpf-sched"
     },
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-greeter"
+      "target": "athanor-greeter"
     },
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-hypervisor-daemon"
+      "target": "athanor-hypervisor-daemon"
     },
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-init-oracle"
+      "target": "athanor-init-oracle"
     },
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-kernel-forge"
+      "target": "azoth-forge"
     },
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-mesh-bus"
+      "target": "athanor-mesh-bus"
     },
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-net-unikernel"
+      "target": "athanor-net-unikernel"
     },
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-oobe"
+      "target": "athanor-oobe"
     },
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-store"
+      "target": "athanor-store"
     },
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-style"
+      "target": "athanor-style"
     },
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-telemetry"
+      "target": "athanor-telemetry"
     },
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-tetragon-injector"
+      "target": "athanor-tetragon-injector"
     },
     {
       "relation": "contains",
       "source": "system",
-      "target": "ermete-updater-rs"
+      "target": "athanor-updater-rs"
     },
     {
       "relation": "contains",
@@ -32918,7 +32918,7 @@
     {
       "relation": "contains",
       "source": "tests",
-      "target": "ermete-cluster-mesh"
+      "target": "athanor-cluster-mesh"
     },
     {
       "relation": "implements",
@@ -32933,7 +32933,7 @@
     {
       "relation": "contains",
       "source": "assets",
-      "target": "ermete-daemon-rs-0.2.1"
+      "target": "athanor-daemon-rs-0.2.1"
     },
     {
       "relation": "contains",
@@ -33068,7 +33068,7 @@
     {
       "relation": "implements",
       "source": "scripts",
-      "target": "scripts/ermete-theme-generator.sh"
+      "target": "scripts/athanor-theme-generator.sh"
     },
     {
       "relation": "implements",
@@ -33083,7 +33083,7 @@
     {
       "relation": "implements",
       "source": "specs",
-      "target": "specs/2026-07-22-ermete-ui-overhaul-design.md"
+      "target": "specs/2026-07-22-athanor-ui-overhaul-design.md"
     },
     {
       "relation": "contains",
@@ -33093,307 +33093,307 @@
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-ai-daemon"
+      "target": "athanor-ai-daemon"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-ananicy"
+      "target": "athanor-ananicy"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-antigravity"
+      "target": "athanor-antigravity"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-astro-toolchain"
+      "target": "athanor-astro-toolchain"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-audio-bus"
+      "target": "athanor-audio-bus"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-backup"
+      "target": "athanor-backup"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-base-config"
+      "target": "athanor-base-config"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-bat"
+      "target": "athanor-bat"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-bibata"
+      "target": "athanor-bibata"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-bpf-linker"
+      "target": "athanor-bpf-linker"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-cargo-tools"
+      "target": "athanor-cargo-tools"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-cliphist"
+      "target": "athanor-cliphist"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-cloud-rs"
+      "target": "athanor-cloud-rs"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-cluster-mesh"
+      "target": "athanor-cluster-mesh"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-compositor"
+      "target": "athanor-compositor"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-cosign"
+      "target": "athanor-cosign"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-daemon-rs"
+      "target": "athanor-daemon-rs"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-dart-sass"
+      "target": "athanor-dart-sass"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-desktop-ui"
+      "target": "athanor-desktop-ui"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-dock"
+      "target": "athanor-dock"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-doctor"
+      "target": "athanor-doctor"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-gatekeeper-rs"
+      "target": "athanor-gatekeeper-rs"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-greeter"
+      "target": "athanor-greeter"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-hypervisor-daemon"
+      "target": "athanor-hypervisor-daemon"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-ide-bootstrap"
+      "target": "athanor-ide-bootstrap"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-init-oracle"
+      "target": "athanor-init-oracle"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-kernel"
+      "target": "azoth"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-kernel-forge"
+      "target": "azoth-forge"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-keylime"
+      "target": "athanor-keylime"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-livepatch"
+      "target": "athanor-livepatch"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-lvfs-rs"
+      "target": "athanor-lvfs-rs"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-matugen"
+      "target": "athanor-matugen"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-mdm-rs"
+      "target": "athanor-mdm-rs"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-mesh-bus"
+      "target": "athanor-mesh-bus"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-mesh-sync"
+      "target": "athanor-mesh-sync"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-net-unikernel"
+      "target": "athanor-net-unikernel"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-niri"
+      "target": "athanor-niri"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-niri-ipc"
+      "target": "athanor-niri-ipc"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-nix-support"
+      "target": "athanor-nix-support"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-qa"
+      "target": "athanor-qa"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-recovery"
+      "target": "athanor-recovery"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-rosenpass"
+      "target": "athanor-rosenpass"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-rust-toolchain"
+      "target": "athanor-rust-toolchain"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-scudo"
+      "target": "athanor-scudo"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-secure-boot"
+      "target": "athanor-secure-boot"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-selinux"
+      "target": "athanor-selinux"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-semantic-db"
+      "target": "athanor-semantic-db"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-settings-rs"
+      "target": "athanor-settings-rs"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-shell-rs"
+      "target": "athanor-shell-rs"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-starship"
+      "target": "athanor-starship"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-store-rs"
+      "target": "athanor-store-rs"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-style"
+      "target": "athanor-style"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-syft"
+      "target": "athanor-syft"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-sysmon-ebpf"
+      "target": "athanor-sysmon-ebpf"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-system-config"
+      "target": "athanor-system-config"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-system-services"
+      "target": "athanor-system-services"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-system-tweaks"
+      "target": "athanor-system-tweaks"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-telemetry"
+      "target": "athanor-telemetry"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-tetragon"
+      "target": "athanor-tetragon"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-ui-agent"
+      "target": "athanor-ui-agent"
     },
     {
       "relation": "contains",
       "source": "specs",
-      "target": "ermete-xdg-desktop-portal-ermete"
+      "target": "athanor-xdg-desktop-portal-athanor"
     },
     {
       "relation": "contains",
@@ -33453,7 +33453,7 @@
     {
       "relation": "implements",
       "source": "plans",
-      "target": "plans/2026-07-22-ermete-ui-overhaul.md"
+      "target": "plans/2026-07-22-athanor-ui-overhaul.md"
     },
     {
       "relation": "implements",
@@ -33497,273 +33497,273 @@
     },
     {
       "relation": "contains",
-      "source": "ermete-ai-daemon",
-      "target": "ermete-ai-daemon-1.0.0"
+      "source": "athanor-ai-daemon",
+      "target": "athanor-ai-daemon-1.0.0"
     },
     {
       "relation": "contains",
-      "source": "ermete-audio-bus",
+      "source": "athanor-audio-bus",
       "target": "src"
     },
     {
       "relation": "contains",
-      "source": "ermete-backup",
-      "target": "ermete-backup-1.0.0"
+      "source": "athanor-backup",
+      "target": "athanor-backup-1.0.0"
     },
     {
       "relation": "contains",
-      "source": "ermete-base-config",
+      "source": "athanor-base-config",
       "target": "SOURCES"
     },
     {
       "relation": "contains",
-      "source": "ermete-bat",
+      "source": "athanor-bat",
       "target": "SOURCES"
     },
     {
       "relation": "contains",
-      "source": "ermete-cloud-rs",
-      "target": "ermete-cloud-rs-1.0.0"
+      "source": "athanor-cloud-rs",
+      "target": "athanor-cloud-rs-1.0.0"
     },
     {
       "relation": "contains",
-      "source": "ermete-cluster-mesh",
+      "source": "athanor-cluster-mesh",
       "target": "src"
     },
     {
       "relation": "contains",
-      "source": "ermete-compositor",
+      "source": "athanor-compositor",
       "target": "protocols"
     },
     {
       "relation": "contains",
-      "source": "ermete-compositor",
+      "source": "athanor-compositor",
       "target": "src"
     },
     {
       "relation": "contains",
-      "source": "ermete-daemon-rs",
-      "target": "ermete-daemon-rs-0.2.1"
+      "source": "athanor-daemon-rs",
+      "target": "athanor-daemon-rs-0.2.1"
     },
     {
       "relation": "contains",
-      "source": "ermete-daemon-rs",
+      "source": "athanor-daemon-rs",
       "target": "SOURCES"
     },
     {
       "relation": "contains",
-      "source": "ermete-desktop-ui",
+      "source": "athanor-desktop-ui",
       "target": "niri"
     },
     {
       "relation": "contains",
-      "source": "ermete-desktop-ui",
+      "source": "athanor-desktop-ui",
       "target": "SOURCES"
     },
     {
       "relation": "contains",
-      "source": "ermete-dock",
-      "target": "ermete-dock-1.0.0"
+      "source": "athanor-dock",
+      "target": "athanor-dock-1.0.0"
     },
     {
       "relation": "contains",
-      "source": "ermete-doctor",
-      "target": "ermete-doctor-1.0.0"
+      "source": "athanor-doctor",
+      "target": "athanor-doctor-1.0.0"
     },
     {
       "relation": "contains",
-      "source": "ermete-gatekeeper-rs",
-      "target": "ermete-gatekeeper-rs-1.0.0"
+      "source": "athanor-gatekeeper-rs",
+      "target": "athanor-gatekeeper-rs-1.0.0"
     },
     {
       "relation": "contains",
-      "source": "ermete-greeter",
+      "source": "athanor-greeter",
       "target": "src"
     },
     {
       "relation": "contains",
-      "source": "ermete-hypervisor-daemon",
+      "source": "athanor-hypervisor-daemon",
       "target": "src"
     },
     {
       "relation": "contains",
-      "source": "ermete-init-oracle",
+      "source": "athanor-init-oracle",
       "target": "src"
     },
     {
       "relation": "contains",
-      "source": "ermete-kernel",
+      "source": "azoth",
       "target": "cachyos-patches"
     },
     {
       "relation": "implements",
-      "source": "ermete-kernel",
-      "target": "ermete-kernel/build-local.sh"
+      "source": "azoth",
+      "target": "azoth/build-local.sh"
     },
     {
       "relation": "implements",
-      "source": "ermete-kernel",
-      "target": "ermete-kernel/prepare-chimera.sh"
+      "source": "azoth",
+      "target": "azoth/prepare-chimera.sh"
     },
     {
       "relation": "implements",
-      "source": "ermete-kernel",
-      "target": "ermete-kernel/README.md"
+      "source": "azoth",
+      "target": "azoth/README.md"
     },
     {
       "relation": "contains",
-      "source": "ermete-kernel-forge",
+      "source": "azoth-forge",
       "target": "src"
     },
     {
       "relation": "implements",
-      "source": "ermete-livepatch",
-      "target": "ermete-livepatch/ermete-livepatch-injector.sh"
+      "source": "athanor-livepatch",
+      "target": "athanor-livepatch/athanor-livepatch-injector.sh"
     },
     {
       "relation": "contains",
-      "source": "ermete-lvfs-rs",
-      "target": "ermete-lvfs-rs-1.0.0"
+      "source": "athanor-lvfs-rs",
+      "target": "athanor-lvfs-rs-1.0.0"
     },
     {
       "relation": "contains",
-      "source": "ermete-mdm-rs",
-      "target": "ermete-mdm-rs-1.0.0"
+      "source": "athanor-mdm-rs",
+      "target": "athanor-mdm-rs-1.0.0"
     },
     {
       "relation": "contains",
-      "source": "ermete-mesh-bus",
+      "source": "athanor-mesh-bus",
       "target": "src"
     },
     {
       "relation": "contains",
-      "source": "ermete-mesh-sync",
-      "target": "ermete-mesh-sync-1.0.0"
+      "source": "athanor-mesh-sync",
+      "target": "athanor-mesh-sync-1.0.0"
     },
     {
       "relation": "contains",
-      "source": "ermete-net-unikernel",
+      "source": "athanor-net-unikernel",
       "target": "src"
     },
     {
       "relation": "contains",
-      "source": "ermete-niri",
+      "source": "athanor-niri",
       "target": "SOURCES"
     },
     {
       "relation": "contains",
-      "source": "ermete-niri-ipc",
+      "source": "athanor-niri-ipc",
       "target": "src"
     },
     {
       "relation": "contains",
-      "source": "ermete-nix-support",
+      "source": "athanor-nix-support",
       "target": "SOURCES"
     },
     {
       "relation": "contains",
-      "source": "ermete-qa",
+      "source": "athanor-qa",
       "target": "SOURCES"
     },
     {
       "relation": "contains",
-      "source": "ermete-recovery",
-      "target": "ermete-recovery-1.0.0"
+      "source": "athanor-recovery",
+      "target": "athanor-recovery-1.0.0"
     },
     {
       "relation": "contains",
-      "source": "ermete-secure-boot",
-      "target": "ermete-secure-boot-1.0.0"
+      "source": "athanor-secure-boot",
+      "target": "athanor-secure-boot-1.0.0"
     },
     {
       "relation": "contains",
-      "source": "ermete-secure-boot",
+      "source": "athanor-secure-boot",
       "target": "SOURCES"
     },
     {
       "relation": "contains",
-      "source": "ermete-selinux",
+      "source": "athanor-selinux",
       "target": "SOURCES"
     },
     {
       "relation": "contains",
-      "source": "ermete-settings-rs",
-      "target": "ermete-settings-rs-1.0.0"
+      "source": "athanor-settings-rs",
+      "target": "athanor-settings-rs-1.0.0"
     },
     {
       "relation": "contains",
-      "source": "ermete-settings-rs",
+      "source": "athanor-settings-rs",
       "target": "SOURCES"
     },
     {
       "relation": "contains",
-      "source": "ermete-shell-rs",
-      "target": "ermete-shell-rs-1.0.0"
+      "source": "athanor-shell-rs",
+      "target": "athanor-shell-rs-1.0.0"
     },
     {
       "relation": "contains",
-      "source": "ermete-shell-rs",
+      "source": "athanor-shell-rs",
       "target": "SOURCES"
     },
     {
       "relation": "contains",
-      "source": "ermete-starship",
+      "source": "athanor-starship",
       "target": "SOURCES"
     },
     {
       "relation": "contains",
-      "source": "ermete-store-rs",
-      "target": "ermete-store-rs-1.0.0"
+      "source": "athanor-store-rs",
+      "target": "athanor-store-rs-1.0.0"
     },
     {
       "relation": "contains",
-      "source": "ermete-style",
+      "source": "athanor-style",
       "target": "src"
     },
     {
       "relation": "contains",
-      "source": "ermete-sysmon-ebpf",
-      "target": "ermete-sysmon-ebpf-1.0.0"
+      "source": "athanor-sysmon-ebpf",
+      "target": "athanor-sysmon-ebpf-1.0.0"
     },
     {
       "relation": "contains",
-      "source": "ermete-system-config",
+      "source": "athanor-system-config",
       "target": "SOURCES"
     },
     {
       "relation": "contains",
-      "source": "ermete-system-config",
+      "source": "athanor-system-config",
       "target": "share"
     },
     {
       "relation": "contains",
-      "source": "ermete-system-services",
+      "source": "athanor-system-services",
       "target": "SOURCES"
     },
     {
       "relation": "contains",
-      "source": "ermete-system-tweaks",
+      "source": "athanor-system-tweaks",
       "target": "SOURCES"
     },
     {
       "relation": "contains",
-      "source": "ermete-telemetry",
+      "source": "athanor-telemetry",
       "target": "src"
     },
     {
       "relation": "contains",
-      "source": "ermete-tetragon",
+      "source": "athanor-tetragon",
       "target": "SOURCES"
     },
     {
       "relation": "contains",
-      "source": "ermete-ui-agent",
-      "target": "ermete-ui-agent-1.0.0"
+      "source": "athanor-ui-agent",
+      "target": "athanor-ui-agent-1.0.0"
     },
     {
       "relation": "contains",
-      "source": "ermete-xdg-desktop-portal-ermete",
-      "target": "xdg-desktop-portal-ermete-1.0.0"
+      "source": "athanor-xdg-desktop-portal-athanor",
+      "target": "xdg-desktop-portal-athanor-1.0.0"
     },
     {
       "relation": "contains",
@@ -33797,12 +33797,12 @@
     },
     {
       "relation": "contains",
-      "source": "ermete-ai-daemon-1.0.0",
+      "source": "athanor-ai-daemon-1.0.0",
       "target": "models"
     },
     {
       "relation": "contains",
-      "source": "ermete-ai-daemon-1.0.0",
+      "source": "athanor-ai-daemon-1.0.0",
       "target": "src"
     },
     {
@@ -33838,7 +33838,7 @@
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-backup-1.0.0"
+      "target": "athanor-backup-1.0.0"
     },
     {
       "relation": "implements",
@@ -33848,7 +33848,7 @@
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-cloud-rs-1.0.0"
+      "target": "athanor-cloud-rs-1.0.0"
     },
     {
       "relation": "implements",
@@ -33888,7 +33888,7 @@
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-daemon-rs-0.2.1"
+      "target": "athanor-daemon-rs-0.2.1"
     },
     {
       "relation": "implements",
@@ -33953,7 +33953,7 @@
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-dock-1.0.0"
+      "target": "athanor-dock-1.0.0"
     },
     {
       "relation": "implements",
@@ -34003,12 +34003,12 @@
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-doctor-1.0.0"
+      "target": "athanor-doctor-1.0.0"
     },
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-gatekeeper-rs-1.0.0"
+      "target": "athanor-gatekeeper-rs-1.0.0"
     },
     {
       "relation": "implements",
@@ -34038,7 +34038,7 @@
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-lvfs-rs-1.0.0"
+      "target": "athanor-lvfs-rs-1.0.0"
     },
     {
       "relation": "implements",
@@ -34048,7 +34048,7 @@
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-mdm-rs-1.0.0"
+      "target": "athanor-mdm-rs-1.0.0"
     },
     {
       "relation": "implements",
@@ -34058,7 +34058,7 @@
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-mesh-sync-1.0.0"
+      "target": "athanor-mesh-sync-1.0.0"
     },
     {
       "relation": "implements",
@@ -34073,17 +34073,17 @@
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-recovery-1.0.0"
+      "target": "athanor-recovery-1.0.0"
     },
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-secure-boot-1.0.0"
+      "target": "athanor-secure-boot-1.0.0"
     },
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-settings-rs-1.0.0"
+      "target": "athanor-settings-rs-1.0.0"
     },
     {
       "relation": "contains",
@@ -34108,7 +34108,7 @@
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-shell-rs-1.0.0"
+      "target": "athanor-shell-rs-1.0.0"
     },
     {
       "relation": "contains",
@@ -34168,7 +34168,7 @@
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-store-rs-1.0.0"
+      "target": "athanor-store-rs-1.0.0"
     },
     {
       "relation": "contains",
@@ -34178,17 +34178,17 @@
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-sysmon-ebpf-1.0.0"
+      "target": "athanor-sysmon-ebpf-1.0.0"
     },
     {
       "relation": "contains",
       "source": "src",
-      "target": "xdg-desktop-portal-ermete-1.0.0"
+      "target": "xdg-desktop-portal-athanor-1.0.0"
     },
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-attestation"
+      "target": "athanor-attestation"
     },
     {
       "relation": "implements",
@@ -34233,7 +34233,7 @@
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-agentic-kernel"
+      "target": "athanor-agentic-kernel"
     },
     {
       "relation": "contains",
@@ -34273,7 +34273,7 @@
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-bus-api"
+      "target": "athanor-bus-api"
     },
     {
       "relation": "implements",
@@ -34343,7 +34343,7 @@
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-ebpf-sched"
+      "target": "athanor-ebpf-sched"
     },
     {
       "relation": "contains",
@@ -34488,12 +34488,12 @@
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-oobe"
+      "target": "athanor-oobe"
     },
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-store"
+      "target": "athanor-store"
     },
     {
       "relation": "contains",
@@ -34528,12 +34528,12 @@
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-tetragon-injector"
+      "target": "athanor-tetragon-injector"
     },
     {
       "relation": "contains",
       "source": "src",
-      "target": "ermete-updater-rs"
+      "target": "athanor-updater-rs"
     },
     {
       "relation": "contains",
@@ -34567,7 +34567,7 @@
     },
     {
       "relation": "contains",
-      "source": "ermete-backup-1.0.0",
+      "source": "athanor-backup-1.0.0",
       "target": "systemd"
     },
     {
@@ -34603,7 +34603,7 @@
     {
       "relation": "contains",
       "source": "systemd",
-      "target": "ermete-recovery-1.0.0"
+      "target": "athanor-recovery-1.0.0"
     },
     {
       "relation": "contains",
@@ -35483,32 +35483,32 @@
     {
       "relation": "contains",
       "source": "libexec",
-      "target": "ermete"
+      "target": "athanor"
     },
     {
       "relation": "implements",
       "source": "libexec",
-      "target": "libexec/ermete-secure-boot-measure.sh"
+      "target": "libexec/athanor-secure-boot-measure.sh"
     },
     {
       "relation": "implements",
       "source": "libexec",
-      "target": "libexec/ermete-tpm-luks-seal.sh"
+      "target": "libexec/athanor-tpm-luks-seal.sh"
     },
     {
       "relation": "implements",
       "source": "libexec",
-      "target": "libexec/ermete-snapshot-trigger.sh"
+      "target": "libexec/athanor-snapshot-trigger.sh"
     },
     {
       "relation": "implements",
-      "source": "ermete",
-      "target": "ermete/ermete-tpm-rollback-check.sh"
+      "source": "athanor",
+      "target": "athanor/athanor-tpm-rollback-check.sh"
     },
     {
       "relation": "implements",
-      "source": "ermete",
-      "target": "ermete/ermete-tpm-rollback-update.sh"
+      "source": "athanor",
+      "target": "athanor/athanor-tpm-rollback-update.sh"
     },
     {
       "relation": "implements",
@@ -36082,18 +36082,18 @@
     },
     {
       "relation": "implements",
-      "source": "ermete-ui-agent-1.0.0",
-      "target": "ermete-ui-agent-1.0.0/README.md"
+      "source": "athanor-ui-agent-1.0.0",
+      "target": "athanor-ui-agent-1.0.0/README.md"
     },
     {
       "relation": "implements",
-      "source": "ermete-ui-agent-1.0.0",
-      "target": "ermete-ui-agent-1.0.0/SYSTEM_PROMPT.md"
+      "source": "athanor-ui-agent-1.0.0",
+      "target": "athanor-ui-agent-1.0.0/SYSTEM_PROMPT.md"
     },
     {
       "relation": "contains",
       "source": "confidential_computing",
-      "target": "ermete-attestation"
+      "target": "athanor-attestation"
     },
     {
       "relation": "contains",
@@ -36108,12 +36108,12 @@
     {
       "relation": "contains",
       "source": "ebpf",
-      "target": "ermete-ebpf-sched"
+      "target": "athanor-ebpf-sched"
     },
     {
       "relation": "implements",
-      "source": "ermete-ebpf-sched",
-      "target": "ermete-ebpf-sched/build.rs"
+      "source": "athanor-ebpf-sched",
+      "target": "athanor-ebpf-sched/build.rs"
     },
     {
       "relation": "contains",

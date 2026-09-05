@@ -1,7 +1,7 @@
 Name:           openssl-native
 Version:        3.4.1
 Release:        1%{?dist}
-Summary:        Assimilated OpenSSL Cryptographic Toolkit built natively from source for Ermete OS
+Summary:        Assimilated OpenSSL Cryptographic Toolkit built natively from source for Athanor OS
 License:        Apache-2.0
 URL:            https://www.openssl.org/
 
@@ -19,7 +19,7 @@ BuildRequires:  perl
 BuildRequires:  zlib-devel
 
 %description
-OpenSSL Toolkit compiled natively from source with aggressive x86_64-v3 optimization for Ermete OS.
+OpenSSL Toolkit compiled natively from source with aggressive x86_64-v3 optimization for Athanor OS.
 
 %prep
 # Stub prep
@@ -45,5 +45,5 @@ mkdir -p %{buildroot}$(dirname /etc/pki/tls) && touch %{buildroot}/etc/pki/tls
 /etc/pki/tls
 
 %changelog
-* Sat Aug 08 2026 Ermete Forge <forge@ermete.os> - 3.4.1-1
-- Assimilated OpenSSL native source build for Ermete OS.
+* Sat Aug 08 2026 Athanor Forge <forge@athanor.os> - 3.4.1-1
+- Assimilated OpenSSL native source build for Athanor OS.

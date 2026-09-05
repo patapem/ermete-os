@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-TARGET_IMAGE="${1:-localhost/ermete-os-system}"
+TARGET_IMAGE="${1:-localhost/athanor-system}"
 TAG="${2:-latest}"
 TYPE="${3:-qcow2}"
 BIB_IMAGE="${BIB_IMAGE:-quay.io/centos-bootc/bootc-image-builder:latest}"

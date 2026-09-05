@@ -14,7 +14,7 @@ BuildRequires:  mold
 
 %description
 `just` is a handy way to save and run project-specific commands.
-Compiled natively in Ermete Forge with extreme x86-64-v3 optimizations.
+Compiled natively in Athanor Forge with extreme x86-64-v3 optimizations.
 
 %prep
 %autosetup -n %{name}-%{version}
@@ -38,6 +38,6 @@ install -Dm755 target/release/just %{buildroot}/usr/bin/just
 /usr/bin/just
 
 %changelog
-* Sat Aug 08 2026 Ermete Forge <forge@ermete.os> - 1.39.0-1
-- Native Rust source build integrated into Ermete Forge Tier0
+* Sat Aug 08 2026 Athanor Forge <forge@athanor.os> - 1.39.0-1
+- Native Rust source build integrated into Athanor Forge Tier0
 

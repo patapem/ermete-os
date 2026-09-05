@@ -1,6 +1,6 @@
 name: Kernel Build
 
-# Il kernel Ermete (forge/specs/ermete-kernel, docs/architecture/doc_kernel_build.md).
+# Il kernel Athanor (forge/specs/azoth, docs/architecture/doc_kernel_build.md).
 # build: sul runner self-hosted, `prep` (sorgenti, patch, gate del config) in pochi
 # minuti o `build` (RPM) in un'ora. boot: su runner GitHub con KVM, la boot matrix
 # (SeaBIOS e OVMF con Secure Boot, CPU Nehalem e host) con le asserzioni della spec.
@@ -28,7 +28,7 @@ on:
   push:
     branches: [main, iso-v0]
     paths:
-      - forge/specs/ermete-kernel/**
+      - forge/specs/azoth/**
       - .github/workflows/kernel-build.yml
       - .github/workflows/nvidia-build.yml
 
@@ -41,7 +41,7 @@ permissions:
 
 env:
   STAGE: ${{ inputs.stage || 'build' }}
-  IMAGE: ghcr.io/${{ github.repository_owner }}/ermete-os-kernel
+  IMAGE: ghcr.io/${{ github.repository_owner }}/azoth
 
 jobs:
   inputs:
@@ -61,10 +61,10 @@ jobs:
       - id: key
         run: |
           set -euo pipefail
-          # Lo stesso NVR che rpmbuild produce con `%buildid .ermete` (build.sh);
+          # Lo stesso NVR che rpmbuild produce con `%buildid .azoth` (build.sh);
           # publish verifica che coincidano.
-          nvr=$(bash forge/specs/ermete-kernel/nvr.sh)
-          python3 forge/specs/ermete-kernel/build-inputs.py > inputs.json
+          nvr=$(bash forge/specs/azoth/nvr.sh)
+          python3 forge/specs/azoth/build-inputs.py > inputs.json
           reuse=false
           if cosign verify-attestation --type custom \
                --certificate-identity-regexp "^${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/" \
@@ -93,17 +93,17 @@ jobs:
         # L'isolamento chroot di buildah e' quello che gli altri workflow gia' usano.
         env:
           BUILDAH_ISOLATION: chroot
-        run: podman build -t localhost/ermete-kernel-builder forge/specs/ermete-kernel/builder
+        run: podman build -t localhost/azoth-builder forge/specs/azoth/builder
 
       - name: Run build.sh
         run: |
           set -euo pipefail
-          mkdir -p "$HOME/.cache/ermete-kernel" out
+          mkdir -p "$HOME/.cache/azoth" out
           podman run --rm \
             -v "$GITHUB_WORKSPACE:/forge" \
-            -v "$HOME/.cache/ermete-kernel:/var/cache/ermete-kernel" \
-            -w /forge localhost/ermete-kernel-builder \
-            bash forge/specs/ermete-kernel/build.sh --stage "$STAGE" --out /forge/out
+            -v "$HOME/.cache/azoth:/var/cache/azoth" \
+            -w /forge localhost/azoth-builder \
+            bash forge/specs/azoth/build.sh --stage "$STAGE" --out /forge/out
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -165,7 +165,7 @@ jobs:
       - name: Build the boot-matrix image
         env:
           BUILDAH_ISOLATION: chroot
-        run: podman build -t localhost/ermete-kernel-boot forge/specs/ermete-kernel/boot
+        run: podman build -t localhost/azoth-boot forge/specs/azoth/boot
 
       - name: Run boot.sh
         # Quattro avvii: {SeaBIOS, OVMF+Secure Boot via shim} x {Nehalem, host}, ognuno
@@ -173,14 +173,14 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p boot-out
-          podman run --rm --device /dev/kvm -v "$GITHUB_WORKSPACE:/forge" -w /forge localhost/ermete-kernel-boot bash forge/specs/ermete-kernel/boot.sh --rpms /forge/out --out /forge/boot-out
+          podman run --rm --device /dev/kvm -v "$GITHUB_WORKSPACE:/forge" -w /forge localhost/azoth-boot bash forge/specs/azoth/boot.sh --rpms /forge/out --out /forge/boot-out
 
       - name: Run microvm/boot.sh
         # Il kernel guest (spec, sezione 9): il vmlinux del pacchetto avvia in Firecracker
         # con una rootfs di prova e chiude con `K6 RESULT ok` (asserzioni in microvm/init).
         run: |
           set -euo pipefail
-          podman run --rm --device /dev/kvm -v "$GITHUB_WORKSPACE:/forge" -w /forge localhost/ermete-kernel-boot bash forge/specs/ermete-kernel/microvm/boot.sh --rpms /forge/out --out /forge/boot-out/microvm
+          podman run --rm --device /dev/kvm -v "$GITHUB_WORKSPACE:/forge" -w /forge localhost/azoth-boot bash forge/specs/azoth/microvm/boot.sh --rpms /forge/out --out /forge/boot-out/microvm
 
       - name: Summary
         if: ${{ always() }}
@@ -278,7 +278,7 @@ jobs:
             ctr=$(buildah from scratch)
             buildah copy "$ctr" "out/${group}/" /
             buildah config \
-              --label org.opencontainers.image.title="ermete-os-kernel ${group}" \
+              --label org.opencontainers.image.title="azoth ${group}" \
               --label org.opencontainers.image.version="${nvr}" \
               --label org.opencontainers.image.revision="${GITHUB_SHA}" \
               --label org.opencontainers.image.source="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}" \
@@ -303,7 +303,7 @@ jobs:
           set -euo pipefail
           echo "${GH_TOKEN}" | cosign login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
           mkdir -p sbom
-          python3 forge/specs/ermete-kernel/build-inputs.py > pins.json
+          python3 forge/specs/azoth/build-inputs.py > pins.json
           for group in kernel devel debuginfo microvm; do
             image=$IMAGE
             [[ $group == kernel || $group == microvm ]] || image="${IMAGE}-${group}"
@@ -332,7 +332,7 @@ jobs:
         # Prima del gate: la verifica prova cio' che resta nel registro. Restano le release
         # (tutte per kernel e devel, due per il debuginfo) e cio' che e' raggiungibile da
         # esse: l'indice dei referrer `sha256-<hex>` e i bundle cosign che elenca.
-        run: bash forge/specs/ermete-kernel/retention.sh
+        run: bash forge/specs/azoth/retention.sh
 
       - name: Verify (gate K2)
         run: |

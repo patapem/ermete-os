@@ -1,11 +1,11 @@
 # =========================================================================
-# ERMETE FORGE - BEDROCK COMPILER MACROS
+# ATHANOR FORGE - BEDROCK COMPILER MACROS
 # Holy Grail Optimizations: Clear Linux + CachyOS + Gentoo LTO
 # =========================================================================
 
 %_topdir %{getenv:HOME}/rpmbuild
 
-# Disable debug subpackages globally for Ermete Forge builds
+# Disable debug subpackages globally for Athanor Forge builds
 %debug_package %{nil}
 
 # DIET PACKAGE AUDIT - RPM PAYLOAD & DOC EXCLUSION

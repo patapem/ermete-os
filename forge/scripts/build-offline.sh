@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# 🌋 Ermete OS - Local Offline Bootc Build Fallback Script
+# 🌋 Athanor OS - Local Offline Bootc Build Fallback Script
 # ==============================================================================
 # Used when GitHub Actions or Cloud CI is in an outage or network is offline.
 # Builds the bootc system container image locally with podman without touching
@@ -9,7 +9,7 @@
 
 set -euo pipefail
 
-IMAGE_NAME="${1:-localhost/ermete-os-system}"
+IMAGE_NAME="${1:-localhost/athanor-system}"
 IMAGE_TAG="${2:-offline}"
 FULL_IMAGE_REF="${IMAGE_NAME}:${IMAGE_TAG}"
 
@@ -17,7 +17,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SYSTEM_DIR="${SCRIPT_DIR}/../../system"
 
 echo "======================================================================"
-echo "🌋 Ermete OS — Local Offline Fallback Build"
+echo "🌋 Athanor OS — Local Offline Fallback Build"
 echo "======================================================================"
 echo "🎯 Target Local Image: ${FULL_IMAGE_REF}"
 echo "📁 Context Directory:  ${SYSTEM_DIR}"
@@ -27,7 +27,7 @@ echo "======================================================================"
 if [[ "${IMAGE_NAME}" == *"ghcr.io"* ]] && [[ "${IMAGE_TAG}" == "latest" ]]; then
     echo "⚠️  WARNING: Target image is set to production cloud ref '${FULL_IMAGE_REF}'."
     echo "   Using local isolation prefix 'localhost/' to protect primary cloud infrastructure."
-    IMAGE_NAME="localhost/ermete-os-system"
+    IMAGE_NAME="localhost/athanor-system"
     FULL_IMAGE_REF="${IMAGE_NAME}:${IMAGE_TAG}"
     echo "   Updated Target: ${FULL_IMAGE_REF}"
 fi
@@ -83,10 +83,10 @@ podman build \
     "${SECRET_ARGS[@]}" \
     --tag "${FULL_IMAGE_REF}" \
     --label "org.opencontainers.image.created=${BUILD_DATE}" \
-    --label "org.opencontainers.image.title=ermete-os-system-offline" \
-    --label "org.opencontainers.image.description=Ermete OS - Immutable Bootc System (Local Offline Fallback)" \
+    --label "org.opencontainers.image.title=athanor-system-offline" \
+    --label "org.opencontainers.image.description=Athanor OS - Immutable Bootc System (Local Offline Fallback)" \
     --label "containers.bootc=1" \
-    --label "ermete.build.type=offline-fallback" \
+    --label "athanor.build.type=offline-fallback" \
     "${BUILD_ARGS[@]}" \
     -f "${SYSTEM_DIR}/Containerfile" \
     .

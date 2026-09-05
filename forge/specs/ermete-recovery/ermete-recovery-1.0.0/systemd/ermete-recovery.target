@@ -1,5 +1,0 @@
-[Unit]
-Description=Ermete OS Emergency Recovery Mode Target
-Documentation=https://github.com/hr-mes/ermete-forge
-Requires=ermete-recovery.service
-AllowIsolate=yes

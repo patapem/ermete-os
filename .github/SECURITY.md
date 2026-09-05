@@ -1,6 +1,6 @@
 # Security Policy
 
-Ermete OS treats security as its highest priority. The system is designed around Zero-Trust enclaves and Post-Quantum Cryptography.
+Athanor OS treats security as its highest priority. The system is designed around Zero-Trust enclaves and Post-Quantum Cryptography.
 
 ## Supported Versions
 | Version | Supported          |
@@ -10,9 +10,9 @@ Ermete OS treats security as its highest priority. The system is designed around
 
 ## Reporting a Vulnerability
 
-If you discover a vulnerability in Ermete OS (e.g., in `ermete-ebpf-sched`, `ermete-mesh-bus`, or `ermete-hypervisor-daemon`), **DO NOT** open a public issue.
+If you discover a vulnerability in Athanor OS (e.g., in `athanor-ebpf-sched`, `athanor-mesh-bus`, or `athanor-hypervisor-daemon`), **DO NOT** open a public issue.
 
-Instead, please email **security@ermete-os.org** with a detailed description and steps to reproduce. Our Security Response Team (SRT) will acknowledge your report within 24 hours.
+Instead, please email **security@athanor.org** with a detailed description and steps to reproduce. Our Security Response Team (SRT) will acknowledge your report within 24 hours.
 
 ### Bug Bounty
 We offer bug bounties for verified remote code execution (RCE) or hypervisor escape vulnerabilities that bypass our KVM/SEV-SNP enclaves.

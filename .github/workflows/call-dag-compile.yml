@@ -75,11 +75,11 @@ jobs:
         run: |
           set -euo pipefail
           echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
-          img_name="ermete-os-forge-${PKG_NAME}"
-          if [ ! -d "specs/ermete-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
-            img_name="ermete-os-forge-rolling-${PKG_NAME}"
+          img_name="athanor-forge-${PKG_NAME}"
+          if [ ! -d "specs/athanor-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
+            img_name="athanor-forge-rolling-${PKG_NAME}"
           fi
-          podman run -i --rm --security-opt label=disable --security-opt seccomp=unconfined --privileged --userns=keep-id -e GITHUB_TOKEN="${GITHUB_TOKEN}" -v ${{ github.workspace }}:/workspace -w /workspace/forge ghcr.io/hr-mes/ermete-os-builder:${{ inputs.builder_hash }} bash scripts/check_idempotency.sh --package "${PKG_NAME}" --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} --image-name "$img_name" > idemp.out
+          podman run -i --rm --security-opt label=disable --security-opt seccomp=unconfined --privileged --userns=keep-id -e GITHUB_TOKEN="${GITHUB_TOKEN}" -v ${{ github.workspace }}:/workspace -w /workspace/forge ghcr.io/hr-mes/athanor-builder:${{ inputs.builder_hash }} bash scripts/check_idempotency.sh --package "${PKG_NAME}" --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} --image-name "$img_name" > idemp.out
           source ./idemp.out
           echo "hash=$CONTENT_HASH" >> $GITHUB_OUTPUT
           if [ "$CACHE_HIT" = "true" ]; then echo "skip=true" >> $GITHUB_OUTPUT; else echo "skip=false" >> $GITHUB_OUTPUT; fi
@@ -113,12 +113,12 @@ jobs:
           
           PKG_CLEAN=$(echo "$PKG_NAME" | tr -cd '[:alnum:]-')
           SPEC_DIR=""
-          if [ -d "specs/ermete-${PKG_CLEAN}" ]; then SPEC_DIR="specs/ermete-${PKG_CLEAN}"; elif [ -d "specs/${PKG_CLEAN}" ]; then SPEC_DIR="specs/${PKG_CLEAN}"; fi
+          if [ -d "specs/athanor-${PKG_CLEAN}" ]; then SPEC_DIR="specs/athanor-${PKG_CLEAN}"; elif [ -d "specs/${PKG_CLEAN}" ]; then SPEC_DIR="specs/${PKG_CLEAN}"; fi
           if [ -z "$SPEC_DIR" ]; then echo "DEBUG: PKG_NAME='$PKG_NAME' PKG_CLEAN='$PKG_CLEAN'"; ls -la specs/; fi
             if [ -n "$SPEC_DIR" ]; then
-              if [ "$PKG_NAME" = "ermete-telemetry" ] || [ "$PKG_NAME" = "telemetry" ]; then
+              if [ "$PKG_NAME" = "athanor-telemetry" ] || [ "$PKG_NAME" = "telemetry" ]; then
                 echo "🚀 [A/B TEST] Compiling $PKG_NAME via Nix Flake pure derivation!"
-                nix run nixpkgs#nix -- build .#ermete-telemetry-rpm
+                nix run nixpkgs#nix -- build .#athanor-telemetry-rpm
                 mkdir -p RPMS
                 cp result/RPMS/*.rpm RPMS/
               else
@@ -129,13 +129,13 @@ jobs:
               -v ${{ github.workspace }}:/workspace \
               -v ${{ github.workspace }}/.sccache:/root/.cache/sccache \
               -w /workspace/forge \
-              ghcr.io/hr-mes/ermete-os-builder:${{ inputs.builder_hash }} \
+              ghcr.io/hr-mes/athanor-builder:${{ inputs.builder_hash }} \
               bash <<'EOF'
               mkdir -p /tmp; chmod 1777 /tmp; mkdir -p ~; cp config/rpmmacros ~/.rpmmacros
               mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
               PKG_CLEAN=$(echo "$PKG_NAME" | tr -cd '[:alnum:]-')
               SPEC_DIR=""
-              if [ -d "specs/ermete-${PKG_CLEAN}" ]; then SPEC_DIR="specs/ermete-${PKG_CLEAN}"; elif [ -d "specs/${PKG_CLEAN}" ]; then SPEC_DIR="specs/${PKG_CLEAN}"; fi
+              if [ -d "specs/athanor-${PKG_CLEAN}" ]; then SPEC_DIR="specs/athanor-${PKG_CLEAN}"; elif [ -d "specs/${PKG_CLEAN}" ]; then SPEC_DIR="specs/${PKG_CLEAN}"; fi
             
               if [ -d "$SPEC_DIR/SOURCES" ]; then 
                 cp -a "$SPEC_DIR"/SOURCES/. ~/rpmbuild/SOURCES/
@@ -172,9 +172,9 @@ jobs:
           ctr=$(buildah from scratch)
           buildah copy $ctr RPMS/*.rpm /
           
-          img_prefix="ermete-os-forge"
-          if [ ! -d "specs/ermete-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
-            img_prefix="ermete-os-forge-rolling"
+          img_prefix="athanor-forge"
+          if [ ! -d "specs/athanor-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
+            img_prefix="athanor-forge-rolling"
           fi
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/${img_prefix}-${PKG_NAME}" | tr '[:upper:]' '[:lower:]')
           buildah config --label tier.content.sha256="${{ steps.check.outputs.hash }}" $ctr
@@ -190,9 +190,9 @@ jobs:
           PKG_NAME: ${{ matrix.package }}
         run: |
           set -euo pipefail
-          img_prefix="ermete-os-forge"
-          if [ ! -d "specs/ermete-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
-            img_prefix="ermete-os-forge-rolling"
+          img_prefix="athanor-forge"
+          if [ ! -d "specs/athanor-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
+            img_prefix="athanor-forge-rolling"
           fi
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/${img_prefix}-${PKG_NAME}:latest" | tr "[:upper:]" "[:lower:]")
           nix run nixpkgs#syft -- packages $IMAGE_LOWER -o spdx-json=sbom-${PKG_NAME}.spdx.json
@@ -205,9 +205,9 @@ jobs:
         run: |
           set -euo pipefail
           nix run nixpkgs#cosign -- login ${{ env.REGISTRY }} -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-          img_prefix="ermete-os-forge"
-          if [ ! -d "specs/ermete-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
-            img_prefix="ermete-os-forge-rolling"
+          img_prefix="athanor-forge"
+          if [ ! -d "specs/athanor-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
+            img_prefix="athanor-forge-rolling"
           fi
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/${img_prefix}-${PKG_NAME}:latest" | tr '[:upper:]' '[:lower:]')
           nix run nixpkgs#cosign -- sign --yes $IMAGE_LOWER
@@ -269,11 +269,11 @@ jobs:
         run: |
           set -euo pipefail
           echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
-          img_name="ermete-os-forge-${PKG_NAME}"
-          if [ ! -d "specs/ermete-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
-            img_name="ermete-os-forge-rolling-${PKG_NAME}"
+          img_name="athanor-forge-${PKG_NAME}"
+          if [ ! -d "specs/athanor-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
+            img_name="athanor-forge-rolling-${PKG_NAME}"
           fi
-          podman run -i --rm --security-opt label=disable --security-opt seccomp=unconfined --privileged --userns=keep-id -e GITHUB_TOKEN="${GITHUB_TOKEN}" -v ${{ github.workspace }}:/workspace -w /workspace/forge ghcr.io/hr-mes/ermete-os-builder:${{ inputs.builder_hash }} bash scripts/check_idempotency.sh --package "${PKG_NAME}" --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} --image-name "$img_name" > idemp.out
+          podman run -i --rm --security-opt label=disable --security-opt seccomp=unconfined --privileged --userns=keep-id -e GITHUB_TOKEN="${GITHUB_TOKEN}" -v ${{ github.workspace }}:/workspace -w /workspace/forge ghcr.io/hr-mes/athanor-builder:${{ inputs.builder_hash }} bash scripts/check_idempotency.sh --package "${PKG_NAME}" --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} --image-name "$img_name" > idemp.out
           source ./idemp.out
           echo "hash=$CONTENT_HASH" >> $GITHUB_OUTPUT
           if [ "$CACHE_HIT" = "true" ]; then echo "skip=true" >> $GITHUB_OUTPUT; else echo "skip=false" >> $GITHUB_OUTPUT; fi
@@ -307,12 +307,12 @@ jobs:
           
           PKG_CLEAN=$(echo "$PKG_NAME" | tr -cd '[:alnum:]-')
           SPEC_DIR=""
-          if [ -d "specs/ermete-${PKG_CLEAN}" ]; then SPEC_DIR="specs/ermete-${PKG_CLEAN}"; elif [ -d "specs/${PKG_CLEAN}" ]; then SPEC_DIR="specs/${PKG_CLEAN}"; fi
+          if [ -d "specs/athanor-${PKG_CLEAN}" ]; then SPEC_DIR="specs/athanor-${PKG_CLEAN}"; elif [ -d "specs/${PKG_CLEAN}" ]; then SPEC_DIR="specs/${PKG_CLEAN}"; fi
           if [ -z "$SPEC_DIR" ]; then echo "DEBUG: PKG_NAME='$PKG_NAME' PKG_CLEAN='$PKG_CLEAN'"; ls -la specs/; fi
             if [ -n "$SPEC_DIR" ]; then
-              if [ "$PKG_NAME" = "ermete-telemetry" ] || [ "$PKG_NAME" = "telemetry" ]; then
+              if [ "$PKG_NAME" = "athanor-telemetry" ] || [ "$PKG_NAME" = "telemetry" ]; then
                 echo "🚀 [A/B TEST] Compiling $PKG_NAME via Nix Flake pure derivation!"
-                nix run nixpkgs#nix -- build .#ermete-telemetry-rpm
+                nix run nixpkgs#nix -- build .#athanor-telemetry-rpm
                 mkdir -p RPMS
                 cp result/RPMS/*.rpm RPMS/
               else
@@ -323,13 +323,13 @@ jobs:
               -v ${{ github.workspace }}:/workspace \
               -v ${{ github.workspace }}/.sccache:/root/.cache/sccache \
               -w /workspace/forge \
-              ghcr.io/hr-mes/ermete-os-builder:${{ inputs.builder_hash }} \
+              ghcr.io/hr-mes/athanor-builder:${{ inputs.builder_hash }} \
               bash <<'EOF'
               mkdir -p /tmp; chmod 1777 /tmp; mkdir -p ~; cp config/rpmmacros ~/.rpmmacros
               mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
               PKG_CLEAN=$(echo "$PKG_NAME" | tr -cd '[:alnum:]-')
               SPEC_DIR=""
-              if [ -d "specs/ermete-${PKG_CLEAN}" ]; then SPEC_DIR="specs/ermete-${PKG_CLEAN}"; elif [ -d "specs/${PKG_CLEAN}" ]; then SPEC_DIR="specs/${PKG_CLEAN}"; fi
+              if [ -d "specs/athanor-${PKG_CLEAN}" ]; then SPEC_DIR="specs/athanor-${PKG_CLEAN}"; elif [ -d "specs/${PKG_CLEAN}" ]; then SPEC_DIR="specs/${PKG_CLEAN}"; fi
             
               if [ -d "$SPEC_DIR/SOURCES" ]; then 
                 cp -a "$SPEC_DIR"/SOURCES/. ~/rpmbuild/SOURCES/
@@ -366,9 +366,9 @@ jobs:
           ctr=$(buildah from scratch)
           buildah copy $ctr RPMS/*.rpm /
           
-          img_prefix="ermete-os-forge"
-          if [ ! -d "specs/ermete-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
-            img_prefix="ermete-os-forge-rolling"
+          img_prefix="athanor-forge"
+          if [ ! -d "specs/athanor-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
+            img_prefix="athanor-forge-rolling"
           fi
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/${img_prefix}-${PKG_NAME}" | tr '[:upper:]' '[:lower:]')
           buildah config --label tier.content.sha256="${{ steps.check.outputs.hash }}" $ctr
@@ -384,9 +384,9 @@ jobs:
           PKG_NAME: ${{ matrix.package }}
         run: |
           set -euo pipefail
-          img_prefix="ermete-os-forge"
-          if [ ! -d "specs/ermete-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
-            img_prefix="ermete-os-forge-rolling"
+          img_prefix="athanor-forge"
+          if [ ! -d "specs/athanor-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
+            img_prefix="athanor-forge-rolling"
           fi
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/${img_prefix}-${PKG_NAME}:latest" | tr "[:upper:]" "[:lower:]")
           nix run nixpkgs#syft -- packages $IMAGE_LOWER -o spdx-json=sbom-${PKG_NAME}.spdx.json
@@ -399,9 +399,9 @@ jobs:
         run: |
           set -euo pipefail
           nix run nixpkgs#cosign -- login ${{ env.REGISTRY }} -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-          img_prefix="ermete-os-forge"
-          if [ ! -d "specs/ermete-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
-            img_prefix="ermete-os-forge-rolling"
+          img_prefix="athanor-forge"
+          if [ ! -d "specs/athanor-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
+            img_prefix="athanor-forge-rolling"
           fi
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/${img_prefix}-${PKG_NAME}:latest" | tr '[:upper:]' '[:lower:]')
           nix run nixpkgs#cosign -- sign --yes $IMAGE_LOWER
@@ -463,9 +463,9 @@ jobs:
         run: |
           set -euo pipefail
           echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
-          img_name="ermete-os-forge-${PKG_NAME}"
-          if [ ! -d "specs/ermete-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then img_name="ermete-os-forge-rolling-${PKG_NAME}"; fi
-          podman run -i --rm --security-opt label=disable --security-opt seccomp=unconfined --privileged --userns=keep-id -e GITHUB_TOKEN="${GITHUB_TOKEN}" -v ${{ github.workspace }}:/workspace -w /workspace/forge ghcr.io/hr-mes/ermete-os-builder:${{ inputs.builder_hash }} bash scripts/check_idempotency.sh --package "${PKG_NAME}" --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} --image-name "$img_name" > idemp.out
+          img_name="athanor-forge-${PKG_NAME}"
+          if [ ! -d "specs/athanor-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then img_name="athanor-forge-rolling-${PKG_NAME}"; fi
+          podman run -i --rm --security-opt label=disable --security-opt seccomp=unconfined --privileged --userns=keep-id -e GITHUB_TOKEN="${GITHUB_TOKEN}" -v ${{ github.workspace }}:/workspace -w /workspace/forge ghcr.io/hr-mes/athanor-builder:${{ inputs.builder_hash }} bash scripts/check_idempotency.sh --package "${PKG_NAME}" --registry ${{ env.REGISTRY }} --owner ${{ github.repository_owner }} --image-name "$img_name" > idemp.out
           source ./idemp.out
           echo "hash=$CONTENT_HASH" >> $GITHUB_OUTPUT
           if [ "$CACHE_HIT" = "true" ]; then echo "skip=true" >> $GITHUB_OUTPUT; else echo "skip=false" >> $GITHUB_OUTPUT; fi
@@ -499,12 +499,12 @@ jobs:
           
           PKG_CLEAN=$(echo "$PKG_NAME" | tr -cd '[:alnum:]-')
           SPEC_DIR=""
-          if [ -d "specs/ermete-${PKG_CLEAN}" ]; then SPEC_DIR="specs/ermete-${PKG_CLEAN}"; elif [ -d "specs/${PKG_CLEAN}" ]; then SPEC_DIR="specs/${PKG_CLEAN}"; fi
+          if [ -d "specs/athanor-${PKG_CLEAN}" ]; then SPEC_DIR="specs/athanor-${PKG_CLEAN}"; elif [ -d "specs/${PKG_CLEAN}" ]; then SPEC_DIR="specs/${PKG_CLEAN}"; fi
           if [ -z "$SPEC_DIR" ]; then echo "DEBUG: PKG_NAME='$PKG_NAME' PKG_CLEAN='$PKG_CLEAN'"; ls -la specs/; fi
             if [ -n "$SPEC_DIR" ]; then
-              if [ "$PKG_NAME" = "ermete-telemetry" ] || [ "$PKG_NAME" = "telemetry" ]; then
+              if [ "$PKG_NAME" = "athanor-telemetry" ] || [ "$PKG_NAME" = "telemetry" ]; then
                 echo "🚀 [A/B TEST] Compiling $PKG_NAME via Nix Flake pure derivation!"
-                nix run nixpkgs#nix -- build .#ermete-telemetry-rpm
+                nix run nixpkgs#nix -- build .#athanor-telemetry-rpm
                 mkdir -p RPMS
                 cp result/RPMS/*.rpm RPMS/
               else
@@ -515,13 +515,13 @@ jobs:
               -v ${{ github.workspace }}:/workspace \
               -v ${{ github.workspace }}/.sccache:/root/.cache/sccache \
               -w /workspace/forge \
-              ghcr.io/hr-mes/ermete-os-builder:${{ inputs.builder_hash }} \
+              ghcr.io/hr-mes/athanor-builder:${{ inputs.builder_hash }} \
               bash <<'EOF'
               mkdir -p /tmp; chmod 1777 /tmp; mkdir -p ~; cp config/rpmmacros ~/.rpmmacros
               mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
               PKG_CLEAN=$(echo "$PKG_NAME" | tr -cd '[:alnum:]-')
               SPEC_DIR=""
-              if [ -d "specs/ermete-${PKG_CLEAN}" ]; then SPEC_DIR="specs/ermete-${PKG_CLEAN}"; elif [ -d "specs/${PKG_CLEAN}" ]; then SPEC_DIR="specs/${PKG_CLEAN}"; fi
+              if [ -d "specs/athanor-${PKG_CLEAN}" ]; then SPEC_DIR="specs/athanor-${PKG_CLEAN}"; elif [ -d "specs/${PKG_CLEAN}" ]; then SPEC_DIR="specs/${PKG_CLEAN}"; fi
             
               if [ -d "$SPEC_DIR/SOURCES" ]; then 
                 cp -a "$SPEC_DIR"/SOURCES/. ~/rpmbuild/SOURCES/
@@ -558,9 +558,9 @@ jobs:
           ctr=$(buildah from scratch)
           buildah copy $ctr RPMS/*.rpm /
           
-          img_prefix="ermete-os-forge"
-          if [ ! -d "specs/ermete-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
-            img_prefix="ermete-os-forge-rolling"
+          img_prefix="athanor-forge"
+          if [ ! -d "specs/athanor-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
+            img_prefix="athanor-forge-rolling"
           fi
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/${img_prefix}-${PKG_NAME}" | tr '[:upper:]' '[:lower:]')
           buildah config --label tier.content.sha256="${{ steps.check.outputs.hash }}" $ctr
@@ -576,9 +576,9 @@ jobs:
           PKG_NAME: ${{ matrix.package }}
         run: |
           set -euo pipefail
-          img_prefix="ermete-os-forge"
-          if [ ! -d "specs/ermete-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
-            img_prefix="ermete-os-forge-rolling"
+          img_prefix="athanor-forge"
+          if [ ! -d "specs/athanor-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
+            img_prefix="athanor-forge-rolling"
           fi
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/${img_prefix}-${PKG_NAME}:latest" | tr "[:upper:]" "[:lower:]")
           nix run nixpkgs#syft -- packages $IMAGE_LOWER -o spdx-json=sbom-${PKG_NAME}.spdx.json
@@ -591,9 +591,9 @@ jobs:
         run: |
           set -euo pipefail
           nix run nixpkgs#cosign -- login ${{ env.REGISTRY }} -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-          img_prefix="ermete-os-forge"
-          if [ ! -d "specs/ermete-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
-            img_prefix="ermete-os-forge-rolling"
+          img_prefix="athanor-forge"
+          if [ ! -d "specs/athanor-${PKG_NAME}" ] && [ ! -d "specs/${PKG_NAME}" ]; then
+            img_prefix="athanor-forge-rolling"
           fi
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/${img_prefix}-${PKG_NAME}:latest" | tr '[:upper:]' '[:lower:]')
           nix run nixpkgs#cosign -- sign --yes $IMAGE_LOWER

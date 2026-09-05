@@ -1,8 +1,8 @@
 ---
-name: ermete-composer
+name: athanor-composer
 description: Triggers Cursor-style multi-file architectural refactoring capabilities natively within Antigravity.
 ---
-# Ermete Composer (Multi-File Refactoring Engine)
+# Athanor Composer (Multi-File Refactoring Engine)
 
 When the user asks for a composer style edit, you MUST:
 1. Always use CodeGraph (codegraph explore) to map all usages of the symbol before touching it.

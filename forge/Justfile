@@ -1,5 +1,5 @@
 # ==============================================================================
-# 🌋 Ermete Forge - Task Runner (Justfile)
+# 🌋 Athanor Forge - Task Runner (Justfile)
 # Centralized command runner for build pipelines, kernel engineering, and CI/CD
 # ==============================================================================
 
@@ -16,7 +16,7 @@ build-rolling package:
 
 # Runs deterministic hermetic build using Bubblewrap sandbox without network (Nix Paradigm)
 [group('Package Build')]
-hermetic-build lockfile="ermete-build.lock":
+hermetic-build lockfile="athanor-build.lock":
     #!/usr/bin/env bash
     set -euo pipefail
     bash scripts/nix_hermetic_build.sh "{{ lockfile }}"
@@ -65,9 +65,9 @@ kernel-prepare mode="full":
     #!/usr/bin/env bash
     set -euo pipefail
     if [ "{{ mode }}" = "meta" ]; then
-        bash specs/ermete-kernel/prepare-chimera.sh --meta
+        bash specs/azoth/prepare-chimera.sh --meta
     else
-        bash specs/ermete-kernel/prepare-chimera.sh
+        bash specs/azoth/prepare-chimera.sh
     fi
 
 # Runs containerized local build of Chimera kernel with Clang/ThinLTO inside a privileged Fedora 43 OCI container
@@ -75,17 +75,17 @@ kernel-prepare mode="full":
 kernel-build-local:
     #!/usr/bin/env bash
     set -euo pipefail
-    bash specs/ermete-kernel/build-local.sh
+    bash specs/azoth/build-local.sh
 
 # Builds kpatch kernel livepatch module and packages it into an RPM
 [group('Kernel Build')]
 livepatch-build:
     #!/usr/bin/env bash
     set -euo pipefail
-    if [ -f specs/ermete-livepatch/ermete-livepatch.spec ]; then
-        rpmbuild -ba specs/ermete-livepatch/ermete-livepatch.spec
+    if [ -f specs/athanor-livepatch/athanor-livepatch.spec ]; then
+        rpmbuild -ba specs/athanor-livepatch/athanor-livepatch.spec
     else
-        echo "Error: specs/ermete-livepatch/ermete-livepatch.spec not found" >&2
+        echo "Error: specs/athanor-livepatch/athanor-livepatch.spec not found" >&2
         exit 1
     fi
 
@@ -94,7 +94,7 @@ livepatch-build:
 livepatch-inject:
     #!/usr/bin/env bash
     set -euo pipefail
-    bash specs/ermete-livepatch/ermete-livepatch-injector.sh
+    bash specs/athanor-livepatch/athanor-livepatch-injector.sh
 
 # Runs Rust Clippy policies, Cargo Vet cryptographic supply-chain audit, and Cargo Deny security check
 [group('QA & Validation')]
@@ -114,17 +114,17 @@ fuzz component="all" time="60":
 
 # Runs AWS Kani formal verification proof harnesses on Rust spec targets
 [group('QA & Validation')]
-verify component="ermete-gatekeeper-rs":
+verify component="athanor-gatekeeper-rs":
     #!/usr/bin/env bash
     set -euo pipefail
-    LD_LIBRARY_PATH=/usr/lib64:/lib64:${LD_LIBRARY_PATH:-} PATH=/home/ermete/.cargo/bin:$PATH cargo kani --package "{{ component }}"
+    LD_LIBRARY_PATH=/usr/lib64:/lib64:${LD_LIBRARY_PATH:-} PATH=/home/athanor/.cargo/bin:$PATH cargo kani --package "{{ component }}"
 
 # Validates NVIDIA kernel module loading (nvidia, uvm, drm, modeset) and GPU device nodes
 [group('QA & Validation')]
 test-nvidia-modules:
     #!/usr/bin/env bash
     set -euo pipefail
-    bash specs/ermete-qa/SOURCES/test-nvidia-modules.sh
+    bash specs/athanor-qa/SOURCES/test-nvidia-modules.sh
 
 # Runs shellcheck on all Bash scripts in forge/
 [group('Utility')]

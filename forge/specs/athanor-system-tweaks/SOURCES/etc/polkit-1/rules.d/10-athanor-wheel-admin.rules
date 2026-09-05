@@ -1,0 +1,15 @@
+/* Athanor OS Bedrock: Only allow wheel group to become admin */
+polkit.addAdminRule(function(action, subject) {
+    return ["unix-group:wheel"];
+});
+
+/* Lock down specific actions if needed */
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.udisks2.filesystem-mount" || action.id == "org.freedesktop.udisks2.eject-media") {
+        if (subject.isInGroup("wheel")) {
+            return polkit.Result.YES;
+        } else {
+            return polkit.Result.AUTH_ADMIN;
+        }
+    }
+});

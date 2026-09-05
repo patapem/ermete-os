@@ -1,7 +1,7 @@
 # Infinite Canvas 2D Workspace Paradigm
 
 ## Vision
-Ermete OS is evolving beyond the archaic concept of discrete, compartmentalized virtual desktops. Instead, we are adopting the **Infinite Canvas 2D Workspace Paradigm**, an unbounded, scrollable, and zoomable 2D plane.
+Athanor OS is evolving beyond the archaic concept of discrete, compartmentalized virtual desktops. Instead, we are adopting the **Infinite Canvas 2D Workspace Paradigm**, an unbounded, scrollable, and zoomable 2D plane.
 
 ## Core Concepts
 1. **Niri as the Foundation**: We leverage Niri's infinite scrolling layout, which already provides a seamless 1D (horizontal) strip of windows.

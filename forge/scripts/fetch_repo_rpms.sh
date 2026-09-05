@@ -35,32 +35,32 @@ readarray -t UPSTREAM_CLI < <(jq -r '.upstream_cli[] // empty' config/packages.j
 
 # Define per-Tier micro-container images dynamically
 TIER0_IMAGES=(
-  "ermete-os-kernel"
-  "ermete-os-forge-nvidia"
+  "azoth"
+  "athanor-forge-nvidia"
 )
 for pkg in "${CUSTOM_TIER0[@]}"; do
-  [[ -n "$pkg" ]] && TIER0_IMAGES+=("ermete-os-forge-$pkg")
+  [[ -n "$pkg" ]] && TIER0_IMAGES+=("athanor-forge-$pkg")
 done
 for pkg in "${UPSTREAM_CORE[@]}" "${UPSTREAM_MEDIA[@]}"; do
-  [[ -n "$pkg" ]] && TIER0_IMAGES+=("ermete-os-forge-rolling-$pkg")
+  [[ -n "$pkg" ]] && TIER0_IMAGES+=("athanor-forge-rolling-$pkg")
 done
 
 TIER1_IMAGES=()
 for pkg in "${CUSTOM_TIER1[@]}"; do
-  [[ -n "$pkg" ]] && TIER1_IMAGES+=("ermete-os-forge-$pkg")
+  [[ -n "$pkg" ]] && TIER1_IMAGES+=("athanor-forge-$pkg")
 done
 for pkg in "${UPSTREAM_DESKTOP[@]}" "${UPSTREAM_CLI[@]}"; do
-  [[ -n "$pkg" ]] && TIER1_IMAGES+=("ermete-os-forge-rolling-$pkg")
+  [[ -n "$pkg" ]] && TIER1_IMAGES+=("athanor-forge-rolling-$pkg")
 done
 
 TIER2_IMAGES=()
 for pkg in "${CUSTOM_TIER2[@]}"; do
-  [[ -n "$pkg" ]] && TIER2_IMAGES+=("ermete-os-forge-$pkg")
+  [[ -n "$pkg" ]] && TIER2_IMAGES+=("athanor-forge-$pkg")
 done
 
 TIER3_IMAGES=()
 for pkg in "${CUSTOM_TIER3[@]}"; do
-  [[ -n "$pkg" ]] && TIER3_IMAGES+=("ermete-os-forge-$pkg")
+  [[ -n "$pkg" ]] && TIER3_IMAGES+=("athanor-forge-$pkg")
 done
 
 declare -A OLD_DIGESTS
@@ -118,7 +118,7 @@ pull_and_extract() {
 
 echo "=== Restoring Aggregate Tier Repos (Caching) ==="
 for tier in tier0 tier1 tier2 tier3; do
-  img="ermete-os-forge-${tier}-repo:latest"
+  img="athanor-forge-${tier}-repo:latest"
   IMAGE_LOWER=$(echo "ghcr.io/$OWNER/$img" | tr '[:upper:]' '[:lower:]')
   echo "    Pulling previous $IMAGE_LOWER..."
   ctr=""
@@ -171,10 +171,10 @@ done
 echo "=== Post-Processing: Deduplicating RPMs (Keeping Latest) ==="
 # In case of leftover duplicates from parallel jobs, keep only the latest version of each RPM
 for tier in tier0 tier1 tier2 tier3; do
-  # First pass: if ermete-kernel exists anywhere in this tier, purge all old 'kernel' packages
+  # First pass: if azoth exists anywhere in this tier, purge all old 'kernel' packages
   for prefix in kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-modules-internal kernel-uki-virt kernel-uki-virt-addons kernel-devel kernel-devel-matched; do
-    if find repo-cache/repo-${tier}/ -type f -name "ermete-kernel-[0-9]*.rpm" | grep -q .; then
-      echo "    [DEDUPLICATION] Found ermete-kernel. Removing obsolete ${prefix}..."
+    if find repo-cache/repo-${tier}/ -type f -name "azoth-[0-9]*.rpm" | grep -q .; then
+      echo "    [DEDUPLICATION] Found azoth. Removing obsolete ${prefix}..."
       find repo-cache/repo-${tier}/ -type f -name "${prefix}-[0-9]*.rpm" -delete
     fi
   done

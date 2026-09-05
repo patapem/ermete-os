@@ -2,7 +2,7 @@
 { pkgs ? import <nixpkgs> {} }:
 
 pkgs.stdenv.mkDerivation {
-  pname = "ermete-just";
+  pname = "athanor-just";
   version = "1.34.0";
 
   src = pkgs.fetchFromGitHub {
@@ -24,8 +24,8 @@ pkgs.stdenv.mkDerivation {
   '';
 
   meta = with pkgs.lib; {
-    description = "Command runner nativo e sigillato crittograficamente per Ermete OS";
-    homepage = "https://github.com/hr-mes/ermete-os";
+    description = "Command runner nativo e sigillato crittograficamente per Athanor OS";
+    homepage = "https://github.com/hr-mes/athanor";
     license = licenses.mit;
   };
 }

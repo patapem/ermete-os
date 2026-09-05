@@ -44,7 +44,7 @@ jobs:
         run: |
           set -euo pipefail
           echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
-          podman run -i --rm  --security-opt label=disable --security-opt seccomp=unconfined --privileged -e GITHUB_TOKEN="${GITHUB_TOKEN}" -v ${{ github.workspace }}:/workspace -w /workspace/forge ghcr.io/hr-mes/ermete-os-builder:${{ vars.BUILDER_STABLE_TAG || 'latest' }} bash scripts/check_idempotency.sh --package builder --registry ghcr.io --owner ${{ github.repository_owner }} --image-name ermete-os-builder > idemp.out
+          podman run -i --rm  --security-opt label=disable --security-opt seccomp=unconfined --privileged -e GITHUB_TOKEN="${GITHUB_TOKEN}" -v ${{ github.workspace }}:/workspace -w /workspace/forge ghcr.io/hr-mes/athanor-builder:${{ vars.BUILDER_STABLE_TAG || 'latest' }} bash scripts/check_idempotency.sh --package builder --registry ghcr.io --owner ${{ github.repository_owner }} --image-name athanor-builder > idemp.out
           source ./idemp.out
           if [ "$CACHE_HIT" = "true" ]; then
             echo "cache_hit=true" >> $GITHUB_OUTPUT
@@ -62,8 +62,8 @@ jobs:
           podman load -i result
           
           echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
-          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/ermete-os-builder" | tr '[:upper:]' '[:lower:]')
-          podman tag ghcr.io/hr-mes/ermete-os-builder:${{ vars.BUILDER_STABLE_TAG || 'latest' }} $IMAGE_LOWER:latest || true
+          IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/athanor-builder" | tr '[:upper:]' '[:lower:]')
+          podman tag ghcr.io/hr-mes/athanor-builder:${{ vars.BUILDER_STABLE_TAG || 'latest' }} $IMAGE_LOWER:latest || true
           podman tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.check_idempotency.outputs.content_hash }}
           podman push $IMAGE_LOWER:latest
           podman push $IMAGE_LOWER:${{ steps.check_idempotency.outputs.content_hash }}

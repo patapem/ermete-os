@@ -1,5 +1,5 @@
 {
-  description = "Ermete OS - Singularity Level 5 (Nix Hermetic Build Factory)";
+  description = "Athanor OS - Singularity Level 5 (Nix Hermetic Build Factory)";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -63,7 +63,7 @@
           ];
           shellHook = ''
             echo "========================================================"
-            echo " ERMETE OS: Nix Hermetic Build Environment Activated "
+            echo " ATHANOR OS: Nix Hermetic Build Environment Activated "
             echo "========================================================"
           '';
         };
@@ -71,36 +71,36 @@
         packages = rec {
           just-hermetic = pkgs.just;
 
-          ermete-telemetry-rpm = pkgs.runCommand "ermete-telemetry-rpm" {
+          athanor-telemetry-rpm = pkgs.runCommand "athanor-telemetry-rpm" {
             nativeBuildInputs = [ pkgs.nfpm ];
             # Dipende matematicamente dalla compilazione Rust pura
-            src = ermete-core;
+            src = athanor-core;
           } ''
             mkdir -p $out/RPMS
             cat > nfpm.yaml <<EOF
-name: "ermete-telemetry"
+name: "athanor-telemetry"
 arch: "x86_64"
 platform: "linux"
 version: "1.0.0"
 section: "default"
 priority: "extra"
-maintainer: "Ermete OS"
-description: "Ermete Telemetry Daemon"
-vendor: "Ermete OS"
+maintainer: "Athanor OS"
+description: "Athanor Telemetry Daemon"
+vendor: "Athanor OS"
 license: "MIT"
 contents:
-  - src: "$src/bin/ermete-telemetry"
-    dst: "/usr/bin/ermete-telemetry"
+  - src: "$src/bin/athanor-telemetry"
+    dst: "/usr/bin/athanor-telemetry"
 EOF
             # Infallibilit�: Genera l'RPM senza root e senza dnf!
-            nfpm pkg --packager rpm --target $out/RPMS/ermete-telemetry.rpm
+            nfpm pkg --packager rpm --target $out/RPMS/athanor-telemetry.rpm
           '';
 
-          ermete-core = (pkgs.makeRustPlatform {
+          athanor-core = (pkgs.makeRustPlatform {
             cargo = rust-toolchain;
             rustc = rust-toolchain;
           }).buildRustPackage {
-            pname = "ermete-os-core";
+            pname = "athanor-core";
             version = "1.0.0";
             src = ./.;
             cargoLock = {
@@ -115,7 +115,7 @@ EOF
           # librerie di runtime di gcc di nixpkgs, come contenuto immutabile dell'immagine.
           # È una derivazione ordinaria, costruibile e ispezionabile da sola:
           #   nix build .#builder-fhs-compat
-          builder-fhs-compat = pkgs.runCommand "ermete-builder-fhs-compat" { } ''
+          builder-fhs-compat = pkgs.runCommand "athanor-builder-fhs-compat" { } ''
             mkdir -p $out/lib64 $out/lib/x86_64-linux-gnu $out/usr/lib $out/usr/lib64 $out/usr/lib/x86_64-linux-gnu
 
             for lib in ld-linux-x86-64.so.2 libc.so.6 libm.so.6 libpthread.so.0 libdl.so.2 librt.so.1; do
@@ -167,7 +167,7 @@ EOF
               substitutions = pkgs.lib.concatStringsSep " "
                 (pkgs.lib.mapAttrsToList (name: path: "-e 's|{{${name}}}|${path}|g'") targetPaths);
             in
-            pkgs.runCommand "ermete-builder-rpm-macros-systemd" { } ''
+            pkgs.runCommand "athanor-builder-rpm-macros-systemd" { } ''
               mkdir -p $out/macros.d
               sed ${substitutions} ${pkgs.systemd.src}/src/rpm/macros.systemd.in > $out/macros.d/macros.systemd
               if grep -q '{{' $out/macros.d/macros.systemd; then
@@ -180,7 +180,7 @@ EOF
           # Percorsi del sistema di destinazione. L'rpm di nixpkgs è configurato con
           # prefix = il proprio store path, quindi %{_bindir}, %{_datadir}, %{_libexecdir}
           # e %{_localstatedir} finirebbero sotto /nix/store dentro i pacchetti (visto su
-          # ermete-daemon-rs: dbus service e polkit policy installati lì). I pacchetti
+          # athanor-daemon-rs: dbus service e polkit policy installati lì). I pacchetti
           # sono per Fedora: prefix /usr, lib64, /var. Le macro derivate (_bindir, _libdir,
           # _mandir, …) discendono da queste nel file macros di rpm.
           builder-rpm-macros-target =
@@ -196,19 +196,19 @@ EOF
 "
                 (pkgs.lib.mapAttrsToList (name: value: "%${name} ${value}") macros);
             in
-            pkgs.writeTextDir "macros.d/macros.ermete-target" (body + "
+            pkgs.writeTextDir "macros.d/macros.athanor-target" (body + "
 ");
 
           # Config dir di rpm del builder: quella di nixpkgs più le macro di systemd e
           # dei percorsi di destinazione. rpm la trova tramite RPM_CONFIGDIR (config.Env
           # dell'immagine); l'rpm di nixpkgs non consulta /etc/rpm.
           builder-rpm-configdir = pkgs.symlinkJoin {
-            name = "ermete-builder-rpm-configdir";
+            name = "athanor-builder-rpm-configdir";
             paths = [ "${pkgs.rpm}/lib/rpm" builder-rpm-macros-systemd builder-rpm-macros-target ];
           };
 
           builderImage = pkgs.dockerTools.buildLayeredImage {
-            name = "ghcr.io/hr-mes/ermete-os-builder";
+            name = "ghcr.io/hr-mes/athanor-builder";
             tag = "latest";
             contents = [ builder-fhs-compat pkgs.bashInteractive pkgs.coreutils pkgs.findutils pkgs.gnused pkgs.gawk pkgs.cacert pkgs.tzdata pkgs.shadow ] ++ security-tools ++ c-toolchain ++ rust-tools ++ build-tools ++ system-deps ++ system-dev ++ system-lib;
             config = {

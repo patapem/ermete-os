@@ -1,4 +1,4 @@
-export image_name := env("IMAGE_NAME", "ermete-os-system")
+export image_name := env("IMAGE_NAME", "athanor-system")
 export default_tag := env("DEFAULT_TAG", "latest")
 export bib_image := env("BIB_IMAGE", "quay.io/centos-bootc/bootc-image-builder:latest")
 
@@ -45,7 +45,7 @@ build-iso target_image=("localhost/" + image_name) tag=default_tag:
 
 # Build Bare-Metal Ring-0 Unikernel Binary (RustyHermit)
 [group('Build')]
-build-unikernel component="ermete-unikernel-daemon" mode="release":
+build-unikernel component="athanor-unikernel-daemon" mode="release":
     ./scripts/build_unikernel.sh "{{ component }}" "{{ mode }}"
 
 # Security Scan of System Image using Trivy

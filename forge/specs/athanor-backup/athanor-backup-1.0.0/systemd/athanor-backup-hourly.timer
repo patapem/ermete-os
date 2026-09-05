@@ -1,0 +1,11 @@
+[Unit]
+Description=Athanor OS Hourly Bcachefs Home Snapshot Timer
+Documentation=https://github.com/hr-mes/athanor-forge
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+AccuracySec=5m
+
+[Install]
+WantedBy=timers.target

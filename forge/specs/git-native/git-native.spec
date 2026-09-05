@@ -1,7 +1,7 @@
 Name:           git-native
 Version:        2.48.1
 Release:        1%{?dist}
-Summary:        Assimilated Git Version Control System built natively from source for Ermete OS
+Summary:        Assimilated Git Version Control System built natively from source for Athanor OS
 License:        GPL-2.0-only
 URL:            https://git-scm.com/
 Source0:        https://www.kernel.org/pub/software/scm/git/git-%{version}.tar.gz
@@ -21,7 +21,7 @@ BuildRequires:  openssl-devel
 BuildRequires:  zlib-devel
 
 %description
-Git version control system compiled natively from source for Ermete OS Forge.
+Git version control system compiled natively from source for Athanor OS Forge.
 
 %prep
 %autosetup -n git-%{version}
@@ -42,6 +42,6 @@ make %{?_smp_mflags} prefix=/usr DESTDIR=%{buildroot} install
 %{_datadir}/git-core
 
 %changelog
-* Sat Aug 08 2026 Ermete Forge <forge@ermete.os> - 2.48.1-1
-- Assimilated git native source build for Ermete OS.
+* Sat Aug 08 2026 Athanor Forge <forge@athanor.os> - 2.48.1-1
+- Assimilated git native source build for Athanor OS.
 

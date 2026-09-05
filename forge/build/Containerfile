@@ -1,10 +1,10 @@
 # ==============================================================================
-# 🌋 Ermete OS - Multistage Containerfile (Fase 14)
+# 🌋 Athanor OS - Multistage Containerfile (Fase 14)
 # ==============================================================================
-# Multi-stage container build for Ermete OS Rust workspace binaries.
+# Multi-stage container build for Athanor OS Rust workspace binaries.
 # Stage 1: Rust Builder - Compiles entire workspace in release mode.
 # Stage 2: Minimal Runtime - Lightweight Fedora Minimal runtime environment.
-# Entrypoint: /usr/bin/ermete-init-oracle
+# Entrypoint: /usr/bin/athanor-init-oracle
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ RUN microdnf update -y && microdnf install -y \
     cargo \
     && microdnf clean all
 
-WORKDIR /usr/src/ermete-os
+WORKDIR /usr/src/athanor
 
 # Copy Cargo configuration, lockfile, and workspace sources
 COPY Cargo.toml Cargo.lock ./
@@ -48,9 +48,9 @@ RUN mkdir -p /out/bin && \
 # ------------------------------------------------------------------------------
 FROM registry.fedoraproject.org/fedora-minimal:latest@sha256:3e69f7246838e5c0a98764201b77975d28daacb1987d22f62832cb56b387955e AS runtime
 
-LABEL org.opencontainers.image.title="Ermete OS Init Oracle Container" \
-      org.opencontainers.image.description="Multistage container image for Ermete OS microservices" \
-      org.opencontainers.image.vendor="Ermete OS Core Team" \
+LABEL org.opencontainers.image.title="Athanor OS Init Oracle Container" \
+      org.opencontainers.image.description="Multistage container image for Athanor OS microservices" \
+      org.opencontainers.image.vendor="Athanor OS Core Team" \
       containers.bootc="1"
 
 # Install minimal runtime shared libraries (OpenSSL, DBus libs, CA certs)
@@ -64,5 +64,5 @@ COPY --from=builder /out/bin/ /usr/bin/
 # Set working directory
 WORKDIR /root
 
-# Set /usr/bin/ermete-init-oracle as the default entrypoint
-ENTRYPOINT ["/usr/bin/ermete-init-oracle"]
+# Set /usr/bin/athanor-init-oracle as the default entrypoint
+ENTRYPOINT ["/usr/bin/athanor-init-oracle"]

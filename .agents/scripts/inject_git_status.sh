@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
-cd /var/home/ermete/GEMINI/ermete-os || exit 0
+cd /var/home/athanor/GEMINI/athanor || exit 0
 STATUS=$(git status --short)
 
 if [ -n "$STATUS" ]; then

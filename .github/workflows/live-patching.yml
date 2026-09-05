@@ -1,4 +1,4 @@
-name: Ermete OS Kernel Live Patching
+name: Athanor OS Kernel Live Patching
 
 on:
   push:
@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     container:
-      image: ghcr.io/hr-mes/ermete-os-builder:${{ vars.BUILDER_STABLE_TAG || 'latest' }}
+      image: ghcr.io/hr-mes/athanor-builder:${{ vars.BUILDER_STABLE_TAG || 'latest' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -40,8 +40,8 @@ jobs:
         run: |
           set -euo pipefail
           echo "Packaging live patch into RPM..."
-          if [ -f "forge/specs/ermete-livepatch/ermete-livepatch.spec" ]; then
-            rpmbuild -ba forge/specs/ermete-livepatch/ermete-livepatch.spec
+          if [ -f "forge/specs/athanor-livepatch/athanor-livepatch.spec" ]; then
+            rpmbuild -ba forge/specs/athanor-livepatch/athanor-livepatch.spec
           fi
           
 
@@ -49,7 +49,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: ermete-livepatch
+          name: athanor-livepatch
           path: forge/build/livepatch/
           compression-level: 1
 

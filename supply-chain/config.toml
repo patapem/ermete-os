@@ -1,8 +1,8 @@
 [cargo-vet]
 version = "0.10"
 
-[policy.ermete-gatekeeper-rs]
+[policy.athanor-gatekeeper-rs]
 audit-as-crates-io = false
 
-[policy.ermete-daemon-rs]
+[policy.athanor-daemon-rs]
 audit-as-crates-io = false

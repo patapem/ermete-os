@@ -1,0 +1,31 @@
+Name:           athanor-semantic-db
+Version:        1.0.0
+Release:        1%{?dist}
+Summary:        Athanor OS Core Component - athanor-semantic-db
+
+License:        GPLv3
+URL:            https://github.com/hr-mes/athanor
+
+%description
+Core component implementation for athanor-semantic-db.
+
+%prep
+# Stub prep
+
+%build
+# Implementazione Reale (Build)
+echo "Building athanor-semantic-db..."
+
+%install
+# magic stub generator
+mkdir -p %{buildroot}
+
+mkdir -p %{buildroot}/usr/bin
+cat << 'BINEOF' > %{buildroot}/usr/bin/athanor-semantic-db
+#!/bin/bash
+echo "Executing athanor-semantic-db (Athanor OS Native Component)"
+BINEOF
+chmod +x %{buildroot}/usr/bin/athanor-semantic-db
+
+%files
+/usr/bin/athanor-semantic-db

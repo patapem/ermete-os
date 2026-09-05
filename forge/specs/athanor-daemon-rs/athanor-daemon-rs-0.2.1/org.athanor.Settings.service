@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=org.athanor.Settings
+Exec=/usr/bin/athanor-daemon-rs

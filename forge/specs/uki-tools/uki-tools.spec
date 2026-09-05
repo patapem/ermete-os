@@ -3,10 +3,10 @@
 Name:           uki-tools
 Version:        1.0.0
 Release:        1%{?dist}
-Summary:        Native UKI (Unified Kernel Image) and Secure Boot signing toolchain for Ermete OS
+Summary:        Native UKI (Unified Kernel Image) and Secure Boot signing toolchain for Athanor OS
 
 License:        GPL-3.0-or-later AND LGPL-2.1-or-later AND MIT
-URL:            https://github.com/hr-mes/ermete-os
+URL:            https://github.com/hr-mes/athanor
 
 Provides:       sbsigntools = %{version}-%{release}
 Provides:       sbsigntools = 0.9.5
@@ -26,7 +26,7 @@ Requires:       systemd
 %description
 Assimilated UKI toolchain packaging sbsigntools (sbsign, sbverify, sbattach,
 sbkeysync, sbsiglist, sbvarsign) and systemd-ukify (ukify) natively within
-Ermete OS Forge to guarantee 100% autarchic boot generation and CI pipelines.
+Athanor OS Forge to guarantee 100% autarchic boot generation and CI pipelines.
 
 %prep
 # Source files provided in SOURCES directory
@@ -66,5 +66,5 @@ ln -sf ../../bin/ukify %{buildroot}%{_prefix}/lib/systemd/ukify
 %{_prefix}/lib/kernel/install.d/60-ukify.install
 
 %changelog
-* Sat Aug 08 2026 Ermete Architect <admin@ermete.os> - 1.0.0-1
+* Sat Aug 08 2026 Athanor Architect <admin@athanor.os> - 1.0.0-1
 - Assimilate sbsigntools and systemd-ukify into native uki-tools spec.

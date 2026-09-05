@@ -64,7 +64,7 @@ jobs:
             -e EVENT_REPO_NAME="${EVENT_REPO_NAME}" \
             -e RPM_GPG_KEY="${RPM_GPG_KEY}" \
             -e RPM_GPG_PASSPHRASE="${RPM_GPG_PASSPHRASE}" \
-            "ghcr.io/hr-mes/ermete-os-builder:${BUILDER_CONTENT_HASH}" \
+            "ghcr.io/hr-mes/athanor-builder:${BUILDER_CONTENT_HASH}" \
             bash <<'EOF'
             set -e
             export BUILDAH_ISOLATION=chroot
@@ -88,7 +88,7 @@ jobs:
               echo "::add-mask::${RPM_GPG_PASSPHRASE}"
               echo "${RPM_GPG_KEY}" | gpg --import
               mkdir -p ~; echo '%_signature gpg' > ~/.rpmmacros
-              echo '%_gpg_name ermete' >> ~/.rpmmacros
+              echo '%_gpg_name athanor' >> ~/.rpmmacros
               echo '%__gpg_sign_cmd %{__gpg} --batch --verbose --no-armor --passphrase "${RPM_GPG_PASSPHRASE}" --pinentry-mode loopback --no-secmem-warning -u "%{_gpg_name}" -sbo %{__signature_filename} --digest-algo sha256 %{__plaintext_filename}' >> ~/.rpmmacros
             fi
             
@@ -102,10 +102,10 @@ jobs:
               {
                 if [ -n "$tier" ]; then
                   dir="repo-cache/repo-${tier}"
-                  img_name="ermete-os-forge-${tier}-repo:latest"
+                  img_name="athanor-forge-${tier}-repo:latest"
                 else
                   dir="repo-cache/repo"
-                  img_name="ermete-os-forge-rolling-repo:latest"
+                  img_name="athanor-forge-rolling-repo:latest"
                 fi
                 
                 IMAGE_LOWER=$(echo "ghcr.io/hr-mes/$img_name" | tr '[:upper:]' '[:lower:]')
@@ -145,13 +145,13 @@ jobs:
               git checkout -b gh-pages
             }
             cd /workspace/pages_repo
-            git config --global user.name "Ermete Forge"
-            git config --global user.email "forge@ermete.os"
+            git config --global user.name "Athanor Forge"
+            git config --global user.email "forge@athanor.os"
             git config --global --add safe.directory /workspace/pages_repo
 
             rm -rf tier0 tier1 tier2 tier3
             if [ -n "${RPM_GPG_KEY}" ]; then
-              gpg --export --armor "%{_gpg_name}" > RPM-GPG-KEY-ermete
+              gpg --export --armor "%{_gpg_name}" > RPM-GPG-KEY-athanor
             fi
             cp -a /workspace/forge/repo-cache/repo-tier0 tier0
             cp -a /workspace/forge/repo-cache/repo-tier1 tier1
@@ -177,9 +177,9 @@ jobs:
   
             git add -A
             if git rev-parse HEAD >/dev/null 2>&1; then
-              git commit --amend -m "🚀 Deploy DNF & Flatpak channels for Ermete OS Rolling Release"
+              git commit --amend -m "🚀 Deploy DNF & Flatpak channels for Athanor OS Rolling Release"
             else
-              git commit -m "🚀 Deploy DNF & Flatpak channels for Ermete OS Rolling Release"
+              git commit -m "🚀 Deploy DNF & Flatpak channels for Athanor OS Rolling Release"
             fi
             git push -f "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
           EOF
@@ -216,7 +216,7 @@ jobs:
         run: |
           set -euo pipefail
           echo "IMAGE_REGISTRY=ghcr.io/hr-mes" >> ${GITHUB_ENV}
-          echo "IMAGE_NAME=ermete-os-system" >> ${GITHUB_ENV}
+          echo "IMAGE_NAME=athanor-system" >> ${GITHUB_ENV}
           echo "DEFAULT_TAG=latest" >> ${GITHUB_ENV}
       - name: 📥 Checkout Repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -240,10 +240,10 @@ jobs:
           RUN_ID: ${{ github.run_id }}
         run: |
           set -euo pipefail
-          podman run -i --rm --privileged -v "${GITHUB_WORKSPACE}:/workspace" -w /workspace "ghcr.io/hr-mes/ermete-os-builder:${BUILDER_CONTENT_HASH}" bash -c "set -euo pipefail; \
-          bwrap --unshare-net --dev-bind / / podman build --network=none --layers -t ghcr.io/hr-mes/ermete-os-system:latest -t ghcr.io/hr-mes/ermete-os-system:${RUN_ID} -f ./system/Containerfile ./system && podman push ghcr.io/hr-mes/ermete-os-system:${RUN_ID}" || bwrap --unshare-net --dev-bind / / podman build --network=none --layers -t ghcr.io/hr-mes/ermete-os-system:latest -t ghcr.io/hr-mes/ermete-os-system:${RUN_ID} -f ./system/Containerfile ./system
-          podman push ghcr.io/hr-mes/ermete-os-system:latest
-          podman push ghcr.io/hr-mes/ermete-os-system:${RUN_ID} || true
+          podman run -i --rm --privileged -v "${GITHUB_WORKSPACE}:/workspace" -w /workspace "ghcr.io/hr-mes/athanor-builder:${BUILDER_CONTENT_HASH}" bash -c "set -euo pipefail; \
+          bwrap --unshare-net --dev-bind / / podman build --network=none --layers -t ghcr.io/hr-mes/athanor-system:latest -t ghcr.io/hr-mes/athanor-system:${RUN_ID} -f ./system/Containerfile ./system && podman push ghcr.io/hr-mes/athanor-system:${RUN_ID}" || bwrap --unshare-net --dev-bind / / podman build --network=none --layers -t ghcr.io/hr-mes/athanor-system:latest -t ghcr.io/hr-mes/athanor-system:${RUN_ID} -f ./system/Containerfile ./system
+          podman push ghcr.io/hr-mes/athanor-system:latest
+          podman push ghcr.io/hr-mes/athanor-system:${RUN_ID} || true
 
       - name: 🔐 Sign & Attest OS Image (Zero-Trust Keyless Sigstore)
         env:
@@ -258,17 +258,17 @@ jobs:
           
           # Generate SPDX SBOM from the final container
           echo "Generating Software Bill of Materials (SBOM)..."
-          nix run nixpkgs#syft -- packages "ghcr.io/hr-mes/ermete-os-system:${RUN_ID}" -o spdx-json > system-sbom.spdx.json
+          nix run nixpkgs#syft -- packages "ghcr.io/hr-mes/athanor-system:${RUN_ID}" -o spdx-json > system-sbom.spdx.json
           
           # Keyless Sign the container images
           echo "Signing OCI Artifacts..."
-          nix run nixpkgs#cosign -- sign --yes "ghcr.io/hr-mes/ermete-os-system:${RUN_ID}"
-          nix run nixpkgs#cosign -- sign --yes "ghcr.io/hr-mes/ermete-os-system:latest"
+          nix run nixpkgs#cosign -- sign --yes "ghcr.io/hr-mes/athanor-system:${RUN_ID}"
+          nix run nixpkgs#cosign -- sign --yes "ghcr.io/hr-mes/athanor-system:latest"
           
           # Attest the SBOM cryptographically
           echo "Attesting SBOM..."
-          nix run nixpkgs#cosign -- attest --yes --type spdxjson --predicate system-sbom.spdx.json "ghcr.io/hr-mes/ermete-os-system:${RUN_ID}"
-          nix run nixpkgs#cosign -- attest --yes --type spdxjson --predicate system-sbom.spdx.json "ghcr.io/hr-mes/ermete-os-system:latest"
+          nix run nixpkgs#cosign -- attest --yes --type spdxjson --predicate system-sbom.spdx.json "ghcr.io/hr-mes/athanor-system:${RUN_ID}"
+          nix run nixpkgs#cosign -- attest --yes --type spdxjson --predicate system-sbom.spdx.json "ghcr.io/hr-mes/athanor-system:latest"
           echo "✅ Final OS Image securely attested (SLSA Level 3)."
 
       - name: 💿 Build ISO (osbuild)
@@ -276,7 +276,7 @@ jobs:
         with:
           builder-image: quay.io/centos-bootc/bootc-image-builder:latest
           config-file: ./system/disk_config/iso.toml
-          image: ghcr.io/hr-mes/ermete-os-system:${{ github.run_id }}
+          image: ghcr.io/hr-mes/athanor-system:${{ github.run_id }}
           types: anaconda-iso
           additional-args: --use-librepo=True --rootfs=bcachefs
 
@@ -331,7 +331,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     container:
-      image: ghcr.io/hr-mes/ermete-os-builder:${{ inputs.builder_content_hash }}
+      image: ghcr.io/hr-mes/athanor-builder:${{ inputs.builder_content_hash }}
     steps:
       - name: 📥 Check out repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -345,8 +345,8 @@ jobs:
         run: |
           set -euo pipefail
           echo "🚀 Executing GTK4 UI & Wayland Headless Compositor Regression Audit..."
-          xvfb-run -a cargo test --manifest-path system/ermete-compositor/Cargo.toml -- --nocapture
-          xvfb-run -a cargo test --manifest-path system/ermete-greeter/Cargo.toml -- --nocapture
+          xvfb-run -a cargo test --manifest-path system/athanor-compositor/Cargo.toml -- --nocapture
+          xvfb-run -a cargo test --manifest-path system/athanor-greeter/Cargo.toml -- --nocapture
           echo "✅ GTK4 UI and Wayland Headless Compositor checks passed successfully."
 
       - name: 🧹 Fix Workspace Permissions (GH Actions Cleanup)

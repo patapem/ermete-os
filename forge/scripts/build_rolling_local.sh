@@ -33,7 +33,7 @@ sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-rel
 
 
 SPEC_DIR="$(realpath "$(dirname "$0")/../specs")"
-CUSTOM_DIR="$SPEC_DIR/ermete-$PACKAGE"
+CUSTOM_DIR="$SPEC_DIR/athanor-$PACKAGE"
 if [ ! -d "$CUSTOM_DIR" ]; then
     CUSTOM_DIR="$SPEC_DIR/$PACKAGE"
 fi

@@ -1,10 +1,10 @@
 Name:           osbuild
 Version:        1.0.0
 Release:        1%{?dist}
-Summary:        Ermete OS Core Component - osbuild
+Summary:        Athanor OS Core Component - osbuild
 
 License:        GPLv3
-URL:            https://github.com/hr-mes/ermete-os
+URL:            https://github.com/hr-mes/athanor
 
 %description
 Core component implementation for osbuild.

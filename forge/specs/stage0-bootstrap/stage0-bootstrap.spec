@@ -1,10 +1,10 @@
 Name:           stage0-bootstrap
 Version:        1.0.0
 Release:        1%{?dist}
-Summary:        Ermete OS Core Component - stage0-bootstrap
+Summary:        Athanor OS Core Component - stage0-bootstrap
 
 License:        GPLv3
-URL:            https://github.com/hr-mes/ermete-os
+URL:            https://github.com/hr-mes/athanor
 
 %description
 Core component implementation for stage0-bootstrap.
@@ -23,7 +23,7 @@ mkdir -p %{buildroot}
 mkdir -p %{buildroot}/usr/bin
 cat << 'BINEOF' > %{buildroot}/usr/bin/stage0-bootstrap
 #!/bin/bash
-echo "Executing stage0-bootstrap (Ermete OS Native Component)"
+echo "Executing stage0-bootstrap (Athanor OS Native Component)"
 BINEOF
 chmod +x %{buildroot}/usr/bin/stage0-bootstrap
 

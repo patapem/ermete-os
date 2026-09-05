@@ -25,14 +25,14 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -z "$IMAGE_NAME" ]]; then
-  IMAGE_NAME="ermete-os-forge-${PACKAGE}"
+  IMAGE_NAME="athanor-forge-${PACKAGE}"
 fi
 
 # Determina directory o seed per il calcolo dell'hash
 if [[ "$PACKAGE" == "builder" ]]; then
   DIR="builder"
-elif [[ -d "specs/ermete-${PACKAGE}" ]]; then
-  DIR="specs/ermete-${PACKAGE}"
+elif [[ -d "specs/athanor-${PACKAGE}" ]]; then
+  DIR="specs/athanor-${PACKAGE}"
 elif [[ -d "specs/${PACKAGE}" ]]; then
   DIR="specs/${PACKAGE}"
 else
@@ -84,7 +84,7 @@ else
   # per prevenire desincronizzazione librerie (es. libx265 per ffmpeg).
   if [[ -z "${BASE_DIGEST:-}" ]]; then
     if command -v skopeo >/dev/null 2>&1; then
-      BASE_DIGEST=$(skopeo inspect --no-tags "docker://ghcr.io/${OWNER}/ermete-base-nvidia:latest" 2>/dev/null | grep -oP '"Digest": "\K[^"]+' | head -n 1 || true)
+      BASE_DIGEST=$(skopeo inspect --no-tags "docker://ghcr.io/${OWNER}/athanor-base-nvidia:latest" 2>/dev/null | grep -oP '"Digest": "\K[^"]+' | head -n 1 || true)
     fi
   fi
   

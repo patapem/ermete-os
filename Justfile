@@ -1,5 +1,5 @@
 # ==============================================================================
-# 🌋 Ermete OS - Main Workspace Task Runner (Justfile)
+# 🌋 Athanor OS - Main Workspace Task Runner (Justfile)
 # Centralized entrypoint for Forge build system, System image builder, and QA/CI pipeline
 # Declarative, Nix-like hermetic target graph connecting all repository scripts
 # ==============================================================================
@@ -43,27 +43,27 @@ kernel mode="full":
 
 # Builds System bootc container image
 [group('Pipeline')]
-system-build target_image=env('IMAGE_NAME', 'ermete-os-system') tag=env('DEFAULT_TAG', 'latest'):
+system-build target_image=env('IMAGE_NAME', 'athanor-system') tag=env('DEFAULT_TAG', 'latest'):
     just system/build "{{ target_image }}" "{{ tag }}"
 
 # Builds system bootc container image locally in offline fallback mode (GH Actions outage fallback)
 [group('Pipeline')]
-build-offline target_image="localhost/ermete-os-system" tag="offline":
+build-offline target_image="localhost/athanor-system" tag="offline":
     ./forge/scripts/build-offline.sh "{{ target_image }}" "{{ tag }}"
 
 # Builds QCOW2 VM disk image from system bootc container
 [group('Pipeline')]
-disk-qcow2 target_image=("localhost/" + env('IMAGE_NAME', 'ermete-os-system')) tag=env('DEFAULT_TAG', 'latest'):
+disk-qcow2 target_image=("localhost/" + env('IMAGE_NAME', 'athanor-system')) tag=env('DEFAULT_TAG', 'latest'):
     just system/build-vm "qcow2" "{{ target_image }}" "{{ tag }}"
 
 # Builds Anaconda ISO image from system bootc container
 [group('Pipeline')]
-disk-iso target_image=("localhost/" + env('IMAGE_NAME', 'ermete-os-system')) tag=env('DEFAULT_TAG', 'latest'):
+disk-iso target_image=("localhost/" + env('IMAGE_NAME', 'athanor-system')) tag=env('DEFAULT_TAG', 'latest'):
     just system/build-iso "{{ target_image }}" "{{ tag }}"
 
 # Builds Rust microservice as zero-latency bare-metal Unikernel (RustyHermit target)
 [group('Pipeline')]
-unikernel package="ermete-unikernel-daemon" mode="release":
+unikernel package="athanor-unikernel-daemon" mode="release":
     ./system/scripts/build_unikernel.sh "{{ package }}" "{{ mode }}"
 
 # ------------------------------------------------------------------------------
@@ -72,7 +72,7 @@ unikernel package="ermete-unikernel-daemon" mode="release":
 
 # Runs hermetic build inside bubblewrap sandbox without network (Nix paradigm)
 [group('QA & Security')]
-hermetic-build lockfile="ermete-build.lock":
+hermetic-build lockfile="athanor-build.lock":
     just forge/hermetic-build "{{ lockfile }}"
 
 # Check idempotency of a package build against GHCR SHA-256 digest
@@ -97,7 +97,7 @@ fuzz component="all" time="60":
 
 # Runs AWS Kani formal verification proofs on Rust spec targets
 [group('QA & Security')]
-verify component="ermete-gatekeeper-rs":
+verify component="athanor-gatekeeper-rs":
     just forge/verify "{{ component }}"
 
 # Validates NVIDIA kernel module loading and GPU device nodes
@@ -165,4 +165,4 @@ clean-ghcr owner="hr-mes":
 # Runs the entire CI pipeline locally via Act for rapid debugging
 [group('Utility')]
 test-ci-local:
-    act -W .github/workflows/ermete-forge-orchestrator.yml --container-architecture linux/amd64
+    act -W .github/workflows/athanor-forge-orchestrator.yml --container-architecture linux/amd64

@@ -21,7 +21,7 @@ enum XdpAttachMode {
 }
 
 #[derive(Debug, Parser)]
-#[command(author, version, about = "Ermete OS XDP Zero-Trust Firewall Loader", long_about = None)]
+#[command(author, version, about = "Athanor OS XDP Zero-Trust Firewall Loader", long_about = None)]
 struct Opt {
     /// Network interface to attach the XDP program to
     #[clap(short, long, default_value = "eth0")]

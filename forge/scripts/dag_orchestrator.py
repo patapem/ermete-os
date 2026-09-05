@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Ermete Forge DAG Orchestrator Engine
+Athanor Forge DAG Orchestrator Engine
 Calculates Directed Acyclic Graph (DAG) for RPM & Flatpak dependencies,
 queries Redis distributed cache for node states, invalidates downstream dependencies,
 and outputs topological matrix execution levels for parallel GitHub Actions execution.
@@ -141,7 +141,7 @@ def build_dag(manifest):
     for pkg in all_custom:
         if pkg not in all_nodes:
             continue
-        spec_dir = os.path.join(SPECS_DIR, f"ermete-{pkg}")
+        spec_dir = os.path.join(SPECS_DIR, f"athanor-{pkg}")
         if not os.path.exists(spec_dir):
             spec_dir = os.path.join(SPECS_DIR, pkg)
         spec_files = glob.glob(os.path.join(spec_dir, "*.spec"))
@@ -152,7 +152,7 @@ def build_dag(manifest):
         if spec_files:
             build_reqs, reqs = parse_spec_dependencies(spec_files[0])
             for dep in build_reqs | reqs:
-                clean_dep = dep.replace("ermete-", "")
+                clean_dep = dep.replace("athanor-", "")
                 if clean_dep in all_nodes and clean_dep != pkg:
                     graph[clean_dep].add(pkg)
                     prereqs[pkg].add(clean_dep)
@@ -195,7 +195,7 @@ def evaluate_dirty_nodes(all_nodes, graph, prereqs, node_hashes):
     
     redis_client = None
     if redis is not None:
-        redis_url = os.environ.get("ERMETE_REDIS_URL")
+        redis_url = os.environ.get("ATHANOR_REDIS_URL")
         if redis_url:
             try:
                 redis_client = redis.from_url(redis_url, socket_timeout=2, socket_connect_timeout=2)
@@ -213,7 +213,7 @@ def evaluate_dirty_nodes(all_nodes, graph, prereqs, node_hashes):
         transitive_hashes[node] = trans_hash
         
         cached_val = None
-        redis_key = f"ermete:build:hash:{node}"
+        redis_key = f"athanor:build:hash:{node}"
         
         if redis_client:
             try:
@@ -357,7 +357,7 @@ def main():
     if github_summary:
         try:
             with open(github_summary, "a") as f:
-                f.write("### 🌋 Ermete Forge DAG - Execution Topology\n")
+                f.write("### 🌋 Athanor Forge DAG - Execution Topology\n")
                 f.write(mermaid_str + "\n")
         except OSError:
             pass

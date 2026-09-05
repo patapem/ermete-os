@@ -1,0 +1,36 @@
+[Unit]
+Description=Athanor OS Desktop Panel (Pure Rust Native Shell)
+Documentation=https://github.com/hr-mes/athanor-forge
+BindsTo=graphical-session.target
+After=graphical-session.target athanor-skel-sync.service
+PartOf=graphical-session.target
+
+[Service]
+MemoryDenyWriteExecute=true
+CPUWeight=200
+MemoryHigh=768M
+MemoryMax=1024M
+OOMScoreAdjust=-500
+Type=simple
+Slice=session.slice
+ExecStart=/usr/bin/athanor-shell-rs
+Restart=on-failure
+RestartSec=2s
+
+# Extreme Sandboxing
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+NoNewPrivileges=true
+SystemCallFilter=@system-service
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+LockPersonality=true
+
+[Install]
+WantedBy=graphical-session.target
+Alias=athanor-ags.service

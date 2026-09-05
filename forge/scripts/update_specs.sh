@@ -15,6 +15,6 @@ update_spec() {
     fi
 }
 
-update_spec "starship/starship" "specs/ermete-starship/ermete-starship.spec"
-update_spec "InioX/matugen" "specs/ermete-matugen/ermete-matugen.spec"
-update_spec "ful1e5/Bibata_Cursor" "specs/ermete-bibata/ermete-bibata.spec"
+update_spec "starship/starship" "specs/athanor-starship/athanor-starship.spec"
+update_spec "InioX/matugen" "specs/athanor-matugen/athanor-matugen.spec"
+update_spec "ful1e5/Bibata_Cursor" "specs/athanor-bibata/athanor-bibata.spec"

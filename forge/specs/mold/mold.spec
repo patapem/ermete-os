@@ -1,7 +1,7 @@
 Name:           mold
 Version:        2.36.0
 Release:        1%{?dist}
-Summary:        Ermete OS Core Component - mold
+Summary:        Athanor OS Core Component - mold
 
 License:        GPLv3
 URL:            https://github.com/rui314/mold

@@ -1,26 +1,26 @@
-# Central Daemons Architecture: `ermete-daemon-rs`, `ermete-gatekeeper-rs` and IPC / Polkit Security
+# Central Daemons Architecture: `athanor-daemon-rs`, `athanor-gatekeeper-rs` and IPC / Polkit Security
 
 ## 1. Architectural Overview
 
-The core daemons of Ermete OS orchestrate system state, power XDG Desktop Portals integration, maintain ACID user settings persistence, and enforce zero-trust kernel execution security.
+The core daemons of Athanor OS orchestrate system state, power XDG Desktop Portals integration, maintain ACID user settings persistence, and enforce zero-trust kernel execution security.
 
 The architecture is anchored by two fundamental daemons:
-1. **`ermete-daemon-rs` (Settings Engine & Desktop Portals)**: Executes in the user **D-Bus Session Bus** context (with a secondary connection to the System Bus for system services). Manages ACID settings state, acts as proxy for NetworkManager and BlueZ, handles speech synthesis, and serves XDG Desktop Portals (Settings, ScreenCast, RemoteDesktop).
-2. **`ermete-gatekeeper-rs` (Zero-Trust Execution Gatekeeper)**: Runs as a privileged **Root Systemd Service** registered on the **D-Bus System Bus**. Intercepts binary execution attempts in real time via the Linux kernel `fanotify` subsystem, enforcing Bubblewrap (`bwrap`) sandbox enclaves for unverified or quarantined binaries.
+1. **`athanor-daemon-rs` (Settings Engine & Desktop Portals)**: Executes in the user **D-Bus Session Bus** context (with a secondary connection to the System Bus for system services). Manages ACID settings state, acts as proxy for NetworkManager and BlueZ, handles speech synthesis, and serves XDG Desktop Portals (Settings, ScreenCast, RemoteDesktop).
+2. **`athanor-gatekeeper-rs` (Zero-Trust Execution Gatekeeper)**: Runs as a privileged **Root Systemd Service** registered on the **D-Bus System Bus**. Intercepts binary execution attempts in real time via the Linux kernel `fanotify` subsystem, enforcing Bubblewrap (`bwrap`) sandbox enclaves for unverified or quarantined binaries.
 
 Both daemons are engineered in **Pure Rust**, leveraging the `mimalloc` high-performance memory allocator and `zbus 5.x` async D-Bus IPC.
 
 ---
 
-## 2. In-Depth Analysis: `ermete-daemon-rs` (Core & Desktop Services)
+## 2. In-Depth Analysis: `athanor-daemon-rs` (Core & Desktop Services)
 
 ### 2.1 Module Architecture & Actor/Channel Model
 
-`ermete-daemon-rs` orchestrates system state via an asynchronous Tokio model powered by `tokio::sync` channels (`watch`, `mpsc`, `oneshot`).
+`athanor-daemon-rs` orchestrates system state via an asynchronous Tokio model powered by `tokio::sync` channels (`watch`, `mpsc`, `oneshot`).
 
 ```text
                                ┌──────────────────────────────────────────────┐
-                               │            ermete-daemon-rs                  │
+                               │            athanor-daemon-rs                  │
                                │           (D-Bus Session Bus)                │
                                └──────────────────────┬───────────────────────┘
                                                       │
@@ -28,7 +28,7 @@ Both daemons are engineered in **Pure Rust**, leveraging the `mimalloc` high-per
          │                   │                       │                       │                   │
 ┌────────▼────────┐ ┌────────▼────────┐    ┌─────────▼─────────┐   ┌─────────▼─────────┐ ┌────────▼────────┐
 │   bedrock.rs    │ │   settings.rs   │    │    network.rs     │   │   bluetooth.rs    │ │ portal_screencast│
-│ os.ermete.      │ │ org.ermete.     │    │ os.ermete.Bedrock.│   │ os.ermete.Bedrock.│ │ org.freedesktop. │
+│ os.athanor.      │ │ org.athanor.     │    │ os.athanor.Bedrock.│   │ os.athanor.Bedrock.│ │ org.freedesktop. │
 │ Bedrock         │ │ Settings        │    │ Network           │   │ Bluetooth         │ │ impl.portal.*    │
 └────────┬────────┘ └────────┬────────┘    └─────────┬─────────┘   └─────────┬─────────┘ └────────┬────────┘
          │                   │                       │                       │                    │
@@ -42,39 +42,39 @@ Both daemons are engineered in **Pure Rust**, leveraging the `mimalloc` high-per
 
 #### Core Components:
 
-1. **`bedrock.rs` (`os.ermete.Bedrock`)**:
+1. **`bedrock.rs` (`os.athanor.Bedrock`)**:
    - **Responsibility**: System volume and core audio state management via `AtomicU64`.
-   - **IPC Flow**: Interacts with `os.ermete.AudioWorker` service via `AudioWorkerProxy`.
+   - **IPC Flow**: Interacts with `os.athanor.AudioWorker` service via `AudioWorkerProxy`.
 
-2. **`settings.rs` (`org.ermete.Settings` / `os.ermete.Bedrock.Settings`)**:
+2. **`settings.rs` (`org.athanor.Settings` / `os.athanor.Bedrock.Settings`)**:
    - **Decentralized Domain States**: Maintains domain micro-states `AppearanceDomainState` (light/dark mode, accent colors, wallpaper, dock configuration, True Tone) and `VoiceOverDomainState` (accessibility voiceovers).
-   - **Atomic Persistence**: Flushes settings to domain JSON files (`appearance.json`, `voiceover.json`) using atomic temporary writes and renames under `~/.config/ermete/`.
+   - **Atomic Persistence**: Flushes settings to domain JSON files (`appearance.json`, `voiceover.json`) using atomic temporary writes and renames under `~/.config/athanor/`.
    - **Async Actor Loop**: Uses an `mpsc::channel(32)` actor loop processing `SettingsCommand` messages paired with `oneshot::Sender` channels. State mutations trigger updates on domain-specific `watch::Sender` channels, notifying only subscriber services.
 
-3. **`network.rs` (`os.ermete.Bedrock.Network`)**:
+3. **`network.rs` (`os.athanor.Bedrock.Network`)**:
    - **NetworkManager Integration**: Connects to the **System D-Bus** to interact with `org.freedesktop.NetworkManager`.
    - **Concurrent AP Scanning**: Employs `futures_util::future::join_all` and `tokio::join!` to concurrently query Wi-Fi devices (`device_type == 2`) and scan Access Points (SSID, signal strength, WPA/RSN security flags).
    - **Enterprise Wi-Fi & VPN**: Configures 802.1x EAP (PEAP) networks and VPN tunnels (OpenVPN/WireGuard) by assembling `zbus::zvariant::Value` variant dictionaries passed to `NmSettingsProxy.add_connection`.
 
-4. **`bluetooth.rs` (`os.ermete.Bedrock.Bluetooth`)**:
+4. **`bluetooth.rs` (`os.athanor.Bedrock.Bluetooth`)**:
    - **BlueZ Integration**: Interoperates with BlueZ (`org.bluez`) on `/org/bluez/hci0` via `PropertiesProxy` and `ObjectManagerProxy` to enumerate paired/connected Bluetooth peripherals.
 
 5. **`portal.rs` & `portal_screencast.rs` (Strict Fail-Closed XDG Desktop Portal)**:
-   - **Zero-Trust Fail-Closed Policy**: If permission prompts fail, or if Micro-VM DBus authentication cannot be established via `org.ermete.Hypervisor`, the portal enforces a strict `return false` (denial by default). String-based application ID spoofing is architecturally rejected.
+   - **Zero-Trust Fail-Closed Policy**: If permission prompts fail, or if Micro-VM DBus authentication cannot be established via `org.athanor.Hypervisor`, the portal enforces a strict `return false` (denial by default). String-based application ID spoofing is architecturally rejected.
    - **`org.freedesktop.impl.portal.Settings`**: Exposes desktop theme tokens read reactively from `watch::Receiver<AppearanceDomainState>`.
    - **`org.freedesktop.impl.portal.ScreenCast`**: Rejects mocked or insecure `/dev/null` PipeWire stream passing. Acknowledges missing features explicitly via DBus Errors instead of presenting a fake success surface.
 
-6. **`voiceover.rs` (`os.ermete.VoiceOver`)**:
-   - Monitors state from `watch::Receiver<VoiceOverDomainState>` and forwards text payloads to `os.ermete.VoiceOverWorker`.
+6. **`voiceover.rs` (`os.athanor.VoiceOver`)**:
+   - Monitors state from `watch::Receiver<VoiceOverDomainState>` and forwards text payloads to `os.athanor.VoiceOverWorker`.
 
 7. **`qos.rs` (App QoS Observer)**:
    - Evaluates background process PIDs and applies high nice values (`nice 19`) via `libc::setpriority(PRIO_PROCESS, pid, 19)` to preserve CPU cycles for foreground interactive tasks.
 
 ---
 
-## 3. In-Depth Analysis: `ermete-gatekeeper-rs` (Zero-Trust Execution Gatekeeper)
+## 3. In-Depth Analysis: `athanor-gatekeeper-rs` (Zero-Trust Execution Gatekeeper)
 
-`ermete-gatekeeper-rs` is the root security enforcement engine. It prevents execution of untrusted or unverified binaries downloaded from external channels.
+`athanor-gatekeeper-rs` is the root security enforcement engine. It prevents execution of untrusted or unverified binaries downloaded from external channels.
 
 ### 3.1 Kernel Interception via `fanotify`
 
@@ -105,7 +105,7 @@ When any process attempts binary execution on these filesystems, the Linux kerne
                                           ▼
                          ┌─────────────────────────────────┐
                          │ Is file xattr quarantined?      │
-                         │ (user.ermete.quarantine check)  │
+                         │ (user.athanor.quarantine check)  │
                          └────────────────┬────────────────┘
                                           │
                    ┌──────────────────────┴──────────────────────┐
@@ -123,12 +123,12 @@ When any process attempts binary execution on these filesystems, the Linux kerne
                                                   [ Invocation of approve_execution(fd_id) ]
                                                                  │
                                                                  ▼
-                                                  [ Polkit Check: pkcheck os.ermete.gatekeeper.approve ]
+                                                  [ Polkit Check: pkcheck os.athanor.gatekeeper.approve ]
                                                                  │
                                       ┌──────────────────────────┴──────────────────────────┐
                                       │ Success                                             │ Failed
                                       ▼                                                     ▼
-                       [ Remove xattr user.ermete.quarantine ]                    [ Send FAN_DENY ]
+                       [ Remove xattr user.athanor.quarantine ]                    [ Send FAN_DENY ]
                                       │                                           (Block Exec)
                                       ▼
                        [ Spawn binary inside Bubblewrap ]
@@ -141,7 +141,7 @@ When any process attempts binary execution on these filesystems, the Linux kerne
 #### Detailed Execution Sequence:
 
 1. **Event Detection**: The async event loop driven by `tokio::io::unix::AsyncFd` reads `fanotify_event_metadata`.
-2. **Extended Attribute Inspection (TOCTOU-Safe)**: Resolves paths via `/proc/self/fd/<fd>` and performs non-blocking checks via `tokio::task::spawn_blocking` for the `user.ermete.quarantine` extended attribute.
+2. **Extended Attribute Inspection (TOCTOU-Safe)**: Resolves paths via `/proc/self/fd/<fd>` and performs non-blocking checks via `tokio::task::spawn_blocking` for the `user.athanor.quarantine` extended attribute.
 3. **Unquarantined Execution**: If the attribute is absent, immediately emits `FAN_ALLOW` to the kernel and closes the descriptor.
 4. **Interception & Prompt UI**: If the binary is quarantined:
    - Assigns a unique `fd_id` and records the file descriptor in a thread-safe `pending_events` map.
@@ -149,8 +149,8 @@ When any process attempts binary execution on these filesystems, the Linux kerne
    - The UI (`gatekeeper-ui`) renders a modal prompting for user authorization.
 5. **Approval & Bubblewrap Sandboxing**:
    - User approves execution via D-Bus method call `approve_execution(fd_id)`.
-   - **Polkit Check**: Gatekeeper executes `pkcheck --system-bus-name <sender> --action-id os.ermete.gatekeeper.approve`.
-   - Upon authorization, removes `user.ermete.quarantine` extended attribute.
+   - **Polkit Check**: Gatekeeper executes `pkcheck --system-bus-name <sender> --action-id os.athanor.gatekeeper.approve`.
+   - Upon authorization, removes `user.athanor.quarantine` extended attribute.
    - Spawns target binary inside a restricted **Bubblewrap (`bwrap`)** sandbox (`--unshare-all`, `--share-net`, `--ro-bind` for `/usr`, `/lib`, `/lib64`, `/etc`, `--proc /proc`).
    - Emits **`FAN_DENY`** to the kernel for the original unsandboxed execution request, handing off execution exclusively to the sandboxed child process.
 
@@ -162,10 +162,10 @@ When any process attempts binary execution on these filesystems, the Linux kerne
 
 | Daemon | D-Bus Bus | D-Bus Interface | Polkit Action (`action-id`) | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| `ermete-gatekeeper-rs` | **System Bus** | `os.ermete.Gatekeeper` | `os.ermete.gatekeeper.approve` | Approval & sandboxed execution of quarantined binaries |
-| `ermete-gatekeeper-rs` | **System Bus** | `os.ermete.Gatekeeper` | `os.ermete.gatekeeper.root` | Elevation request to root privileges (with FIDO2 fallback) |
-| `ermete-daemon-rs` | **Session Bus** | `org.ermete.Settings` | N/A | Modification of user settings & desktop theme tokens |
-| `ermete-daemon-rs` | **Session Bus** | `os.ermete.Bedrock` | N/A | Adjustment of system audio/volume parameters |
+| `athanor-gatekeeper-rs` | **System Bus** | `os.athanor.Gatekeeper` | `os.athanor.gatekeeper.approve` | Approval & sandboxed execution of quarantined binaries |
+| `athanor-gatekeeper-rs` | **System Bus** | `os.athanor.Gatekeeper` | `os.athanor.gatekeeper.root` | Elevation request to root privileges (with FIDO2 fallback) |
+| `athanor-daemon-rs` | **Session Bus** | `org.athanor.Settings` | N/A | Modification of user settings & desktop theme tokens |
+| `athanor-daemon-rs` | **Session Bus** | `os.athanor.Bedrock` | N/A | Adjustment of system audio/volume parameters |
 
 ### 4.2 Security Audit & Hardening Directives
 
@@ -191,7 +191,7 @@ graph TD
     end
 
     subgraph UserSpaceRoot ["User Space System Daemons (Root)"]
-        GK[ermete-gatekeeper-rs]
+        GK[athanor-gatekeeper-rs]
         PK[Polkit Authority / pkcheck]
         BWRAP[Bubblewrap Sandbox Engine]
         NM[NetworkManager Service]
@@ -199,14 +199,14 @@ graph TD
     end
 
     subgraph UserSpaceSession ["User Space Session Daemons (User Session)"]
-        DM[ermete-daemon-rs]
+        DM[athanor-daemon-rs]
         NIRI[Niri Compositor / $NIRI_SOCKET]
         PW[PipeWire Audio/Video Server]
         UI[Gatekeeper UI Prompt]
     end
 
     KERN -- FAN_OPEN_EXEC_PERM --> GK
-    GK -- Check xattr user.ermete.quarantine --> KERN
+    GK -- Check xattr user.athanor.quarantine --> KERN
     GK -- D-Bus Signal prompt_required --> UI
     UI -- Call approve_execution --> GK
     GK -- Authentication pkcheck --> PK

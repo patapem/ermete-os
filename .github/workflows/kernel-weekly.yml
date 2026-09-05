@@ -1,6 +1,6 @@
 name: Kernel Weekly
 
-# Riproducibilita' e benchmark del kernel (forge/specs/ermete-kernel; spec sezione 3 passo
+# Riproducibilita' e benchmark del kernel (forge/specs/azoth; spec sezione 3 passo
 # 8 e sezione 7, gate 5 e 6; fase K7). repro: sul runner self-hosted ricostruisce il pin
 # pubblicato con cache vuota e builder appena costruito e lo confronta con l'OCI pubblicato
 # (repro.py: config, System.map, vmlinux sezione per sezione, moduli senza firma); una
@@ -44,7 +44,7 @@ permissions:
   contents: read
 
 env:
-  IMAGE: ghcr.io/${{ github.repository_owner }}/ermete-os-kernel
+  IMAGE: ghcr.io/${{ github.repository_owner }}/azoth
 
 jobs:
   repro:
@@ -60,7 +60,7 @@ jobs:
       - name: Build the kernel builder image
         env:
           BUILDAH_ISOLATION: chroot
-        run: podman build -t localhost/ermete-kernel-builder forge/specs/ermete-kernel/builder
+        run: podman build -t localhost/azoth-builder forge/specs/azoth/builder
 
       - name: Rebuild the pinned kernel with an empty cache (B)
         # Cache nuova: ogni sorgente si riscarica e si riverifica, come alla prima build.
@@ -70,9 +70,9 @@ jobs:
           mkdir -p out-b
           podman run --rm \
             -v "$GITHUB_WORKSPACE:/forge" \
-            -v "$cache:/var/cache/ermete-kernel" \
-            -w /forge localhost/ermete-kernel-builder \
-            bash forge/specs/ermete-kernel/build.sh --stage build --out /forge/out-b
+            -v "$cache:/var/cache/azoth" \
+            -w /forge localhost/azoth-builder \
+            bash forge/specs/azoth/build.sh --stage build --out /forge/out-b
 
       - name: Published kernel (A)
         # Sempre dal registro: una copia locale dell'immagine potrebbe essere una build
@@ -81,7 +81,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          nvr=$(bash forge/specs/ermete-kernel/nvr.sh)
+          nvr=$(bash forge/specs/azoth/nvr.sh)
           [[ $(cat out-b/nvr) == "$nvr" ]] || { echo "NVR ricostruito $(cat out-b/nvr), pubblicato ${nvr}"; exit 1; }
           echo "${GH_TOKEN}" | podman login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
           trap 'podman logout ghcr.io' EXIT
@@ -94,8 +94,8 @@ jobs:
         run: |
           set -euo pipefail
           rc=0
-          podman run --rm -v "$GITHUB_WORKSPACE:/forge" -w /forge localhost/ermete-kernel-builder \
-            python3 forge/specs/ermete-kernel/repro.py --a /forge/out-a --b /forge/out-b --out /forge/repro-out || rc=$?
+          podman run --rm -v "$GITHUB_WORKSPACE:/forge" -w /forge localhost/azoth-builder \
+            python3 forge/specs/azoth/repro.py --a /forge/out-a --b /forge/out-b --out /forge/repro-out || rc=$?
           cat repro-out/summary.md >> "$GITHUB_STEP_SUMMARY"
           exit "$rc"
 
@@ -128,19 +128,19 @@ jobs:
       - name: Build the kernel builder image
         env:
           BUILDAH_ISOLATION: chroot
-        run: podman build -t localhost/ermete-kernel-builder forge/specs/ermete-kernel/builder
+        run: podman build -t localhost/azoth-builder forge/specs/azoth/builder
 
       - name: Run build.sh --variant
         env:
           VARIANT: ${{ inputs.variant }}
         run: |
           set -euo pipefail
-          mkdir -p "$HOME/.cache/ermete-kernel" out-v
+          mkdir -p "$HOME/.cache/azoth" out-v
           podman run --rm \
             -v "$GITHUB_WORKSPACE:/forge" \
-            -v "$HOME/.cache/ermete-kernel:/var/cache/ermete-kernel" \
-            -w /forge localhost/ermete-kernel-builder \
-            bash forge/specs/ermete-kernel/build.sh --stage build --variant "$VARIANT" --out /forge/out-v
+            -v "$HOME/.cache/azoth:/var/cache/azoth" \
+            -w /forge localhost/azoth-builder \
+            bash forge/specs/azoth/build.sh --stage build --variant "$VARIANT" --out /forge/out-v
           cat out-v/nvr
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -168,12 +168,12 @@ jobs:
       - name: Build the boot-matrix image
         env:
           BUILDAH_ISOLATION: chroot
-        run: podman build -t localhost/ermete-kernel-boot forge/specs/ermete-kernel/boot
+        run: podman build -t localhost/azoth-boot forge/specs/azoth/boot
 
       - name: Published kernel
         run: |
           set -euo pipefail
-          nvr=$(bash forge/specs/ermete-kernel/nvr.sh)
+          nvr=$(bash forge/specs/azoth/nvr.sh)
           podman pull "${IMAGE}:${nvr}"
           ctr=$(podman create "${IMAGE}:${nvr}" /kernel)
           mkdir -p out-a && podman cp "${ctr}:/." out-a/ && podman rm "$ctr" > /dev/null
@@ -190,8 +190,8 @@ jobs:
         run: |
           set -euo pipefail
           bench() { # bench RPMS OUT LABEL
-            podman run --rm --device /dev/kvm -v "$GITHUB_WORKSPACE:/forge" -w /forge localhost/ermete-kernel-boot \
-              bash forge/specs/ermete-kernel/bench.sh --rpms "/forge/$1" --out "/forge/bench-out/$2" --label "$3"
+            podman run --rm --device /dev/kvm -v "$GITHUB_WORKSPACE:/forge" -w /forge localhost/azoth-boot \
+              bash forge/specs/azoth/bench.sh --rpms "/forge/$1" --out "/forge/bench-out/$2" --label "$3"
           }
           bench out-a published published
           if [[ -d out-v ]]; then bench out-v "variant-${VARIANT}" "$VARIANT"; fi
@@ -208,7 +208,7 @@ jobs:
             fi
           done
           mkdir -p "history/$GITHUB_RUN_ID" && cp -r bench-out/. "history/$GITHUB_RUN_ID/"
-          python3 forge/specs/ermete-kernel/bench-report.py history/* | tee -a "$GITHUB_STEP_SUMMARY"
+          python3 forge/specs/azoth/bench-report.py history/* | tee -a "$GITHUB_STEP_SUMMARY"
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: ${{ always() && hashFiles('bench-out/**') != '' }}

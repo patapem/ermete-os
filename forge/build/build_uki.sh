@@ -3,11 +3,11 @@
 # Deterministic Build Timestamp (Reproducible Builds)
 export SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH:-1723320000}
 # ==============================================================================
-# 🌋 Ermete OS - UKI (Unified Kernel Image) Assembler (Fase 14)
+# 🌋 Athanor OS - UKI (Unified Kernel Image) Assembler (Fase 14)
 # ==============================================================================
 # Generates a Unified Kernel Image (UKI) PE binary combining the Linux kernel,
 # initramfs, os-release metadata, and kernel command line into a single EFI
-# executable target (`build/ErmeteOS.efi`).
+# executable target (`build/AthanorOS.efi`).
 #
 # Supports:
 #   1. systemd-ukify tool (recommended modern standard)
@@ -23,7 +23,7 @@ WORKSPACE_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 BUILD_DIR="${WORKSPACE_ROOT}/build"
 
 # Default Output Target
-OUTPUT_EFI="${BUILD_DIR}/ErmeteOS.efi"
+OUTPUT_EFI="${BUILD_DIR}/AthanorOS.efi"
 
 # Default Input Parameters (overridable via CLI flags or ENV)
 VMLINUZ="${VMLINUZ:-}"
@@ -45,7 +45,7 @@ usage() {
     cat << EOF
 Usage: $(basename "$0") [OPTIONS]
 
-Ermete OS - Unified Kernel Image (UKI) Assembler Engine (Fase 14)
+Athanor OS - Unified Kernel Image (UKI) Assembler Engine (Fase 14)
 
 Options:
   -k, --kernel PATH        Path to vmlinuz kernel image (Default: auto-detect)
@@ -53,7 +53,7 @@ Options:
   -r, --os-release PATH    Path to os-release file (Default: /etc/os-release)
   -c, --cmdline STRING     Kernel command line arguments
   -s, --stub PATH          Path to systemd-stub EFI binary (Default: auto-detect)
-  -o, --output PATH        Output path for UKI binary (Default: build/ErmeteOS.efi)
+  -o, --output PATH        Output path for UKI binary (Default: build/AthanorOS.efi)
       --tool TOOL          Assembly backend tool ('auto', 'ukify', or 'objcopy')
       --sign               Enable Secure Boot signing via sbsign
       --sb-key PATH        Path to Secure Boot private key
@@ -69,7 +69,7 @@ Examples:
   ./build/build_uki.sh
 
   # Explicit parameters:
-  ./build/build_uki.sh -k /boot/vmlinuz-6.10.0 -i /boot/initramfs-6.10.0.img -o build/ErmeteOS.efi
+  ./build/build_uki.sh -k /boot/vmlinuz-6.10.0 -i /boot/initramfs-6.10.0.img -o build/AthanorOS.efi
 
   # Force objcopy fallback backend:
   ./build/build_uki.sh --tool objcopy
@@ -102,7 +102,7 @@ done
 mkdir -p "${BUILD_DIR}"
 
 echo "=============================================================================="
-echo "🌋 Ermete OS - UKI Assembly Engine (Fase 14)"
+echo "🌋 Athanor OS - UKI Assembly Engine (Fase 14)"
 echo "=============================================================================="
 
 # ------------------------------------------------------------------------------
@@ -287,9 +287,9 @@ fi
 # ------------------------------------
 # sbsign --key /etc/pki/secureboot/private/uki-signing.key \
 #        --cert /etc/pki/uki/uki-signing.crt \
-#        --output build/ErmeteOS.efi.signed \
-#        build/ErmeteOS.efi
-# mv -f build/ErmeteOS.efi.signed build/ErmeteOS.efi
+#        --output build/AthanorOS.efi.signed \
+#        build/AthanorOS.efi
+# mv -f build/AthanorOS.efi.signed build/AthanorOS.efi
 
 if [[ "${SIGN_IMAGE}" == "true" ]] && [[ "${ALREADY_SIGNED:-false}" != "true" ]]; then
     echo "------------------------------------------------------------------------------"

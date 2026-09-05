@@ -1,0 +1,89 @@
+%global debug_package %{nil}
+%global __requires_exclude ^kernel-rt$
+Name:           athanor-system-config
+Version:        1.0.0
+Release:        %{?autorelease}%{!?autorelease:12.fc43}
+Summary:        Athanor OS athanor-system-config
+License:        MIT
+URL:            https://github.com/hr-mes/athanor-forge
+BuildArch:      noarch
+
+Requires: cage greetd greenboot systemd-ukify niri nodejs
+# Core UI andDaemons
+Requires: athanor-shell-rs athanor-settings-rs athanor-daemon-rs
+Requires: athanor-store-rs athanor-sysmon-ebpf athanor-cloud-rs xdg-desktop-portal-athanor
+Requires: usbguard bolt
+
+Requires:       bcachefs-tools
+%description
+Provides athanor-system-config for Athanor OS.
+
+%prep
+# Nothing to prep
+
+%build
+# Nothing to build
+
+%install
+mkdir -p %{buildroot}
+cp -a %{_sourcedir}/usr %{buildroot}/ 2>/dev/null || true
+cp -a %{_sourcedir}/etc %{buildroot}/ 2>/dev/null || true
+
+mkdir -p %{buildroot}/usr/share/athanor-system-config
+mv %{buildroot}/etc/usbguard/usbguard-daemon.conf %{buildroot}/usr/share/athanor-system-config/usbguard-daemon.conf
+mv %{buildroot}/etc/yum.repos.d/athanor-forge.repo %{buildroot}/usr/share/athanor-system-config/athanor-forge.repo
+
+%post
+# Configurations are now managed declaratively via tmpfiles.d (10-athanor-greetd.conf)
+mkdir -p /etc/usbguard
+mkdir -p /etc/yum.repos.d
+
+%files
+%dir /usr/share/athanor-system-config
+%attr(0755,root,root) /usr/bin/athanor-session
+%attr(0755,root,root) /usr/bin/athanor-uki-enroll
+%attr(0755,root,root) /usr/libexec/athanor-snapshot-trigger.sh
+/usr/lib/systemd/system/athanor-timewarp.service
+/usr/lib/systemd/system/athanor-timewarp.timer
+/usr/lib/systemd/system-preset/99-Athanor.preset
+/usr/lib/tmpfiles.d/10-athanor-greetd.conf
+/usr/share/athanor-system-config/greetd.toml
+/usr/share/athanor-system-config/usbguard-daemon.conf
+/usr/share/athanor-system-config/athanor-forge.repo
+%attr(0755,root,root) /etc/greenboot/check/required.d/10-greetd-running.sh
+%config(noreplace) /etc/security/limits.d/99-athanor-realtime.conf
+
+%changelog
+* Fri Jul 17 2026 Athanor Forge <forge@athanor.os> - 1.0.0-15
+- Fix DNF file conflicts: removed %dir ownerships for /etc/yum.repos.d and /etc/security/limits.d
+- Fix usbguard-daemon.conf RPM file conflict by copying it in %post instead of packaging it in /etc
+
+* Thu Jul 16 2026 Athanor Forge <forge@athanor.os> - 1.0.0-14
+- Enforce PREEMPT_RT scheduling limits for sub-5ms latency and add kernel-rt requirement
+
+* Thu Jul 16 2026 Athanor Forge <forge@athanor.os> - 1.0.0-12
+- Add systemd-ukify dependency and athanor-uki-enroll script for UKI generation and TPM2 LUKS enrollment
+
+* Thu Jul 16 2026 Athanor Forge <forge@athanor.os> - 1.0.0-11
+- Add /etc/yum.repos.d/athanor-forge.repo for live DNF rolling release updates
+
+* Tue Jul 14 2026 Athanor Forge <forge@athanor.os> - 1.0.0-10
+- Encapsulate /usr/bin/athanor-session native script and add %post symlink for /etc/greetd/config.toml
+
+* Tue Jul 14 2026 Athanor Forge <forge@athanor.os> - 1.0.0-9
+- Add Requires: cage greetd athanor-shell-rs and remove obsolete niri-greeter.kdl and greeter-bundle.js
+
+* Mon Jul 13 2026 Athanor Forge <forge@athanor.os> - 1.0.0-8
+- Remove direct /etc/greetd/config.toml to eliminate RPM transaction file conflict with greetd package (using tmpfiles L+ symlink override)
+
+* Mon Jul 13 2026 Athanor Forge <forge@athanor.os> - 1.0.0-7
+- Configure default_session command for cage Wayland kiosk executing athanor-shell-rs --greeter
+
+* Sat Jul 11 2026 Athanor Forge <forge@athanor.os> - 1.0.0-6
+- Fix %install source path expansion to copy directly from %{_sourcedir}/usr.
+
+* Sat Jul 11 2026 Athanor Forge <forge@athanor.os> - 1.0.0-5
+- Package updated greeter-bundle.js and shadow tmpfiles overrides for instant greeter transitions.
+
+* Wed Jul 01 2026 Athanor Forge <forge@athanor.os> - 1.0.0-1
+- Initial Bedrock encapsulation

@@ -1537,13 +1537,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-agentic-kernel"
+name = "athanor-agentic-kernel"
 version = "1.0.0"
 dependencies = [
  "anyhow",
  "aya",
  "bytes",
- "ermete-bus-api",
+ "athanor-bus-api",
  "libc",
  "serde",
  "serde_json",
@@ -1554,12 +1554,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-backup"
+name = "athanor-backup"
 version = "1.0.0"
 dependencies = [
  "chrono",
  "dirs",
- "ermete-bus-api",
+ "athanor-bus-api",
  "glib",
  "libc",
  "serde",
@@ -1570,7 +1570,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-bus-api"
+name = "athanor-bus-api"
 version = "1.0.0"
 dependencies = [
  "anyhow",
@@ -1592,12 +1592,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-cloud-rs"
+name = "athanor-cloud-rs"
 version = "1.0.0"
 dependencies = [
  "anyhow",
  "base64 0.21.7",
- "ermete-bus-api",
+ "athanor-bus-api",
  "pqc_dilithium",
  "pqc_kyber",
  "rand_core 0.6.4",
@@ -1614,12 +1614,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-cluster-mesh"
+name = "athanor-cluster-mesh"
 version = "1.0.0"
 dependencies = [
  "anyhow",
  "base64 0.21.7",
- "ermete-bus-api",
+ "athanor-bus-api",
  "rand 0.8.8",
  "serde",
  "serde_json",
@@ -1633,7 +1633,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-compositor"
+name = "athanor-compositor"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -1654,7 +1654,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-cvm-attestation"
+name = "athanor-cvm-attestation"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -1678,13 +1678,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-daemon-rs"
+name = "athanor-daemon-rs"
 version = "0.2.1"
 dependencies = [
  "anyhow",
  "aya",
- "ermete-bus-api",
- "ermete-style",
+ "athanor-bus-api",
+ "athanor-style",
  "futures-util",
  "libc",
  "libloading 0.8.9",
@@ -1699,12 +1699,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-dock"
+name = "athanor-dock"
 version = "1.0.0"
 dependencies = [
  "anyhow",
- "ermete-niri-ipc",
- "ermete-style",
+ "athanor-niri-ipc",
+ "athanor-style",
  "glib",
  "gtk4",
  "gtk4-layer-shell",
@@ -1717,7 +1717,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-doctor"
+name = "athanor-doctor"
 version = "1.0.0"
 dependencies = [
  "libc",
@@ -1728,13 +1728,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-ebpf-sched"
+name = "athanor-ebpf-sched"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "aya",
  "candle-core",
- "ermete-bus-api",
+ "athanor-bus-api",
  "libc",
  "serde",
  "serde_json",
@@ -1745,11 +1745,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-gatekeeper-rs"
+name = "athanor-gatekeeper-rs"
 version = "1.0.0"
 dependencies = [
  "anyhow",
- "ermete-bus-api",
+ "athanor-bus-api",
  "libc",
  "pqc_dilithium",
  "serde",
@@ -1763,7 +1763,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-greeter"
+name = "athanor-greeter"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -1785,12 +1785,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-hypervisor-daemon"
+name = "athanor-hypervisor-daemon"
 version = "1.0.0"
 dependencies = [
  "anyhow",
  "env_logger",
- "ermete-bus-api",
+ "athanor-bus-api",
  "hex",
  "libc",
  "log",
@@ -1809,11 +1809,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-init-oracle"
+name = "athanor-init-oracle"
 version = "1.0.0"
 dependencies = [
  "anyhow",
- "ermete-bus-api",
+ "athanor-bus-api",
  "regex",
  "serde",
  "serde_json",
@@ -1824,11 +1824,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-lvfs-rs"
+name = "athanor-lvfs-rs"
 version = "1.0.0"
 dependencies = [
  "anyhow",
- "ermete-bus-api",
+ "athanor-bus-api",
  "mimalloc",
  "reqwest 0.13.4",
  "serde",
@@ -1840,11 +1840,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-mdm-rs"
+name = "athanor-mdm-rs"
 version = "1.0.0"
 dependencies = [
  "anyhow",
- "ermete-bus-api",
+ "athanor-bus-api",
  "libc",
  "mimalloc",
  "serde",
@@ -1856,12 +1856,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-mesh-bus"
+name = "athanor-mesh-bus"
 version = "1.0.0"
 dependencies = [
  "anyhow",
  "base64 0.21.7",
- "ermete-bus-api",
+ "athanor-bus-api",
  "hex",
  "libc",
  "rand 0.8.8",
@@ -1880,14 +1880,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-mesh-sync"
+name = "athanor-mesh-sync"
 version = "1.0.0"
 dependencies = [
  "anyhow",
  "base64 0.21.7",
  "boringtun",
  "defguard_wireguard_rs",
- "ermete-bus-api",
+ "athanor-bus-api",
  "futures",
  "netlink-packet-route 0.19.0",
  "pqc_dilithium",
@@ -1900,12 +1900,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-net-unikernel"
+name = "athanor-net-unikernel"
 version = "1.0.0"
 dependencies = [
  "anyhow",
  "env_logger",
- "ermete-bus-api",
+ "athanor-bus-api",
  "libc",
  "log",
  "nix 0.29.0",
@@ -1918,7 +1918,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-niri-ipc"
+name = "athanor-niri-ipc"
 version = "0.1.0"
 dependencies = [
  "serde",
@@ -1928,10 +1928,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-oobe"
+name = "athanor-oobe"
 version = "0.1.0"
 dependencies = [
- "ermete-style",
+ "athanor-style",
  "gtk4",
  "relm4",
  "tokio",
@@ -1939,11 +1939,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-recovery"
+name = "athanor-recovery"
 version = "1.0.0"
 dependencies = [
  "anyhow",
- "ermete-style",
+ "athanor-style",
  "futures-util",
  "glib",
  "gtk4",
@@ -1958,13 +1958,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-settings-rs"
+name = "athanor-settings-rs"
 version = "1.0.0"
 dependencies = [
  "anyhow",
- "ermete-bus-api",
- "ermete-niri-ipc",
- "ermete-style",
+ "athanor-bus-api",
+ "athanor-niri-ipc",
+ "athanor-style",
  "glib",
  "gtk4",
  "libc",
@@ -1979,15 +1979,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-shell-rs"
+name = "athanor-shell-rs"
 version = "1.0.0"
 dependencies = [
  "arc-swap",
  "chrono",
  "clap",
- "ermete-dock",
- "ermete-niri-ipc",
- "ermete-style",
+ "athanor-dock",
+ "athanor-niri-ipc",
+ "athanor-style",
  "futures-util",
  "glib",
  "greetd_ipc",
@@ -2011,7 +2011,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-store"
+name = "athanor-store"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -2028,11 +2028,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-store-rs"
+name = "athanor-store-rs"
 version = "1.0.0"
 dependencies = [
  "anyhow",
- "ermete-style",
+ "athanor-style",
  "hex",
  "mimalloc",
  "pqc_dilithium",
@@ -2043,7 +2043,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-style"
+name = "athanor-style"
 version = "1.0.0"
 dependencies = [
  "glib",
@@ -2058,7 +2058,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-sysmon-ebpf"
+name = "athanor-sysmon-ebpf"
 version = "1.0.0"
 dependencies = [
  "aya",
@@ -2069,13 +2069,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-telemetry"
+name = "athanor-telemetry"
 version = "1.0.0"
 dependencies = [
  "anyhow",
  "aya",
  "chrono",
- "ermete-bus-api",
+ "athanor-bus-api",
  "libc",
  "serde",
  "serde_json",
@@ -2086,7 +2086,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ermete-updater-rs"
+name = "athanor-updater-rs"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -7174,7 +7174,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xdg-desktop-portal-ermete"
+name = "xdg-desktop-portal-athanor"
 version = "1.0.0"
 dependencies = [
  "anyhow",

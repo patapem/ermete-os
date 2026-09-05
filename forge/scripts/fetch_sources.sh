@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# ERMETE FORGE - fetch_sources.sh
+# ATHANOR FORGE - fetch_sources.sh
 # Scarica le sorgenti remote dichiarate in una spec (Source*/Patch* con URL)
 # in <sourcedir> e ne verifica il checksum contro SOURCES/sources.sha256.
 #

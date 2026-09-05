@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 
-echo "🛡️  [Ermete OS Stage-0] Verifying Compiler Toolchain GPG Signatures..."
+echo "🛡️  [Athanor OS Stage-0] Verifying Compiler Toolchain GPG Signatures..."
 
 # List of critical compilers and toolchain packages
 COMPILERS=("gcc" "gcc-c++" "rust" "cargo" "llvm" "clang")

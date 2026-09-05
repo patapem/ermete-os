@@ -7,7 +7,7 @@ ROOT_DIR = "."
 
 def build_graph():
     G = nx.Graph()
-    G.add_node("ermete-os", type="root", description="Ermete OS Core Repository")
+    G.add_node("athanor", type="root", description="Athanor OS Core Repository")
     
     # Scan major directories
     for root, dirs, files in os.walk(ROOT_DIR):
@@ -16,7 +16,7 @@ def build_graph():
         
         rel_root = os.path.relpath(root, ROOT_DIR)
         if rel_root == ".":
-            parent = "ermete-os"
+            parent = "athanor"
         else:
             parent = os.path.basename(rel_root)
             

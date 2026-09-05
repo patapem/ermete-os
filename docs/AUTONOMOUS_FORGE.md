@@ -1,6 +1,6 @@
-# Ermete OS: Autonomous Kernel & Spec Forge
+# Athanor OS: Autonomous Kernel & Spec Forge
 
-This document delineates the cutting-edge architecture designed for the continuous self-maintenance of the Ermete OS hybrid Chimera Kernel and RPM package repository. The primary directive of this infrastructure is to ensure that the operating system remains perpetually synchronized with upstream sources (Fedora ARK) and optimized with maximum performance patches (CachyOS / Clear Linux) within a zero-trust, highly automated build ecosystem.
+This document delineates the cutting-edge architecture designed for the continuous self-maintenance of the Athanor OS hybrid Chimera Kernel and RPM package repository. The primary directive of this infrastructure is to ensure that the operating system remains perpetually synchronized with upstream sources (Fedora ARK) and optimized with maximum performance patches (CachyOS / Clear Linux) within a zero-trust, highly automated build ecosystem.
 
 ## 1. Architectural Vision
 
@@ -16,7 +16,7 @@ The infrastructure comprises modular, hermetically isolated pillars:
 The core orchestrator responsible for compiling the Chimera Kernel:
 1. **Dynamic Ceiling (NVIDIA Shield)**: Queries installed proprietary NVIDIA driver releases and dynamically calculates the maximum allowable kernel release ceiling to eliminate ABI regressions and display crashes.
 2. **Dominant Matrix (CachyOS + Clear Linux)**: Pulls and prioritizes patches (`SOURCES/bedrock-*`) combining the BORE (Burst-Oriented Response Enhancer) scheduler with Clear Linux memory/CPU optimizations.
-3. **AST & Kconfig Tuning**: Injects specialized kernel configuration fragments (`ermete-bedrock.cfg`) enforcing `CONFIG_SCHED_BORE=y`, `CONFIG_HZ_1000=y`, `CONFIG_PREEMPT=y`, `CONFIG_LTO_CLANG_THIN=y`, and `-O3 -march=x86-64-v3`.
+3. **AST & Kconfig Tuning**: Injects specialized kernel configuration fragments (`athanor-bedrock.cfg`) enforcing `CONFIG_SCHED_BORE=y`, `CONFIG_HZ_1000=y`, `CONFIG_PREEMPT=y`, `CONFIG_LTO_CLANG_THIN=y`, and `-O3 -march=x86-64-v3`.
 
 ### B. Micro-Container OCI Packaging (`build_rolling_local.sh`)
 - Executes isolated RPM compilations inside ephemerally spawned OCI micro-containers (`scratch` or `fedora:43`).

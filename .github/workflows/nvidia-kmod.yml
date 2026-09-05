@@ -1,13 +1,13 @@
 name: NVIDIA kmod
 
-# I moduli kernel NVIDIA firmati e pubblicati (forge/specs/ermete-kernel/nvidia.sh,
+# I moduli kernel NVIDIA firmati e pubblicati (forge/specs/azoth/nvidia.sh,
 # docs/architecture/doc_kernel_build.md, sezione 10). build: nvidia-build.yml, i due
 # rami (open 610, legacy 580) contro il kernel-devel pubblicato per l'NVR dei pin.
 # sign: su runner GitHub nell'environment `signing`, un job che vede solo i .ko e la
 # MOK di progetto. boot: in QEMU con Secure Boot e la MOK di progetto arruolata, il
 # nvidia.ko firmato di ogni ramo deve passare la verifica della firma (ENODEV: niente
 # GPU) e una copia non firmata deve essere respinta (EKEYREJECTED). publish: OCI
-# ermete-os-nvidia:<nvr>-<ramo> con cosign, SBOM, attestazione dei pin e retention.
+# azoth-nvidia:<nvr>-<ramo> con cosign, SBOM, attestazione dei pin e retention.
 # Parte solo per dispatch: da Kernel Build a valle della pubblicazione (o del riuso)
 # del kernel, o a mano. Il gate sulle PR e' il job kmod di Kernel Build.
 
@@ -22,8 +22,8 @@ permissions:
   contents: read
 
 env:
-  KERNEL_IMAGE: ghcr.io/${{ github.repository_owner }}/ermete-os-kernel
-  IMAGE: ghcr.io/${{ github.repository_owner }}/ermete-os-nvidia
+  KERNEL_IMAGE: ghcr.io/${{ github.repository_owner }}/azoth
+  IMAGE: ghcr.io/${{ github.repository_owner }}/azoth-nvidia
 
 jobs:
   build:
@@ -52,7 +52,7 @@ jobs:
       - name: Build the nvidia image
         env:
           BUILDAH_ISOLATION: chroot
-        run: podman build -t localhost/ermete-kernel-nvidia forge/specs/ermete-kernel/nvidia
+        run: podman build -t localhost/azoth-nvidia forge/specs/azoth/nvidia
 
       - name: Kernel-devel from the published image
         # Solo per scripts/sign-file, che nvidia.sh estrae dal RPM.
@@ -60,7 +60,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          nvr=$(bash forge/specs/ermete-kernel/nvr.sh)
+          nvr=$(bash forge/specs/azoth/nvr.sh)
           echo "${GH_TOKEN}" | podman login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
           trap 'podman logout ghcr.io' EXIT
           ctr=$(podman create "${KERNEL_IMAGE}-devel:${nvr}" /kernel-devel)
@@ -79,9 +79,9 @@ jobs:
           podman run --rm \
             -v "$GITHUB_WORKSPACE:/forge" \
             -v "$RUNNER_TEMP/mok.key:/run/mok.key:ro" \
-            -w /forge localhost/ermete-kernel-nvidia \
-            bash forge/specs/ermete-kernel/nvidia.sh sign --key /run/mok.key \
-              --cert forge/specs/ermete-kernel/keys/mok/ermete-mok.pem --devel /forge/devel --out /forge/out
+            -w /forge localhost/azoth-nvidia \
+            bash forge/specs/azoth/nvidia.sh sign --key /run/mok.key \
+              --cert forge/specs/azoth/keys/mok/athanor-mok.pem --devel /forge/devel --out /forge/out
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -110,7 +110,7 @@ jobs:
       - name: Kernel-core from the published image
         run: |
           set -euo pipefail
-          nvr=$(bash forge/specs/ermete-kernel/nvr.sh)
+          nvr=$(bash forge/specs/azoth/nvr.sh)
           ctr=$(podman create "${KERNEL_IMAGE}:${nvr}" /kernel-core)
           mkdir -p out && podman cp "${ctr}:/." out/ && podman rm "$ctr" > /dev/null
           echo "nvr=${nvr}" >> "$GITHUB_ENV"
@@ -120,7 +120,7 @@ jobs:
       - name: Build the boot-matrix image
         env:
           BUILDAH_ISOLATION: chroot
-        run: podman build -t localhost/ermete-kernel-boot forge/specs/ermete-kernel/boot
+        run: podman build -t localhost/azoth-boot forge/specs/azoth/boot
 
       - name: Run boot.sh with the signed modules
         # Solo i casi UEFI: la fiducia nella MOK arriva da MokListRT, che senza shim non
@@ -129,10 +129,10 @@ jobs:
           set -euo pipefail
           mkdir -p boot-out
           ko="lib/modules/${nvr}.x86_64/extra/nvidia/nvidia.ko"
-          podman run --rm --device /dev/kvm -v "$GITHUB_WORKSPACE:/forge" -w /forge localhost/ermete-kernel-boot \
-            bash forge/specs/ermete-kernel/boot.sh --rpms /forge/out --out /forge/boot-out \
+          podman run --rm --device /dev/kvm -v "$GITHUB_WORKSPACE:/forge" -w /forge localhost/azoth-boot \
+            bash forge/specs/azoth/boot.sh --rpms /forge/out --out /forge/boot-out \
               --case uefi-nehalem --case uefi-host \
-              --mok forge/specs/ermete-kernel/keys/mok/ermete-mok.pem \
+              --mok forge/specs/azoth/keys/mok/athanor-mok.pem \
               --insmod "signed/open/${ko}:ENODEV" \
               --insmod "signed/legacy/${ko}:ENODEV" \
               --insmod "unsigned/open/${ko}:EKEYREJECTED"
@@ -179,7 +179,7 @@ jobs:
           BUILDAH_ISOLATION: chroot
         run: |
           set -euo pipefail
-          nvr=$(bash forge/specs/ermete-kernel/nvr.sh)
+          nvr=$(bash forge/specs/azoth/nvr.sh)
           echo "${GH_TOKEN}" | buildah login -u "${GITHUB_ACTOR}" --password-stdin ghcr.io
           mkdir -p digests
           for driver in open legacy; do
@@ -188,7 +188,7 @@ jobs:
             ctr=$(buildah from scratch)
             buildah copy "$ctr" "out/${driver}/" /
             buildah config \
-              --label org.opencontainers.image.title="ermete-os-nvidia ${driver}" \
+              --label org.opencontainers.image.title="azoth-nvidia ${driver}" \
               --label org.opencontainers.image.version="${nvr}-${driver}-${version}" \
               --label org.opencontainers.image.revision="${GITHUB_SHA}" \
               --label org.opencontainers.image.source="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}" \
@@ -210,7 +210,7 @@ jobs:
             ref="${IMAGE}@$(cat "digests/${driver}")"
             python3 - "$driver" > "pins-${driver}.json" <<'PY'
           import json, pathlib, re, sys
-          k = pathlib.Path("forge/specs/ermete-kernel")
+          k = pathlib.Path("forge/specs/azoth")
           pins = dict(re.findall(r"^(NVIDIA_\w+)=(.*)$", (k / "pins.env").read_text(), re.M))
           driver = sys.argv[1]
           print(json.dumps({"driver": driver, "version": (pathlib.Path("out") / driver / "version").read_text().strip(),
@@ -229,7 +229,7 @@ jobs:
           SYFT_REGISTRY_AUTH_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Retention (retention.sh)
-        run: bash forge/specs/ermete-kernel/retention.sh
+        run: bash forge/specs/azoth/retention.sh
 
       - name: Verify (gate K4)
         run: |

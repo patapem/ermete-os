@@ -3,7 +3,7 @@
 Name:           ripgrep-native
 Version:        14.1.1
 Release:        1%{?dist}
-Summary:        Assimilated Fast Line-Oriented Search Tool built natively from source for Ermete OS
+Summary:        Assimilated Fast Line-Oriented Search Tool built natively from source for Athanor OS
 License:        Unlicense OR MIT
 URL:            https://github.com/BurntSushi/ripgrep
 Source0:        https://github.com/BurntSushi/ripgrep/archive/refs/tags/%{version}.tar.gz#/ripgrep-%{version}.tar.gz
@@ -19,7 +19,7 @@ BuildRequires:  mold
 
 %description
 ripgrep is a line-oriented search tool that recursively searches your current directory for a regex pattern.
-Compiled natively in Ermete Forge from Rust source with extreme x86-64-v3 optimizations.
+Compiled natively in Athanor Forge from Rust source with extreme x86-64-v3 optimizations.
 
 %prep
 %autosetup -n ripgrep-%{version}
@@ -42,6 +42,6 @@ install -Dm755 target/release/rg %{buildroot}/usr/bin/rg
 /usr/bin/rg
 
 %changelog
-* Sat Aug 08 2026 Ermete Forge <forge@ermete.os> - 14.1.1-1
-- Assimilated ripgrep native source build for Ermete OS.
+* Sat Aug 08 2026 Athanor Forge <forge@athanor.os> - 14.1.1-1
+- Assimilated ripgrep native source build for Athanor OS.
 

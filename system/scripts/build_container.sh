@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-TARGET_IMAGE="${1:-ermete-os-system}"
+TARGET_IMAGE="${1:-athanor-system}"
 TAG="${2:-latest}"
 
 BUILD_ARGS=()

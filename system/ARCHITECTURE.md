@@ -1,7 +1,7 @@
-# Ermete OS v3.0 Architectural Specification
+# Athanor OS v3.0 Architectural Specification
 
 > **Author**: Architecture Auditor  
-> **Repository Root**: `/var/home/ermete/GEMINI/ermete-os`  
+> **Repository Root**: `/var/home/athanor/GEMINI/athanor`  
 > **Logic Map Status**: Synchronized (`codegraph sync`, `graphify --update`)  
 > **Release Date**: August 7, 2026  
 > **Security Clearance**: Formally Verified (AWS Kani Proofs) & Zero-Trust Hardened  
@@ -10,7 +10,7 @@
 
 ## Executive Summary & Architectural Overview
 
-**Ermete OS v3.0** defines the system architecture for an immutable, zero-trust desktop operating system. Ermete OS fuses an **Immutable Core** architecture based on **Unified Kernel Images (UKI)** and **Bcachefs Atomic Snapshots** with a **Zero-Trust Wire-Speed Processing** paradigm.
+**Athanor OS v3.0** defines the system architecture for an immutable, zero-trust desktop operating system. Athanor OS fuses an **Immutable Core** architecture based on **Unified Kernel Images (UKI)** and **Bcachefs Atomic Snapshots** with a **Zero-Trust Wire-Speed Processing** paradigm.
 
 Key architectural features include an **OCI Flatpak Store (SLSA Level 4)** isolated from unverified third-party repositories, an **Astro.js Starlight Portal** served with static zero-overhead Pagefind index, a multi-level **deterministic DAG build engine**, and formal mathematical verification via **AWS Kani** enforced alongside **Strict Clippy**.
 
@@ -22,9 +22,9 @@ graph TD
     end
 
     subgraph Vertical_Layers ["VERTICAL LAYERS (Subsystems)"]
-        KERNEL["Ermete Chimera Kernel (Clang ThinLTO, AutoFDO, BORE, BBRv3)"]
+        KERNEL["Athanor Chimera Kernel (Clang ThinLTO, AutoFDO, BORE, BBRv3)"]
         STORE["OCI Flatpak Store (SLSA 4, Cosign, GHCR)"]
-        TELEMETRY["Static Log Rules Engine (ermete-telemetry)"]
+        TELEMETRY["Static Log Rules Engine (athanor-telemetry)"]
         PORTAL["Astro.js Starlight Portal (Pagefind i18n, Static)"]
     end
 
@@ -48,7 +48,7 @@ graph TD
 ### 1.1 XDP / eBPF Network Fabric (Kernel Bypass Wire-Speed Firewall)
 *Primary Source: [`system/ebpf/ebpf-core/src/main.rs`](./ebpf/ebpf-core/src/main.rs)*
 
-The network architecture of Ermete OS bypasses the traditional Linux kernel network stack via **eBPF Express Data Path (XDP)** executing directly at the Network Interface Card (NIC) driver level.
+The network architecture of Athanor OS bypasses the traditional Linux kernel network stack via **eBPF Express Data Path (XDP)** executing directly at the Network Interface Card (NIC) driver level.
 
 - **In-Driver Processing (`XDP_PASS` / `XDP_DROP`)**: Ingress packets are evaluated in real-time (< 5 nanoseconds) prior to allocating `sk_buff` kernel socket buffers.
 - **Anomaly Detection & Scan Neutralization**:
@@ -59,7 +59,7 @@ The network architecture of Ermete OS bypasses the traditional Linux kernel netw
 - **Zero-Trust Port Authorization**: eBPF `HashMap<u16, u32>` maps for dynamic port whitelisting paired with lockless `Array<u64>` maps for high-frequency telemetry counters (`FIREWALL_STATS`).
 
 ### 1.2 Zbus IPC & Real-Time eBPF Uprobes Auditing
-*Primary Sources: [`forge/specs/ermete-niri-ipc`](../forge/specs/ermete-niri-ipc), [`forge/specs/ermete-sysmon-ebpf`](../forge/specs/ermete-sysmon-ebpf)*
+*Primary Sources: [`forge/specs/athanor-niri-ipc`](../forge/specs/athanor-niri-ipc), [`forge/specs/athanor-sysmon-ebpf`](../forge/specs/athanor-sysmon-ebpf)*
 
 Inter-process communication (IPC) uses **Zbus**, an asynchronous, native **Pure Rust** D-Bus implementation.
 
@@ -75,20 +75,20 @@ Inter-process communication (IPC) uses **Zbus**, an asynchronous, native **Pure 
 
 System observability is driven by explicit rules and hardware-level eBPF metrics, avoiding unreliable local ML models.
 
-- **`ermete-telemetry`**: A static log rules engine that parses journal events for CRITICAL/FATAL errors without inventing vector embeddings.
+- **`athanor-telemetry`**: A static log rules engine that parses journal events for CRITICAL/FATAL errors without inventing vector embeddings.
 - **`ebpf_monitor`**: Reads real-time XDP drop/pass stats from Ring-0 maps without simulating false-positive attacks.
 - **Fail-Closed Design**: If eBPF maps are unreadable, the system defaults to Zero (Fail-Closed) rather than hallucinating anomalies.
 
 ### 2.2 OCI Flatpak Store (SLSA Level 4 & Cosign Cryptographic Security)
-*Primary Source: [`system/ermete-store/src/main.rs`](./ermete-store/src/main.rs)*
+*Primary Source: [`system/athanor-store/src/main.rs`](./athanor-store/src/main.rs)*
 
-The **Ermete Store** package orchestrator enforces a cryptographically signed OCI registry (`ghcr.io/hr-mes/ermete-store`).
+The **Athanor Store** package orchestrator enforces a cryptographically signed OCI registry (`ghcr.io/hr-mes/athanor-store`).
 
 - **SLSA Level 4 Supply Chain Verification**: Packages are compiled in hermetic, reproducible environments and cryptographically signed using **Cosign**.
-- **Cryptographic Hardware Enforcement**: Prior to installation (`install_app`), the runtime verifies signatures using public keys stored in TPM 2.0 / Secure Storage (`/etc/ermete/keys/cosign.pub`). Verification failures abort installation immediately.
+- **Cryptographic Hardware Enforcement**: Prior to installation (`install_app`), the runtime verifies signatures using public keys stored in TPM 2.0 / Secure Storage (`/etc/athanor/keys/cosign.pub`). Verification failures abort installation immediately.
 
 ```rust
-// Verified snippet from system/ermete-store/src/main.rs
+// Verified snippet from system/athanor-store/src/main.rs
 let cosign_status = Command::new("cosign")
     .args(["verify", "--key", PUBLIC_KEY_PATH, &oci_image])
     .status()?;
@@ -97,10 +97,10 @@ if !cosign_status.success() {
 }
 ```
 
-### 2.3 Ermete Chimera Kernel (Clang ThinLTO, AutoFDO & BORE Scheduler)
-*Primary Source: [`forge/specs/ermete-kernel/prepare-chimera.sh`](../forge/specs/ermete-kernel/prepare-chimera.sh)*
+### 2.3 Athanor Chimera Kernel (Clang ThinLTO, AutoFDO & BORE Scheduler)
+*Primary Source: [`forge/specs/azoth/prepare-chimera.sh`](../forge/specs/azoth/prepare-chimera.sh)*
 
-The **Ermete Chimera Kernel** is compiled specifically for the `x86-64-v3` ISA:
+The **Athanor Chimera Kernel** is compiled specifically for the `x86-64-v3` ISA:
 
 - **Clang LLVM ThinLTO**: Inter-procedural Link-Time Optimization eliminating cross-module call overhead and expanding cross-file inline optimizations.
 - **AutoFDO (Sample PGO)**: Profile-guided optimization using production trace data (`-fprofile-sample-use=/forge/profiles/kernel_autofdo.profdata`) to maximize CPU branch predictor accuracy.
@@ -117,37 +117,37 @@ System documentation is served via **Astro.js Starlight**.
 
 ### 2.5 Core System Architecture Services
 
-Ermete OS anchors its core capabilities around 4 specialized system services:
+Athanor OS anchors its core capabilities around 4 specialized system services:
 
-1. **Kernel AI Scheduler (`ermete-ebpf-sched`)**  
-   *Path:* [`system/ermete-ebpf-sched`](./ermete-ebpf-sched)  
+1. **Kernel AI Scheduler (`athanor-ebpf-sched`)**  
+   *Path:* [`system/athanor-ebpf-sched`](./athanor-ebpf-sched)  
    Intercepts Ring-0 `sys_execve` events via eBPF probes, reads asynchronous eBPF map heuristics updated by the local user-space NPU AI daemon, and applies real-time CPU scheduling (without synchronous blocking) via `sched_ext` (targeting 100μs for Realtime NPU tasks vs 20ms for background processing) and cgroup v2 `cpu.weight`.
 
-2. **Micro-Hypervisor Enclave Daemon (`ermete-hypervisor-daemon`)**  
-   *Path:* [`system/ermete-hypervisor-daemon`](./ermete-hypervisor-daemon)  
+2. **Micro-Hypervisor Enclave Daemon (`athanor-hypervisor-daemon`)**  
+   *Path:* [`system/athanor-hypervisor-daemon`](./athanor-hypervisor-daemon)  
    Orchestrates confidential enclaves inside encrypted hardware memory (AMD SEV-SNP / Intel TDX) using KVM and `vmm-sys-util`.
 
-3. **Mesh PQC Daemon (`ermete-mesh-bus`)**  
-   *Path:* [`system/ermete-mesh-bus`](./ermete-mesh-bus)  
+3. **Mesh PQC Daemon (`athanor-mesh-bus`)**  
+   *Path:* [`system/athanor-mesh-bus`](./athanor-mesh-bus)  
    P2P mesh network daemon secured with post-quantum cryptography. Employs **ML-KEM-1024 (Kyber1024)** key encapsulation and **Dilithium5 (ML-DSA-87)** digital signatures across P2P WireGuard tunnels. (Note: Zbus IPC strictly uses unencrypted zero-copy Unix Domain Sockets for zero-latency local communication).
 
-4. **Flatpak Declarative Orchestrator (`ermete-store`)**  
-   *Path:* [`system/ermete-store`](./ermete-store)  
+4. **Flatpak Declarative Orchestrator (`athanor-store`)**  
+   *Path:* [`system/athanor-store`](./athanor-store)  
    Isolated declarative package manager. Verifies and installs OCI application containers signed with **Cosign** under **SLSA Level 4** compliance.
 
 ### 2.6 Native Pure-Rust Core Subsystems
 
-Ermete OS implements 5 native **Pure Rust** system daemons:
+Athanor OS implements 5 native **Pure Rust** system daemons:
 
-1. **`ermete-compositor`** ([`system/ermete-compositor`](./ermete-compositor))  
+1. **`athanor-compositor`** ([`system/athanor-compositor`](./athanor-compositor))  
    Native Rust Wayland compositor powered by the Smithay framework (DRM/KMS, Udev, EGL). Delivers 144Hz glassmorphic rendering and tiling engine.
 2. **`Systemd Monitor`** ([`system/Systemd Monitor`](./Systemd Monitor))  
    Systemd State Monitor & Health Recovery daemon. Actively listens to systemd DBus to monitor critical service states.
 3. **`wireplumber` & `pipewire`** (Upstream Standards)  
    Replaced custom incomplete audio buses with the industry-standard PipeWire and WirePlumber for secure and flawless DSP audio routing.
-4. **`ermete-greeter`** ([`system/ermete-greeter`](./ermete-greeter))  
+4. **`athanor-greeter`** ([`system/athanor-greeter`](./athanor-greeter))  
    Display Manager featuring TPM 2.0 PCR hardware attestation. Implements `ZeroizeOnDrop` wrappers for immediate credential zeroing in RAM.
-5. **`xdg-desktop-portal-ermete`** ([`forge/...`](../forge/specs/ermete-xdg-desktop-portal-ermete/xdg-desktop-portal-ermete-1.0.0))  
+5. **`xdg-desktop-portal-athanor`** ([`forge/...`](../forge/specs/athanor-xdg-desktop-portal-athanor/xdg-desktop-portal-athanor-1.0.0))  
    Strict Fail-Closed Zero-Trust Portal. Flatpak permissions are unconditionally denied if the security prompt fails. VM isolation verified via cryptographic DBus, not spoofable string names.
 
 ---
@@ -155,9 +155,9 @@ Ermete OS implements 5 native **Pure Rust** system daemons:
 ## 3. Formal Verification & Topology Orchestration
 
 ### 3.1 AWS Kani Formal Verification & Strict Clippy Enforcement
-*Primary Source: [`forge/specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/security.rs`](../forge/specs/ermete-gatekeeper-rs/ermete-gatekeeper-rs-1.0.0/src/security.rs)*
+*Primary Source: [`forge/specs/athanor-gatekeeper-rs/athanor-gatekeeper-rs-1.0.0/src/security.rs`](../forge/specs/athanor-gatekeeper-rs/athanor-gatekeeper-rs-1.0.0/src/security.rs)*
 
-Ermete OS applies **mathematical formal verification (AWS Kani Model Checker)** across critical security invariants.
+Athanor OS applies **mathematical formal verification (AWS Kani Model Checker)** across critical security invariants.
 
 - **Constant-Time Comparison Proofs**: Mathematical proof that security token comparisons complete in constant time, preventing side-channel timing attacks (`#[kani::proof]`).
 - **Buffer & Ring-Buffer Bound Guarantees**: Formal proof that memory offset bounds within `Gatekeeper` buffers never suffer Buffer Overflow, Integer Overflow, or Underflow (`kani::assert(next_offset <= buffer_len)`).
@@ -194,9 +194,9 @@ The operating system build and deployment infrastructure is driven by a Directed
 
 ## 4. Architectural Comparison Matrix
 
-The matrix below illustrates the technical parameters of **Ermete OS v3.0** compared to other operating systems.
+The matrix below illustrates the technical parameters of **Athanor OS v3.0** compared to other operating systems.
 
-| Architectural Domain | Apple (macOS) | Microsoft (Windows 11) | Google (ChromeOS / Fuchsia) | **Ermete OS v3.0** |
+| Architectural Domain | Apple (macOS) | Microsoft (Windows 11) | Google (ChromeOS / Fuchsia) | **Athanor OS v3.0** |
 | :--- | :--- | :--- | :--- | :--- |
 | **Kernel Architecture** | XNU Monolithic | Monolithic Hybrid | Linux / Microkernel Zircon | **Chimera Kernel Clang ThinLTO + AutoFDO + BORE Scheduler + BBRv3 (x86-64-v3)** |
 | **Network & Firewall** | User-space Socket Filter | Windows Defender Firewall | Standard Linux iptables / nftables | **XDP eBPF Driver Firewall (< 5ns, Zero Context-Switch)** |
@@ -210,7 +210,7 @@ The matrix below illustrates the technical parameters of **Ermete OS v3.0** comp
 
 ## 5. Architectural Compliance & Verification Audit
 
-The architectural audit confirms that **Ermete OS v3.0** fulfills all design specifications:
+The architectural audit confirms that **Athanor OS v3.0** fulfills all design specifications:
 
 1. **Security Assurance**: The combination of **Kani Formal Verification**, **Cosign SLSA Level 4 Compliance**, **eBPF XDP Firewall**, and **Bcachefs Snapshots** provides a defensive perimeter against network threats and supply-chain attacks.
 2. **Performance Optimization**: The **Chimera** kernel compiled with **AutoFDO** and **ThinLTO**, coupled with IPC over **Zbus**, provides low latency execution.
@@ -223,11 +223,11 @@ The architectural audit confirms that **Ermete OS v3.0** fulfills all design spe
 
 
 ## 3. Advanced Features (Implemented)
-- **Security Audit Center**: A dedicated UI in ermete-settings-rs providing real-time visibility into XDP Firewall drops and Fail-Closed portal denials, ensuring transparent security.
-- **Micro-VM GPU Acceleration**: ermete-hypervisor-daemon natively supports the --gpu flag and wayland_sock passthrough to enable hardware-accelerated Vulkan rendering inside isolated crosvm instances.
+- **Security Audit Center**: A dedicated UI in athanor-settings-rs providing real-time visibility into XDP Firewall drops and Fail-Closed portal denials, ensuring transparent security.
+- **Micro-VM GPU Acceleration**: athanor-hypervisor-daemon natively supports the --gpu flag and wayland_sock passthrough to enable hardware-accelerated Vulkan rendering inside isolated crosvm instances.
 - **Legacy X11 Translation**: Support for isolated Xwayland bridges, allowing legacy applications to run securely without breaching the Wayland Zero-Trust perimeter.
 
 ## 4. Hardware Independence & Storage Efficiency (Implemented)
 - **Dynamic IOMMU Separation**: Integration of the  001-acs-override.patch inside the Chimera Kernel guarantees strict IOMMU device grouping even on consumer motherboards, allowing perfect GPU passthrough.
 - **Bcachefs ZSTD & Deduplication**: The root filesystem is explicitly mounted with compression=zstd,background_compression=zstd and block-level deduplication to aggressively reduce the OCI and Micro-VM storage footprint.
-- **Zero-Trust Mesh Routing**: The Micro-VMs spawned by crosvm are directly bound via TAP interfaces (ermete-mesh-tap0) to the post-quantum ermete-mesh-bus, bypassing the physical local LAN entirely.
+- **Zero-Trust Mesh Routing**: The Micro-VMs spawned by crosvm are directly bound via TAP interfaces (athanor-mesh-tap0) to the post-quantum athanor-mesh-bus, bypassing the physical local LAN entirely.

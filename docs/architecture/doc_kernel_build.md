@@ -1,9 +1,9 @@
-# Ermete OS: Specifica del Kernel (costruzione, pin, manutenzione automatica)
+# Athanor OS: Specifica del Kernel (costruzione, pin, manutenzione automatica)
 
 Stato: **approvata il 2026-09-03** (serie `stable` 7.x, `-O2` dal 2026-09-05, debuginfo
 come OCI separato con retention di due versioni; dal 2026-09-04 Rust acceso,
 ThinLTO e `RANDSTRUCT` spenti, sezione 13). Sostituisce il
-README "Testo Sacro" di `forge/specs/ermete-kernel/` e lo script
+README "Testo Sacro" di `forge/specs/azoth/` e lo script
 `prepare-chimera.sh`. Il livello funzionale del kernel (eBPF, KVM, Gatekeeper) è
 descritto in [doc_kernel_layer.md](doc_kernel_layer.md): questo documento dice
 **come il kernel viene costruito, pinnato, firmato e mantenuto**, e quali garanzie
@@ -23,7 +23,7 @@ Decisioni già prese con il maintainer:
    nativi per esattamente questo uso: `Patch999999: linux-kernel-test.patch`,
    applicato con `git apply` dopo la patch Red Hat, e `Source3001: kernel-local`,
    fuso nei config da `merge.py` con il controllo di coerenza di
-   `process_configs.sh`. Ermete fornisce quei due file e i bcond. Lo spec non
+   `process_configs.sh`. Athanor fornisce quei due file e i bcond. Lo spec non
    viene mai modificato con `sed`.
 2. **Tutto pinnato, tutto verificato.** Un solo file di pin (`pins.env`) e un
    manifest `sources.sha256`. Il SRPM Fedora è verificato con la firma GPG di
@@ -43,7 +43,7 @@ Decisioni già prese con il maintainer:
 
 ## 2. Sorgenti e pin
 
-Directory `forge/specs/ermete-kernel/` dopo il blocco:
+Directory `forge/specs/azoth/` dopo il blocco:
 
 | File                     | Ruolo                                                                                                                                                                               |
 | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -51,7 +51,7 @@ Directory `forge/specs/ermete-kernel/` dopo il blocco:
 | `SOURCES/sources.sha256` | hash del SRPM, del tarball CachyOS, delle patch singole; lo scrive `build.sh --stage manifest`                                                                                                                             |
 | `kernel-local`           | frammento di config, una riga di motivazione per opzione                                                                                                                            |
 | `patches.list`           | patch di `CachyOS/kernel-patches` da accodare dopo la base, in ordine                                                                                                               |
-| `patches/`               | patch di Ermete in formato git, applicate dopo `patches.list` in ordine di nome; il messaggio spiega il perché, e ogni patch è candidata all'upstream                            |
+| `patches/`               | patch di Athanor in formato git, applicate dopo `patches.list` in ordine di nome; il messaggio spiega il perché, e ogni patch è candidata all'upstream                            |
 | `fedora-wins.list`       | percorsi in cui un conflitto del merge tra base CachyOS e patch Red Hat si risolve con l'albero Fedora; ogni altro conflitto ferma la build                                        |
 | `cmdline`                | riga di comando del kernel, firmata nella UKI (sezione 6)                                                                                                                           |
 | `boot.sh`, `boot/`       | la boot matrix (sezione 7, gate 3): ambiente QEMU/OVMF/shim pinnato come il builder, PID 1 dell'initramfs di prova con le asserzioni                                              |
@@ -83,7 +83,7 @@ firmate: il risultato è byte per byte quello del mirror) e verifica con
 proprio albero come release firmata su GitHub
 (`cachyos-X.Y.Z-N.tar.gz` + `.asc`, chiavi `E18447AC…` e `E8B9AA39…`), che
 contiene BBRv3, l'opzione `-O3`, i tuning di scheduler e memoria, `more-uarches`.
-La base Ermete è il merge a tre vie, deterministico, di quell'albero sull'albero
+La base Athanor è il merge a tre vie, deterministico, di quell'albero sull'albero
 Fedora (vanilla + patch Red Hat) con base il tarball vanilla della stessa `X.Y.Z`
 (kernel.org, firma PGP): generato in build da input hashati, non conservato nel
 repo. Serve il merge, non un `diff` applicato: la patch Red Hat porta backport
@@ -116,7 +116,7 @@ identica in locale. Passi, tutti senza rete tranne i download verificati:
 1. scarica nella cache e verifica: hash di ogni file contro il manifest, firma
    PGP del tarball CachyOS e di quello vanilla contro le chiavi vendorizzate,
    firma RPM del SRPM ricucito;
-2. scrive `~/.rpmmacros` con `%_topdir` e `%buildid .ermete`; `rpm -i` del SRPM;
+2. scrive `~/.rpmmacros` con `%_topdir` e `%buildid .azoth`; `rpm -i` del SRPM;
    `dnf builddep -y SPECS/kernel.spec` con gli stessi bcond di rpmbuild, subito,
    perché la derivazione del config deve vedere la toolchain vera (rust-src,
    bindgen, pahole: `RUST_IS_AVAILABLE` e le opzioni che ne dipendono);
@@ -125,7 +125,7 @@ identica in locale. Passi, tutti senza rete tranne i download verificati:
    sopra il vanilla, `patches.list` e poi `patches/` applicate sull'indice, diff
    dal commit Fedora al risultato. Le stesse patch vanno anche sull'albero CachyOS
    estratto, che serve al passo 4;
-4. genera il `kernel-local` completo: il delta Ermete committato, più le opzioni
+4. genera il `kernel-local` completo: il delta Athanor committato, più le opzioni
    che l'albero introduce (`make listnewconfig` sul config Fedora fuso con i
    frammenti clang e con il delta, iterato fino a convergenza) con il valore del
    config CachyOS pinnato o, se assente lì, il default Kconfig. Così il gate
@@ -135,14 +135,14 @@ identica in locale. Passi, tutti senza rete tranne i download verificati:
 6. `rpmbuild -bp --with toolchain_clang --with clang_lto --without debug
    --without tools --without perf --without libperf --without bpftool --without
    ynl --without selftests --without doc`: patch e `process_configs.sh -w -n -c`.
-   Poi il gate di Ermete: ogni riga del delta committato deve valere nel config
+   Poi il gate di Athanor: ogni riga del delta committato deve valere nel config
    generato (Fedora segnala i mismatch solo sulle opzioni presenti nel
    risultato, un'opzione caduta per dipendenza non soddisfatta passerebbe in
    silenzio). Config e `kernel-local` finiscono nell'artefatto;
 7. stadio `build`: `rpmbuild -bb --noprep` sullo stesso albero. Il debuginfo si
    costruisce e si pubblica a parte: serve a `perf`, `crash`, a un futuro AutoFDO
    e non entra nell'immagine;
-8. riproducibilità: `SOURCE_DATE_EPOCH` dalla changelog, `KBUILD_BUILD_USER=ermete`,
+8. riproducibilità: `SOURCE_DATE_EPOCH` dalla changelog, `KBUILD_BUILD_USER=azoth`,
    `KBUILD_BUILD_HOST=forge`, `KBUILD_BUILD_TIMESTAMP` derivato. Un job
    settimanale (`kernel-weekly.yml`, job `repro`) ricostruisce lo stesso pin
    con cache vuota e builder ricostruito (sul runner self-hosted: un secondo
@@ -154,8 +154,8 @@ identica in locale. Passi, tutti senza rete tranne i download verificati:
 7. ccache su directory persistente del runner (non `actions/cache`): tra due
    patch level cambiano pochi file, la LTO finale no;
 8. pubblicazione (job `publish` su runner GitHub, dall'artefatto del job `build`):
-   tre pacchetti OCI con i soli RPM dentro, `ghcr.io/hr-mes/ermete-os-kernel`
-   (binari), `ermete-os-kernel-devel`, `ermete-os-kernel-debuginfo`, tag `<nvr>`.
+   tre pacchetti OCI con i soli RPM dentro, `ghcr.io/hr-mes/azoth`
+   (binari), `azoth-devel`, `azoth-debuginfo`, tag `<nvr>`.
    Pacchetti separati e non suffissi del tag, perché la retention di ghcr è per
    pacchetto (`retention.sh`, prima del gate, che così verifica ciò che resta):
    del debuginfo restano le due release più recenti, di kernel e devel tutte; con
@@ -175,7 +175,7 @@ identica in locale. Passi, tutti senza rete tranne i download verificati:
    `main`, cioè al merge di una PR di bump. Una PR costruisce e non pubblica.
 
 Il job del kernel è un workflow proprio (`kernel-build.yml`), attivato da cambi in
-`forge/specs/ermete-kernel/**` e a mano, con hash di idempotenza sugli input:
+`forge/specs/azoth/**` e a mano, con hash di idempotenza sugli input:
 l'orchestratore non lo ricompila a ogni run, l'immagine di sistema consuma il tag
 pinnato in `pins.env`.
 
@@ -186,7 +186,7 @@ Il config Fedora 43 x86_64 porta già: `SCHED_CLASS_EXT`, `DEBUG_INFO_BTF`,
 `EROFS`, `INIT_ON_ALLOC_DEFAULT_ON`, `X86_KERNEL_IBT`, `HZ_1000`, `PREEMPT_DYNAMIC`,
 `LRU_GEN_ENABLED`, `NTSYNC`, `RUST` (che il delta spegne, sezione 5), `WIREGUARD`,
 CAKE e FQ, e la lista LSM
-`lockdown,yama,integrity,selinux,bpf,landlock,ipe`. Il frammento Ermete è il
+`lockdown,yama,integrity,selinux,bpf,landlock,ipe`. Il frammento Athanor è il
 delta, e resta corto:
 
 | Opzione                                               | Valore | Perché                                                                                                        |
@@ -220,7 +220,7 @@ da questo blocco.
 
 **Il controllo di coerenza** è quello di Fedora: `process_configs.sh` con
 `with_configchecks` acceso fallisce se un'opzione del frammento viene scartata
-da kconfig. Non serve uno script Ermete.
+da kconfig. Non serve uno script Athanor.
 
 ## 5. Toolchain
 
@@ -228,7 +228,7 @@ clang, lld e llvm di Fedora 43 dal Containerfile, con la base
 `registry.fedoraproject.org/fedora:43@sha256:…` pinnata per digest e aggiornata
 dal bot. `LLVM=1` arriva dal bcond dello spec (`clang_make_opts`). Rust acceso come
 in Fedora: in 7.1 `RUST` dipende da `!RANDSTRUCT` e, con `DEBUG_INFO_BTF` acceso
-(l'eBPF di Ermete non può rinunciarvi), da `!LTO`, perché pahole non regge i DWARF
+(l'eBPF di Athanor non può rinunciarvi), da `!LTO`, perché pahole non regge i DWARF
 fusi da LTO con unità Rust. Quindi ThinLTO e `RANDSTRUCT` restano spenti nel delta,
 verificato dal gate. Il bcond `--with clang_lto` resta comunque acceso: è l'unico
 con cui kernel.spec passa `HOSTCC=clang CC=clang LLVM=1` a `process_configs.sh`,
@@ -246,7 +246,7 @@ patchano i Makefile per forzarlo.
   separato che non vede altro. La chiave privata (RSA 4096, generata offline il
   2026-09-04, copia cifrata fuori da GitHub) sta nel secret `MOK_PRIVATE_KEY`
   dell'environment `signing`, ammesso solo ai branch `main` e `iso-v0`; il
-  certificato pubblico è committato in `keys/mok/ermete-mok.pem` (`.der` per
+  certificato pubblico è committato in `keys/mok/athanor-mok.pem` (`.der` per
   `mokutil --import` e `sign-file`). Un secret non è più sicuro per essere nato
   sul runner: conta dove si usa, e chi ne ha la custodia.
 - **UKI**: kernel, initrd, `cmdline` e microcode early in un'unica immagine
@@ -265,7 +265,7 @@ amd_pstate=active zswap.enabled=1`. Niente `iommu=pt`, niente `mitigations=off`.
 
 ## 7. Gate
 
-Ogni PR di bump e ogni cambio in `forge/specs/ermete-kernel/**` passa:
+Ogni PR di bump e ogni cambio in `forge/specs/azoth/**` passa:
 
 1. **build** sul runner self-hosted (60 min misurati su 16 core con ThinLTO);
 2. **config**: `process_configs.sh` con controlli accesi;
@@ -321,13 +321,13 @@ tabella, confronto e un grafico Mermaid per metrica. I runner GitHub cambiano
 CPU da un run all'altro: l'andamento è indicativo, la decisione sta nel
 confronto A/B nello stesso run, con l'input `variant`: `build.sh --variant
 <nome>` fonde `variants/<nome>` sopra `kernel-local` (le righe con lo stesso
-simbolo vengono sostituite), buildid `.ermete.<nome>`, mai pubblicato, misurato
+simbolo vengono sostituite), buildid `.athanor.<nome>`, mai pubblicato, misurato
 accanto al kernel pubblicato. `o3` rimisura `-O3` contro il default `-O2`.
 
 **Riuso.** Il job `inputs` calcola `build-inputs.py` (pin, manifest delle
 sorgenti, `kernel-local`, `patches.list`, `patches/`, `fedora-wins.list`, `build.sh`,
 Containerfile: solo ciò che cambia gli RPM) e lo confronta con il predicato
-dell'attestazione dei pin sull'immagine `ermete-os-kernel:<nvr>`, verificata con
+dell'attestazione dei pin sull'immagine `azoth:<nvr>`, verificata con
 cosign. Se coincidono, `build` e `publish` non partono e la boot matrix usa il
 kernel-core dell'immagine pubblicata: un push che tocca solo test, retention o
 workflow costa i minuti della matrice, non l'ora di build. Un bump dei pin
@@ -381,9 +381,9 @@ firma, boot e pubblicazione dei moduli. Il cambio di release Fedora della rootfs
 Stessa sorgente e stesso pin, secondo config: `make x86_64_defconfig` +
 `kvm_guest.config` + frammento `microvm/kernel-local` (virtio, 9p/virtiofs,
 EROFS, dm-verity, BPF, nessun driver fisico, nessun modulo). Spec minimo
-`microvm/ermete-kernel-microvm.spec` (~100 righe, non ha bisogno del packaging
+`microvm/azoth-microvm.spec` (~100 righe, non ha bisogno del packaging
 Fedora: produce `vmlinux` e `bzImage`), pochi minuti di build nello stesso job,
-pubblicato in `ermete-os-kernel:<nvr>-microvm`. È il kernel che
+pubblicato in `azoth:<nvr>-microvm`. È il kernel che
 `hypervisor-daemon` avvia in Firecracker o cloud-hypervisor; SEV/TDX guest
 restano opzioni del frammento per gli host che li hanno.
 
@@ -392,12 +392,12 @@ una directory oggetto separata (`make O=… x86_64_defconfig kvm_guest.config`,
 `merge_config.sh` con `microvm/kernel-local`, `olddefconfig`) e lo verifica riga
 per riga come `kernel-local` (`check_delta`): il gate del frammento gira anche
 in `prep`, quindi nelle PR del bot. Negli stadi `microvm` e `build` compila con
-`rpmbuild -bb microvm/ermete-kernel-microvm.spec` (una quarantina di righe:
+`rpmbuild -bb microvm/azoth-microvm.spec` (una quarantina di righe:
 `%build` con `O=` sull'albero preparato, `%install` di `vmlinux` senza DWARF ma
 con simboli e `.BTF`, `bzImage`, `config` e `release` in
-`/usr/lib/ermete/microvm/`), pochi minuti prima del kernel principale, che
+`/usr/lib/athanor/microvm/`), pochi minuti prima del kernel principale, che
 trova l'albero pulito. Il pacchetto va in `out/microvm/` e nell'OCI
-`ermete-os-kernel:<nvr>-microvm` (stesso `publish`: SBOM, firma, attestazione
+`azoth:<nvr>-microvm` (stesso `publish`: SBOM, firma, attestazione
 dei pin, retention come release). Gate (job `boot`, `microvm/boot.sh`):
 Firecracker, release GitHub pinnata per hash in `boot/Containerfile`, avvia il
 `vmlinux` con una rootfs ext4 di prova (busybox, `microvm/init`) e il guest
@@ -420,7 +420,7 @@ kernel:
 | `nvidia-open`   | Turing 2018+                     | moduli aperti 610.x compilati nel container Fedora contro `kernel-devel`, clang e kCFI coerenti, firmati MOK                                                       |
 | `nvidia-legacy` | Maxwell, Pascal, Volta 2014–2018 | ramo 580, stesso meccanismo; la parte RM è il blob gcc di NVIDIA, senza kCFI né return thunk: rischio noto, verificabile solo su hardware                         |
 
-Pubblicazione `ermete-os-nvidia:<kernel-nvr>-<driver>`; le varianti
+Pubblicazione `azoth-nvidia:<kernel-nvr>-<driver>`; le varianti
 dell'immagine (`-nvidia`, `-nvidia-legacy`) le consumano. Le versioni del driver
 sono pin in `pins.env` (`NVIDIA_OPEN_VERSION` e il commit del tag, che è
 annotato e può muoversi; `NVIDIA_LEGACY_VERSION`, con l'hash del `.run` in
@@ -485,7 +485,7 @@ In `system-tweaks` (sysctl.d, modprobe.d): `net.core.default_qdisc=cake` sul
 desktop, tunable BORE, `vm.max_map_count`, `kernel.split_lock_mitigate`. In
 `forge/config/rpmmacros`: baseline userland v2 e glibc-hwcaps per le librerie
 che guadagnano da v3. AutoFDO: `CONFIG_AUTOFDO_CLANG=y` entra quando esiste la
-pipeline di profilazione sul kernel Ermete (perf con branch sampling sul
+pipeline di profilazione sul kernel Athanor (perf con branch sampling sul
 5800X3D, `create_llvm_prof`, profilo committato con hash); nessun profilo
 altrui. Variante `PREEMPT_RT` (mainline dal 6.12) e patchset `hardened` di
 CachyOS: candidati da valutare con il benchmark, non default.
@@ -502,7 +502,7 @@ CachyOS: candidati da valutare con il benchmark, non default.
 | K6   | kernel guest MicroVM                                                                                                                   | `vmlinux` avvia in Firecracker con rootfs di prova |
 | K7   | riproducibilità settimanale, benchmark di tendenza, `-O3` deciso dai numeri                                                            | primo report                                       |
 
-Poi la v0 riprende con `ermete-os-kernel:<nvr>` nell'immagine. Ogni fase è un
+Poi la v0 riprende con `azoth:<nvr>` nell'immagine. Ogni fase è un
 insieme di commit verificabili da soli; la specifica si aggiorna se
 l'implementazione scopre che un gancio Fedora non è come descritto.
 

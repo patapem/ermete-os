@@ -1,4 +1,4 @@
-FROM ghcr.io/hr-mes/ermete-base-nvidia:latest
+FROM ghcr.io/hr-mes/athanor-base-nvidia:latest
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG FEDORA_VERSION=43
 ENV FEDORA_VERSION=$FEDORA_VERSION
@@ -6,15 +6,15 @@ ARG TETRAGON_VERSION=v1.3.0
 
 
 # TIER 0: BEDROCK HARDWARE & KERNEL FOUNDATION
-RUN --mount=type=bind,from=ghcr.io/hr-mes/ermete-os-forge-tier0-repo:latest,source=/,target=/mnt/tier0-repo \
+RUN --mount=type=bind,from=ghcr.io/hr-mes/athanor-forge-tier0-repo:latest,source=/,target=/mnt/tier0-repo \
     --mount=type=cache,dst=/var/cache --mount=type=cache,dst=/var/cache/libdnf5 \
-    BASE_CONFIG=$(find /mnt/tier0-repo -name "ermete-base-config*.rpm" | head -n 1) && \
+    BASE_CONFIG=$(find /mnt/tier0-repo -name "athanor-base-config*.rpm" | head -n 1) && \
     if [ -n "$BASE_CONFIG" ]; then \
-        echo "Tier 0: Installing core Ermete Forge base configuration..." && \
+        echo "Tier 0: Installing core Athanor Forge base configuration..." && \
         rpm -e --nodeps fedora-logos || true && \
         rpm -Uvh --replacefiles --replacepkgs --nodeps "$BASE_CONFIG"; \
     fi && \
-    RAW_RPM_LIST=$(find /mnt/tier0-repo -name "*.rpm" 2>/dev/null | awk '!/systemd-standalone-|.*-free-.*\.rpm|glibc32|kernel-debug|rpm-.*\.rpm|fedora-release-|selinux-policy|ermete-base-config|-doc-|debuginfo|debugsource/ && (!/-devel-/ || /kernel-devel/)' || true) && \
+    RAW_RPM_LIST=$(find /mnt/tier0-repo -name "*.rpm" 2>/dev/null | awk '!/systemd-standalone-|.*-free-.*\.rpm|glibc32|kernel-debug|rpm-.*\.rpm|fedora-release-|selinux-policy|athanor-base-config|-doc-|debuginfo|debugsource/ && (!/-devel-/ || /kernel-devel/)' || true) && \
     RPM_LIST="" && \
     for rpm in $RAW_RPM_LIST; do \
         if [[ "$rpm" == *kmod-nvidia-* ]] && [[ "$rpm" != *chimera* ]]; then \
@@ -28,10 +28,10 @@ RUN --mount=type=bind,from=ghcr.io/hr-mes/ermete-os-forge-tier0-repo:latest,sour
     fi && \
     rm -rf /usr/lib/firmware/{mellanox,qlogic,netronome,liquidio,cxgb4,bnx2x,cavium,dpaa2}
 
-# Tier 0: Install Cilium Tetragon eBPF Runtime Security is now delegated to ermete-tetragon RPM
+# Tier 0: Install Cilium Tetragon eBPF Runtime Security is now delegated to athanor-tetragon RPM
 
 # TIER 1: CORE USERSERVICE, DBUS & POLICYKIT
-RUN --mount=type=bind,from=ghcr.io/hr-mes/ermete-os-forge-tier1-repo:latest,source=/,target=/mnt/tier1-repo \
+RUN --mount=type=bind,from=ghcr.io/hr-mes/athanor-forge-tier1-repo:latest,source=/,target=/mnt/tier1-repo \
     --mount=type=cache,dst=/var/cache --mount=type=cache,dst=/var/cache/libdnf5 \
     echo "Tier 1: Installing Scudo Hardened Allocator (compiler-rt), Keylime & UKI tools..." && \
     dnf5 install -y --setopt=install_weak_deps=False --setopt=tsflags=nodocs compiler-rt keylime-tenant keylime-agent systemd-ukify systemd-boot-unsigned sbsigntools openssl tpm2-tools cryptsetup dracut && \
@@ -44,7 +44,7 @@ RUN --mount=type=bind,from=ghcr.io/hr-mes/ermete-os-forge-tier1-repo:latest,sour
     fi
 
 # TIER 2: DESIGN SYSTEM & STATIC ASSETS
-RUN --mount=type=bind,from=ghcr.io/hr-mes/ermete-os-forge-tier2-repo:latest,source=/,target=/mnt/tier2-repo \
+RUN --mount=type=bind,from=ghcr.io/hr-mes/athanor-forge-tier2-repo:latest,source=/,target=/mnt/tier2-repo \
     --mount=type=cache,dst=/var/cache --mount=type=cache,dst=/var/cache/libdnf5 \
     if find /mnt/tier2-repo -name "*.rpm" 1> /dev/null 2>&1; then \
         echo "Tier 2: Installing Design System & Static Assets..." && \
@@ -55,7 +55,7 @@ RUN --mount=type=bind,from=ghcr.io/hr-mes/ermete-os-forge-tier2-repo:latest,sour
     fi
 
 # TIER 3: AGILE RUST SHELL & APPS
-RUN --mount=type=bind,from=ghcr.io/hr-mes/ermete-os-forge-tier3-repo:latest,source=/,target=/mnt/tier3-repo \
+RUN --mount=type=bind,from=ghcr.io/hr-mes/athanor-forge-tier3-repo:latest,source=/,target=/mnt/tier3-repo \
     --mount=type=cache,dst=/var/cache --mount=type=cache,dst=/var/cache/libdnf5 \
     if find /mnt/tier3-repo -name "*.rpm" 1> /dev/null 2>&1; then \
         echo "Tier 3: Installing Agile Rust Shell & Apps..." && \
@@ -66,7 +66,7 @@ RUN --mount=type=bind,from=ghcr.io/hr-mes/ermete-os-forge-tier3-repo:latest,sour
     fi
 
 # DECLARATIVE DYNAMIC FLATPAK LAYER & PROVISIONING ENGINE
-COPY forge/config/packages.json /usr/share/ermete/packages.json
+COPY forge/config/packages.json /usr/share/athanor/packages.json
 RUN dnf5 install -y --setopt=install_weak_deps=False --setopt=tsflags=nodocs flatpak jq || true
 
 COPY system/scripts/ /scripts/
@@ -74,13 +74,13 @@ RUN /bin/bash /scripts/provision_flatpak.sh
 
 
 # TPM 2.0 PCR Sealing Provisioning Service & Script for LUKS /var/home
-COPY forge/specs/ermete-secure-boot/SOURCES/usr/libexec/ermete-tpm-luks-seal.sh /usr/libexec/ermete-tpm-luks-seal.sh
-COPY forge/specs/ermete-secure-boot/SOURCES/usr/lib/systemd/system/ermete-tpm-luks-seal.service /usr/lib/systemd/system/ermete-tpm-luks-seal.service
-RUN chmod +x /usr/libexec/ermete-tpm-luks-seal.sh
+COPY forge/specs/athanor-secure-boot/SOURCES/usr/libexec/athanor-tpm-luks-seal.sh /usr/libexec/athanor-tpm-luks-seal.sh
+COPY forge/specs/athanor-secure-boot/SOURCES/usr/lib/systemd/system/athanor-tpm-luks-seal.service /usr/lib/systemd/system/athanor-tpm-luks-seal.service
+RUN chmod +x /usr/libexec/athanor-tpm-luks-seal.sh
 
 # Declarative Systemd presets & sysusers
 RUN authselect enable-feature with-systemd-homed && \
-    systemctl enable tetragon.service systemd-sysext.service systemd-homed.service ermete-tpm-rollback-check.service ermete-tpm-rollback-update.service ermete-tpm-luks-seal.service && systemd-sysusers && systemctl preset-all && systemctl --global preset-all
+    systemctl enable tetragon.service systemd-sysext.service systemd-homed.service athanor-tpm-rollback-check.service athanor-tpm-rollback-update.service athanor-tpm-luks-seal.service && systemd-sysusers && systemctl preset-all && systemctl --global preset-all
 
 # Initramfs & Unified Kernel Image (UKI) generation
 RUN --mount=type=secret,id=uki_key,required=false \

@@ -323,7 +323,7 @@ fn process_udp(ctx: &XdpContext, offset: usize) -> Result<u32, ()> {
         }
     }
 
-    // XDP OFFLOAD: Ermete Mesh Bus (Port 51820)
+    // XDP OFFLOAD: Athanor Mesh Bus (Port 51820)
     // Validate structural integrity of the MeshHeader in Ring-0 to defeat DDoS
     if dest_port == 51820 {
         let payload_offset = offset + mem::size_of::<UdpHdr>();

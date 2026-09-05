@@ -1,8 +1,8 @@
-# Ermete Forge: Guida allo Sviluppo e all'Integrazione Pacchetti
+# Athanor Forge: Guida allo Sviluppo e all'Integrazione Pacchetti
 
-Questa guida è destinata a ingegneri, sviluppatori e Agenti IA che necessitano di integrare nuovi pacchetti, demoni o configurazioni all'interno di Ermete OS.
+Questa guida è destinata a ingegneri, sviluppatori e Agenti IA che necessitano di integrare nuovi pacchetti, demoni o configurazioni all'interno di Athanor OS.
 
-In Ermete OS, l'aggiunta di un software **non avviene mai a runtime** (es. scaricando un eseguibile). Tutto deve passare attraverso l'infrastruttura **Ermete Forge**, che gestisce la compilazione distribuita, l'hashing e l'assemblaggio OCI (bootc/OSTree) in modo immutabile e Zero-Trust.
+In Athanor OS, l'aggiunta di un software **non avviene mai a runtime** (es. scaricando un eseguibile). Tutto deve passare attraverso l'infrastruttura **Athanor Forge**, che gestisce la compilazione distribuita, l'hashing e l'assemblaggio OCI (bootc/OSTree) in modo immutabile e Zero-Trust.
 
 ---
 
@@ -31,7 +31,7 @@ Non è permesso utilizzare lo scriptlet `%post` o script di provisioning eseguit
 **Soluzione:** Ogni file di configurazione, binario o demone systemd DEVE essere copiato nei percorsi giusti *esclusivamente* durante la fase `%install` dello `.spec`. Per file dinamici, usare `systemd-tmpfiles`.
 
 ### ❌ Regola 3: Zero Disabilitazione di Sicurezza
-Vietato impostare `repo_gpgcheck=0`. Vietato usare la macro `%undefine _fortify_source`. Ermete OS compila tutto con flag di hardenizzazione estremi (LTO, -O3, ASLR, CFI). Disabilitarli è vietato.
+Vietato impostare `repo_gpgcheck=0`. Vietato usare la macro `%undefine _fortify_source`. Athanor OS compila tutto con flag di hardenizzazione estremi (LTO, -O3, ASLR, CFI). Disabilitarli è vietato.
 
 ### ❌ Regola 4: Nessun Accesso di Rete in Compilazione
 Il container OCI in cui avviene il `rpmbuild` viene istanziato con `bwrap --unshare-net` (o equivalenti podman). Qualsiasi pacchetto linguistico (NPM, Cargo, Pip) che tenta di scaricare dipendenze durante il `%build` fallirà.
@@ -39,21 +39,21 @@ Il container OCI in cui avviene il `rpmbuild` viene istanziato con `bwrap --unsh
 
 ---
 
-## 3. Aggiungere un nuovo Demone Rust (Es. `ermete-example-daemon`)
+## 3. Aggiungere un nuovo Demone Rust (Es. `athanor-example-daemon`)
 
 Se sei un agente incaricato di scrivere un nuovo demone per l'OS, segui questa checklist:
-1. Sviluppa il codice in `system/ermete-example-daemon/` assicurandoti di non usare blocchi `unsafe` senza estrema giustificazione.
-2. Crea `forge/specs/ermete-example-daemon/ermete-example-daemon.spec`.
+1. Sviluppa il codice in `system/athanor-example-daemon/` assicurandoti di non usare blocchi `unsafe` senza estrema giustificazione.
+2. Crea `forge/specs/athanor-example-daemon/athanor-example-daemon.spec`.
 3. Nel `.spec`, definisci il pacchetto **senza** `Source0`: il crate vive nel workspace e il DAG compila il checkout in place (`rpmbuild --build-in-place`, scelto automaticamente per le spec senza `Source`), con la radice del repo come directory corrente di `%build` e `%install`. Le spec che dichiarano `Source` seguono invece il percorso ordinario, `%prep` incluso.
 4. In `%build`, `cargo build --release --locked -p <nome-crate>`; i file di dati del crate si riferiscono tramite `%global crate_dir <percorso del crate dalla radice>`.
-5. In `%install`, installa l'eseguibile in `/usr/libexec/` o `/usr/bin/` e il file `ermete-example-daemon.service` in `/usr/lib/systemd/system/`.
-6. Nel `%post`, esegui solo `systemctl preset ermete-example-daemon.service` (mai systemctl start).
+5. In `%install`, installa l'eseguibile in `/usr/libexec/` o `/usr/bin/` e il file `athanor-example-daemon.service` in `/usr/lib/systemd/system/`.
+6. Nel `%post`, esegui solo `systemctl preset athanor-example-daemon.service` (mai systemctl start).
 
 ---
 
 ## 4. Test Locali prima del Commit
 
-Prima di inviare una modifica a Ermete, un agente o sviluppatore deve validare:
+Prima di inviare una modifica a Athanor, un agente o sviluppatore deve validare:
 ```bash
 # 1. Verifica statica della memoria (Agente Rust Paranoia)
 cargo clippy --workspace --all-features -- -D warnings

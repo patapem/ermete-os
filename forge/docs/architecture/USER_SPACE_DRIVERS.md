@@ -1,7 +1,7 @@
-# User-Space Drivers Paradigm in Ermete OS
+# User-Space Drivers Paradigm in Athanor OS
 
 ## Introduction
-In our pursuit of extreme system stability, security, and the "Vista da Corvo fino alla Bedrock" architectural vision, Ermete OS is adopting a microkernel-like paradigm for driver management. This involves transitioning from traditional monolithic, kernel-space drivers to user-space Rust daemons and eBPF programs.
+In our pursuit of extreme system stability, security, and the "Vista da Corvo fino alla Bedrock" architectural vision, Athanor OS is adopting a microkernel-like paradigm for driver management. This involves transitioning from traditional monolithic, kernel-space drivers to user-space Rust daemons and eBPF programs.
 
 ## Disabling Monolithic Kernel Modules
 To enforce this paradigm, legacy kernel modules must be explicitly disabled to prevent them from claiming devices.
@@ -24,4 +24,4 @@ The actual driver logic will be implemented entirely in **Rust** to guarantee me
 ## Benefits
 - **Security**: Drivers run unprivileged; memory bugs in Rust are statically eliminated. IOMMU prevents DMA attacks.
 - **Stability**: A driver crash is a process crash, not a kernel panic. The daemon can be automatically restarted.
-- **Live Updatability**: Aligning with Ermete OS's Dual-Layer Architecture, user-space drivers reside in Layer 1 and can be updated and applied LIVE without rebooting the core Layer 0 kernel.
+- **Live Updatability**: Aligning with Athanor OS's Dual-Layer Architecture, user-space drivers reside in Layer 1 and can be updated and applied LIVE without rebooting the core Layer 0 kernel.

@@ -1,6 +1,6 @@
 name: Kernel Bump
 
-# Il bot di bump del kernel (forge/specs/ermete-kernel/bump.py, spec sezione 8).
+# Il bot di bump del kernel (forge/specs/azoth/bump.py, spec sezione 8).
 # check: su runner GitHub, bump.py confronta i pin con Bodhi, le release CachyOS, i tag
 # NVIDIA e il registro Fedora; se nulla e' cambiato finisce qui. prep: sul runner
 # self-hosted, nel builder, rigenera i manifesti degli hash per i pin nuovi e passa
@@ -52,12 +52,12 @@ jobs:
         if: ${{ steps.open.outputs.open == '0' }}
         run: |
           set -euo pipefail
-          python3 forge/specs/ermete-kernel/bump.py apply > body.md
+          python3 forge/specs/azoth/bump.py apply > body.md
           changed=false
-          [[ -z $(git status --porcelain -- forge/specs/ermete-kernel) ]] || changed=true
+          [[ -z $(git status --porcelain -- forge/specs/azoth) ]] || changed=true
           echo "changed=${changed}" >> "$GITHUB_OUTPUT"
           { echo "## bump: $([[ $changed == true ]] && echo "pin nuovi" || echo "pin invariati")"; echo; cat body.md; } >> "$GITHUB_STEP_SUMMARY"
-          git status --short -- forge/specs/ermete-kernel
+          git status --short -- forge/specs/azoth
 
       - if: ${{ steps.bump.outputs.changed == 'true' }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -65,11 +65,11 @@ jobs:
           name: bump-pins
           path: |
             body.md
-            forge/specs/ermete-kernel/pins.env
-            forge/specs/ermete-kernel/KERNEL.md
-            forge/specs/ermete-kernel/builder/Containerfile
-            forge/specs/ermete-kernel/boot/Containerfile
-            forge/specs/ermete-kernel/nvidia/Containerfile
+            forge/specs/azoth/pins.env
+            forge/specs/azoth/KERNEL.md
+            forge/specs/azoth/builder/Containerfile
+            forge/specs/azoth/boot/Containerfile
+            forge/specs/azoth/nvidia/Containerfile
           if-no-files-found: error
 
   prep:
@@ -87,23 +87,23 @@ jobs:
       - name: Build the kernel builder image
         env:
           BUILDAH_ISOLATION: chroot
-        run: podman build -t localhost/ermete-kernel-builder forge/specs/ermete-kernel/builder
+        run: podman build -t localhost/azoth-builder forge/specs/azoth/builder
 
       - name: Manifests for the new pins
         run: |
           set -euo pipefail
-          mkdir -p "$HOME/.cache/ermete-kernel"
+          mkdir -p "$HOME/.cache/azoth"
           builder() {
             podman run --rm \
               -v "$GITHUB_WORKSPACE:/forge" \
-              -v "$HOME/.cache/ermete-kernel:/var/cache/ermete-kernel" \
-              -w /forge localhost/ermete-kernel-builder "$@"
+              -v "$HOME/.cache/azoth:/var/cache/azoth" \
+              -w /forge localhost/azoth-builder "$@"
           }
-          builder bash forge/specs/ermete-kernel/build.sh --stage manifest --out /forge/manifest/kernel
-          builder bash forge/specs/ermete-kernel/nvidia.sh manifest --out /forge/manifest/nvidia
-          cp manifest/kernel/sources.sha256 forge/specs/ermete-kernel/SOURCES/sources.sha256
-          cp manifest/nvidia/sources.sha256 forge/specs/ermete-kernel/nvidia/sources.sha256
-          git diff --stat -- forge/specs/ermete-kernel
+          builder bash forge/specs/azoth/build.sh --stage manifest --out /forge/manifest/kernel
+          builder bash forge/specs/azoth/nvidia.sh manifest --out /forge/manifest/nvidia
+          cp manifest/kernel/sources.sha256 forge/specs/azoth/SOURCES/sources.sha256
+          cp manifest/nvidia/sources.sha256 forge/specs/azoth/nvidia/sources.sha256
+          git diff --stat -- forge/specs/azoth
 
       - name: Prep (signatures, patches, config gate)
         # Verde o rosso, l'esito e le opzioni derivate finiscono nel corpo della PR: la
@@ -115,9 +115,9 @@ jobs:
           outcome=ok
           if ! podman run --rm \
                  -v "$GITHUB_WORKSPACE:/forge" \
-                 -v "$HOME/.cache/ermete-kernel:/var/cache/ermete-kernel" \
-                 -w /forge localhost/ermete-kernel-builder \
-                 bash forge/specs/ermete-kernel/build.sh --stage prep --out /forge/out > prep.log 2>&1; then
+                 -v "$HOME/.cache/azoth:/var/cache/azoth" \
+                 -w /forge localhost/azoth-builder \
+                 bash forge/specs/azoth/build.sh --stage prep --out /forge/out > prep.log 2>&1; then
             outcome=FAIL
           fi
           {
@@ -141,8 +141,8 @@ jobs:
           path: |
             prep.md
             prep.log
-            forge/specs/ermete-kernel/SOURCES/sources.sha256
-            forge/specs/ermete-kernel/nvidia/sources.sha256
+            forge/specs/azoth/SOURCES/sources.sha256
+            forge/specs/azoth/nvidia/sources.sha256
           if-no-files-found: error
 
   pr:
@@ -166,13 +166,13 @@ jobs:
       - name: Branch, commit, PR with auto-merge
         run: |
           set -euo pipefail
-          git add forge/specs/ermete-kernel
-          keys=$(git diff --cached -U0 -- forge/specs/ermete-kernel/pins.env | sed -n 's/^+\([A-Z_]\+\)=.*/\1/p')
-          git diff --cached --quiet -- 'forge/specs/ermete-kernel/*/Containerfile' || keys+=$'\n'"immagine base"
+          git add forge/specs/azoth
+          keys=$(git diff --cached -U0 -- forge/specs/azoth/pins.env | sed -n 's/^+\([A-Z_]\+\)=.*/\1/p')
+          git diff --cached --quiet -- 'forge/specs/azoth/*/Containerfile' || keys+=$'\n'"immagine base"
           title="chore(kernel): bump $(paste -sd, - <<< "$keys" | sed 's/,/, /g')"
           branch="bump/kernel-$(date -u +%Y%m%d-%H%M)"
-          git config user.name "ermete-bump"
-          git config user.email "kernel@ermete.os"
+          git config user.name "athanor-bump"
+          git config user.email "kernel@athanor.os"
           git checkout -b "$branch"
           git commit -q -m "$title" -m "Aperta dal bot di bump (kernel-bump.yml, spec sezione 8)."
           git push -u origin "$branch"

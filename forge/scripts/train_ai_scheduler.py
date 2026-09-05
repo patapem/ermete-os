@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Ermete OS - AI Scheduler Base Model Generator
+Athanor OS - AI Scheduler Base Model Generator
 Trains a TinyML model (Linear Layer 4 -> 3) to classify Linux workloads.
 Exports to .safetensors for zero-overhead inference in Rust (candle-core).
 """
@@ -54,7 +54,7 @@ class SchedModel(nn.Module):
         return self.fc(x)
 
 def train_model():
-    print("🧠 Generazione del Modello Base Universale per Ermete OS...")
+    print("🧠 Generazione del Modello Base Universale per Athanor OS...")
     
     # Preparazione tensori
     X = torch.tensor([extract_features(c, f) for c, f, _, _, _ in DATA], dtype=torch.float32)
@@ -85,7 +85,7 @@ def main():
     model = train_model()
     
     # --- 3. EXPORT IN SAFETENSORS ---
-    out_dir = "system/ermete-ai-daemon/models"
+    out_dir = "system/athanor-ai-daemon/models"
     os.makedirs(out_dir, exist_ok=True)
     out_path = os.path.join(out_dir, "base_model.safetensors")
     

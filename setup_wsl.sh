@@ -15,6 +15,6 @@ if [ ! -d "/tmp/gtk4-layer-shell" ]; then
     sudo ninja -C build install
     sudo ldconfig
 fi
-cd "/mnt/c/Users/Hermes/Documents/Gemini Project/ermete-os"
+cd "/mnt/c/Users/Hermes/Documents/Gemini Project/athanor"
 echo "Running cargo clippy..."
-cargo clippy --workspace --exclude ebpf-core --exclude ermete-sysmon-ebpf --all-targets --all-features -- -A clippy::undocumented_unsafe_blocks -A clippy::multiple_unsafe_ops_per_block -D warnings -A dead_code -A unused_variables
+cargo clippy --workspace --exclude ebpf-core --exclude athanor-sysmon-ebpf --all-targets --all-features -- -A clippy::undocumented_unsafe_blocks -A clippy::multiple_unsafe_ops_per_block -D warnings -A dead_code -A unused_variables

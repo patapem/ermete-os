@@ -1,7 +1,7 @@
 Name:           sccache
 Version:        0.9.1
 Release:        1%{?dist}
-Summary:        Ermete OS Core Component - sccache
+Summary:        Athanor OS Core Component - sccache
 
 License:        GPLv3
 URL:            https://github.com/mozilla/sccache

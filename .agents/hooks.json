@@ -1,5 +1,5 @@
 {
-  "ermete-safety-gate": {
+  "athanor-safety-gate": {
     "PreToolUse": [
       {
         "matcher": "run_command",

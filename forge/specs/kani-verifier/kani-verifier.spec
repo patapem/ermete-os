@@ -36,6 +36,6 @@ ln -s /opt/kani/bin/kani %{buildroot}/usr/bin/kani
 /usr/bin/kani
 
 %changelog
-* Wed Aug 12 2026 Kani Forge Architect <admin@ermete.os> - 0.67.0-1
+* Wed Aug 12 2026 Kani Forge Architect <admin@athanor.os> - 0.67.0-1
 - Real Kani offline bundle to eradicate GitHub 503 failures.
 
