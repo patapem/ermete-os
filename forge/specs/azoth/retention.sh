@@ -1,23 +1,27 @@
 #!/usr/bin/env bash
-# Retention dei pacchetti OCI del kernel su ghcr (docs/architecture/doc_kernel_build.md,
-# sezione 3, passo 8). Una versione (= un manifesto) resta se e' raggiungibile da una
-# release conservata; tutto il resto se ne va.
+# Retention of the kernel OCI packages on ghcr (docs/architecture/doc_kernel_build.md,
+# section 3, step 8). A version (= one manifest) survives if it is reachable from a
+# retained release; everything else is deleted.
 #
-# Release: un manifesto con un tag che non inizia per `sha256-` (l'NVR, `latest`). Ne
-# restano le KEEP piu' recenti: tutte per kernel e devel, due per il debuginfo.
-# Raggiungibile da una release con digest sha256:<hex>:
-#   - i manifesti con tag `sha256-<hex>*`: l'indice dei referrer che cosign v3 aggiorna
-#     sotto il tag di fallback `sha256-<hex>` (ghcr non ha l'API referrers: GET
-#     /v2/<repo>/referrers/<digest> risponde 404) e i tag legacy `.sig`, `.att`, `.sbom`;
-#   - i membri di quell'indice, cioe' i bundle Sigstore di firma e attestazioni, che sono
-#     manifesti senza tag: la lista si legge dal registro, non dall'API dei pacchetti.
-# Se ne vanno quindi le release oltre KEEP con i loro referrer, gli indici sostituiti da
-# ogni `cosign sign|attest` successivo e i manifesti di un push ripetuto dello stesso tag.
-# Il gate del workflow verifica la firma DOPO la retention: se questo modello smettesse
-# di valere (ghcr con l'API referrers, cosign senza tag di fallback) il run fallirebbe.
+# Release: a manifest carrying a tag that does not start with `sha256-` (the NVR,
+# `latest`). The KEEP most recent ones survive: all of them for kernel and devel, two
+# for the debuginfo. Reachable from a release with digest sha256:<hex>:
+#   - the manifests tagged `sha256-<hex>*`: the referrers index that cosign v3 updates
+#     under the fallback tag `sha256-<hex>` (ghcr has no referrers API: GET
+#     /v2/<repo>/referrers/<digest> answers 404) and the legacy `.sig`, `.att`, `.sbom`
+#     tags;
+#   - the members of that index, i.e. the Sigstore bundles of the signature and the
+#     attestations, which are untagged manifests: their list comes from the registry,
+#     not from the packages API.
+# Deleted, therefore: the releases beyond KEEP together with their referrers, the
+# indexes superseded by every later `cosign sign|attest`, and the manifests left by a
+# repeated push of the same tag. The workflow gate verifies the signature AFTER the
+# retention: should this model stop holding (ghcr with a referrers API, cosign without
+# the fallback tag) the run would fail.
 #
-# Uso: retention.sh [--dry-run]. Serve gh con read:packages e delete:packages (in CI il
-# GITHUB_TOKEN con packages: write) e skopeo autenticato su ghcr (login di buildah).
+# Usage: retention.sh [--dry-run]. Needs gh with read:packages and delete:packages (in
+# CI the GITHUB_TOKEN with packages: write) and skopeo authenticated to ghcr (buildah
+# login).
 set -euo pipefail
 
 DRY=''
@@ -53,10 +57,10 @@ prune() { # prune PACKAGE KEEP
     [.[] | select(.metadata.container.tags | any(startswith("sha256-") | not))]
     | sort_by(.created_at) | reverse | .[:$keep][].name' <<<"$versions")
 
-  echo "${pkg}: ${#live[@]} manifesti raggiungibili da una release conservata"
+  echo "${pkg}: ${#live[@]} manifests reachable from a retained release"
   while read -r id digest tags; do
     [[ ${live[$digest]:-} ]] && continue
-    echo "${DRY:+[dry-run] }${pkg}: cancello ${id} ${digest} ${tags:-(senza tag)}"
+    echo "${DRY:+[dry-run] }${pkg}: deleting ${id} ${digest} ${tags:-(untagged)}"
     [[ $DRY ]] || gh api --method DELETE "${api}/${id}" > /dev/null
   done < <(jq -r '.[] | "\(.id) \(.name) \(.metadata.container.tags | join(","))"' <<<"$versions")
 }
