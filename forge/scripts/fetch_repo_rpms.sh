@@ -129,10 +129,12 @@ for tier in tier0 tier1 tier2 tier3; do
   ctr=""
   if ctr=$(buildah from "$IMAGE_LOWER" 2>/dev/null); then
     mnt=$(buildah mount "$ctr")
-    readarray -t cached_rpms < <(find "$mnt" -name '*.rpm' -type f)
-    if [ ${#cached_rpms[@]} -gt 0 ]; then
-      cp -a "${cached_rpms[@]}" "repo-cache/repo-${tier}/"
-      cp -a "${cached_rpms[@]}" "repo-cache/repo/"
+    # The published repository keeps one directory per package image: restore them as
+    # they are, so that a cache hit below finds its RPMs in place and a package that
+    # left the manifest can be pruned by name.
+    readarray -t cached_dirs < <(find "$mnt" -mindepth 1 -maxdepth 1 -type d ! -name repodata)
+    if [ ${#cached_dirs[@]} -gt 0 ]; then
+      cp -a "${cached_dirs[@]}" "repo-cache/repo-${tier}/"
     fi
     if [ -f "$mnt/manifest.json" ]; then
       cp -a "$mnt/manifest.json" "repo-cache/repo-${tier}/"
@@ -140,6 +142,16 @@ for tier in tier0 tier1 tier2 tier3; do
     buildah umount "$ctr"
     buildah rm "$ctr"
   fi
+  declare -n current_images="TIER${tier#tier}_IMAGES"
+  for dir in "repo-cache/repo-${tier}"/*/; do
+    [ -d "$dir" ] || continue
+    name=$(basename "$dir")
+    if [[ " ${current_images[*]} " != *" $name "* ]]; then
+      echo "    [PRUNE] $name is no longer in the manifest: dropping its RPMs from $tier"
+      rm -rf "$dir"
+    fi
+  done
+  unset -n current_images
   
   # Load old digests
   if [ -f "repo-cache/repo-${tier}/manifest.json" ]; then
