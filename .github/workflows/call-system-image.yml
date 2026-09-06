@@ -281,7 +281,9 @@ jobs:
           [[ -n ${MOK_PRIVATE_KEY:-} ]] || { echo "MOK_PRIVATE_KEY is not available to this job: check the signing environment" >&2; exit 1; }
           # The MOK private key and its certificate reach assemble_uki.sh as build secrets
           # (/run/secrets/uki_key and /run/secrets/uki_cert): they never enter a layer.
-          podman build --layers \
+          # docker format: the OCI format has no SHELL instruction and podman would
+          # drop the bash -o pipefail the Containerfile sets for every RUN.
+          podman build --layers --format docker \
             --secret "id=uki_key,env=MOK_PRIVATE_KEY" \
             --secret "id=uki_cert,src=forge/specs/azoth/keys/mok/athanor-mok.pem" \
             -t "${image}:${RUN_ID}" \
