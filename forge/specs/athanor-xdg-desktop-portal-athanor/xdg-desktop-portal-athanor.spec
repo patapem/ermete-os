@@ -20,7 +20,7 @@ Athanor OS implementation of the XDG Desktop Portal for native Wayland/Niri inte
 %build
 %set_build_flags
 # cargo generate-lockfile // FORBIDDEN BY RULE 4 (Offline Build)
-cargo build --release --locked
+cargo build --release --locked -p %{name}
 
 %install
 mkdir -p %{buildroot}

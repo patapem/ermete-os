@@ -22,7 +22,7 @@ Local AI and Machine Learning inference service for Athanor OS using Candle fram
 %build
 %set_build_flags
 # cargo generate-lockfile // FORBIDDEN BY RULE 4 (Offline Build)
-cargo build --release --locked
+cargo build --release --locked -p %{name}
 
 %install
 mkdir -p %{buildroot}

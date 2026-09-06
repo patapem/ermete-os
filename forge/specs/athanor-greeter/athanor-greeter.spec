@@ -15,7 +15,7 @@ Core component implementation for athanor-greeter.
 %build
 %set_build_flags
 cd /forge/system/athanor-greeter
-cargo build --release --offline
+cargo build --release --offline -p %{name}
 
 %install
 mkdir -p %{buildroot}/usr/bin

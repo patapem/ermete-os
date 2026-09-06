@@ -23,7 +23,7 @@ and Intel TDX confidential micro-VM enclaves for isolating untrusted agents and 
 %build
 %set_build_flags
 cd /forge/system/athanor-hypervisor-daemon
-cargo build --release --offline
+cargo build --release --offline -p %{name}
 
 %install
 mkdir -p %{buildroot}/usr/bin

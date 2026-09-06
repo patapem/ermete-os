@@ -20,7 +20,7 @@ Athanor OS LVFS Daemon for automated background UEFI/BIOS firmware updates via f
 %build
 %set_build_flags
 # cargo generate-lockfile // FORBIDDEN BY RULE 4 (Offline Build)
-cargo build --release --locked
+cargo build --release --locked -p %{name}
 
 %install
 mkdir -p %{buildroot}

@@ -22,7 +22,7 @@ Peer-to-peer mesh synchronization and WireGuard tunnel manager daemon for Athano
 %build
 %set_build_flags
 # cargo generate-lockfile // FORBIDDEN BY RULE 4 (Offline Build)
-cargo build --release --locked
+cargo build --release --locked -p %{name}
 
 %install
 mkdir -p %{buildroot}

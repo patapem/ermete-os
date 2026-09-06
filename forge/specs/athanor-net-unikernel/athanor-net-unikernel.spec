@@ -23,7 +23,7 @@ providing micro-VM enclaves and system services zero-copy packet switching witho
 %build
 %set_build_flags
 cd /forge/system/athanor-net-unikernel
-cargo build --release --offline
+cargo build --release --offline -p %{name}
 
 %install
 mkdir -p %{buildroot}/usr/bin

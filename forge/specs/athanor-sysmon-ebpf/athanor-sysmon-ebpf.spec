@@ -22,7 +22,7 @@ System monitoring and telemetry daemon leveraging Aya eBPF for kernel-level perf
 %build
 %set_build_flags
 # cargo generate-lockfile // FORBIDDEN BY RULE 4 (Offline Build)
-cargo build --release --locked
+cargo build --release --locked -p %{name}
 
 %install
 mkdir -p %{buildroot}

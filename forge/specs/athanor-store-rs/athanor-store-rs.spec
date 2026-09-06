@@ -22,7 +22,7 @@ Athanor OS Universal App Store Daemon for Flatpak and OCI container management.
 %build
 %set_build_flags
 # cargo generate-lockfile // FORBIDDEN BY RULE 4 (Offline Build)
-cargo build --release --locked
+cargo build --release --locked -p %{name}
 
 %install
 mkdir -p %{buildroot}
