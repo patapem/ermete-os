@@ -24,7 +24,6 @@ cargo build --release --locked -p %{name}
 
 %install
 mkdir -p %{buildroot}
-mkdir -p $(dirname 0755) && touch 0755
 
 mkdir -p %{buildroot}/usr/bin
 install -m 0755 target/release/athanor-doctor %{buildroot}/usr/bin/athanor-doctor

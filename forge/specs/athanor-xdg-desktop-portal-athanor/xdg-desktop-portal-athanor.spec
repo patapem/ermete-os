@@ -1,7 +1,8 @@
 %global debug_package %{nil}
+%global crate_dir forge/specs/athanor-%{name}/%{name}-%{version}
 Name:           xdg-desktop-portal-athanor
 Version:        1.0.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Athanor OS Desktop Portal (Privacy & ScreenShare)
 
 License:        GPL-3.0-or-later
@@ -15,7 +16,7 @@ Requires:       athanor-shell-rs
 Athanor OS implementation of the XDG Desktop Portal for native Wayland/Niri integration, privacy prompts, and hardware indicators.
 
 %prep
-# Stub prep
+# Built in place from the workspace checkout: nothing to unpack.
 
 %build
 %set_build_flags
@@ -23,20 +24,11 @@ Athanor OS implementation of the XDG Desktop Portal for native Wayland/Niri inte
 cargo build --release --locked -p %{name}
 
 %install
-mkdir -p %{buildroot}
-mkdir -p $(dirname 0755) && touch 0755
-mkdir -p $(dirname 0644) && touch 0644
-mkdir -p $(dirname org.freedesktop.impl.portal.desktop.athanor.service) && touch org.freedesktop.impl.portal.desktop.athanor.service
-mkdir -p $(dirname 0644) && touch 0644
-mkdir -p $(dirname athanor.portal) && touch athanor.portal
-
 install -D -m 0755 target/release/%{name} %{buildroot}%{_libexecdir}/%{name}
 
-# Install D-Bus session service
-install -D -m 0644 org.freedesktop.impl.portal.desktop.athanor.service %{buildroot}%{_datadir}/dbus-1/services/org.freedesktop.impl.portal.desktop.athanor.service
-
-# Install Portal definition
-install -D -m 0644 athanor.portal %{buildroot}%{_datadir}/xdg-desktop-portal/portals/athanor.portal
+# D-Bus session service and portal definition, from the crate directory.
+install -D -m 0644 %{crate_dir}/org.freedesktop.impl.portal.desktop.athanor.service %{buildroot}%{_datadir}/dbus-1/services/org.freedesktop.impl.portal.desktop.athanor.service
+install -D -m 0644 %{crate_dir}/athanor.portal %{buildroot}%{_datadir}/xdg-desktop-portal/portals/athanor.portal
 
 %files
 %{_libexecdir}/%{name}
@@ -44,6 +36,9 @@ install -D -m 0644 athanor.portal %{buildroot}%{_datadir}/xdg-desktop-portal/por
 %{_datadir}/xdg-desktop-portal/portals/athanor.portal
 
 %changelog
+* Sun Sep 06 2026 Athanor Forge <forge@athanor.os> - 1.0.0-3
+- Build only this crate from the workspace; install the D-Bus service and the
+  portal definition from the crate directory instead of empty placeholder files
+
 * Thu Jul 16 2026 Athanor <athanor@athanor.os> - 1.0.0-1
 - Initial release
-

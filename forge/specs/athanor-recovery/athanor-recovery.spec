@@ -1,7 +1,8 @@
 %global debug_package %{nil}
+%global crate_dir forge/specs/%{name}/%{name}-%{version}
 Name:           athanor-recovery
 Version:        1.0.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Athanor OS Pre-Boot GUI Recovery Kiosk & Rollback Manager
 
 License:        MIT
@@ -15,7 +16,7 @@ Pre-Boot GUI Wayland Kiosk recovery environment for Athanor OS (`athanor-recover
 Provides 1-click OSTree/bootc visual rollback and automatic failover when `greetd` or the graphical session crashes.
 
 %prep
-# Stub prep
+# Built in place from the workspace checkout: nothing to unpack.
 
 %build
 %set_build_flags
@@ -23,24 +24,12 @@ Provides 1-click OSTree/bootc visual rollback and automatic failover when `greet
 cargo build --release --locked -p %{name}
 
 %install
-mkdir -p %{buildroot}
-mkdir -p $(dirname 0755) && touch 0755
-mkdir -p $(dirname 0644) && touch 0644
-mkdir -p $(dirname systemd/athanor-recovery.service) && touch systemd/athanor-recovery.service
-mkdir -p $(dirname 0644) && touch 0644
-mkdir -p $(dirname systemd/athanor-recovery.target) && touch systemd/athanor-recovery.target
-mkdir -p $(dirname 0644) && touch 0644
-mkdir -p $(dirname systemd/greetd-recovery-fallback.conf) && touch systemd/greetd-recovery-fallback.conf
+install -D -m 0755 target/release/athanor-recovery-ui %{buildroot}/usr/bin/athanor-recovery-ui
 
-mkdir -p %{buildroot}/usr/bin
-install -m 0755 target/release/athanor-recovery-ui %{buildroot}/usr/bin/athanor-recovery-ui
-
-mkdir -p %{buildroot}/usr/lib/systemd/system
-install -m 0644 systemd/athanor-recovery.service %{buildroot}/usr/lib/systemd/system/athanor-recovery.service
-install -m 0644 systemd/athanor-recovery.target %{buildroot}/usr/lib/systemd/system/athanor-recovery.target
-
-mkdir -p %{buildroot}/usr/lib/systemd/system/greetd.service.d
-install -m 0644 systemd/greetd-recovery-fallback.conf %{buildroot}/usr/lib/systemd/system/greetd.service.d/recovery-fallback.conf
+# systemd units and the greetd drop-in, from the crate directory.
+install -D -m 0644 %{crate_dir}/systemd/athanor-recovery.service %{buildroot}/usr/lib/systemd/system/athanor-recovery.service
+install -D -m 0644 %{crate_dir}/systemd/athanor-recovery.target %{buildroot}/usr/lib/systemd/system/athanor-recovery.target
+install -D -m 0644 %{crate_dir}/systemd/greetd-recovery-fallback.conf %{buildroot}/usr/lib/systemd/system/greetd.service.d/recovery-fallback.conf
 
 %files
 /usr/bin/athanor-recovery-ui
@@ -50,8 +39,11 @@ install -m 0644 systemd/greetd-recovery-fallback.conf %{buildroot}/usr/lib/syste
 /usr/lib/systemd/system/greetd.service.d/recovery-fallback.conf
 
 %changelog
+* Sun Sep 06 2026 Athanor Forge <forge@athanor.os> - 1.0.0-3
+- Build only this crate from the workspace; install the systemd units and the
+  greetd drop-in from the crate directory instead of empty placeholder files
+
 * Wed Jul 15 2026 Athanor Forge <forge@athanor.os> - 1.0.0-1
 - Initial release of athanor-recovery Pre-Boot GUI Wayland Kiosk (`cage` + `athanor-recovery-ui`)
 - Automatic isolation to athanor-recovery.target when greetd fails StartLimitBurst=3 times
 - Visual 1-click rollback to Bedrock Stable Commit (`8aa3fd4`) and previous stable OSTree deployments
-
