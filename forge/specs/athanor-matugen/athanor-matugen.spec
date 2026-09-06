@@ -1,42 +1,35 @@
 Name:           athanor-matugen
-%global debug_package %{nil}
-Version:        4.1.0
+Version:        4.2.0
 Release:        1%{?dist}
 Summary:        Material Design 3 color generation tool
-License:        GPLv3
+
+License:        GPL-2.0-or-later
 URL:            https://github.com/InioX/matugen
+Source0:        https://github.com/InioX/matugen/archive/refs/tags/v%{version}.tar.gz#/matugen-%{version}.tar.gz
 
-
-BuildRequires:  cargo
-BuildRequires:  rust
-BuildRequires:  mold
+BuildRequires:  cargo rust
 
 %description
-Matugen is a tool to generate a colorscheme from an image or a color and export it to a file.
-Compiled natively in Athanor Forge with extreme optimizations.
+Matugen generates a Material Design 3 colour scheme from an image or a colour
+and renders it into templates, built from the upstream release with the crates
+pinned by its Cargo.lock.
 
 %prep
-# Stub prep
+%autosetup -n matugen-%{version}
 
 %build
 %set_build_flags
-export CARGO_PROFILE_RELEASE_LTO="thin"
-export CFLAGS="$(echo $CFLAGS | sed 's/-flto=auto//g')"
-export CXXFLAGS="$(echo $CXXFLAGS | sed 's/-flto=auto//g')"
-export LDFLAGS="$(echo $LDFLAGS | sed 's/-flto=auto//g')"
-# cargo generate-lockfile // FORBIDDEN BY RULE 4 (Offline Build)
-cargo build --release
+cargo build --release --locked
 
 %install
-mkdir -p %{buildroot}
-
-rm -rf %{buildroot}
-install -Dm755 target/release/matugen %{buildroot}/usr/bin/matugen
+install -D -m 0755 target/release/matugen %{buildroot}%{_bindir}/matugen
 
 %files
-/usr/bin/matugen
+%license LICENSE
+%{_bindir}/matugen
 
 %changelog
-* Sun Jun 28 2026 Athanor Forge <forge@athanor.os> - 2.4.0-1
-- Native OCI build with x86-64-v3 optimizations
-
+* Sun Sep 06 2026 Athanor Forge <forge@athanor.os> - 4.2.0-1
+- Built from the upstream release archive verified by SOURCES/sources.sha256.
+  The previous spec had no source: it compiled the whole workspace in place and
+  installed a matugen binary that never existed.
