@@ -2,7 +2,7 @@
 %global __requires_exclude ^kernel-rt$
 Name:           athanor-system-config
 Version:        1.0.0
-Release:        %{?autorelease}%{!?autorelease:12.fc43}
+Release:        %{?autorelease}%{!?autorelease:16.fc43}
 Summary:        Athanor OS athanor-system-config
 License:        MIT
 URL:            https://github.com/hr-mes/athanor-forge
@@ -11,7 +11,10 @@ BuildArch:      noarch
 Requires: cage greetd greenboot systemd-ukify niri nodejs
 # Core UI andDaemons
 Requires: athanor-shell-rs athanor-settings-rs athanor-daemon-rs
-Requires: athanor-store-rs athanor-sysmon-ebpf athanor-cloud-rs xdg-desktop-portal-athanor
+Requires: athanor-store-rs xdg-desktop-portal-athanor
+# The eBPF monitor and the cloud agent are integrations the configuration is ready
+# for, not prerequisites of the configuration itself: weak dependencies.
+Recommends: athanor-sysmon-ebpf athanor-cloud-rs
 Requires: usbguard bolt
 
 Requires:       bcachefs-tools
@@ -54,6 +57,10 @@ mkdir -p /etc/yum.repos.d
 %config(noreplace) /etc/security/limits.d/99-athanor-realtime.conf
 
 %changelog
+* Sun Sep 07 2026 Athanor Forge <forge@athanor.os> - 1.0.0-16
+- Recommend athanor-sysmon-ebpf and athanor-cloud-rs instead of requiring them:
+  the v0 image ships neither
+
 * Fri Jul 17 2026 Athanor Forge <forge@athanor.os> - 1.0.0-15
 - Fix DNF file conflicts: removed %dir ownerships for /etc/yum.repos.d and /etc/security/limits.d
 - Fix usbguard-daemon.conf RPM file conflict by copying it in %post instead of packaging it in /etc
