@@ -1,7 +1,8 @@
 %global debug_package %{nil}
+%global spec_dir forge/specs/%{name}
 Name:           athanor-ai-daemon
 Version:        1.0.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Athanor OS Local AI & Machine Learning Inference Daemon
 
 License:        GPL-3.0-or-later
@@ -17,7 +18,7 @@ BuildRequires:  gcc gcc-c++ pkgconf-pkg-config openssl-devel
 Local AI and Machine Learning inference service for Athanor OS using Candle framework over D-Bus (os.athanor.AiDaemon).
 
 %prep
-# Stub prep
+# Built in place from the workspace checkout: nothing to unpack.
 
 %build
 %set_build_flags
@@ -25,19 +26,8 @@ Local AI and Machine Learning inference service for Athanor OS using Candle fram
 cargo build --release --locked -p %{name}
 
 %install
-mkdir -p %{buildroot}
-mkdir -p $(dirname 0755) && touch 0755
-mkdir -p $(dirname 0644) && touch 0644
-mkdir -p $(dirname ||) && touch ||
-mkdir -p $(dirname install) && touch install
-mkdir -p $(dirname 0644) && touch 0644
-mkdir -p $(dirname athanor-ai-daemon.service) && touch athanor-ai-daemon.service
-
-mkdir -p %{buildroot}/usr/bin
-install -m 0755 target/release/%{name} %{buildroot}/usr/bin/%{name}
-
-mkdir -p %{buildroot}/usr/lib/systemd/system
-install -m 0644 %{_sourcedir}/../athanor-ai-daemon.service %{buildroot}/usr/lib/systemd/system/%{name}.service || install -m 0644 athanor-ai-daemon.service %{buildroot}/usr/lib/systemd/system/%{name}.service
+install -D -m 0755 target/release/%{name} %{buildroot}/usr/bin/%{name}
+install -D -m 0644 %{spec_dir}/athanor-ai-daemon.service %{buildroot}/usr/lib/systemd/system/%{name}.service
 
 %post
 %systemd_post %{name}.service
@@ -53,6 +43,8 @@ install -m 0644 %{_sourcedir}/../athanor-ai-daemon.service %{buildroot}/usr/lib/
 /usr/lib/systemd/system/%{name}.service
 
 %changelog
+* Sun Sep 06 2026 Athanor Forge <forge@athanor.os> - 1.0.0-2
+- Install the unit from the spec directory instead of an empty placeholder file
+
 * Wed Aug 05 2026 Athanor Forge <forge@athanor.os> - 1.0.0-1
 - Initial release of athanor-ai-daemon spec
-
