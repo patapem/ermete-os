@@ -72,15 +72,17 @@ jobs:
             export XDG_CACHE_HOME=/var/tmp
             export _CONTAINERS_USERNS_CONFIGURED=done
 
-            mkdir -p /workspace/var-tmp
-            mount --bind /workspace/var-tmp /var/tmp
-
-            echo '[storage]' > /var/tmp/storage.conf
-            echo 'driver = "vfs"' >> /var/tmp/storage.conf
-            echo 'runroot = "/var/tmp/containers/runroot"' >> /var/tmp/storage.conf
-            echo 'graphroot = "/var/tmp/containers/storage"' >> /var/tmp/storage.conf
-            echo '[storage.options.vfs]' >> /var/tmp/storage.conf
-            echo 'ignore_chown_errors = "true"' >> /var/tmp/storage.conf
+            # Container storage on the workspace mount, i.e. the runner's disk, addressed
+            # by path: no bind mount, which the builder could not perform anyway.
+            mkdir -p /workspace/var-tmp/containers
+            {
+              echo '[storage]'
+              echo 'driver = "vfs"'
+              echo 'runroot = "/workspace/var-tmp/containers/runroot"'
+              echo 'graphroot = "/workspace/var-tmp/containers/storage"'
+              echo '[storage.options.vfs]'
+              echo 'ignore_chown_errors = "true"'
+            } > /var/tmp/storage.conf
             export CONTAINERS_STORAGE_CONF=/var/tmp/storage.conf
 
             if [ -n "${RPM_GPG_KEY}" ]; then
