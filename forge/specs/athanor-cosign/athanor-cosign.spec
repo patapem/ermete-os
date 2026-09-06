@@ -1,33 +1,34 @@
+%global debug_package %{nil}
+# Prebuilt Go binary from the upstream release: never strip it.
+%global __os_install_post %{nil}
 Name:           athanor-cosign
 Version:        2.4.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Container Signing Tool for Athanor OS
 
 License:        Apache-2.0
 URL:            https://github.com/sigstore/cosign
-
+Source0:        https://github.com/sigstore/cosign/releases/download/v%{version}/cosign-linux-amd64#/cosign-%{version}-linux-amd64
 
 %description
-Pre-compiled Cosign binary for air-gapped container image signing.
+Sigstore cosign for air-gapped container image signing, packaged from the
+upstream release binary verified against SOURCES/sources.sha256.
 
 %prep
-# Stub prep
+# Nothing to unpack: Source0 is the binary itself.
 
 %build
-# Pre-compiled static binary.
+# Nothing to build: the release ships a static binary.
 
 %install
-mkdir -p %{buildroot}
-mkdir -p $(dirname 0755) && touch 0755
-mkdir -p $(dirname cosign) && touch cosign
-
-mkdir -p %{buildroot}/usr/bin
-install -m 0755 cosign %{buildroot}/usr/bin/cosign
+install -D -m 0755 %{SOURCE0} %{buildroot}%{_bindir}/cosign
 
 %files
-/usr/bin/cosign
+%{_bindir}/cosign
 
 %changelog
+* Sun Sep 06 2026 Athanor Forge <forge@athanor.os> - 2.4.0-2
+- Package the upstream release binary instead of an empty placeholder file
+
 * Wed Aug 12 2026 Athanor Architect <admin@athanor.os> - 2.4.0-1
 - Initial Cosign binary packaging.
-
