@@ -31,7 +31,6 @@
     "tetragon",
     "scudo",
     "qa",
-    "rust-toolchain",
     "antigravity",
     "syft",
     "bpf-linker",
@@ -46,7 +45,6 @@
     "uki-tools",
     "kernel-forge",
     "git-native",
-    "openssl-native",
     "ripgrep-native",
     "athanor-semantic-db"
   ],
@@ -57,7 +55,6 @@
     "nix-support",
     "secure-boot",
     "tetragon",
-    "rust-toolchain",
     "antigravity",
     "syft",
     "bpf-linker",
@@ -78,7 +75,6 @@
     "niri",
     "scudo",
     "git-native",
-    "openssl-native",
     "ripgrep-native"
   ],
   "custom_tier2": [
