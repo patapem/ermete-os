@@ -47,7 +47,7 @@ jobs:
           # On the runner itself, not inside the builder image: the check decides whether
           # that image has to exist, so it cannot depend on it (first run, renamed image).
           # The script only needs bash, coreutils and skopeo, all on the runner.
-          (cd forge && bash scripts/check_idempotency.sh --package builder --registry ghcr.io --owner ${{ github.repository_owner }} --image-name athanor-builder) > idemp.out
+          bash scripts/check_idempotency.sh --package builder --registry ghcr.io --owner ${{ github.repository_owner }} --image-name athanor-builder > idemp.out
           source ./idemp.out
           if [ "$CACHE_HIT" = "true" ]; then
             echo "cache_hit=true" >> $GITHUB_OUTPUT
