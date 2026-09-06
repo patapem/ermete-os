@@ -1,53 +1,46 @@
 %global debug_package %{nil}
 %global _build_id_links none
+# Prebuilt Dart runtime and snapshot from upstream: never strip or rewrite them.
+%global __os_install_post %{nil}
 
 Name:           athanor-dart-sass
 Version:        1.77.8
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Dart-Sass precompiled binary for Athanor OS dynamic theming
 License:        MIT
 URL:            https://github.com/sass/dart-sass
+Source0:        https://github.com/sass/dart-sass/releases/download/%{version}/dart-sass-%{version}-linux-x64.tar.gz
 
-
-
-# Add a fake provide so other packages can depend on 'dart-sass' directly
+# Other packages depend on 'dart-sass' directly.
 Provides:       dart-sass = %{version}-%{release}
 
 %description
 Provides the standalone dart-sass binary required for dynamic SCSS compilation
-by the Athanor OS Desktop UI (AGS).
+by the Athanor OS Desktop UI (AGS), from the upstream release archive verified
+against SOURCES/sources.sha256.
 
 %prep
-# Stub prep
+%autosetup -n dart-sass
 
 %build
-# Nothing to build, it's a precompiled binary
+# Nothing to build: the release ships the Dart runtime and the compiled snapshot.
 
 %install
-mkdir -p %{buildroot}
-mkdir -p $(dirname 755) && touch 755
-mkdir -p $(dirname sass) && touch sass
-mkdir -p $(dirname 755) && touch 755
-mkdir -p $(dirname src/dart) && touch src/dart
-mkdir -p $(dirname 644) && touch 644
-mkdir -p $(dirname src/sass.snapshot) && touch src/sass.snapshot
-
-mkdir -p %{buildroot}/usr/bin
-mkdir -p %{buildroot}/usr/share/dart-sass/src
-
-# Install the dart-sass binary wrapper
-install -m 755 sass %{buildroot}/usr/share/dart-sass/
-install -m 755 src/dart %{buildroot}/usr/share/dart-sass/src/
-install -m 644 src/sass.snapshot %{buildroot}/usr/share/dart-sass/src/
-
-# Create a symlink in /usr/bin
-ln -sf /usr/share/dart-sass/sass %{buildroot}/usr/bin/sass
+install -D -m 0755 sass %{buildroot}%{_datadir}/dart-sass/sass
+install -D -m 0755 src/dart %{buildroot}%{_datadir}/dart-sass/src/dart
+install -D -m 0644 src/sass.snapshot %{buildroot}%{_datadir}/dart-sass/src/sass.snapshot
+install -D -m 0644 src/LICENSE %{buildroot}%{_datadir}/dart-sass/src/LICENSE
+# The wrapper resolves symlinks before locating src/, so /usr/bin/sass can be one.
+install -d %{buildroot}%{_bindir}
+ln -s %{_datadir}/dart-sass/sass %{buildroot}%{_bindir}/sass
 
 %files
-/usr/share/dart-sass/
-/usr/bin/sass
+%{_datadir}/dart-sass/
+%{_bindir}/sass
 
 %changelog
+* Sun Sep 06 2026 Athanor Forge <forge@athanor.os> - 1.77.8-2
+- Package the upstream release archive instead of empty placeholder files
+
 * Tue Jul 07 2026 Athanor Forge <forge@athanor.os> - 1.77.8-1
 - Initial encapsulation of dart-sass for runtime UI theming
-
