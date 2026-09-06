@@ -5,7 +5,6 @@
     "starship",
     "bat",
     "selinux",
-    "ananicy",
     "base-config",
     "desktop-ui",
     "ide-bootstrap",
@@ -43,7 +42,6 @@
     "cargo-tools",
     "just",
     "kernel-forge",
-    "git-native",
     "ripgrep-native",
     "athanor-semantic-db"
   ],
@@ -66,13 +64,11 @@
   "custom_tier1": [
     "starship",
     "bat",
-    "ananicy",
     "cliphist",
     "ide-bootstrap",
     "system-tweaks",
     "niri",
     "scudo",
-    "git-native",
     "ripgrep-native"
   ],
   "custom_tier2": [
