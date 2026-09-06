@@ -8,7 +8,13 @@ on:
     branches: [ main, iso-v0 ]
     paths:
       - 'forge/**'
+      # Workspace crates under system/ feed the DAG packages; the Containerfile,
+      # scripts and disk configuration under it feed the system image.
+      - 'system/**'
       - 'Cargo.toml'
+      # Inputs of the builder image (build-builder hashes both).
+      - 'flake.nix'
+      - 'flake.lock'
       - '.github/workflows/athanor-forge-orchestrator.yml'
       - '.github/workflows/call-*.yml'
   workflow_dispatch:
