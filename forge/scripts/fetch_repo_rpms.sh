@@ -33,10 +33,13 @@ readarray -t UPSTREAM_DESKTOP < <(jq -r '.upstream_desktop[] // empty' config/pa
 readarray -t UPSTREAM_MEDIA < <(jq -r '.upstream_media[] // empty' config/packages.json)
 readarray -t UPSTREAM_CLI < <(jq -r '.upstream_cli[] // empty' config/packages.json)
 
-# Define per-Tier micro-container images dynamically
+# Per-tier package images. An entry without a tag means :latest. The kernel and the
+# NVIDIA modules are published by kernel-build.yml and nvidia-kmod.yml under the NVR
+# derived from the pins (:latest exists only for builds from main).
+KERNEL_NVR=$(bash "$(dirname "${BASH_SOURCE[0]}")/../specs/azoth/nvr.sh")
 TIER0_IMAGES=(
-  "azoth"
-  "athanor-forge-nvidia"
+  "azoth:${KERNEL_NVR}"
+  "azoth-nvidia:${KERNEL_NVR}-open"
 )
 for pkg in "${CUSTOM_TIER0[@]}"; do
   [[ -n "$pkg" ]] && TIER0_IMAGES+=("athanor-forge-$pkg")
@@ -69,7 +72,9 @@ declare -A NEW_DIGESTS
 pull_and_extract() {
   local img="$1"
   local target_dir="$2"
-  local IMAGE_LOWER=$(echo "ghcr.io/$OWNER/$img:latest" | tr '[:upper:]' '[:lower:]')
+  local ref="$img"
+  [[ "$ref" == *:* ]] || ref="$ref:latest"
+  local IMAGE_LOWER=$(echo "ghcr.io/$OWNER/$ref" | tr '[:upper:]' '[:lower:]')
   
   local old_digest="${OLD_DIGESTS[$img]:-}"
   local new_digest=""
