@@ -1,19 +1,19 @@
-# Kernel guest per le MicroVM (docs/architecture/doc_kernel_build.md, sezione 9): il
-# frammento che build.sh fonde sopra x86_64_defconfig + kvm_guest.config, stessa sorgente
-# e stesso pin del kernel principale. Stesso formato di kernel-local: ogni riga deve
-# valere nel config generato (check_delta), una riga di motivazione per opzione.
+# Guest kernel for the MicroVMs (docs/architecture/doc_kernel_build.md, section 9): the
+# fragment that build.sh merges on top of x86_64_defconfig + kvm_guest.config, same
+# source and same pin as the main kernel. Same format as kernel-local: every line must
+# hold in the generated config (check_delta), one line of rationale per option.
 
-# Identita': uname -r finisce in -microvm, senza suffisso git.
+# Identity: uname -r ends in -microvm, without the git suffix.
 CONFIG_LOCALVERSION="-microvm"
 # CONFIG_LOCALVERSION_AUTO is not set
-# Niente moduli: tutto built-in, un solo file da caricare e da attestare.
+# No modules: everything built-in, a single file to load and to attest.
 # CONFIG_MODULES is not set
-# Il config nel kernel: e' cio' che l'attestazione e il gate leggono a runtime.
+# The config inside the kernel: it is what the attestation and the gate read at runtime.
 CONFIG_IKCONFIG=y
 CONFIG_IKCONFIG_PROC=y
 
-# Virtio: bus MMIO (Firecracker enumera i device dalla riga di comando) e PCI
-# (cloud-hypervisor); dischi, rete, console, vsock per hypervisor-daemon, rng, balloon.
+# Virtio: MMIO bus (Firecracker enumerates the devices from the command line) and PCI
+# (cloud-hypervisor); disks, network, console, vsock for hypervisor-daemon, rng, balloon.
 CONFIG_VIRTIO_MMIO=y
 CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
 CONFIG_VIRTIO_PCI=y
@@ -25,8 +25,8 @@ CONFIG_VIRTIO_VSOCKETS=y
 CONFIG_HW_RANDOM_VIRTIO=y
 CONFIG_VIRTIO_BALLOON=y
 
-# File system: 9p e virtiofs per le directory condivise dall'host, EROFS per la rootfs
-# immutabile (come il sistema), overlay per lo strato scrivibile, ext4 per i volumi.
+# File systems: 9p and virtiofs for the directories shared by the host, EROFS for the
+# immutable rootfs (like the system), overlay for the writable layer, ext4 for volumes.
 CONFIG_NET_9P=y
 CONFIG_NET_9P_VIRTIO=y
 CONFIG_9P_FS=y
@@ -35,30 +35,30 @@ CONFIG_VIRTIO_FS=y
 CONFIG_EROFS_FS=y
 CONFIG_OVERLAY_FS=y
 CONFIG_EXT4_FS=y
-# dm-verity: la rootfs del guest e' verificata come quella dell'host.
+# dm-verity: the guest rootfs is verified like the host's.
 CONFIG_MD=y
 CONFIG_BLK_DEV_DM=y
 CONFIG_DM_VERITY=y
 
-# BPF con BTF, come nel kernel principale: osservabilita' e policy anche nel guest.
+# BPF with BTF, as in the main kernel: observability and policy in the guest as well.
 CONFIG_BPF_SYSCALL=y
 CONFIG_BPF_JIT=y
 CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
 CONFIG_DEBUG_INFO_BTF=y
 
-# Hardening del kernel principale che vale anche in un guest: kCFI (clang), Landlock.
+# Hardening of the main kernel that also holds in a guest: kCFI (clang), Landlock.
 CONFIG_CFI=y
 CONFIG_SECURITY=y
 CONFIG_SECURITY_LANDLOCK=y
-# Guest confidenziali, per gli host che li hanno.
+# Confidential guests, for the hosts that have them.
 CONFIG_AMD_MEM_ENCRYPT=y
 CONFIG_INTEL_TDX_GUEST=y
 
-# La console e' la seriale che Firecracker e cloud-hypervisor espongono.
+# The console is the serial port that Firecracker and cloud-hypervisor expose.
 CONFIG_SERIAL_8250=y
 CONFIG_SERIAL_8250_CONSOLE=y
 
-# Nessun driver fisico: via cio' che defconfig accende per le macchine vere.
+# No physical drivers: out with what defconfig turns on for real machines.
 # CONFIG_DRM is not set
 # CONFIG_SOUND is not set
 # CONFIG_USB_SUPPORT is not set
@@ -70,5 +70,5 @@ CONFIG_SERIAL_8250_CONSOLE=y
 # CONFIG_HID_SUPPORT is not set
 # CONFIG_I2C is not set
 # CONFIG_AGP is not set
-# THERMAL e HWMON restano: li selezionano ACPI (che cloud-hypervisor e Firecracker usano
-# per enumerare i device) e la piattaforma x86; senza sensori non fanno nulla.
+# THERMAL and HWMON stay: ACPI (which cloud-hypervisor and Firecracker use to enumerate
+# the devices) and the x86 platform select them; without sensors they do nothing.

@@ -1,43 +1,43 @@
-# Delta Kconfig di Athanor OS sul config x86_64 di Fedora. kernel.spec lo fonde con
-# merge.py come partial-kernel-local-snip.config (Source3001); build.sh ne verifica
-# ogni riga sul config generato. Le opzioni che l'albero CachyOS introduce non
-# stanno qui: build.sh le accoda con i valori del config CachyOS pinnato.
-# Vedi docs/architecture/doc_kernel_build.md, sezione 4.
+# Athanor OS Kconfig delta on top of the Fedora x86_64 config. kernel.spec merges it with
+# merge.py as partial-kernel-local-snip.config (Source3001); build.sh verifies every line
+# of it against the generated config. The options that the CachyOS tree introduces do
+# not live here: build.sh appends them with the values of the pinned CachyOS config.
+# See docs/architecture/doc_kernel_build.md, section 4.
 
-# Scheduler: BORE sopra EEVDF e i tunable CachyOS.
+# Scheduler: BORE on top of EEVDF and the CachyOS tunables.
 CONFIG_SCHED_BORE=y
 CONFIG_CACHY=y
 
-# Codegen: -O2, niente LTO. -O3 (il default CachyOS) e' stato misurato con l'A/B
-# settimanale (variants/o3): mai meglio del rumore, -O2 vince hackbench (decisione del
-# 2026-09-05, sezione 13 della specifica). Il frammento clang_lto di Fedora accende
-# ThinLTO, ma Rust con DEBUG_INFO_BTF richiede !LTO: si riaccende quando pahole
-# reggera' i DWARF fusi da LTO (decisione del 2026-09-04, sezione 13).
+# Codegen: -O2, no LTO. -O3 (the CachyOS default) was measured with the weekly A/B
+# (variants/o3): never better than the noise, -O2 wins hackbench (decision of
+# 2026-09-05, section 13 of the specification). Fedora's clang_lto fragment turns
+# ThinLTO on, but Rust with DEBUG_INFO_BTF requires !LTO: it comes back when pahole
+# copes with the DWARF merged by LTO (decision of 2026-09-04, section 13).
 CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y
 # CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3 is not set
 CONFIG_LTO_NONE=y
 # CONFIG_LTO_CLANG_THIN is not set
 
-# ISA: x86-64 di base, ogni PC dal 2014/2015 in poi (patch more-uarches di CachyOS).
+# ISA: baseline x86-64, every PC from 2014/2015 onwards (CachyOS more-uarches patch).
 CONFIG_GENERIC_CPU=y
 CONFIG_X86_64_VERSION=1
 
-# Rust acceso come in Fedora: e' la porta ai driver che nasceranno in Rust. In 7.1
-# RUST dipende da !RANDSTRUCT e, con DEBUG_INFO_BTF, da !LTO. Con kCFI seleziona
+# Rust on as in Fedora: it is the door to the drivers that will be born in Rust. In 7.1
+# RUST depends on !RANDSTRUCT and, with DEBUG_INFO_BTF, on !LTO. With kCFI it selects
 # CFI_ICALL_NORMALIZE_INTEGERS.
 CONFIG_RUST=y
 CONFIG_CFI_ICALL_NORMALIZE_INTEGERS=y
 
-# Hardening in piu' rispetto a Fedora.
+# Hardening beyond Fedora.
 CONFIG_CFI=y
 # CONFIG_CFI_PERMISSIVE is not set
 CONFIG_ZERO_CALL_USED_REGS=y
-# RANDSTRUCT resta NONE come in Fedora: RUST dipende da !RANDSTRUCT.
+# RANDSTRUCT stays NONE as in Fedora: RUST depends on !RANDSTRUCT.
 CONFIG_RANDSTRUCT_NONE=y
 # CONFIG_RANDSTRUCT_FULL is not set
 CONFIG_MODULE_SIG_FORCE=y
 
-# Rete: BBRv3 (simbolo TCP_CONG_BBR3 della base CachyOS) e FQ di default.
+# Network: BBRv3 (TCP_CONG_BBR3 symbol of the CachyOS base) and FQ by default.
 CONFIG_TCP_CONG_BBR3=y
 CONFIG_DEFAULT_BBR3=y
 # CONFIG_DEFAULT_CUBIC is not set
@@ -46,14 +46,14 @@ CONFIG_NET_SCH_DEFAULT=y
 CONFIG_DEFAULT_FQ=y
 # CONFIG_DEFAULT_FQ_CODEL is not set
 
-# Memoria: zstd per zswap e zram (il default di zswap seleziona CRYPTO_ZSTD built-in).
+# Memory: zstd for zswap and zram (the zswap default selects CRYPTO_ZSTD built-in).
 CONFIG_CRYPTO_ZSTD=y
 CONFIG_ZSWAP_COMPRESSOR_DEFAULT_ZSTD=y
 # CONFIG_ZSWAP_COMPRESSOR_DEFAULT_LZO is not set
 CONFIG_ZRAM_DEF_COMP_ZSTD=y
 # CONFIG_ZRAM_DEF_COMP_LZORLE is not set
 
-# Rootfs immutabile: EROFS nel kernel, config consultabile da /proc.
+# Immutable rootfs: EROFS in the kernel, config readable from /proc.
 CONFIG_EROFS_FS=y
 CONFIG_IKCONFIG=y
 CONFIG_IKCONFIG_PROC=y

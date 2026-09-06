@@ -1,10 +1,10 @@
-# Variante -O3 per il confronto A/B del benchmark (docs/architecture/doc_kernel_build.md,
-# sezione 7 gate 5 e sezione 13, punto 2). build.sh --variant o3 la fonde sopra
-# kernel-local sostituendo le righe con lo stesso simbolo; il buildid diventa .azoth.o3
-# e il pacchetto non si pubblica. Stesso formato di kernel-local.
+# -O3 variant for the A/B comparison of the benchmark (docs/architecture/doc_kernel_build.md,
+# section 7 gate 5 and section 13, item 2). build.sh --variant o3 merges it on top of
+# kernel-local, replacing the lines with the same symbol; the buildid becomes .azoth.o3
+# and the package is not published. Same format as kernel-local.
 
-# L'opzione CachyOS -O3 al posto del default -O2 scelto il 2026-09-05: due A/B sullo
-# stesso runner non l'hanno mai vista vincere oltre il rumore. Da rimisurare quando
-# cambiano toolchain o serie.
+# The CachyOS -O3 option instead of the -O2 default chosen on 2026-09-05: two A/B runs
+# on the same runner never saw it win beyond the noise. To be measured again when the
+# toolchain or the series changes.
 # CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE is not set
 CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3=y

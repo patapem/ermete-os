@@ -33,8 +33,8 @@ directory e come si usa.
 
 ## Pin correnti
 
-<!-- pins:begin (tabella scritta da bump.py apply) -->
-| pin | valore |
+<!-- pins:begin (table written by bump.py apply) -->
+| pin | value |
 | --- | --- |
 | `FEDORA_KERNEL_NVR` | `7.1.8-100.fc43` |
 | `FEDORA_KEY_FPR` | `c6e7f081cf80e13146676e88829b606631645531` |

@@ -1,12 +1,12 @@
-# Athanor OS: ambiente della boot matrix del kernel (docs/architecture/doc_kernel_build.md,
-# sezione 7, gate 3). Stessa base pinnata del builder, ma qui non si compila nulla:
-# boot.sh estrae vmlinuz dal kernel-core, costruisce un initramfs di prova e una UKI
-# firmata con una MOK effimera, arruola la MOK nel varstore OVMF e avvia QEMU.
-# microvm/boot.sh (sezione 9) avvia il kernel guest in Firecracker con una rootfs ext4;
-# bench.sh (sezione 7, gate 5) misura il kernel in QEMU con hackbench, schbench, fio, netperf.
+# Athanor OS: environment of the kernel boot matrix (docs/architecture/doc_kernel_build.md,
+# section 7, gate 3). Same pinned base as the builder, but nothing is compiled here:
+# boot.sh extracts vmlinuz from the kernel-core, builds a test initramfs and a UKI signed
+# with an ephemeral MOK, enrols the MOK in the OVMF varstore and boots QEMU.
+# microvm/boot.sh (section 9) boots the guest kernel in Firecracker with an ext4 rootfs;
+# bench.sh (section 7, gate 5) measures the kernel in QEMU with hackbench, schbench, fio, netperf.
 
-# schbench non e' nei repo Fedora: dal sorgente al commit pinnato, in uno stadio a parte
-# cosi' gcc non entra nell'immagine.
+# schbench is not in the Fedora repos: from source at the pinned commit, in a separate
+# stage so that gcc stays out of the image.
 FROM registry.fedoraproject.org/fedora:43@sha256:396ef5b431dec0e4c5b1aa3bc2508f02b1270e798dda073b8c813cc637c6884c AS schbench
 ARG SCHBENCH_COMMIT=24e32b8ef67cbafb0761aed68747d90a291767ae
 RUN dnf -y install gcc make tar \
@@ -18,11 +18,11 @@ FROM registry.fedoraproject.org/fedora:43@sha256:396ef5b431dec0e4c5b1aa3bc2508f0
 
 RUN printf 'install_weak_deps=False\nkeepcache=False\n' >> /etc/dnf/dnf.conf
 
-# qemu con KVM o TCG e SeaBIOS; OVMF con Secure Boot; lo shim Fedora firmato Microsoft;
-# ukify e lo stub systemd per la UKI, sbsign per firmarla; virt-firmware per scrivere
-# la MOK nel varstore; busybox (statico) e bpftool per l'initramfs di prova;
-# e2fsprogs per la rootfs ext4 del kernel guest; realtime-tests (hackbench), fio e netperf
-# per il benchmark.
+# qemu with KVM or TCG and SeaBIOS; OVMF with Secure Boot; the Microsoft-signed Fedora
+# shim; ukify and the systemd stub for the UKI, sbsign to sign it; virt-firmware to write
+# the MOK into the varstore; busybox (static) and bpftool for the test initramfs;
+# e2fsprogs for the ext4 rootfs of the guest kernel; realtime-tests (hackbench), fio and
+# netperf for the benchmark.
 RUN dnf -y install \
       qemu-system-x86-core edk2-ovmf shim-x64 \
       systemd-ukify systemd-boot-unsigned sbsigntools python3-virt-firmware \
@@ -30,7 +30,7 @@ RUN dnf -y install \
     && dnf clean all
 COPY --from=schbench /usr/local/bin/schbench /usr/local/bin/schbench
 
-# Firecracker non e' nei repo Fedora: la release GitHub, pinnata per hash.
+# Firecracker is not in the Fedora repos: the GitHub release, pinned by hash.
 ARG FIRECRACKER=v1.16.1
 ARG FIRECRACKER_SHA256=382a02a869e4d6d5cb14c40577f9545e8458021ea8b0b2d3fc10ec14d9c242e6
 RUN curl -fsSL -o /tmp/firecracker.tgz "https://github.com/firecracker-microvm/firecracker/releases/download/${FIRECRACKER}/firecracker-${FIRECRACKER}-x86_64.tgz" \

@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
-"""Confronto di riproducibilita' tra due build dello stesso pin (spec, sezione 3 passo 8 e
-sezione 7 gate 6): A e' il kernel pubblicato, B la ricostruzione del job settimanale.
+"""Reproducibility comparison between two builds of the same pin (spec, section 3 step 8
+and section 7 gate 6): A is the published kernel, B the rebuild of the weekly job.
 
     repro.py --a DIR --b DIR --out DIR
 
-DIR contiene gli RPM del kernel (kernel-core, kernel-modules*) e, per B, kernel-devel: da
-li' viene scripts/extract-vmlinux. Confronta: `config` (byte per byte), `System.map`,
-`vmlinuz` (byte per byte, poi il vmlinux estratto sezione per sezione, offset e size da llvm-readelf) e
-ogni modulo senza la firma appesa. La chiave che firma moduli e immagine nasce e muore in
-ogni build (CONFIG_MODULE_SIG con chiave generata), quindi la firma dei .ko e il
-certificato dentro vmlinux (.init.data) sono differenze attese: il resto no. Scrive
-OUT/summary.md e OUT/results.json; esce 1 se c'e' una differenza non attesa.
+DIR holds the kernel RPMs (kernel-core, kernel-modules*) and, for B, kernel-devel: that
+is where scripts/extract-vmlinux comes from. It compares `config` (byte for byte),
+`System.map`, `vmlinuz` (byte for byte, then the extracted vmlinux section by section,
+offset and size from llvm-readelf) and every module without its appended signature. The
+key that signs modules and image is born and dies within each build (CONFIG_MODULE_SIG
+with a generated key), so the signature of the .ko files and the certificate inside
+vmlinux (.init.data) are expected differences: nothing else is. Writes OUT/summary.md
+and OUT/results.json; exits 1 on an unexpected difference.
 """
 
 import argparse
@@ -25,8 +26,8 @@ import tempfile
 from pathlib import Path
 
 SIG_MARKER = b"~Module signature appended~\n"
-# Sezioni di vmlinux in cui la chiave effimera lascia traccia: il certificato in
-# system_certificate_list (.init.data) e il build-id, che ne dipende (.notes).
+# Sections of vmlinux where the ephemeral key leaves a trace: the certificate in
+# system_certificate_list (.init.data) and the build-id, which depends on it (.notes).
 EXPECTED_SECTIONS = {".init.data", ".notes"}
 
 
@@ -38,7 +39,7 @@ def run(*cmd, **kw):
 
 
 def extract(rpms, dest, patterns):
-    """rpm2cpio | cpio dei soli percorsi che servono, da ogni RPM che li ha."""
+    """rpm2cpio | cpio of only the paths needed, from every RPM that has them."""
     dest.mkdir(parents=True, exist_ok=True)
     for rpm in rpms:
         with subprocess.Popen(["rpm2cpio", str(rpm)], stdout=subprocess.PIPE) as p:
@@ -55,7 +56,7 @@ def sha(data):
 
 
 def module_payload(data):
-    """Il modulo senza la firma: [payload][signer][key id][firma][struct 12][marker]."""
+    """The module without its signature: [payload][signer][key id][signature][struct 12][marker]."""
     if not data.endswith(SIG_MARKER):
         return data
     info = data[-len(SIG_MARKER) - 12 : -len(SIG_MARKER)]
@@ -66,14 +67,14 @@ def module_payload(data):
 
 
 def module_bytes(path):
-    """Il modulo decompresso (Fedora spedisce .ko.xz: la firma sta dentro il flusso)."""
+    """The decompressed module (Fedora ships .ko.xz: the signature is inside the stream)."""
     data = path.read_bytes()
     if path.suffix == ".xz":
         return lzma.decompress(data)
     if path.suffix == ".gz":
         return gzip.decompress(data)
     if path.suffix == ".zst":
-        sys.exit(f"{path.name}: moduli .zst, manca il decompressore")
+        sys.exit(f"{path.name}: .zst modules, decompressor missing")
     return data
 
 
@@ -85,7 +86,7 @@ def modules(tree):
 
 
 def sections(vmlinux):
-    """{sezione: sha256 del contenuto}: offset e size da llvm-readelf, byte dal file."""
+    """{section: sha256 of the content}: offset and size from llvm-readelf, bytes from the file."""
     data = vmlinux.read_bytes()
     (elf,) = json.loads(
         run("llvm-readelf", "-S", "--elf-output-style=JSON", str(vmlinux))
@@ -119,14 +120,14 @@ def main():
             src.rglob("kernel-modules*.rpm")
         )
         if not any(r.name.startswith("kernel-core-") for r in rpms):
-            sys.exit(f"{src}: kernel-core-*.rpm assente")
+            sys.exit(f"{src}: kernel-core-*.rpm missing")
         tree = work / label
         extract(rpms, tree, ["./lib/modules/*"])
         trees[label] = tree
     devel = sorted(args.b.rglob("kernel-devel-[0-9]*.rpm"))
     if not devel:
         sys.exit(
-            f"{args.b}: kernel-devel-*.rpm assente (serve scripts/extract-vmlinux)"
+            f"{args.b}: kernel-devel-*.rpm missing (scripts/extract-vmlinux is needed)"
         )
     extract(devel, work / "devel", ["./usr/src/kernels/*/scripts/extract-vmlinux"])
     (extract_vmlinux,) = list((work / "devel").rglob("extract-vmlinux"))
@@ -141,14 +142,14 @@ def main():
     }
     findings = []
     if ka != kb:
-        findings.append(f"versioni diverse: {ka} e {kb}")
+        findings.append(f"different versions: {ka} and {kb}")
     for name in ("config", "System.map", "vmlinuz"):
         da = (trees["a"] / "lib/modules" / ka / name).read_bytes()
         db = (trees["b"] / "lib/modules" / kb / name).read_bytes()
         results["files"][name] = da == db
         if da != db and name != "vmlinuz":
-            findings.append(f"{name} diverso")
-    # vmlinuz differisce per costruzione (certificato): conta cosa differisce dentro.
+            findings.append(f"{name} differs")
+    # vmlinuz differs by construction (certificate): what matters is what differs inside.
     for label in ("a", "b"):
         vmlinux = work / f"vmlinux-{label}"
         with vmlinux.open("wb") as f:
@@ -177,7 +178,7 @@ def main():
     unexpected = [s for s in differing if s not in EXPECTED_SECTIONS]
     if unexpected:
         findings.append(
-            f"sezioni di vmlinux diverse oltre a quelle attese: {' '.join(unexpected)}"
+            f"vmlinux sections differing beyond the expected ones: {' '.join(unexpected)}"
         )
     ma, mb = modules(trees["a"]), modules(trees["b"])
     only_a, only_b = sorted(set(ma) - set(mb)), sorted(set(mb) - set(ma))
@@ -190,10 +191,10 @@ def main():
     }
     if only_a or only_b:
         findings.append(
-            f"moduli presenti in una sola build: {len(only_a)} solo in A, {len(only_b)} solo in B"
+            f"modules present in one build only: {len(only_a)} only in A, {len(only_b)} only in B"
         )
-    # Per i primi moduli diversi, quali sezioni differiscono: distingue codice diverso da
-    # soli simboli, rilocazioni o build-id.
+    # For the first differing modules, which sections differ: tells different code from
+    # symbols, relocations or build-id only.
     mod_sections = {}
     for name in diff_mods[:3]:
         hashes = {}
@@ -209,44 +210,44 @@ def main():
     results["modules"]["sections"] = mod_sections
     if diff_mods:
         findings.append(
-            f"{len(diff_mods)} moduli con contenuto diverso (firma esclusa)"
+            f"{len(diff_mods)} modules with different content (signature excluded)"
         )
     results["findings"] = findings
     (args.out / "results.json").write_text(json.dumps(results, indent=2) + "\n")
 
-    ok = "identico" if not findings else "DIVERSO"
+    ok = "identical" if not findings else "DIFFERENT"
     lines = [
-        f"## Riproducibilita' {ka}: {ok}",
+        f"## Reproducibility {ka}: {ok}",
         "",
-        "| oggetto | esito |",
+        "| object | result |",
         "| --- | --- |",
     ]
     for name, same in results["files"].items():
-        lines.append(f"| `{name}` | {'identico' if same else 'diverso'} |")
+        lines.append(f"| `{name}` | {'identical' if same else 'different'} |")
     lines.append(
-        f"| vmlinux, {results['vmlinux_sections']['total']} sezioni | {len(differing)} diverse: {' '.join(differing) or 'nessuna'} |"
+        f"| vmlinux, {results['vmlinux_sections']['total']} sections | {len(differing)} differing: {' '.join(differing) or 'none'} |"
     )
     lines.append(
-        f"| moduli, {results['modules']['total']} | {len(diff_mods)} diversi senza firma, {len(only_a) + len(only_b)} presenti in una sola build |"
+        f"| modules, {results['modules']['total']} | {len(diff_mods)} differing without signature, {len(only_a) + len(only_b)} present in one build only |"
     )
     if findings:
-        lines += ["", "Differenze non attese (un bug da aprire):", ""] + [
+        lines += ["", "Unexpected differences (a bug to open):", ""] + [
             f"- {f}" for f in findings
         ]
         if diff_mods:
-            lines += ["", "| modulo | sezioni diverse |", "| --- | --- |"] + [
-                f"| `{name.rsplit('/', 1)[-1]}` | {' '.join(secs) or 'nessuna'} |"
+            lines += ["", "| module | differing sections |", "| --- | --- |"] + [
+                f"| `{name.rsplit('/', 1)[-1]}` | {' '.join(secs) or 'none'} |"
                 for name, secs in mod_sections.items()
             ]
             lines += (
-                ["", "<details><summary>moduli diversi</summary>", "", "```"]
+                ["", "<details><summary>differing modules</summary>", "", "```"]
                 + diff_mods[:200]
                 + ["```", "</details>"]
             )
     else:
         lines += [
             "",
-            "Le sole differenze stanno dove la chiave di firma effimera lascia traccia (firma dei moduli, certificato in vmlinux).",
+            "The only differences lie where the ephemeral signing key leaves a trace (module signatures, certificate in vmlinux).",
         ]
     (args.out / "summary.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines))

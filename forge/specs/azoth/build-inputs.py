@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Gli input della build del kernel come JSON (docs/architecture/doc_kernel_build.md,
-sezione 3 passo 8 e sezione 7): e' il predicato dell'attestazione dei pin che publish
-allega alle immagini, e la chiave con cui il job inputs riconosce un kernel gia'
-costruito da questi identici input. Entra solo cio' che cambia gli RPM: pin, manifest
-delle sorgenti, delta di config, patch, regole di merge, il kernel guest (frammento e
-spec), build.sh e l'ambiente. Non
-cmdline, boot/, retention.sh o il workflow: cambiarli non deve ricompilare nulla."""
+"""The inputs of the kernel build as JSON (docs/architecture/doc_kernel_build.md,
+section 3 step 8 and section 7): the predicate of the pins attestation that publish
+attaches to the images, and the key with which the inputs job recognises a kernel
+already built from these identical inputs. Only what changes the RPMs goes in: pins,
+source manifest, config delta, patches, merge rules, the guest kernel (fragment and
+spec), build.sh and the environment. Not cmdline, boot/, retention.sh or the workflow:
+changing them must not rebuild anything."""
 
 import hashlib
 import json
@@ -19,7 +19,7 @@ def sha(name):
     return hashlib.sha256((k / name).read_bytes()).hexdigest()
 
 
-# I pin NVIDIA_* riguardano i moduli esterni (nvidia.sh), non gli RPM del kernel.
+# The NVIDIA_* pins concern the external modules (nvidia.sh), not the kernel RPMs.
 pins = {
     key: value
     for key, value in re.findall(r"^(\w+)=(.*)$", (k / "pins.env").read_text(), re.M)

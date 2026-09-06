@@ -1,12 +1,12 @@
-# Kernel guest per le MicroVM di Athanor OS (docs/architecture/doc_kernel_build.md,
-# sezione 9). Stessa sorgente e stesso pin del kernel principale, secondo config: non
-# passa dal packaging Fedora e produce vmlinux (quello che Firecracker e cloud-hypervisor
-# caricano), bzImage e il config in /usr/lib/athanor/microvm/. build.sh passa l'albero
-# preparato da `rpmbuild -bp` del kernel.spec e la directory oggetto gia' configurata
-# (x86_64_defconfig + kvm_guest.config + microvm/kernel-local): qui c'e' solo la
-# compilazione con O=, cosi' l'albero resta pulito per il kernel principale.
-# Niente strip ne' debuginfo automatici: vmlinux si spoglia del DWARF a mano, tenendo
-# simboli e .BTF.
+# Guest kernel for the Athanor OS MicroVMs (docs/architecture/doc_kernel_build.md,
+# section 9). Same source and same pin as the main kernel, second config: it does not go
+# through the Fedora packaging and produces vmlinux (what Firecracker and cloud-hypervisor
+# load), bzImage and the config in /usr/lib/athanor/microvm/. build.sh passes the tree
+# prepared by `rpmbuild -bp` of kernel.spec and the already configured object directory
+# (x86_64_defconfig + kvm_guest.config + microvm/kernel-local): only the compilation with
+# O= happens here, so the tree stays clean for the main kernel.
+# No automatic strip or debuginfo: vmlinux is stripped of its DWARF by hand, keeping the
+# symbols and .BTF.
 %global debug_package %{nil}
 %global __os_install_post %{nil}
 %global microvm_dir /usr/lib/athanor/microvm
@@ -14,18 +14,18 @@
 Name:           azoth-microvm
 Version:        %{kversion}
 Release:        %{krelease}
-Summary:        Kernel guest di Athanor OS per le MicroVM
+Summary:        Athanor OS guest kernel for the MicroVMs
 License:        GPL-2.0-only WITH Linux-syscall-note
 URL:            https://github.com/hr-mes/athanor
 ExclusiveArch:  x86_64
-# La toolchain del kernel principale (builder/Containerfile): clang e lld, pahole per il BTF.
+# The toolchain of the main kernel (builder/Containerfile): clang and lld, pahole for the BTF.
 BuildRequires:  clang lld llvm make dwarves
 
 %description
-Il kernel che hypervisor-daemon avvia nelle MicroVM (Firecracker, cloud-hypervisor):
-x86_64_defconfig + kvm_guest.config + microvm/kernel-local (virtio, 9p e virtiofs,
-EROFS, dm-verity, BPF con BTF; nessun driver fisico, nessun modulo), compilato con
-clang e kCFI dalla stessa sorgente del kernel principale.
+The kernel that hypervisor-daemon boots in the MicroVMs (Firecracker, cloud-hypervisor):
+x86_64_defconfig + kvm_guest.config + microvm/kernel-local (virtio, 9p and virtiofs,
+EROFS, dm-verity, BPF with BTF; no physical drivers, no modules), compiled with clang
+and kCFI from the same source as the main kernel.
 
 %build
 make -C %{kernel_tree} O=%{objdir} %{make_opts} -j%{_smp_build_ncpus} vmlinux bzImage

@@ -1,18 +1,18 @@
-# Athanor OS: ambiente di build del kernel (docs/architecture/doc_kernel_build.md, sezione 5).
+# Athanor OS: kernel build environment (docs/architecture/doc_kernel_build.md, section 5).
 #
-# Il kernel e' il pacchetto Fedora (kernel.spec dal SRPM pinnato in ../pins.env)
-# ricostruito con clang/ThinLTO sopra la base CachyOS: servono dnf, le macro RPM di
-# Fedora e la toolchain LLVM, che il builder Nix della forge non ha. build.sh installa
-# le BuildRequires dello spec pinnato con `dnf builddep`: qui c'e' solo la base.
-# L'immagine e' pinnata per digest: e' l'unico input che il repo non versiona.
+# The kernel is the Fedora package (kernel.spec from the SRPM pinned in ../pins.env)
+# rebuilt with clang on top of the CachyOS base: it needs dnf, the Fedora RPM macros and
+# the LLVM toolchain, which the Nix builder of the forge lacks. build.sh installs the
+# BuildRequires of the pinned spec with `dnf builddep`: only the base is here.
+# The image is pinned by digest: it is the only input the repository does not version.
 FROM registry.fedoraproject.org/fedora:43@sha256:396ef5b431dec0e4c5b1aa3bc2508f02b1270e798dda073b8c813cc637c6884c
 
-# Nessuna dipendenza debole e niente cache: l'immagine resta minima.
+# No weak dependencies and no cache: the image stays minimal.
 RUN printf 'install_weak_deps=False\nkeepcache=False\n' >> /etc/dnf/dnf.conf
 
-# Toolchain LLVM (ThinLTO, lld), strumenti RPM e il plugin builddep di dnf5, rust e
-# bindgen per CONFIG_RUST, dwarves (pahole) per il BTF, gnupg2 per le firme delle
-# sorgenti, python3 per merge.py di Fedora, python3-koji per ricucire la firma del SRPM.
+# LLVM toolchain (clang, lld), RPM tools and the dnf5 builddep plugin, rust and bindgen
+# for CONFIG_RUST, dwarves (pahole) for the BTF, gnupg2 for the source signatures,
+# python3 for Fedora's merge.py, python3-koji to restitch the SRPM signature.
 RUN dnf -y install \
       rpm-build dnf5-plugins python3-koji \
       clang lld llvm \

@@ -1,9 +1,9 @@
-# Athanor OS: ambiente dei moduli kernel NVIDIA (docs/architecture/doc_kernel_build.md,
-# sezione 10, fase K4). Stessa base pinnata del builder del kernel, ma solo cio' che
-# serve a nvidia.sh: la toolchain LLVM con cui e' compilato il kernel (kCFI), Kbuild
-# dall'albero kernel-devel estratto dal RPM, kmod per modinfo, openssl e sign-file per
-# la firma. Niente rust, pahole o koji: e' un'immagine piu' piccola e piu' veloce del
-# builder, e non tocca il suo Containerfile (che e' un input del riuso del kernel).
+# Athanor OS: environment of the NVIDIA kernel modules (docs/architecture/doc_kernel_build.md,
+# section 10, phase K4). Same pinned base as the kernel builder, but only what nvidia.sh
+# needs: the LLVM toolchain the kernel is compiled with (kCFI), Kbuild from the
+# kernel-devel tree extracted from the RPM, kmod for modinfo, openssl and sign-file for
+# the signing. No rust, pahole or koji: a smaller and faster image than the builder, and
+# it does not touch the builder's Containerfile (which is an input of the kernel reuse).
 FROM registry.fedoraproject.org/fedora:43@sha256:396ef5b431dec0e4c5b1aa3bc2508f02b1270e798dda073b8c813cc637c6884c
 
 RUN printf 'install_weak_deps=False\nkeepcache=False\n' >> /etc/dnf/dnf.conf

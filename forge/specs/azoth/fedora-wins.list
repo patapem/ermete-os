@@ -1,6 +1,6 @@
-# Percorsi in cui, se il merge a tre vie tra la base CachyOS e l'albero Fedora
-# confligge, vince l'albero Fedora: la patch Red Hat porta lo stesso backport in una
-# variante diversa e Fedora e' cio' che viene testato e spedito. Ogni conflitto fuori
-# da questo elenco ferma la build. Pattern di bash ([[ == ]]), uno per riga.
+# Paths where, if the three-way merge between the CachyOS base and the Fedora tree
+# conflicts, the Fedora tree wins: the Red Hat patch carries the same backport in a
+# different variant and Fedora is what gets tested and shipped. Any conflict outside
+# this list stops the build. Bash patterns ([[ == ]]), one per line.
 MAINTAINERS
 drivers/media/platform/amd/isp4/*

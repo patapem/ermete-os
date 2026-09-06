@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
-"""Il bot di bump del kernel Athanor (docs/architecture/doc_kernel_build.md, sezione 8).
+"""The bump bot of the Athanor kernel (docs/architecture/doc_kernel_build.md, section 8).
 
-    bump.py check   stampa su stdout un JSON con i pin correnti, quelli nuovi e le note
-    bump.py apply   riscrive pins.env, i FROM dei Containerfile e la tabella dei pin di
-                    KERNEL.md; stampa su stdout il corpo della PR (Markdown)
+    bump.py check   prints to stdout a JSON with the current pins, the new ones and the notes
+    bump.py apply   rewrites pins.env, the FROM lines of the Containerfiles and the pins
+                    table of KERNEL.md; prints the PR body (Markdown) to stdout
 
-Coppia kernel (spec, sezione 2): per la serie X.Y che Fedora (stable, F43 poi F44) e
-CachyOS (release GitHub di CachyOS/linux) spediscono entrambe, il patch level X.Y.Z piu'
-alto presente su entrambi i lati. KERNEL_CHANNEL=stable prende la serie piu' nuova
-comune, lts la serie longterm. Senza coppia il kernel resta dov'e' e una nota lo dice.
-Con la coppia si muovono anche il commit di testa di CachyOS/kernel-patches per la
-serie e il commit di linux-cachyos/config vigente alla data della release CachyOS.
-Fuori dal kernel: i tag NVIDIA (open su GitHub, legacy dall'indice di download) dentro
-il ramo pinnato, e il digest dell'immagine base dei Containerfile. I manifesti degli
-hash non sono qui: li scrivono `build.sh --stage manifest` e `nvidia.sh manifest`.
-Solo libreria standard: gira sul runner GitHub senza installare nulla.
+Kernel pair (spec, section 2): for the X.Y series that both Fedora (stable, F43 then F44)
+and CachyOS (GitHub releases of CachyOS/linux) ship, the highest patch level X.Y.Z present
+on both sides. KERNEL_CHANNEL=stable takes the newest common series, lts the longterm
+one. Without a pair the kernel stays where it is and a note says so. With the pair, the
+head commit of CachyOS/kernel-patches for the series and the commit of
+linux-cachyos/config in force at the date of the CachyOS release move as well.
+Outside the kernel: the NVIDIA tags (open on GitHub, legacy from the download index)
+within the pinned branch, and the digest of the base image of the Containerfiles. The
+hash manifests are not here: `build.sh --stage manifest` and `nvidia.sh manifest` write
+them. Standard library only: it runs on the GitHub runner without installing anything.
 """
 
 import json
@@ -29,8 +29,8 @@ HERE = Path(__file__).resolve().parent
 PINS = HERE / "pins.env"
 CONTAINERFILES = [HERE / d / "Containerfile" for d in ("builder", "boot", "nvidia")]
 KERNEL_MD = HERE / "KERNEL.md"
-FEDORA_RELEASES = ("F43", "F44")  # in ordine di preferenza per lo stesso patch level
-LTS_SERIES = "6.18"  # KERNEL_CHANNEL=lts: la longterm che Fedora e CachyOS mantengono
+FEDORA_RELEASES = ("F43", "F44")  # in order of preference for the same patch level
+LTS_SERIES = "6.18"  # KERNEL_CHANNEL=lts: the longterm Fedora and CachyOS maintain
 BODHI = "https://bodhi.fedoraproject.org/updates/"
 NVIDIA_INDEX = "https://download.nvidia.com/XFree86/Linux-x86_64/"
 NVR_RE = re.compile(r"^kernel-(\d+\.\d+\.\d+)-(\d+)\.fc(\d+)$")
@@ -61,7 +61,7 @@ def http(url, headers=None, method="GET"):
 
 
 def gh(url):
-    """Una richiesta all'API GitHub, con il token del job se c'e' (60/ora senza)."""
+    """One request to the GitHub API, with the job token when present (60/hour without)."""
     headers = {"Accept": "application/vnd.github+json"}
     token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
     if token:
@@ -71,7 +71,7 @@ def gh(url):
 
 
 def github(endpoint, **params):
-    """Gli elementi di un endpoint lista, pagina dopo pagina."""
+    """The items of a list endpoint, page after page."""
     url = f"https://api.github.com/{endpoint}?{urllib.parse.urlencode(params)}"
     while url:
         head, items = gh(url)
@@ -90,7 +90,7 @@ def read_pins():
 
 
 def fedora_kernels():
-    """{patch level: NVR} delle build kernel stable; F43 prima di F44 a parita' di versione."""
+    """{patch level: NVR} of the stable kernel builds; F43 before F44 for the same version."""
     found = {}
     for release in FEDORA_RELEASES:
         page, pages = 1, 1
@@ -118,7 +118,7 @@ def fedora_kernels():
 
 
 def cachyos_releases():
-    """{patch level: (tag, published_at)} dell'ultima release di CachyOS/linux per versione."""
+    """{patch level: (tag, published_at)} of the latest CachyOS/linux release per version."""
     found = {}
     for rel in github("repos/CachyOS/linux/releases", per_page=100):
         m = CACHY_TAG_RE.match(rel["tag_name"])
@@ -131,17 +131,17 @@ def cachyos_releases():
 
 
 def kernel_pair(pins, notes):
-    """(versione, NVR Fedora, tag CachyOS, data della release) della coppia scelta, o None."""
+    """(version, Fedora NVR, CachyOS tag, release date) of the chosen pair, or None."""
     fedora, cachy = fedora_kernels(), cachyos_releases()
     common = sorted(set(fedora) & set(cachy), key=vtuple)
     if pins["KERNEL_CHANNEL"] == "lts":
         common = [v for v in common if series(v) == LTS_SERIES]
     elif pins["KERNEL_CHANNEL"] != "stable":
-        sys.exit(f"KERNEL_CHANNEL={pins['KERNEL_CHANNEL']}: atteso stable o lts")
+        sys.exit(f"KERNEL_CHANNEL={pins['KERNEL_CHANNEL']}: expected stable or lts")
     newest_fedora, newest_cachy = max(fedora, key=vtuple), max(cachy, key=vtuple)
     if not common:
         notes.append(
-            f"kernel: nessuna coppia Fedora/CachyOS (Fedora {newest_fedora}, CachyOS {newest_cachy}); il kernel resta {pins['FEDORA_KERNEL_NVR']}"
+            f"kernel: no Fedora/CachyOS pair (Fedora {newest_fedora}, CachyOS {newest_cachy}); the kernel stays at {pins['FEDORA_KERNEL_NVR']}"
         )
         return None
     version = common[-1]
@@ -149,8 +149,8 @@ def kernel_pair(pins, notes):
         version
     ):
         notes.append(
-            f"kernel: la coppia piu' alta e' {version} (Fedora {fedora[version]}, CachyOS {cachy[version][0]}); "
-            f"oltre, senza coppia: Fedora {newest_fedora}, CachyOS {newest_cachy}"
+            f"kernel: the highest pair is {version} (Fedora {fedora[version]}, CachyOS {cachy[version][0]}); "
+            f"beyond it, unpaired: Fedora {newest_fedora}, CachyOS {newest_cachy}"
         )
     return version, fedora[version], cachy[version][0], cachy[version][1]
 
@@ -162,11 +162,11 @@ def head_commit(repo, path, until=None):
     return next(github(f"repos/{repo}/commits", **params))["sha"]
 
 
-# --- NVIDIA e immagine base ----------------------------------------------------------
+# --- NVIDIA and base image -----------------------------------------------------------
 
 
 def nvidia_open(current):
-    """(tag, commit) piu' alto di NVIDIA/open-gpu-kernel-modules nel ramo (major) pinnato."""
+    """Highest (tag, commit) of NVIDIA/open-gpu-kernel-modules in the pinned (major) branch."""
     major = current.split(".")[0]
     tags = [
         t["name"]
@@ -175,21 +175,21 @@ def nvidia_open(current):
     best = max(
         (t for t in tags if re.fullmatch(rf"{major}\.\d+(\.\d+)?", t)), key=vtuple
     )
-    # L'endpoint dei commit dereferenzia anche un tag annotato: e' il commit che nvidia.sh verifica.
+    # The commits endpoint dereferences an annotated tag too: it is the commit nvidia.sh verifies.
     return best, gh(
         f"https://api.github.com/repos/NVIDIA/open-gpu-kernel-modules/commits/{best}"
     )[1]["sha"]
 
 
 def nvidia_legacy(current):
-    """La versione piu' alta del ramo pinnato nell'indice di download di NVIDIA."""
+    """The highest version of the pinned branch in NVIDIA's download index."""
     major = current.split(".")[0]
     index = http(NVIDIA_INDEX)[1].decode()
     return max(re.findall(rf"href='({major}\.\d+(?:\.\d+)?)/'", index), key=vtuple)
 
 
 def image_digest(image, tag):
-    """Il digest che `podman pull image:tag` risolve: quello del manifest (index) del tag."""
+    """The digest that `podman pull image:tag` resolves: the one of the tag's manifest (index)."""
     registry, _, name = image.partition("/")
     head, _ = http(
         f"https://{registry}/v2/{name}/manifests/{tag}",
@@ -198,12 +198,12 @@ def image_digest(image, tag):
     )
     digest = head.get("Docker-Content-Digest", "")
     if not re.fullmatch(r"sha256:[0-9a-f]{64}", digest):
-        sys.exit(f"{image}:{tag}: digest assente nella risposta del registro")
+        sys.exit(f"{image}:{tag}: digest missing from the registry response")
     return digest
 
 
 def base_images():
-    """{"immagine:tag": digest pinnato} dai FROM dei Containerfile."""
+    """{"image:tag": pinned digest} from the FROM lines of the Containerfiles."""
     found = {}
     for cf in CONTAINERFILES:
         for m in FROM_RE.finditer(cf.read_text()):
@@ -222,8 +222,8 @@ def compute():
         version, nvr, tag, published = pair
         if nvr != pins["FEDORA_KERNEL_NVR"] or tag != pins["CACHYOS_RELEASE"]:
             new["FEDORA_KERNEL_NVR"], new["CACHYOS_RELEASE"] = nvr, tag
-        # Il config di linux-cachyos vigente alla data della release: quello con cui CachyOS
-        # ha spedito quel kernel, non la testa di oggi, che puo' essere della serie dopo.
+        # The linux-cachyos config in force at the release date: the one CachyOS shipped
+        # that kernel with, not today's head, which may belong to the next series.
         config = head_commit(
             "CachyOS/linux-cachyos", "linux-cachyos/config", until=published
         )
@@ -257,7 +257,7 @@ def compute():
 
 def pins_table(pins):
     rows = "\n".join(f"| `{k}` | `{v}` |" for k, v in pins.items())
-    return f"<!-- pins:begin (tabella scritta da bump.py apply) -->\n| pin | valore |\n| --- | --- |\n{rows}\n<!-- pins:end -->"
+    return f"<!-- pins:begin (table written by bump.py apply) -->\n| pin | value |\n| --- | --- |\n{rows}\n<!-- pins:end -->"
 
 
 def apply(result):
@@ -265,7 +265,7 @@ def apply(result):
     for key, value in result["new"].items():
         text, n = re.subn(rf"^{key}=.*$", f"{key}={value}", text, flags=re.M)
         if n != 1:
-            sys.exit(f"pins.env: {key} trovato {n} volte")
+            sys.exit(f"pins.env: {key} found {n} times")
     PINS.write_text(text, newline="\n")
     for cf in CONTAINERFILES:
         content = cf.read_text()
@@ -281,12 +281,12 @@ def apply(result):
         flags=re.S,
     )
     if n != 1:
-        sys.exit("KERNEL.md: marcatori pins:begin/pins:end assenti")
+        sys.exit("KERNEL.md: pins:begin/pins:end markers missing")
     KERNEL_MD.write_text(md, newline="\n")
 
 
 def body(result):
-    lines = ["## Pin", "", "| pin | prima | dopo |", "| --- | --- | --- |"]
+    lines = ["## Pins", "", "| pin | before | after |", "| --- | --- | --- |"]
     lines += [
         f"| `{k}` | `{result['pins'][k]}` | `{v}` |" for k, v in result["new"].items()
     ]
@@ -295,7 +295,7 @@ def body(result):
         for ref, c in result["images"].items()
     ]
     if result["notes"]:
-        lines += ["", "## Note", ""] + [f"- {n}" for n in result["notes"]]
+        lines += ["", "## Notes", ""] + [f"- {n}" for n in result["notes"]]
     return "\n".join(lines) + "\n"
 
 

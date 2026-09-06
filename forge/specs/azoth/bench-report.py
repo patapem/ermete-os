@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
-"""Rapporto del benchmark di tendenza (bench.sh; spec, sezione 7, gate 5).
+"""Trend report of the benchmark (bench.sh; spec, section 7, gate 5).
 
     bench-report.py DIR...
 
-Ogni DIR e' un run settimanale, in ordine cronologico, con uno o piu' results.json
-(<etichetta>/results.json). Stampa Markdown per il summary del job: la tabella
-dell'ultimo run, il confronto tra i kernel misurati nello stesso run (per esempio il
-kernel pubblicato contro la variante o3: e' il confronto che decide, perche' i runner GitHub cambiano CPU
-da un run all'altro) e un grafico Mermaid per metrica con l'andamento tra i run del
-kernel di riferimento (il primo di ogni run).
+Every DIR is a weekly run, in chronological order, with one or more results.json
+(<label>/results.json). Prints Markdown for the job summary: the table of the latest
+run, the comparison between the kernels measured in the same run (for instance the
+published kernel against the o3 variant: the comparison that decides, because GitHub
+runners change CPU from one run to the next) and one Mermaid chart per metric with the
+trend across runs of the reference kernel (the first of every run).
 """
 
 import json
 import sys
 from pathlib import Path
 
-# Verso "meglio" di ogni metrica: serve al segno del confronto A/B.
+# Direction of "better" for every metric: gives the sign of the A/B comparison.
 HIGHER_IS_BETTER = {
     "hackbench_s": False,
     "schbench_wakeup_p99_us": False,
@@ -27,7 +27,7 @@ HIGHER_IS_BETTER = {
 
 
 def load(run_dir):
-    """[results] di un run: il primo e' il kernel di riferimento (published)."""
+    """[results] of a run: the first is the reference kernel (published)."""
     results = [json.loads(p.read_text()) for p in sorted(run_dir.rglob("results.json"))]
     results.sort(
         key=lambda r: (
@@ -46,19 +46,19 @@ def main():
     runs = [(Path(d), load(Path(d))) for d in sys.argv[1:]]
     runs = [(d, r) for d, r in runs if r]
     if not runs:
-        sys.exit("nessun results.json")
+        sys.exit("no results.json")
     latest_dir, latest = runs[-1]
     ref = latest[0]
     out = [
         f"## Benchmark {ref['kver']} ({ref['date']})",
         "",
-        f"QEMU/KVM {ref['vcpus']} vCPU, {ref['mem_mib']} MiB, {ref['seconds_per_test']} s per prova, host `{ref['host_cpu']}`",
+        f"QEMU/KVM {ref['vcpus']} vCPU, {ref['mem_mib']} MiB, {ref['seconds_per_test']} s per test, host `{ref['host_cpu']}`",
         "",
     ]
-    # Ultimo run: una colonna per kernel misurato; con piu' kernel, il delta verso il primo.
+    # Latest run: one column per measured kernel; with several kernels, the delta towards the first.
     labels = [r["label"] for r in latest]
     out.append(
-        "| metrica | "
+        "| metric | "
         + " | ".join(f"`{l}`" for l in labels)
         + (" | delta | " if len(latest) > 1 else " |")
     )
@@ -69,7 +69,7 @@ def main():
         row = [metric] + [
             fmt(r["metrics"][metric]["value"]) + " " + r["metrics"][metric]["unit"]
             if metric in r["metrics"]
-            else "n/d"
+            else "n/a"
             for r in latest
         ]
         if len(latest) > 1:
@@ -81,18 +81,18 @@ def main():
                         - 1
                     ) * 100
                     better = (pct > 0) == HIGHER_IS_BETTER.get(metric, True)
-                    deltas.append(f"{pct:+.1f}% ({'meglio' if better else 'peggio'})")
-            row.append(", ".join(deltas) or "n/d")
+                    deltas.append(f"{pct:+.1f}% ({'better' if better else 'worse'})")
+            row.append(", ".join(deltas) or "n/a")
         out.append("| " + " | ".join(row) + " |")
     if len(latest) > 1:
         out += [
             "",
-            f"Il delta e' della variante rispetto a `{ref['label']}`, nello stesso run e sulla stessa macchina.",
+            f"The delta is of the variant against `{ref['label']}`, in the same run and on the same machine.",
         ]
-    # Andamento del kernel di riferimento tra i run: un grafico per metrica.
+    # Trend of the reference kernel across runs: one chart per metric.
     history = [r[0] for _, r in runs]
     if len(history) > 1:
-        out += ["", f"### Andamento su {len(history)} run", ""]
+        out += ["", f"### Trend over {len(history)} runs", ""]
         dates = [h["date"] for h in history]
         for metric, info in ref["metrics"].items():
             values = [
@@ -100,9 +100,9 @@ def main():
                 for h in history
             ]
             direction = (
-                "piu' alto e' meglio"
+                "higher is better"
                 if HIGHER_IS_BETTER.get(metric, True)
-                else "piu' basso e' meglio"
+                else "lower is better"
             )
             out += [
                 "```mermaid",
@@ -115,7 +115,7 @@ def main():
                 "",
             ]
         out.append(
-            "I runner GitHub cambiano CPU da un run all'altro (`host_cpu` in results.json): l'andamento e' indicativo, la decisione sta nel confronto A/B dello stesso run."
+            "GitHub runners change CPU from one run to the next (`host_cpu` in results.json): the trend is indicative, the decision lies in the A/B comparison of the same run."
         )
     print("\n".join(out))
 
