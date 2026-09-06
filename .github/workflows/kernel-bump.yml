@@ -124,10 +124,10 @@ jobs:
             if [[ $outcome == FAIL ]]; then
               echo '```'; tail -n 40 prep.log; echo '```'
             fi
-            if grep -q '^opzioni derivate: ' prep.log; then
-              echo "<details><summary>$(grep '^opzioni derivate: ' prep.log) (listnewconfig with the CachyOS values)</summary>"
+            if grep -q '^derived options: ' prep.log; then
+              echo "<details><summary>$(grep '^derived options: ' prep.log) (listnewconfig with the CachyOS values)</summary>"
               echo; echo '```'
-              sed -n '/^opzioni derivate: /,/^>>> /{/^opzioni derivate: /d;/^>>> /d;p}' prep.log
+              sed -n '/^derived options: /,/^>>> /{/^derived options: /d;/^>>> /d;p}' prep.log
               echo '```'; echo "</details>"
             fi
           } > prep.md

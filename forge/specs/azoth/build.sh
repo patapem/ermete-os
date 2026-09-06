@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# Kernel Athanor: dai pin agli RPM, dentro builder/Containerfile.
-# Specifica: docs/architecture/doc_kernel_build.md. Tutto cio' che scarica e' pinnato
-# in pins.env, verificato con SOURCES/sources.sha256 e con le firme delle chiavi in
-# SOURCES/keys. Ogni controllo che fallisce ferma la build. La fase manifest scarica i
-# sorgenti dei pin e scrive il loro manifesto: e' cosi' che il bot di bump (bump.py)
-# rigenera SOURCES/sources.sha256. Lo stadio microvm fa il prep e compila solo il
-# kernel guest delle MicroVM (sezione 9); build compila entrambi i kernel. --variant NOME
-# (variants/NOME) e' la stessa build con un frammento che sovrascrive kernel-local, per
-# il confronto A/B del benchmark (kernel-weekly.yml): buildid .azoth.NOME, mai pubblicata.
+# Athanor kernel: from the pins to the RPMs, inside builder/Containerfile.
+# Specification: docs/architecture/doc_kernel_build.md. Everything it downloads is pinned
+# in pins.env, verified against SOURCES/sources.sha256 and against the signatures of the
+# keys in SOURCES/keys. Every failing check stops the build. The manifest stage downloads
+# the pinned sources and writes their manifest: that is how the bump bot (bump.py)
+# regenerates SOURCES/sources.sha256. The microvm stage runs prep and compiles only the
+# MicroVM guest kernel (section 9); build compiles both kernels. --variant NAME
+# (variants/NAME) is the same build with a fragment overriding kernel-local, for the A/B
+# comparison of the benchmark (kernel-weekly.yml): buildid .azoth.NAME, never published.
 set -euo pipefail
 
-usage() { echo "uso: ${0##*/} --stage manifest|prep|microvm|build --out DIR [--variant NOME]" >&2; exit 2; }
+usage() { echo "usage: ${0##*/} --stage manifest|prep|microvm|build --out DIR [--variant NAME]" >&2; exit 2; }
 STAGE='' OUT='' VARIANT=''
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -32,26 +32,27 @@ CACHE=${AZOTH_CACHE:-/var/cache/azoth}
 TOP=$HOME/rpmbuild
 SRC=$TOP/SOURCES
 mkdir -p "$CACHE" "$OUT" "$TOP"
-# Area di lavoro nuova a ogni esecuzione: il repo git del merge non sopporta un secondo
-# giro sullo stesso indice (le patch risultano gia' applicate).
+# A fresh work area on every run: the git repository of the merge does not survive a
+# second pass on the same index (the patches show up as already applied).
 WORK=$(mktemp -d "$TOP/athanor.XXXXXX")
-# Il delta di config effettivo: kernel-local, oppure kernel-local con le righe dei simboli
-# che la variante ridefinisce sostituite dal frammento variants/NOME.
+# The effective config delta: kernel-local, or kernel-local with the lines of the symbols
+# redefined by the variant replaced by the variants/NAME fragment.
 LOCAL=$HERE/kernel-local
 if [[ $VARIANT ]]; then
-  [[ -f $HERE/variants/$VARIANT ]] || die "variante sconosciuta: $VARIANT (variants/)"
+  [[ -f $HERE/variants/$VARIANT ]] || die "unknown variant: $VARIANT (variants/)"
   LOCAL=$WORK/kernel-local
   {
     grep -vEf <(grep -oE 'CONFIG_\w+' "$HERE/variants/$VARIANT" | sed 's/.*/^(# )?&[= ]/') "$HERE/kernel-local"
-    echo; echo "# --- variante $VARIANT (variants/$VARIANT) ---"; cat "$HERE/variants/$VARIANT"
+    echo; echo "# --- variant $VARIANT (variants/$VARIANT) ---"; cat "$HERE/variants/$VARIANT"
   } > "$LOCAL"
 fi
 
-# Nomi e URL derivati dai pin.
+# Names and URLs derived from the pins.
 SRPM=kernel-$FEDORA_KERNEL_NVR.src.rpm
 KOJI=https://kojipkgs.fedoraproject.org/packages/kernel/${FEDORA_KERNEL_NVR%%-*}/${FEDORA_KERNEL_NVR#*-}
-# koji pota le copie firmate delle build non piu' recenti ma conserva l'header di
-# firma in data/sigcache: ricucito sul SRPM dalla libreria koji da' il file firmato.
+# koji prunes the signed copies of the builds that are no longer the latest but keeps the
+# signature header in data/sigcache: spliced onto the SRPM by the koji library it gives
+# the signed file back.
 SRPM_URL=$KOJI/src/$SRPM
 SRPM_SIG_URL=$KOJI/data/sigcache/${FEDORA_KEY_FPR: -8}/src/$SRPM.sig
 FEDORA_KEY=/etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-${FEDORA_KERNEL_NVR##*.fc}-primary
@@ -67,32 +68,32 @@ CACHY_CONFIG_URL=https://raw.githubusercontent.com/CachyOS/linux-cachyos/$CACHYO
 PATCHES_URL=https://raw.githubusercontent.com/CachyOS/kernel-patches/$CACHYOS_PATCHES_COMMIT/$SERIES
 mapfile -t PATCHES < <(grep -vE '^\s*(#|$)' "$HERE/patches.list")
 mapfile -t ATHANOR_PATCHES < <(find "$HERE/patches" -name '*.patch' | sort)
-# In cache le patch CachyOS portano il prefisso del commit: lo stesso nome di file torna
-# a ogni commit di kernel-patches con contenuto diverso, e la cache e' persistente.
+# In the cache the CachyOS patches carry the commit prefix: the same file name comes back
+# with different content at every kernel-patches commit, and the cache is persistent.
 patch_file() { echo "${CACHYOS_PATCHES_COMMIT:0:12}-${1##*/}"; }
 mapfile -t FEDORA_WINS < <(grep -vE '^\s*(#|$)' "$HERE/fedora-wins.list")
-[[ -z $(printf '%s\n' "${PATCHES[@]##*/}" | sort | uniq -d) ]] || die "patches.list: nomi di file duplicati"
+[[ -z $(printf '%s\n' "${PATCHES[@]##*/}" | sort | uniq -d) ]] || die "patches.list: duplicate file names"
 
-# Le stesse scelte per dnf builddep (--define) e per rpmbuild (--with/--without).
-# clang_lto resta acceso anche con LTO spento in kernel-local: e' l'unico bcond con
-# cui kernel.spec passa HOSTCC=clang CC=clang LLVM=1 a process_configs.sh, senza il
-# quale il config verrebbe valutato con gcc e kCFI sparirebbe.
+# The same choices for dnf builddep (--define) and for rpmbuild (--with/--without).
+# clang_lto stays on even with LTO off in kernel-local: it is the only bcond through
+# which kernel.spec passes HOSTCC=clang CC=clang LLVM=1 to process_configs.sh; without it
+# the config would be evaluated with gcc and kCFI would vanish.
 WITH=(toolchain_clang clang_lto)
 WITHOUT=(debug tools perf libperf bpftool ynl selftests doc)
 BCONDS=() DEFINES=()
 for x in "${WITH[@]}"; do BCONDS+=(--with "$x"); DEFINES+=(--define "_with_$x 1"); done
 for x in "${WITHOUT[@]}"; do BCONDS+=(--without "$x"); DEFINES+=(--define "_without_$x 1"); done
-MAKE_OPTS=(HOSTCC=clang CC=clang LLVM=1 LLVM_IAS=1)      # %{clang_make_opts} di kernel.spec
+MAKE_OPTS=(HOSTCC=clang CC=clang LLVM=1 LLVM_IAS=1)      # %{clang_make_opts} of kernel.spec
 
-# --- sorgenti -----------------------------------------------------------------------
+# --- sources ------------------------------------------------------------------------
 
-fetch() { # fetch FILE URL: nella cache, una volta sola
+fetch() { # fetch FILE URL: into the cache, once
   [[ -f $CACHE/$1 ]] && return
-  echo "scarico $1"
+  echo "downloading $1"
   curl -fsSL --retry 3 -o "$CACHE/$1.part" "$2" && mv "$CACHE/$1.part" "$CACHE/$1"
 }
 
-step "sorgenti pinnate (pins.env)"
+step "pinned sources (pins.env)"
 fetch "$SRPM" "$SRPM_URL"
 fetch "$SRPM.sig" "$SRPM_SIG_URL"
 fetch "$CACHY_TAR" "$CACHY_URL"
@@ -103,19 +104,19 @@ fetch "$CACHY_CONFIG" "$CACHY_CONFIG_URL"
 for p in "${PATCHES[@]}"; do fetch "$(patch_file "$p")" "$PATCHES_URL/$p"; done
 
 if [[ $STAGE == manifest ]]; then
-  # Il manifesto di questi pin, dai file appena scaricati. Le firme le verifica prep,
-  # che il bot esegue subito dopo sullo stesso manifesto.
+  # The manifest of these pins, from the files just downloaded. The signatures are
+  # verified by prep, which the bot runs right after on the same manifest.
   files=("$SRPM" "$SRPM.sig" "$CACHY_TAR" "$CACHY_TAR.asc" "$VANILLA_TAR" "$VANILLA_SIGN" "$CACHY_CONFIG")
   for p in "${PATCHES[@]}"; do files+=("$(patch_file "$p")"); done
   (cd "$CACHE" && sha256sum "${files[@]}") > "$OUT/sources.sha256"
-  echo "manifesto di ${#files[@]} file in $OUT/sources.sha256"
+  echo "manifest of ${#files[@]} files in $OUT/sources.sha256"
   exit 0
 fi
 
-step "hash (SOURCES/sources.sha256)"
+step "hashes (SOURCES/sources.sha256)"
 (cd "$CACHE" && sha256sum --check --quiet --strict "$HERE/SOURCES/sources.sha256")
 
-verify_gpg() { # verify_gpg KEYDIR SIGNATURE DATA: buona firma di una delle chiavi vendorizzate
+verify_gpg() { # verify_gpg KEYDIR SIGNATURE DATA: a good signature from one of the vendored keys
   local home
   home=$(mktemp -d)
   gpg --homedir "$home" --batch --quiet --import "$HERE/SOURCES/keys/$1"/*.asc
@@ -123,66 +124,66 @@ verify_gpg() { # verify_gpg KEYDIR SIGNATURE DATA: buona firma di una delle chia
     | grep '^\[GNUPG:\] GOODSIG ' > /dev/null
 }
 
-step "firme"
-verify_gpg cachyos "$CACHE/$CACHY_TAR.asc" "$CACHE/$CACHY_TAR" || die "firma CachyOS non valida: $CACHY_TAR"
-xz -dc "$CACHE/$VANILLA_TAR" | verify_gpg kernel.org "$CACHE/$VANILLA_SIGN" - || die "firma kernel.org non valida: $VANILLA_TAR"
+step "signatures"
+verify_gpg cachyos "$CACHE/$CACHY_TAR.asc" "$CACHE/$CACHY_TAR" || die "invalid CachyOS signature: $CACHY_TAR"
+xz -dc "$CACHE/$VANILLA_TAR" | verify_gpg kernel.org "$CACHE/$VANILLA_SIGN" - || die "invalid kernel.org signature: $VANILLA_TAR"
 SIGNED_SRPM=$WORK/$SRPM
 python3 -c 'import sys, koji; koji.splice_rpm_sighdr(open(sys.argv[1], "rb").read(), sys.argv[2], sys.argv[3])' "$CACHE/$SRPM.sig" "$CACHE/$SRPM" "$SIGNED_SRPM"
 rpmkeys --import "$FEDORA_KEY"
 rpmkeys --checksig --verbose "$SIGNED_SRPM" | grep "signature, key fingerprint: $FEDORA_KEY_FPR: OK" > /dev/null \
-  || die "SRPM non firmato dalla chiave Fedora $FEDORA_KEY_FPR: $SRPM"
+  || die "SRPM not signed by the Fedora key $FEDORA_KEY_FPR: $SRPM"
 
-# --- albero -------------------------------------------------------------------------
+# --- tree ---------------------------------------------------------------------------
 
-step "kernel.spec e sorgenti Fedora in $TOP"
+step "kernel.spec and Fedora sources in $TOP"
 printf '%%_topdir %s\n%%buildid .azoth%s\n' "$TOP" "${VARIANT:+.$VARIANT}" > "$HOME/.rpmmacros"
 rpm -i "$SIGNED_SRPM"
 
-# Prima della derivazione del config: listnewconfig deve vedere la stessa toolchain di
-# rpmbuild (rust-src, bindgen, pahole), altrimenti RUST_IS_AVAILABLE e le opzioni che
-# ne dipendono cambiano tra il pre-pass e il gate di Fedora.
-step "BuildRequires di kernel.spec"
+# Before the config derivation: listnewconfig must see the same toolchain as rpmbuild
+# (rust-src, bindgen, pahole), otherwise RUST_IS_AVAILABLE and the options depending on
+# it change between the pre-pass and the Fedora gate.
+step "BuildRequires of kernel.spec"
 dnf -y builddep "${DEFINES[@]}" "$TOP/SPECS/kernel.spec"
 
-step "base CachyOS: merge a tre vie tra vanilla, CachyOS e la patch Red Hat, poi patches.list e patches/"
+step "CachyOS base: three-way merge of vanilla, CachyOS and the Red Hat patch, then patches.list and patches/"
 tar -C "$WORK" -xf "$CACHE/$VANILLA_TAR" && mv "$WORK/linux-$KVER" "$WORK/a"
 tar -C "$WORK" -xzf "$CACHE/$CACHY_TAR" && mv "$WORK/$CACHYOS_RELEASE" "$WORK/b"
 tar -C "$WORK" -xf "$SRC/$VANILLA_TAR" && mv "$WORK/linux-$KVER" "$WORK/fedora-vanilla"
 REDHAT_PATCH=("$SRC"/patch-*-redhat.patch)
-[[ ${#REDHAT_PATCH[@]} -eq 1 ]] || die "patch Red Hat: attesa una, trovate ${#REDHAT_PATCH[@]}"
-# kernel.spec applica la patch Red Hat e poi linux-kernel-test.patch (Patch999999) con
-# `git --work-tree=. apply`: il test patch e' il diff tra l'albero Fedora e il merge a
-# tre vie (base vanilla) della base CachyOS su quell'albero, cosi' entra per costruzione
-# e le aggiunte identiche (backport presenti in entrambi) si fondono da sole. Solo
-# plumbing git: l'indice fa da area di lavoro, nessun checkout.
+[[ ${#REDHAT_PATCH[@]} -eq 1 ]] || die "Red Hat patch: expected one, found ${#REDHAT_PATCH[@]}"
+# kernel.spec applies the Red Hat patch and then linux-kernel-test.patch (Patch999999)
+# with `git --work-tree=. apply`: the test patch is the diff between the Fedora tree and
+# the three-way merge (vanilla base) of the CachyOS base onto that tree, so it applies by
+# construction and the identical additions (backports present in both) merge on their
+# own. Git plumbing only: the index is the work area, no checkout.
 export GIT_AUTHOR_NAME=athanor GIT_AUTHOR_EMAIL=kernel@athanor.os GIT_COMMITTER_NAME=athanor GIT_COMMITTER_EMAIL=kernel@athanor.os
 g() { git -C "$WORK/a" "$@"; }
 g init -q
 g add -Af . && VANILLA=$(g commit-tree -m vanilla "$(g write-tree)")
-# Fedora rigenera il tarball con git archive: byte diversi dall'upstream firmato,
-# contenuto che deve essere identico. Lo stesso albero git lo prova.
+# Fedora regenerates the tarball with git archive: different bytes from the signed
+# upstream, content that must be identical. The same git tree proves it.
 git --git-dir="$WORK/a/.git" -C "$WORK/fedora-vanilla" add -Af .
-[[ $(g write-tree) == $(g rev-parse "$VANILLA^{tree}") ]] || die "il tarball nel SRPM non ha il contenuto del vanilla firmato $VANILLA_TAR"
+[[ $(g write-tree) == $(g rev-parse "$VANILLA^{tree}") ]] || die "the tarball in the SRPM does not match the signed vanilla $VANILLA_TAR"
 git --git-dir="$WORK/a/.git" -C "$WORK/b" add -Af . && CACHY=$(g commit-tree -p "$VANILLA" -m cachyos "$(g write-tree)")
 g read-tree "$VANILLA" && g apply --cached "${REDHAT_PATCH[0]}" && FEDORA=$(g commit-tree -p "$VANILLA" -m redhat "$(g write-tree)")
-# shellcheck disable=SC2053  # il confronto con pattern e' voluto
+# shellcheck disable=SC2053  # the pattern comparison is intended
 fedora_wins() { local pat; for pat in "${FEDORA_WINS[@]}"; do [[ $1 == $pat ]] && return; done; false; }
 if MERGED=$(g merge-tree --write-tree --name-only --no-messages "$FEDORA" "$CACHY"); then
   g read-tree "$MERGED"
 else
   mapfile -t CONFLICTS < <(tail -n +2 <<< "$MERGED" | grep -v "^$")
   for path in "${CONFLICTS[@]}"; do
-    fedora_wins "$path" || die "conflitto tra base CachyOS e patch Red Hat fuori da fedora-wins.list: $path"
+    fedora_wins "$path" || die "conflict between the CachyOS base and the Red Hat patch outside fedora-wins.list: $path"
   done
   g read-tree "${MERGED%%$'\n'*}"
   g restore --staged --source="$FEDORA" -- "${CONFLICTS[@]}"
-  echo "conflitti risolti con l'albero Fedora (fedora-wins.list): ${CONFLICTS[*]}"
+  echo "conflicts resolved with the Fedora tree (fedora-wins.list): ${CONFLICTS[*]}"
 fi
 for p in "${PATCHES[@]}"; do
   g apply --cached "$CACHE/$(patch_file "$p")"
-  (cd "$WORK/b" && git apply "$CACHE/$(patch_file "$p")")     # l'albero CachyOS serve alla derivazione del config
+  (cd "$WORK/b" && git apply "$CACHE/$(patch_file "$p")")     # the CachyOS tree serves the config derivation
 done
-# Le patch di Athanor (patches/), in ordine di nome, dopo quelle di CachyOS.
+# The Athanor patches (patches/), in name order, after the CachyOS ones.
 for p in "${ATHANOR_PATCHES[@]}"; do
   g apply --cached "$p"
   (cd "$WORK/b" && git apply "$p")
@@ -191,9 +192,9 @@ g diff --binary "$FEDORA" "$(g write-tree)" -- . ':!.github' > "$SRC/linux-kerne
 
 # --- config -------------------------------------------------------------------------
 
-step "kernel-local: delta Athanor, poi le opzioni nuove dell'albero con i valori CachyOS"
-# Stessa fusione che fa kernel.spec: config Fedora x86_64, frammenti clang e clang_lto,
-# kernel-local. Su quel config listnewconfig elenca le opzioni che l'albero introduce.
+step "kernel-local: the Athanor delta, then the options new to the tree with the CachyOS values"
+# The same merge kernel.spec performs: Fedora x86_64 config, clang and clang_lto snippets,
+# kernel-local. On that config listnewconfig lists the options the tree introduces.
 merged=$WORK/merged.config
 cp "$SRC/kernel-x86_64-fedora.config" "$merged"
 for snip in "$SRC/partial-clang-snip.config" "$SRC/partial-clang_lto-x86_64-snip.config" "$LOCAL"; do
@@ -210,66 +211,66 @@ for _ in 1 2 3 4 5; do
   done < "$WORK/new" | sed -E 's/^(CONFIG_\w+)=n$/# \1 is not set/' >> "$derived"
   python3 "$SRC/merge.py" "$derived" "$merged" > "$merged.tmp" && mv "$merged.tmp" "$merged"
 done
-[[ ! -s $WORK/new ]] || die "derivazione del config non convergente: $(head -3 "$WORK/new" | tr '\n' ' ')"
-echo "opzioni derivate: $(wc -l < "$derived")"; cat "$derived"
+[[ ! -s $WORK/new ]] || die "config derivation does not converge: $(head -3 "$WORK/new" | tr '\n' ' ')"
+echo "derived options: $(wc -l < "$derived")"; cat "$derived"
 {
   cat "$LOCAL"
   echo
-  echo "# Opzioni introdotte dall'albero, con i valori di $CACHY_CONFIG (derivate da build.sh)."
+  echo "# Options introduced by the tree, with the values of $CACHY_CONFIG (derived by build.sh)."
   cat "$derived"
 } > "$SRC/kernel-local"
 
-step "solo x86_64: gli altri config Fedora diventano '# EMPTY' e process_configs.sh li salta"
+step "x86_64 only: the other Fedora configs become '# EMPTY' and process_configs.sh skips them"
 for f in "$SRC"/kernel-*-fedora.config; do
   [[ $f == */kernel-x86_64-fedora.config ]] || printf '# EMPTY\n' > "$f"
 done
 
-check_delta() { # check_delta CONFIG FRAGMENT: ogni riga del frammento deve valere nel config
+check_delta() { # check_delta CONFIG FRAGMENT: every line of the fragment must hold in the config
   local bad=0 line name
   while IFS= read -r line; do
     name=$(grep -oE 'CONFIG_\w+' <<< "$line")
     if [[ $line == CONFIG_* ]]; then
-      grep -qxF "$line" "$1" || { echo "  richiesto $line, generato: $(grep -E "^(# )?${name}[= ]" "$1" || echo assente)"; bad=1; }
+      grep -qxF "$line" "$1" || { echo "  required $line, generated: $(grep -E "^(# )?${name}[= ]" "$1" || echo missing)"; bad=1; }
     else
-      ! grep -qE "^$name=" "$1" || { echo "  richiesto $line, generato: $(grep -E "^$name=" "$1")"; bad=1; }
+      ! grep -qE "^$name=" "$1" || { echo "  required $line, generated: $(grep -E "^$name=" "$1")"; bad=1; }
     fi
   done < <(grep -E '^(CONFIG_\w+=|# CONFIG_\w+ is not set)' "$2")
-  [[ $bad -eq 0 ]] || die "il config generato non rispetta ${2#"$HERE"/}"
+  [[ $bad -eq 0 ]] || die "the generated config does not honour ${2#"$HERE"/}"
 }
 
 # --- rpmbuild -----------------------------------------------------------------------
 
-# Riproducibilita' (spec, sezione 3 passo 8): utente, host e data del build fissi. La
-# data e' quella della changelog di kernel.spec, lo stesso SOURCE_DATE_EPOCH che rpm usa
-# per i timestamp dei pacchetti; il kernel la scrive in UTS_VERSION (linux_banner in
-# .rodata, init_uts_ns in .data, `uname -v`) e senza questa variabile userebbe l'ora
-# corrente: due build dello stesso pin differivano proprio li' (repro.py, K7).
+# Reproducibility (spec, section 3 step 8): fixed build user, host and date. The date is
+# the one of the kernel.spec changelog, the same SOURCE_DATE_EPOCH rpm uses for the
+# package timestamps; the kernel writes it into UTS_VERSION (linux_banner in .rodata,
+# init_uts_ns in .data, `uname -v`) and without this variable it would use the current
+# time: two builds of the same pin differed exactly there (repro.py, K7).
 EPOCH=$(rpmspec -q --srpm --qf '[%{changelogtime} ]' "$TOP/SPECS/kernel.spec" | cut -d' ' -f1)
-[[ $EPOCH =~ ^[0-9]+$ ]] || die "changelog di kernel.spec senza data"
+[[ $EPOCH =~ ^[0-9]+$ ]] || die "kernel.spec changelog without a date"
 KBUILD_BUILD_TIMESTAMP=$(date -u -d "@$EPOCH" '+%a %b %e %H:%M:%S UTC %Y')
 export KBUILD_BUILD_USER=azoth KBUILD_BUILD_HOST=forge KBUILD_BUILD_TIMESTAMP
 
-step "rpmbuild -bp: patch e gate del config (process_configs.sh -w -n -c)"
+step "rpmbuild -bp: patches and config gate (process_configs.sh -w -n -c)"
 rpmbuild -bp --target x86_64 "${BCONDS[@]}" "$TOP/SPECS/kernel.spec"
 CONFIG=$(find "$TOP/BUILD" -path '*/configs/kernel-*-x86_64.config' -print -quit)
-[[ -n $CONFIG ]] || die "config generato non trovato sotto $TOP/BUILD"
+[[ -n $CONFIG ]] || die "generated config not found under $TOP/BUILD"
 check_delta "$CONFIG" "$LOCAL"
 cp "$CONFIG" "$SRC/kernel-local" "$OUT/"
 
-# --- kernel guest MicroVM (sezione 9) ---------------------------------------------------
+# --- MicroVM guest kernel (section 9) -----------------------------------------------------
 
-# Stessa sorgente (l'albero preparato da rpmbuild -bp) e stesso pin, secondo config:
-# x86_64_defconfig + kvm_guest.config + microvm/kernel-local, in una directory oggetto
-# separata (O=), cosi' l'albero resta pulito per rpmbuild -bb. Il gate del frammento
-# (check_delta) gira in ogni stadio, la compilazione solo in microvm e build.
+# Same source (the tree prepared by rpmbuild -bp) and same pin, second config:
+# x86_64_defconfig + kvm_guest.config + microvm/kernel-local, in a separate object
+# directory (O=), so the tree stays clean for rpmbuild -bb. The fragment gate
+# (check_delta) runs in every stage, the compilation only in microvm and build.
 TREE=$(dirname "$(dirname "$CONFIG")")
-[[ -f $TREE/Makefile ]] || die "albero kernel non trovato accanto a $CONFIG"
+[[ -f $TREE/Makefile ]] || die "kernel tree not found next to $CONFIG"
 MICROVM_OBJ=$WORK/microvm
-step "config MicroVM: x86_64_defconfig + kvm_guest.config + microvm/kernel-local"
-# rpmbuild -bp lascia in albero include/config e include/generated (process_configs.sh)
-# e O= pretende un albero pulito; mrproper e' anche il primo passo di InitBuildVars in
-# kernel.spec (da cui BuildKernel riparte con configs/), quindi per il kernel
-# principale non cambia nulla.
+step "MicroVM config: x86_64_defconfig + kvm_guest.config + microvm/kernel-local"
+# rpmbuild -bp leaves include/config and include/generated in the tree
+# (process_configs.sh) and O= demands a clean tree; mrproper is also the first step of
+# InitBuildVars in kernel.spec (from which BuildKernel restarts with configs/), so
+# nothing changes for the main kernel.
 make -s -C "$TREE" mrproper
 mkdir -p "$MICROVM_OBJ"
 make -s -C "$TREE" O="$MICROVM_OBJ" "${MAKE_OPTS[@]}" x86_64_defconfig kvm_guest.config
@@ -277,15 +278,15 @@ make -s -C "$TREE" O="$MICROVM_OBJ" "${MAKE_OPTS[@]}" x86_64_defconfig kvm_guest
 make -s -C "$TREE" O="$MICROVM_OBJ" "${MAKE_OPTS[@]}" olddefconfig
 check_delta "$MICROVM_OBJ/.config" "$HERE/microvm/kernel-local"
 cp "$MICROVM_OBJ/.config" "$OUT/microvm.config"
-echo "config MicroVM: $(grep -c '=y$' "$MICROVM_OBJ/.config") opzioni built-in, $(grep -c '=m$' "$MICROVM_OBJ/.config") moduli"
+echo "MicroVM config: $(grep -c '=y$' "$MICROVM_OBJ/.config") built-in options, $(grep -c '=m$' "$MICROVM_OBJ/.config") modules"
 
-# Una variante e' solo il kernel principale da misurare: niente kernel guest.
+# A variant is only the main kernel to be measured: no guest kernel.
 if [[ ( $STAGE == microvm || $STAGE == build ) && -z $VARIANT ]]; then
   NVR=$(bash "$HERE/nvr.sh")
-  step "kernel MicroVM: rpmbuild -bb microvm/azoth-microvm.spec (O=$MICROVM_OBJ)"
-  # Lo stesso SOURCE_DATE_EPOCH del kernel principale, che rpm prende dalla changelog di
-  # kernel.spec: lo spec del guest non ne ha una, e senza epoch i timestamp del pacchetto
-  # non sarebbero riproducibili (KBUILD_BUILD_TIMESTAMP e' gia' nell'ambiente).
+  step "MicroVM kernel: rpmbuild -bb microvm/azoth-microvm.spec (O=$MICROVM_OBJ)"
+  # The same SOURCE_DATE_EPOCH as the main kernel, which rpm takes from the kernel.spec
+  # changelog: the guest spec has none, and without an epoch the package timestamps would
+  # not be reproducible (KBUILD_BUILD_TIMESTAMP is already in the environment).
   SOURCE_DATE_EPOCH=$EPOCH rpmbuild -bb --target x86_64 --define "source_date_epoch_from_changelog 0" --define "use_source_date_epoch_as_buildtime 1" \
     --define "kernel_tree $TREE" --define "objdir $MICROVM_OBJ" \
     --define "kversion ${NVR%%-*}" --define "krelease ${NVR#*-}" \
@@ -297,8 +298,8 @@ fi
 if [[ $STAGE == build ]]; then
   step "rpmbuild -bb"
   rpmbuild -bb --noprep --target x86_64 "${BCONDS[@]}" "$TOP/SPECS/kernel.spec"
-  # Tre OCI distinti (kernel-build.yml): binari, devel per i kmod esterni, debuginfo
-  # con la sua retention. La classificazione e' per nome di pacchetto.
+  # Three distinct OCI images (kernel-build.yml): binaries, devel for the external kmods,
+  # debuginfo with its own retention. The classification is by package name.
   mkdir -p "$OUT/kernel" "$OUT/devel" "$OUT/debuginfo"
   for rpm in "$TOP"/RPMS/x86_64/*.rpm; do
     case ${rpm##*/} in
@@ -310,4 +311,4 @@ if [[ $STAGE == build ]]; then
   rpm -qp --qf '%{VERSION}-%{RELEASE}' "$TOP"/RPMS/x86_64/kernel-core-*.rpm > "$OUT/nvr"
 fi
 
-step "fatto: $(find "$OUT" -type f -printf "%P ")"
+step "done: $(find "$OUT" -type f -printf "%P ")"

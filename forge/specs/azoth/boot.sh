@@ -1,25 +1,25 @@
 #!/usr/bin/env bash
-# Boot matrix del kernel Athanor (docs/architecture/doc_kernel_build.md, sezione 7, gate 3).
-# Gira nell'immagine boot/Containerfile. Dal kernel-core RPM estrae vmlinuz, costruisce un
-# initramfs di prova (busybox, bpftool, boot/init) e una UKI firmata con una MOK effimera,
-# arruola la MOK nel varstore OVMF con Secure Boot acceso e avvia QEMU quattro volte:
-# firmware {SeaBIOS, OVMF+Secure Boot via shim} x CPU {Nehalem, host}. Nehalem prova che
-# nel kernel non e' entrata nessuna istruzione oltre x86-64 baseline. Ogni avvio deve
-# terminare con `K3 RESULT ok` sulla seriale (le asserzioni sono in boot/init).
-# Con --mok e --insmod prova anche la catena dei moduli esterni (sezione 7, gate 4): la
-# MOK di progetto arruolata accanto a quella effimera, e un .ko firmato che il kernel
-# deve accettare (ENODEV: firma buona, GPU assente) o rifiutare (EKEYREJECTED).
+# Boot matrix of the Athanor kernel (docs/architecture/doc_kernel_build.md, section 7, gate 3).
+# Runs in the boot/Containerfile image. Extracts vmlinuz from the kernel-core RPM, builds a
+# test initramfs (busybox, bpftool, boot/init) and a UKI signed with an ephemeral MOK,
+# enrols the MOK in the OVMF varstore with Secure Boot on and boots QEMU four times:
+# firmware {SeaBIOS, OVMF+Secure Boot via shim} x CPU {Nehalem, host}. Nehalem proves that
+# no instruction beyond the x86-64 baseline made it into the kernel. Every boot must end
+# with `K3 RESULT ok` on the serial console (the assertions are in boot/init).
+# With --mok and --insmod it also exercises the external module chain (section 7, gate
+# 4): the project MOK enrolled next to the ephemeral one, and a signed .ko that the kernel
+# must accept (ENODEV: good signature, no GPU) or reject (EKEYREJECTED).
 #
-# Uso: boot.sh --rpms DIR --out DIR [--accel kvm|tcg] [--case NOME]... [--mok CERT]...
-#               [--insmod FILE.ko:ERRNO]...
-#   --rpms   directory in cui cercare kernel-core-*.rpm (l'out di build.sh o l'artefatto)
-#   --out    log seriali, riepilogo e materiale di prova
-#   --accel  kvm (default, serve /dev/kvm) o tcg (emulazione: lento, `host` diventa `max`)
-#   --case   limita la matrice (ripetibile): bios-nehalem bios-host uefi-nehalem uefi-host
-#   --mok    certificato (PEM) da arruolare in MokList oltre a quello effimero della UKI
-#   --insmod modulo da caricare nel guest e errno atteso da insmod (ENODEV, EKEYREJECTED,
-#            oppure 0). Solo nei casi UEFI: senza shim non esiste MokListRT, e la fiducia
-#            nelle MOK arriva da li'.
+# Usage: boot.sh --rpms DIR --out DIR [--accel kvm|tcg] [--case NAME]... [--mok CERT]...
+#                [--insmod FILE.ko:ERRNO]...
+#   --rpms   directory to search for kernel-core-*.rpm (the out of build.sh or the artifact)
+#   --out    serial logs, summary and test material
+#   --accel  kvm (default, needs /dev/kvm) or tcg (emulation: slow, `host` becomes `max`)
+#   --case   restricts the matrix (repeatable): bios-nehalem bios-host uefi-nehalem uefi-host
+#   --mok    certificate (PEM) to enrol in MokList besides the ephemeral one of the UKI
+#   --insmod module to load in the guest and the errno expected from insmod (ENODEV,
+#            EKEYREJECTED, or 0). UEFI cases only: without shim there is no MokListRT, and
+#            the trust in the MOKs comes from there.
 set -euo pipefail
 
 HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
@@ -32,58 +32,59 @@ while [[ $# -gt 0 ]]; do
     --case) CASES+=("$2"); shift 2 ;;
     --mok) MOKS+=("$2"); shift 2 ;;
     --insmod) INSMOD+=("$2"); shift 2 ;;
-    *) echo "argomento sconosciuto: $1" >&2; exit 2 ;;
+    *) echo "unknown argument: $1" >&2; exit 2 ;;
   esac
 done
-[[ $RPMS && $OUT ]] || { echo "uso: boot.sh --rpms DIR --out DIR [--accel kvm|tcg] [--case NOME]... [--mok CERT]... [--insmod FILE.ko:ERRNO]..." >&2; exit 2; }
+[[ $RPMS && $OUT ]] || { echo "usage: boot.sh --rpms DIR --out DIR [--accel kvm|tcg] [--case NAME]... [--mok CERT]... [--insmod FILE.ko:ERRNO]..." >&2; exit 2; }
 [[ ${#CASES[@]} -gt 0 ]] || CASES=(bios-nehalem bios-host uefi-nehalem uefi-host)
-[[ $ACCEL == kvm && ! -w /dev/kvm ]] && { echo "/dev/kvm non accessibile: usa --accel tcg" >&2; exit 2; }
+[[ $ACCEL == kvm && ! -w /dev/kvm ]] && { echo "/dev/kvm not accessible: use --accel tcg" >&2; exit 2; }
 
-die() { echo "errore: $*" >&2; exit 1; }
+die() { echo "error: $*" >&2; exit 1; }
 step() { echo; echo "== $*"; }
 
 mapfile -t CORE < <(find "$RPMS" -name 'kernel-core-*.rpm')
-[[ ${#CORE[@]} -eq 1 ]] || die "atteso un solo kernel-core-*.rpm in $RPMS, trovati ${#CORE[@]}"
+[[ ${#CORE[@]} -eq 1 ]] || die "expected exactly one kernel-core-*.rpm in $RPMS, found ${#CORE[@]}"
 KVER=$(rpm -qp --qf '%{VERSION}-%{RELEASE}.%{ARCH}' "${CORE[0]}")
 CMDLINE=$(< "$HERE/cmdline")
-# Solo per la prova: console seriale, riavvio immediato su panic (con -no-reboot QEMU
-# esce), una policy IMA che misuri qualcosa, e i parametri letti da boot/init.
+# Test only: serial console, immediate reboot on panic (with -no-reboot QEMU exits), an
+# IMA policy that measures something, and the parameters read by boot/init.
 TEST_CMDLINE="$CMDLINE console=ttyS0,115200 panic=-1 ima_policy=tcb k3.uname=$KVER"
 
 WORK=$(mktemp -d)
 mkdir -p "$OUT"
-step "kernel $KVER da ${CORE[0]##*/}"
+step "kernel $KVER from ${CORE[0]##*/}"
 mkdir -p "$WORK/rpm" && (cd "$WORK/rpm" && rpm2cpio "${CORE[0]}" | cpio -idm --quiet "./lib/modules/$KVER/vmlinuz")
 VMLINUZ="$WORK/rpm/lib/modules/$KVER/vmlinuz"
-[[ -s $VMLINUZ ]] || die "vmlinuz assente nel kernel-core"
+[[ -s $VMLINUZ ]] || die "vmlinuz missing from the kernel-core"
 
-step "initramfs di prova"
+step "test initramfs"
 R="$WORK/initramfs"
 mkdir -p "$R"/{bin,dev,proc,sys,tmp,usr/sbin}
 install -m 755 /usr/sbin/busybox "$R/bin/busybox"
-# Link relativi: `busybox --install` li farebbe assoluti verso $R, che nel guest non esiste.
+# Relative links: `busybox --install` would make them absolute towards $R, which does not
+# exist in the guest.
 for applet in $(/usr/sbin/busybox --list); do ln -s busybox "$R/bin/$applet"; done
-# bpftool con le sue librerie: quello di Fedora si porta dietro libLLVM (140 MB in
-# chiaro, 39 MB compressi), il prezzo di `bpftool feature probe` fatto con lo strumento vero.
+# bpftool with its libraries: the Fedora one drags libLLVM along (140 MB uncompressed,
+# 39 MB compressed), the price of `bpftool feature probe` done with the real tool.
 install -m 755 /usr/sbin/bpftool "$R/usr/sbin/bpftool"
-# Tutte in /lib64, il percorso di default del loader: nel guest non c'e' ld.so.cache e
-# libLLVM sta in una directory che sull'host entra solo tramite ld.so.conf.d.
+# All of them in /lib64, the default path of the loader: the guest has no ld.so.cache and
+# libLLVM lives in a directory that on the host is reachable only through ld.so.conf.d.
 ldd /usr/sbin/bpftool | awk '/=> \//{print $3} /^\s*\/lib64\/ld-linux/{print $1}' \
   | while read -r lib; do install -D "$lib" "$R/lib64/${lib##*/}"; done
 install -m 755 "$HERE/boot/init" "$R/init"
-# I moduli da provare, numerati: due rami hanno lo stesso nvidia.ko. Il parametro
-# k3.insmod elenca file:errno e va solo nella riga di comando della UKI (casi UEFI).
+# The modules under test, numbered: two branches share the same nvidia.ko. The k3.insmod
+# parameter lists file:errno and goes only into the command line of the UKI (UEFI cases).
 K3_INSMOD=''
 for i in "${!INSMOD[@]}"; do
   ko=${INSMOD[$i]%%:*}; errno=${INSMOD[$i]##*:}
-  [[ -f $ko && $errno && $errno != "$ko" ]] || die "--insmod vuole FILE.ko:ERRNO, ricevuto: ${INSMOD[$i]}"
+  [[ -f $ko && $errno && $errno != "$ko" ]] || die "--insmod expects FILE.ko:ERRNO, got: ${INSMOD[$i]}"
   install -D -m 644 "$ko" "$R/modules/$i-${ko##*/}"
   K3_INSMOD+="${K3_INSMOD:+,}$i-${ko##*/}:$errno"
 done
 (cd "$R" && find . | cpio -o -H newc --quiet | zstd -q -T0 -19 -o "$WORK/initramfs.img")
-echo "initramfs: $(du -sh "$R" | cut -f1) in chiaro, $(du -h "$WORK/initramfs.img" | cut -f1) compresso"
+echo "initramfs: $(du -sh "$R" | cut -f1) uncompressed, $(du -h "$WORK/initramfs.img" | cut -f1) compressed"
 
-step "UKI firmata con una MOK effimera, arruolata nel varstore OVMF"
+step "UKI signed with an ephemeral MOK, enrolled in the OVMF varstore"
 openssl req -x509 -newkey rsa:2048 -nodes -days 2 -subj '/CN=Athanor OS K3 test MOK/' \
   -keyout "$WORK/mok.key" -out "$OUT/mok.pem" 2> /dev/null
 ukify build --linux "$VMLINUZ" --initrd "$WORK/initramfs.img" --uname "$KVER" \
@@ -92,17 +93,17 @@ ukify build --linux "$VMLINUZ" --initrd "$WORK/initramfs.img" --uname "$KVER" \
   --output "$WORK/uki.efi" > "$OUT/ukify.log"
 sbverify --cert "$OUT/mok.pem" "$WORK/uki.efi" >> "$OUT/ukify.log"
 OVMF_CODE=/usr/share/edk2/ovmf/OVMF_CODE.secboot.fd
-# MokList: la MOK effimera della UKI e quelle di --mok (la MOK di progetto, per i moduli).
-# shim la copia in MokListRT e il kernel la carica nel keyring di piattaforma.
+# MokList: the ephemeral MOK of the UKI and those of --mok (the project MOK, for the
+# modules). shim copies it to MokListRT and the kernel loads it into the platform keyring.
 ADD_MOK=()
 for cert in "$OUT/mok.pem" "${MOKS[@]}"; do ADD_MOK+=(--add-mok "$(< /proc/sys/kernel/random/uuid)" "$cert"); done
 virt-fw-vars -i /usr/share/edk2/ovmf/OVMF_VARS.secboot.fd -o "$WORK/vars.fd" "${ADD_MOK[@]}" > "$OUT/varstore.log"
-# ESP: shim al percorso removibile, la UKI dove shim cerca il secondo stadio.
+# ESP: shim at the removable path, the UKI where shim looks for the second stage.
 mkdir -p "$WORK/esp/EFI/BOOT"
 cp /boot/efi/EFI/fedora/shimx64.efi "$WORK/esp/EFI/BOOT/BOOTX64.EFI"
 cp "$WORK/uki.efi" "$WORK/esp/EFI/BOOT/grubx64.efi"
 
-run_case() { # run_case NOME  (NOME = <bios|uefi>-<nehalem|host>)
+run_case() { # run_case NAME  (NAME = <bios|uefi>-<nehalem|host>)
   local name=$1 fw=${1%-*} cpu=${1#*-} log="$OUT/$1.log" args
   [[ $cpu == host && $ACCEL == tcg ]] && cpu=max
   [[ $cpu == nehalem ]] && cpu=Nehalem
@@ -116,10 +117,10 @@ run_case() { # run_case NOME  (NOME = <bios|uefi>-<nehalem|host>)
                  -drive "if=pflash,format=raw,readonly=on,file=$OVMF_CODE"
                  -drive "if=pflash,format=raw,file=$WORK/vars-$name.fd"
                  -drive "if=virtio,format=raw,readonly=on,file=fat:ro:$WORK/esp") ;;
-    *) die "caso sconosciuto: $name" ;;
+    *) die "unknown case: $name" ;;
   esac
   step "$name (firmware $fw, cpu $cpu, accel $ACCEL)"
-  timeout 900 qemu-system-x86_64 "${args[@]}" || echo "qemu: uscita $?"
+  timeout 900 qemu-system-x86_64 "${args[@]}" || echo "qemu: exit $?"
   if grep -q '^K3 RESULT ok' "$log"; then
     RESULTS+=("| $name | ok |"); echo "$name: ok"
   else
@@ -132,8 +133,8 @@ RESULTS=() FAILED=()
 for c in "${CASES[@]}"; do run_case "$c"; done
 
 {
-  echo "## Boot matrix $KVER (accel $ACCEL)"; echo; echo "| caso | esito |"; echo "| --- | --- |"
+  echo "## Boot matrix $KVER (accel $ACCEL)"; echo; echo "| case | result |"; echo "| --- | --- |"
   printf '%s\n' "${RESULTS[@]}"
 } > "$OUT/summary.md"
-step "riepilogo"; cat "$OUT/summary.md"
-[[ ${#FAILED[@]} -eq 0 ]] || die "casi falliti: ${FAILED[*]}"
+step "summary"; cat "$OUT/summary.md"
+[[ ${#FAILED[@]} -eq 0 ]] || die "failed cases: ${FAILED[*]}"

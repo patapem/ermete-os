@@ -1,31 +1,31 @@
 #!/usr/bin/env bash
-# Moduli kernel NVIDIA per il kernel Athanor (docs/architecture/doc_kernel_build.md,
-# sezione 10, fase K4). Gira nell'immagine nvidia/Containerfile. Due rami:
-#   open    i moduli aperti (Turing e successive) dal repo GitHub
-#           NVIDIA/open-gpu-kernel-modules, al commit pinnato in pins.env;
-#   legacy  i moduli proprietari del ramo 580 (Maxwell, Pascal, Volta) dal .run di
-#           download.nvidia.com, pinnato per sha256 in nvidia/sources.sha256.
-# Compila contro l'albero kernel-devel con la toolchain del kernel (clang, LLVM): Kbuild
-# applica da solo i flag del kernel ai moduli; la parte RM dei moduli aperti, che NVIDIA
-# compila fuori da Kbuild, riceve gli stessi flag (kCFI, retpoline, return thunk, SLS,
-# IBT) tramite EXTRA_CFLAGS: objtool non deve trovare ret nudi ne' chiamate senza retpoline
-# nel codice C (cosi' si vede un flag mancante); il resto lo conta. Nel ramo legacy la
-# parte RM e' il blob nv-kernel.o_binary di NVIDIA, senza kCFI ne' return thunk: le
-# chiamate verso di esso sono un rischio noto, verificabile solo su hardware.
+# NVIDIA kernel modules for the Athanor kernel (docs/architecture/doc_kernel_build.md,
+# section 10, phase K4). Runs in the nvidia/Containerfile image. Two branches:
+#   open    the open modules (Turing and later) from the GitHub repository
+#           NVIDIA/open-gpu-kernel-modules, at the commit pinned in pins.env;
+#   legacy  the proprietary modules of the 580 branch (Maxwell, Pascal, Volta) from the
+#           .run of download.nvidia.com, pinned by sha256 in nvidia/sources.sha256.
+# Builds against the kernel-devel tree with the kernel toolchain (clang, LLVM): Kbuild
+# applies the kernel flags to the modules on its own; the RM part of the open modules,
+# which NVIDIA builds outside Kbuild, receives the same flags (kCFI, retpoline, return
+# thunk, SLS, IBT) through EXTRA_CFLAGS: objtool must find neither naked rets nor calls
+# without retpoline in the C code (that is how a missing flag shows up); the rest is only
+# counted. In the legacy branch the RM part is NVIDIA's nv-kernel.o_binary blob, without
+# kCFI or return thunks: the calls into it are a known risk, verifiable only on hardware.
 #
-# Uso: nvidia.sh build --driver open|legacy --devel DIR --out DIR
-#      nvidia.sh sign  --key FILE --cert FILE --devel DIR --out DIR
-#      nvidia.sh manifest --out DIR
-#   --devel    directory con kernel-devel-*.rpm (l'out/devel di build.sh o l'immagine)
-#   --out      build: i .ko in OUT/<driver>/lib/modules/<kver>/extra/nvidia/, il layout
-#              che l'immagine di sistema copia e che syft cataloga, con `version` e
-#              `kver` in OUT/<driver>/; sign: firma ogni .ko sotto OUT con sign-file del
-#              kernel-devel e lo verifica con modinfo; manifest: scarica il .run del
-#              ramo legacy pinnato in pins.env, lo confronta con l'hash che NVIDIA
-#              pubblica accanto e scrive OUT/sources.sha256 (il bot di bump lo copia
-#              in nvidia/sources.sha256)
-#   --key/--cert  chiave privata e certificato (PEM o DER) della MOK: in CI quella di
-#              progetto dall'environment `signing`, in locale una effimera
+# Usage: nvidia.sh build --driver open|legacy --devel DIR --out DIR
+#        nvidia.sh sign  --key FILE --cert FILE --devel DIR --out DIR
+#        nvidia.sh manifest --out DIR
+#   --devel    directory holding kernel-devel-*.rpm (the out/devel of build.sh or the image)
+#   --out      build: the .ko files in OUT/<driver>/lib/modules/<kver>/extra/nvidia/, the
+#              layout the system image copies and syft catalogs, with `version` and
+#              `kver` in OUT/<driver>/; sign: signs every .ko under OUT with the sign-file
+#              of the kernel-devel and verifies it with modinfo; manifest: downloads the
+#              .run of the legacy branch pinned in pins.env, compares it with the hash
+#              NVIDIA publishes next to it and writes OUT/sources.sha256 (the bump bot
+#              copies it to nvidia/sources.sha256)
+#   --key/--cert  private key and certificate (PEM or DER) of the MOK: in CI the project
+#              one from the `signing` environment, locally an ephemeral one
 set -euo pipefail
 
 HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
@@ -40,13 +40,13 @@ while [[ $# -gt 0 ]]; do
     --out) OUT=$2; shift 2 ;;
     --key) KEY=$2; shift 2 ;;
     --cert) CERT=$2; shift 2 ;;
-    *) echo "argomento sconosciuto: $1" >&2; exit 2 ;;
+    *) echo "unknown argument: $1" >&2; exit 2 ;;
   esac
 done
 usage() {
-  echo "uso: nvidia.sh build --driver open|legacy --devel DIR --out DIR" >&2
-  echo "     nvidia.sh sign --key FILE --cert FILE --devel DIR --out DIR" >&2
-  echo "     nvidia.sh manifest --out DIR" >&2
+  echo "usage: nvidia.sh build --driver open|legacy --devel DIR --out DIR" >&2
+  echo "       nvidia.sh sign --key FILE --cert FILE --devel DIR --out DIR" >&2
+  echo "       nvidia.sh manifest --out DIR" >&2
   exit 2
 }
 [[ $OUT ]] || usage
@@ -57,9 +57,9 @@ case $STAGE in
   *) usage ;;
 esac
 
-die() { echo "errore: $*" >&2; exit 1; }
+die() { echo "error: $*" >&2; exit 1; }
 step() { echo; echo "== $*"; }
-fetch() { # fetch URL: nella cache, se manca
+fetch() { # fetch URL: into the cache, when missing
   local url=$1 name=${1##*/}
   [[ -s $CACHE/$name ]] || { mkdir -p "$CACHE"; curl -fsSL --retry 3 -o "$CACHE/$name.part" "$url" && mv "$CACHE/$name.part" "$CACHE/$name"; }
 }
@@ -69,31 +69,31 @@ fetch() { # fetch URL: nella cache, se manca
 WORK=$(mktemp -d)
 mkdir -p "$OUT"
 
-devel_tree() { # l'albero kernel-devel estratto dal RPM: Kbuild per i moduli esterni non
-  # ha bisogno dell'installazione, cosi' non servono ne' rete ne' dnf.
+devel_tree() { # the kernel-devel tree extracted from the RPM: Kbuild for external modules
+  # does not need the installation, so neither network nor dnf is required.
   mapfile -t DEVEL_RPM < <(find "$DEVEL" -name 'kernel-devel-[0-9]*.rpm')
-  [[ ${#DEVEL_RPM[@]} -eq 1 ]] || die "atteso un solo kernel-devel-*.rpm in $DEVEL, trovati ${#DEVEL_RPM[@]}"
+  [[ ${#DEVEL_RPM[@]} -eq 1 ]] || die "expected exactly one kernel-devel-*.rpm in $DEVEL, found ${#DEVEL_RPM[@]}"
   KVER=$(rpm -qp --qf '%{VERSION}-%{RELEASE}.%{ARCH}' "${DEVEL_RPM[0]}")
   mkdir -p "$WORK/devel" && (cd "$WORK/devel" && rpm2cpio "${DEVEL_RPM[0]}" | cpio -idm --quiet)
   SYSSRC="$WORK/devel/usr/src/kernels/$KVER"
-  [[ -f $SYSSRC/Makefile && -f $SYSSRC/.config ]] || die "albero kernel-devel non trovato per $KVER"
+  [[ -f $SYSSRC/Makefile && -f $SYSSRC/.config ]] || die "kernel-devel tree not found for $KVER"
   echo "kernel $KVER"
 }
 
-cfg() { grep -q "^$1=y" "$SYSSRC/.config"; } # cfg CONFIG_X: l'opzione e' accesa nel kernel
-cfg_val() { sed -n "s/^$1=//p" "$SYSSRC/.config"; } # cfg_val CONFIG_X: il valore dell'opzione
-cc_option() { # cc_option FLAG...: i flag se clang li accetta, come cc-option di Kbuild
+cfg() { grep -q "^$1=y" "$SYSSRC/.config"; } # cfg CONFIG_X: the option is on in the kernel
+cfg_val() { sed -n "s/^$1=//p" "$SYSSRC/.config"; } # cfg_val CONFIG_X: the value of the option
+cc_option() { # cc_option FLAG...: the flags if clang accepts them, like cc-option of Kbuild
   if clang -Werror "$@" -c -x c /dev/null -o /dev/null 2> /dev/null; then echo " $*"; fi
 }
 
 build() {
   local src kodir version flags rm_targets=()
   devel_tree
-  grep -q '^CONFIG_CC_VERSION_TEXT="clang' "$SYSSRC/.config" || die "il kernel non e' compilato con clang: i moduli devono usare la stessa toolchain"
-  cfg CONFIG_CFI || die "il kernel non ha CONFIG_CFI"
-  # I flag con cui Kbuild compila i moduli, letti da .config nella grafia di clang
-  # (Makefile e arch/x86/Makefile del kernel), per il codice che NVIDIA compila fuori da
-  # Kbuild: i suoi Makefile provano solo le grafie gcc, che clang scarta in silenzio.
+  grep -q '^CONFIG_CC_VERSION_TEXT="clang' "$SYSSRC/.config" || die "the kernel is not built with clang: the modules must use the same toolchain"
+  cfg CONFIG_CFI || die "the kernel lacks CONFIG_CFI"
+  # The flags Kbuild builds the modules with, read from .config in clang spelling
+  # (Makefile and arch/x86/Makefile of the kernel), for the code NVIDIA builds outside
+  # Kbuild: its Makefiles only try the gcc spellings, which clang silently drops.
   flags="-fsanitize=kcfi"
   cfg CONFIG_CFI_ICALL_NORMALIZE_INTEGERS && flags+=" -fsanitize-cfi-icall-experimental-normalize-integers"
   cfg CONFIG_FINEIBT_BHI && flags+=" -fsanitize-kcfi-arity"
@@ -101,34 +101,35 @@ build() {
   cfg CONFIG_MITIGATION_RETHUNK && flags+=" -mfunction-return=thunk-extern"
   cfg CONFIG_MITIGATION_SLS && flags+=" -mharden-sls=all"
   cfg CONFIG_X86_KERNEL_IBT && flags+=" -fcf-protection=branch -fno-jump-tables"
-  # CALL_PADDING: il preambolo kCFI sta 16 byte prima dell'entry (movl dell'hash e 11 nop)
-  # e i chiamanti leggono l'hash a -15. Senza lo stesso padding il kernel, applicando
-  # FineIBT/kCFI al caricamento, non trova gli hash e il modulo non carica.
+  # CALL_PADDING: the kCFI preamble sits 16 bytes before the entry (movl of the hash and
+  # 11 nops) and the callers read the hash at -15. Without the same padding the kernel,
+  # applying FineIBT/kCFI at load time, does not find the hashes and the module fails to
+  # load.
   cfg CONFIG_CALL_PADDING && flags+=" -fpatchable-function-entry=$(cfg_val CONFIG_FUNCTION_PADDING_BYTES),$(cfg_val CONFIG_FUNCTION_PADDING_BYTES)"
   local align alignflag
   align=$(cfg_val CONFIG_FUNCTION_ALIGNMENT)
-  if [[ ${align:-0} -gt 0 ]]; then # come il Makefile del kernel: -fmin-function-alignment se c'e', altrimenti -falign-functions
+  if [[ ${align:-0} -gt 0 ]]; then # like the kernel Makefile: -fmin-function-alignment when available, else -falign-functions
     alignflag=$(cc_option -fmin-function-alignment="$align"); flags+="${alignflag:- -falign-functions=$align}"
   fi
 
   case $DRIVER in
     open)
-      step "moduli aperti $NVIDIA_OPEN_VERSION, commit $NVIDIA_OPEN_COMMIT"
+      step "open modules $NVIDIA_OPEN_VERSION, commit $NVIDIA_OPEN_COMMIT"
       git -c advice.detachedHead=false clone -q --depth 1 --branch "$NVIDIA_OPEN_VERSION" \
         https://github.com/NVIDIA/open-gpu-kernel-modules "$WORK/src" 2> /dev/null
       [[ $(git -C "$WORK/src" rev-parse HEAD) == "$NVIDIA_OPEN_COMMIT" ]] \
-        || die "il tag $NVIDIA_OPEN_VERSION non punta al commit pinnato $NVIDIA_OPEN_COMMIT"
+        || die "tag $NVIDIA_OPEN_VERSION does not point to the pinned commit $NVIDIA_OPEN_COMMIT"
       src="$WORK/src"; kodir="$src/kernel-open"; version=$NVIDIA_OPEN_VERSION
-      # La parte RM (nv-kernel.o, nv-modeset-kernel.o), compilata da NVIDIA fuori da Kbuild:
-      # EXTRA_CFLAGS e' il gancio di utils.mk, e qui passano i flag del kernel.
+      # The RM part (nv-kernel.o, nv-modeset-kernel.o), built by NVIDIA outside Kbuild:
+      # EXTRA_CFLAGS is the hook of utils.mk, and the kernel flags go through it.
       rm_targets=(kernel-open/nvidia/nv-kernel.o_binary kernel-open/nvidia-modeset/nv-modeset-kernel.o_binary)
-      step "parte RM con clang e i flag del kernel ($flags)"
+      step "RM part with clang and the kernel flags ($flags)"
       make -C "$src" -j"$(nproc)" -Otarget CC=clang CXX=clang++ LD=ld.lld AR=llvm-ar EXTRA_CFLAGS="$flags" "${rm_targets[@]}" \
-        > "$OUT/$DRIVER-rm.log" 2>&1 || { tail -n 30 "$OUT/$DRIVER-rm.log"; die "parte RM fallita, log in $OUT/$DRIVER-rm.log"; }
+        > "$OUT/$DRIVER-rm.log" 2>&1 || { tail -n 30 "$OUT/$DRIVER-rm.log"; die "RM part failed, log in $OUT/$DRIVER-rm.log"; }
       ;;
     legacy)
       local run="NVIDIA-Linux-x86_64-$NVIDIA_LEGACY_VERSION-no-compat32.run"
-      step "moduli proprietari $NVIDIA_LEGACY_VERSION dal .run"
+      step "proprietary modules $NVIDIA_LEGACY_VERSION from the .run"
       fetch "https://download.nvidia.com/XFree86/Linux-x86_64/$NVIDIA_LEGACY_VERSION/$run"
       (cd "$CACHE" && grep " $run\$" "$HERE/nvidia/sources.sha256" | sha256sum --check --quiet --strict)
       sh "$CACHE/$run" --extract-only --target "$WORK/run" > /dev/null
@@ -136,45 +137,45 @@ build() {
       ;;
   esac
 
-  step "moduli contro $KVER con Kbuild (clang, LLVM, kCFI dal kernel)"
-  # IGNORE_CC_MISMATCH: il conftest di NVIDIA vuole la stessa stringa di versione del
-  # compilatore, e il clang di Fedora si aggiorna tra la build del kernel e questa.
-  # Basta che sia clang: gli hash kCFI dipendono dai tipi, non dalla versione.
-  # -Otarget: l'output di ogni oggetto in blocco, cosi' gli avvisi di objtool restano attribuibili.
+  step "modules against $KVER with Kbuild (clang, LLVM, kCFI from the kernel)"
+  # IGNORE_CC_MISMATCH: NVIDIA's conftest wants the same compiler version string, and the
+  # Fedora clang gets updated between the kernel build and this one. Being clang is
+  # enough: the kCFI hashes depend on the types, not on the version.
+  # -Otarget: the output of each object as a block, so the objtool warnings stay attributable.
   make -C "$src" -j"$(nproc)" -Otarget modules SYSSRC="$SYSSRC" CC=clang LD=ld.lld LLVM=1 LLVM_IAS=1 IGNORE_CC_MISMATCH=1 \
-    > "$OUT/$DRIVER-build.log" 2>&1 || { tail -n 40 "$OUT/$DRIVER-build.log"; die "compilazione fallita, log in $OUT/$DRIVER-build.log"; }
+    > "$OUT/$DRIVER-build.log" 2>&1 || { tail -n 40 "$OUT/$DRIVER-build.log"; die "build failed, log in $OUT/$DRIVER-build.log"; }
   local objtool unmitigated
   objtool=$(awk '/warning: objtool:/ { n++ } END { print n + 0 }' "$OUT/$DRIVER-build.log")
   if [[ $DRIVER == open ]]; then
-    # Nel ramo aperto tutto il codice e' compilato qui con i flag del kernel, e un flag che
-    # manca si vede in objtool come ret nudo o chiamata/salto indiretto senza retpoline in
-    # una funzione C. Il resto e' proprieta' del codice NVIDIA, non dei flag, e viene solo
-    # contato: clang non estende kCFI alle chiamate virtuali ne' i return thunk ai thunk
-    # (nomi _Z) del C++ di DisplayPort in nvidia-modeset.o, e nel RM restano code di
-    # funzione irraggiungibili ("falls through").
+    # In the open branch all the code is built here with the kernel flags, and a missing
+    # flag shows up in objtool as a naked ret or an indirect call/jump without retpoline
+    # in a C function. The rest is a property of NVIDIA's code, not of the flags, and is
+    # only counted: clang extends neither kCFI to virtual calls nor the return thunks to
+    # the thunks (_Z names) of the DisplayPort C++ in nvidia-modeset.o, and the RM keeps
+    # unreachable function tails ("falls through").
     unmitigated=$(awk '/warning: objtool:/ && /MITIGATION_(RETHUNK|RETPOLINE) build/ && !/objtool: _Z/' "$OUT/$DRIVER-build.log")
-    [[ -z $unmitigated ]] || { head -n 20 <<< "$unmitigated"; die "objtool trova codice C senza return thunk o retpoline nel ramo open, log in $OUT/$DRIVER-build.log"; }
-    echo "objtool: $objtool avvisi, nessuno per flag mancanti (C++ di DisplayPort e code irraggiungibili del RM)"
+    [[ -z $unmitigated ]] || { head -n 20 <<< "$unmitigated"; die "objtool finds C code without return thunk or retpoline in the open branch, log in $OUT/$DRIVER-build.log"; }
+    echo "objtool: $objtool warnings, none for missing flags (DisplayPort C++ and unreachable RM tails)"
   else
-    echo "objtool: $objtool avvisi, dal blob RM di NVIDIA e dal C++ di DisplayPort (attesi nel ramo legacy)"
+    echo "objtool: $objtool warnings, from NVIDIA's RM blob and the DisplayPort C++ (expected in the legacy branch)"
   fi
 
   local ko dest="$OUT/$DRIVER/lib/modules/$KVER/extra/nvidia"
   mkdir -p "$dest"
   for ko in "$kodir"/*.ko; do
-    [[ $(modinfo -F vermagic "$ko") == "$KVER "* ]] || die "${ko##*/}: vermagic $(modinfo -F vermagic "$ko") non e' del kernel $KVER"
-    # I preamboli kCFI (__cfi_<funzione>) provano che i flag del kernel sono arrivati.
-    # Non `nm | grep -q`: con pipefail, grep chiude la pipe al primo match e nm muore di
-    # SIGPIPE sui moduli grandi, e il controllo fallirebbe a caso.
-    grep -q ' __cfi_' <(nm "$ko") || die "${ko##*/}: nessun preambolo kCFI"
+    [[ $(modinfo -F vermagic "$ko") == "$KVER "* ]] || die "${ko##*/}: vermagic $(modinfo -F vermagic "$ko") is not of kernel $KVER"
+    # The kCFI preambles (__cfi_<function>) prove that the kernel flags got through.
+    # Not `nm | grep -q`: with pipefail, grep closes the pipe at the first match and nm
+    # dies of SIGPIPE on large modules, so the check would fail at random.
+    grep -q ' __cfi_' <(nm "$ko") || die "${ko##*/}: no kCFI preamble"
     install -m 644 "$ko" "$dest/"
   done
   echo "$version" > "$OUT/$DRIVER/version"
   echo "$KVER" > "$OUT/$DRIVER/kver"
-  echo "moduli $DRIVER $version: $(find "$OUT/$DRIVER" -name '*.ko' -printf '%f ')"
+  echo "$DRIVER modules $version: $(find "$OUT/$DRIVER" -name '*.ko' -printf '%f ')"
 }
 
-cert_cn() { # cert_cn FILE: il CN del certificato, PEM o DER
+cert_cn() { # cert_cn FILE: the CN of the certificate, PEM or DER
   local subject
   subject=$(openssl x509 -in "$1" -noout -subject -nameopt RFC2253 2> /dev/null \
     || openssl x509 -in "$1" -inform DER -noout -subject -nameopt RFC2253)
@@ -185,31 +186,31 @@ sign() {
   local hash cn ko signer
   devel_tree
   hash=$(sed -n 's/^CONFIG_MODULE_SIG_HASH="\(.*\)"$/\1/p' "$SYSSRC/.config")
-  [[ $hash ]] || die "CONFIG_MODULE_SIG_HASH assente nel config"
+  [[ $hash ]] || die "CONFIG_MODULE_SIG_HASH missing from the config"
   cn=$(cert_cn "$CERT")
-  step "firma con $hash, certificato \"$cn\""
+  step "signing with $hash, certificate \"$cn\""
   mapfile -t KOS < <(find "$OUT" -path '*/lib/modules/*' -name '*.ko' | sort)
-  [[ ${#KOS[@]} -gt 0 ]] || die "nessun modulo sotto $OUT/*/lib/modules/"
+  [[ ${#KOS[@]} -gt 0 ]] || die "no module under $OUT/*/lib/modules/"
   for ko in "${KOS[@]}"; do
     "$SYSSRC/scripts/sign-file" "$hash" "$KEY" "$CERT" "$ko"
     signer=$(modinfo -F signer "$ko")
-    [[ $signer == "$cn" ]] || die "${ko##*/}: firmatario \"$signer\", atteso \"$cn\""
-    echo "${ko#"$OUT"/}: firmato da \"$signer\", $(modinfo -F sig_hashalgo "$ko"), chiave $(modinfo -F sig_key "$ko" | cut -c1-23)..."
+    [[ $signer == "$cn" ]] || die "${ko##*/}: signer \"$signer\", expected \"$cn\""
+    echo "${ko#"$OUT"/}: signed by \"$signer\", $(modinfo -F sig_hashalgo "$ko"), key $(modinfo -F sig_key "$ko" | cut -c1-23)..."
   done
 }
 
 manifest() {
   local run="NVIDIA-Linux-x86_64-$NVIDIA_LEGACY_VERSION-no-compat32.run"
   local url="https://download.nvidia.com/XFree86/Linux-x86_64/$NVIDIA_LEGACY_VERSION"
-  step "manifesto del .run $NVIDIA_LEGACY_VERSION"
+  step "manifest of the .run $NVIDIA_LEGACY_VERSION"
   fetch "$url/$run"
   fetch "$url/$run.sha256sum"
-  # L'hash che NVIDIA pubblica accanto al file, dallo stesso host: controllo di
-  # integrita' del download, non di autenticita' (il .run non e' firmato).
+  # The hash NVIDIA publishes next to the file, from the same host: an integrity check of
+  # the download, not of authenticity (the .run is not signed).
   (cd "$CACHE" && sha256sum --check --quiet --strict "$run.sha256sum")
   (cd "$CACHE" && sha256sum "$run") > "$OUT/sources.sha256"
-  echo "manifesto in $OUT/sources.sha256"
+  echo "manifest in $OUT/sources.sha256"
 }
 
 case $STAGE in build) build ;; sign) sign ;; manifest) manifest ;; esac
-step "fatto: $(find "$OUT" -type f -name '*.ko' -printf '%P ')"
+step "done: $(find "$OUT" -type f -name '*.ko' -printf '%P ')"
