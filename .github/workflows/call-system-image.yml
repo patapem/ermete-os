@@ -261,16 +261,20 @@ jobs:
           set -euo pipefail
           echo "${GITHUB_TOKEN}" | podman login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
       - name: 🐳 Build OS Image
+        # The Containerfile pulls its base and the tier repository images and installs
+        # Fedora packages with dnf5, so the build needs the network; the build context
+        # is the repository root, where its COPY sources live.
         env:
-          GITHUB_WORKSPACE: ${{ github.workspace }}
-          BUILDER_CONTENT_HASH: ${{ inputs.builder_content_hash }}
           RUN_ID: ${{ github.run_id }}
         run: |
           set -euo pipefail
-          podman run -i --rm --privileged -v "${GITHUB_WORKSPACE}:/workspace" -w /workspace "ghcr.io/hr-mes/athanor-builder:${BUILDER_CONTENT_HASH}" bash -c "set -euo pipefail; \
-          bwrap --unshare-net --dev-bind / / podman build --network=none --layers -t ghcr.io/hr-mes/athanor-system:latest -t ghcr.io/hr-mes/athanor-system:${RUN_ID} -f ./system/Containerfile ./system && podman push ghcr.io/hr-mes/athanor-system:${RUN_ID}" || bwrap --unshare-net --dev-bind / / podman build --network=none --layers -t ghcr.io/hr-mes/athanor-system:latest -t ghcr.io/hr-mes/athanor-system:${RUN_ID} -f ./system/Containerfile ./system
-          podman push ghcr.io/hr-mes/athanor-system:latest
-          podman push ghcr.io/hr-mes/athanor-system:${RUN_ID} || true
+          image="${IMAGE_REGISTRY}/${IMAGE_NAME}"
+          podman build --layers \
+            -t "${image}:${RUN_ID}" \
+            -t "${image}:${DEFAULT_TAG}" \
+            -f system/Containerfile .
+          podman push "${image}:${RUN_ID}"
+          podman push "${image}:${DEFAULT_TAG}"
 
       - name: 🔐 Sign & Attest OS Image (Zero-Trust Keyless Sigstore)
         env:
