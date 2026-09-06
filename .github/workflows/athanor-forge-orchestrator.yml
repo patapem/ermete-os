@@ -3,7 +3,9 @@ name: Athanor Forge Orchestrator
 
 on:
   push:
-    branches: [ main ]
+    # iso-v0 as well: GitHub registers a workflow on a non-default branch only through a
+    # push matching its trigger; without it workflow_dispatch answers 404 on that branch.
+    branches: [ main, iso-v0 ]
     paths:
       - 'forge/**'
       - 'Cargo.toml'
