@@ -42,7 +42,6 @@
     "recovery",
     "cargo-tools",
     "just",
-    "uki-tools",
     "kernel-forge",
     "git-native",
     "ripgrep-native",
@@ -62,8 +61,7 @@
     "sccache",
     "mold",
     "cargo-tools",
-    "just",
-    "uki-tools"
+    "just"
   ],
   "custom_tier1": [
     "starship",
