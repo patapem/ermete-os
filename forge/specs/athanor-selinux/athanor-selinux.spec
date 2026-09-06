@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 Name:           athanor-selinux
 Version:        1.0
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        Custom SELinux policies for Athanor OS
 License:        MIT
 URL:            https://github.com/hr-mes/athanor-forge
@@ -17,24 +17,30 @@ Custom SELinux Type Enforcement policies for Athanor OS.
 Includes mitigations for bootupd and scx eBPF schedulers.
 
 %prep
-cp %{SOURCE0} .
-cp %{SOURCE1} .
+%setup -q -c -T
+cp %{SOURCE0} %{SOURCE1} .
 
 %build
-# Stubbed
+# checkmodule compiles each .te into a module (the require block resolves against
+# the base policy when the module is installed); semodule_package wraps it as .pp.
+for module in bootupd_lsblk athanor_scx; do
+  checkmodule -M -m -o "${module}.mod" "${module}.te"
+  semodule_package -o "${module}.pp" -m "${module}.mod"
+done
 
 %install
-rm -rf %{buildroot}
-mkdir -p %{buildroot}
-mkdir -p %{buildroot}$(dirname /usr/share/selinux/packages/bootupd_lsblk.pp) && touch %{buildroot}/usr/share/selinux/packages/bootupd_lsblk.pp
-mkdir -p %{buildroot}$(dirname /usr/share/selinux/packages/athanor_scx.pp) && touch %{buildroot}/usr/share/selinux/packages/athanor_scx.pp
-
+install -D -m 0644 bootupd_lsblk.pp %{buildroot}%{_datadir}/selinux/packages/bootupd_lsblk.pp
+install -D -m 0644 athanor_scx.pp %{buildroot}%{_datadir}/selinux/packages/athanor_scx.pp
 
 %files
-/usr/share/selinux/packages/bootupd_lsblk.pp
-/usr/share/selinux/packages/athanor_scx.pp
+%{_datadir}/selinux/packages/bootupd_lsblk.pp
+%{_datadir}/selinux/packages/athanor_scx.pp
 
 %changelog
+* Sun Sep 06 2026 Athanor Forge <forge@athanor.os> - 1.0-3
+- Compile the policy modules with checkmodule and semodule_package instead of
+  installing empty placeholder .pp files
+
 * Tue Jul 07 2026 Athanor Forge <forge@athanor.os> - 1.0-2
 - Purged dangerous %post scriptlet for OSTree compatibility
 - Removed global allow_execmem 1 security risk
