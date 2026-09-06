@@ -82,7 +82,7 @@ jobs:
 
   system-image:
     needs: [orchestrator-brain, dag-compile, build-builder]
-    if: ${{ always() && needs.orchestrator-brain.outputs.has_changes == 'true' }}
+    if: ${{ !cancelled() && needs.orchestrator-brain.outputs.has_changes == 'true' && needs.build-builder.result == 'success' && (needs.dag-compile.result == 'success' || needs.dag-compile.result == 'skipped') }}
     uses: ./.github/workflows/call-system-image.yml
     with:
       builder_content_hash: ${{ needs.build-builder.outputs.content_hash }}
