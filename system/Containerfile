@@ -1,4 +1,6 @@
-FROM ghcr.io/hr-mes/athanor-base-nvidia:latest
+# The base image is built by the separate repository hr-mes/ermete-base-nvidia and
+# has not been renamed: no athanor-base-nvidia image has ever been published.
+FROM ghcr.io/hr-mes/ermete-base-nvidia:latest
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG FEDORA_VERSION=43
 ENV FEDORA_VERSION=$FEDORA_VERSION
