@@ -10,6 +10,11 @@ ARG TETRAGON_VERSION=v1.3.0
 # TIER 0: BEDROCK HARDWARE & KERNEL FOUNDATION
 RUN --mount=type=bind,from=ghcr.io/hr-mes/athanor-forge-tier0-repo:latest,source=/,target=/mnt/tier0-repo \
     --mount=type=cache,dst=/var/cache --mount=type=cache,dst=/var/cache/libdnf5 \
+    base_kernel=$(rpm -qa kernel kernel-core 'kernel-modules*' 'kernel-uki-virt*') && \
+    if [ -n "$base_kernel" ]; then \
+        echo "Tier 0: Removing the base image kernel: bootc supports one kernel per image and Azoth is installed below..." && \
+        dnf5 remove -y --no-autoremove $base_kernel; \
+    fi && \
     BASE_CONFIG=$(find /mnt/tier0-repo -name "athanor-base-config*.rpm" | head -n 1) && \
     if [ -n "$BASE_CONFIG" ]; then \
         echo "Tier 0: Installing core Athanor Forge base configuration..." && \
