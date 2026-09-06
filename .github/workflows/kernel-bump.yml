@@ -167,7 +167,7 @@ jobs:
           set -euo pipefail
           git add forge/specs/azoth
           keys=$(git diff --cached -U0 -- forge/specs/azoth/pins.env | sed -n 's/^+\([A-Z_]\+\)=.*/\1/p')
-          git diff --cached --quiet -- 'forge/specs/azoth/*/Containerfile' || keys+=$'\n'"base image"
+          git diff --cached --quiet -- 'forge/specs/azoth/*/Containerfile' || keys+=${keys:+$'\n'}"base image"
           title="chore(kernel): bump $(paste -sd, - <<< "$keys" | sed 's/,/, /g')"
           branch="bump/kernel-$(date -u +%Y%m%d-%H%M)"
           git config user.name "athanor-bump"
