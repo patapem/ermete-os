@@ -277,30 +277,18 @@ jobs:
           podman push "${image}:${DEFAULT_TAG}"
 
       - name: 🔐 Sign & Attest OS Image (Zero-Trust Keyless Sigstore)
+        # One signature and one SBOM attestation per image digest: the :latest tag
+        # resolves to the same digest as :<run_id>, so cosign verify accepts both.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_ACTOR: ${{ github.actor }}
           RUN_ID: ${{ github.run_id }}
         run: |
           set -euo pipefail
-          echo "=== 🛡️ Initiating Keyless OIDC Signature & SBOM Attestation ==="
-          # Authenticate Cosign
+          image="${IMAGE_REGISTRY}/${IMAGE_NAME}:${RUN_ID}"
           nix run nixpkgs#cosign -- login ghcr.io -u "${GITHUB_ACTOR}" -p "${GITHUB_TOKEN}"
-          
-          # Generate SPDX SBOM from the final container
-          echo "Generating Software Bill of Materials (SBOM)..."
-          nix run nixpkgs#syft -- packages "ghcr.io/hr-mes/athanor-system:${RUN_ID}" -o spdx-json > system-sbom.spdx.json
-          
-          # Keyless Sign the container images
-          echo "Signing OCI Artifacts..."
-          nix run nixpkgs#cosign -- sign --yes "ghcr.io/hr-mes/athanor-system:${RUN_ID}"
-          nix run nixpkgs#cosign -- sign --yes "ghcr.io/hr-mes/athanor-system:latest"
-          
-          # Attest the SBOM cryptographically
-          echo "Attesting SBOM..."
-          nix run nixpkgs#cosign -- attest --yes --type spdxjson --predicate system-sbom.spdx.json "ghcr.io/hr-mes/athanor-system:${RUN_ID}"
-          nix run nixpkgs#cosign -- attest --yes --type spdxjson --predicate system-sbom.spdx.json "ghcr.io/hr-mes/athanor-system:latest"
-          echo "✅ Final OS Image securely attested (SLSA Level 3)."
+          nix run nixpkgs#syft -- packages "${image}" -o spdx-json=system-sbom.spdx.json
+          nix shell nixpkgs#cosign -c bash forge/scripts/sign_attest.sh "${image}" system-sbom.spdx.json
 
       - name: 💿 Build ISO (osbuild)
         uses: osbuild/bootc-image-builder-action@019bb59c5100ecec4e78c9e94e18a840110f7a0b # v0.0.2
