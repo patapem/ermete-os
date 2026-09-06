@@ -68,8 +68,8 @@ jobs:
           IMAGE_LOWER=$(echo "${{ env.REGISTRY }}/${{ github.repository_owner }}/athanor-builder" | tr '[:upper:]' '[:lower:]')
           podman tag ghcr.io/hr-mes/athanor-builder:${{ vars.BUILDER_STABLE_TAG || 'latest' }} $IMAGE_LOWER:latest || true
           podman tag $IMAGE_LOWER:latest $IMAGE_LOWER:${{ steps.check_idempotency.outputs.content_hash }}
-          podman push $IMAGE_LOWER:latest
-          podman push $IMAGE_LOWER:${{ steps.check_idempotency.outputs.content_hash }}
+          bash scripts/retry.sh podman push $IMAGE_LOWER:latest
+          bash scripts/retry.sh podman push $IMAGE_LOWER:${{ steps.check_idempotency.outputs.content_hash }}
           echo "Waiting 15 seconds for GHCR eventual consistency..."
           sleep 15
 
