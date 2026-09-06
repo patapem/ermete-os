@@ -117,7 +117,7 @@ pull_and_extract() {
     buildah umount "$ctr"
     buildah rm "$ctr"
   else
-    echo "    [!] Immagine non trovata o scaricamento fallito per $img"
+    echo "    [!] Image not found or pull failed: $img"
   fi
 }
 
@@ -170,7 +170,7 @@ for img in "${TIER3_IMAGES[@]}"; do
 done
 
 for pid in $(jobs -p); do
-  wait $pid || { echo "FATAL: Un job in parallelo è fallito"; exit 1; }
+  wait $pid || { echo "FATAL: a parallel extraction job failed"; exit 1; }
 done
 
 echo "=== Post-Processing: Deduplicating RPMs (Keeping Latest) ==="
