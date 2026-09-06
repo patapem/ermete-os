@@ -1,16 +1,17 @@
 name: NVIDIA kmod build
 
-# I moduli kernel NVIDIA (forge/specs/azoth/nvidia.sh, spec sezione 10) contro un
-# kernel-devel, sul runner self-hosted con la toolchain del kernel. Workflow riusabile:
-# lo chiama Kernel Build per il gate sulle PR e sui push (kernel-devel dell'artefatto
-# appena costruito, o dell'immagine pubblicata quando il kernel e' riusato) e NVIDIA kmod
-# per la catena di firma e pubblicazione. Carica gli artefatti nvidia-<ramo>-unsigned.
+# The NVIDIA kernel modules (forge/specs/azoth/nvidia.sh, spec section 10) against a
+# kernel-devel, on the self-hosted runner with the kernel toolchain. Reusable workflow:
+# Kernel Build calls it for the gate on PRs and pushes (the kernel-devel of the freshly
+# built artifact, or of the published image when the kernel is reused) and NVIDIA kmod
+# calls it for the signing and publication chain. Uploads the nvidia-<branch>-unsigned
+# artifacts.
 
 on:
   workflow_call:
     inputs:
       devel-artifact:
-        description: "artefatto con kernel-devel-*.rpm; vuoto: l'immagine azoth-devel:<nvr> pubblicata per i pin"
+        description: "artifact holding kernel-devel-*.rpm; empty: the azoth-devel:<nvr> image published for the pins"
         type: string
         default: ""
 
@@ -47,10 +48,10 @@ jobs:
           path: devel
 
       - name: Kernel-devel from the published image
-        # L'NVR viene dai pin (nvr.sh): il kernel per cui si compila e' quello pubblicato.
-        # Login con il token del job: il pacchetto e' pubblico, ma il podman di un runner
-        # self-hosted puo' avere in auth.json credenziali ghcr stantie, e ghcr risponde 403
-        # al token anonimo. Logout a fine passo, cosi' non ne restano.
+        # The NVR comes from the pins (nvr.sh): the kernel built against is the published
+        # one. Login with the job token: the package is public, but the podman of a
+        # self-hosted runner may hold stale ghcr credentials in auth.json, and ghcr answers
+        # 403 to the anonymous token. Logout at the end of the step, so none are left.
         if: ${{ inputs.devel-artifact == '' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

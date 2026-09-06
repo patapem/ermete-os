@@ -1,17 +1,19 @@
 name: Kernel Weekly
 
-# Riproducibilita' e benchmark del kernel (forge/specs/azoth; spec sezione 3 passo
-# 8 e sezione 7, gate 5 e 6; fase K7). repro: sul runner self-hosted ricostruisce il pin
-# pubblicato con cache vuota e builder appena costruito e lo confronta con l'OCI pubblicato
-# (repro.py: config, System.map, vmlinux sezione per sezione, moduli senza firma); una
-# differenza oltre la traccia della chiave di firma effimera e' un job rosso, un bug da
-# aprire. variant: a richiesta, la stessa build con un frammento di variants/ (o3: -O3 al
-# posto di -O2) per il confronto A/B. bench: su runner GitHub con KVM, il kernel pubblicato
-# e la variante, se c'e', in QEMU con hackbench, schbench, fio e netperf (bench.sh); i
-# risultati si accumulano tra i run e bench-report.py ne fa tabelle e grafici nel summary.
-# Non blocca nulla: e' il numero che ha deciso -O2 (2026-09-05) e decide le opzioni future. `schedule` vale solo
-# dal branch di default; `push` sul file stesso registra il workflow sul branch (senza,
-# workflow_dispatch da' 404 fuori dal branch di default) e ne prova il job bench.
+# Reproducibility and benchmark of the kernel (forge/specs/azoth; spec section 3 step
+# 8 and section 7, gates 5 and 6; phase K7). repro: on the self-hosted runner, rebuilds
+# the published pin with an empty cache and a freshly built builder and compares it with
+# the published OCI (repro.py: config, System.map, vmlinux section by section, unsigned
+# modules); a difference beyond the trace of the ephemeral signing key is a red job, a
+# bug to open. variant: on request, the same build with a fragment from variants/ (o3:
+# -O3 instead of -O2) for the A/B comparison. bench: on a GitHub runner with KVM, the
+# published kernel and the variant, if any, in QEMU with hackbench, schbench, fio and
+# netperf (bench.sh); the results accumulate across runs and bench-report.py turns them
+# into tables and charts in the summary. Nothing is blocked by it: it is the number that
+# decided -O2 (2026-09-05) and decides future options. `schedule` only works from the
+# default branch; `push` on this very file registers the workflow on the branch (without
+# it workflow_dispatch answers 404 outside the default branch) and exercises its bench
+# job.
 
 on:
   schedule:
@@ -19,15 +21,15 @@ on:
   workflow_dispatch:
     inputs:
       repro:
-        description: "ricostruisce il pin e lo confronta con l'immagine pubblicata"
+        description: "rebuild the pin and compare it with the published image"
         type: boolean
         default: true
       bench:
-        description: "benchmark del kernel pubblicato in QEMU/KVM"
+        description: "benchmark of the published kernel in QEMU/KVM"
         type: boolean
         default: true
       variant:
-        description: "variante (variants/<nome>) da costruire e mettere a confronto nel benchmark"
+        description: "variant (variants/<name>) to build and compare in the benchmark"
         type: choice
         options: [none, o3]
         default: none
@@ -63,7 +65,7 @@ jobs:
         run: podman build -t localhost/azoth-builder forge/specs/azoth/builder
 
       - name: Rebuild the pinned kernel with an empty cache (B)
-        # Cache nuova: ogni sorgente si riscarica e si riverifica, come alla prima build.
+        # Fresh cache: every source is downloaded and verified again, as on the first build.
         run: |
           set -euo pipefail
           cache=$(mktemp -d)
@@ -75,14 +77,14 @@ jobs:
             bash forge/specs/azoth/build.sh --stage build --out /forge/out-b
 
       - name: Published kernel (A)
-        # Sempre dal registro: una copia locale dell'immagine potrebbe essere una build
-        # precedente con lo stesso tag.
+        # Always from the registry: a local copy of the image could be an earlier build
+        # with the same tag.
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           nvr=$(bash forge/specs/azoth/nvr.sh)
-          [[ $(cat out-b/nvr) == "$nvr" ]] || { echo "NVR ricostruito $(cat out-b/nvr), pubblicato ${nvr}"; exit 1; }
+          [[ $(cat out-b/nvr) == "$nvr" ]] || { echo "rebuilt NVR $(cat out-b/nvr), published ${nvr}"; exit 1; }
           echo "${GH_TOKEN}" | podman login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
           trap 'podman logout ghcr.io' EXIT
           podman pull "${IMAGE}:${nvr}"
@@ -107,7 +109,8 @@ jobs:
           if-no-files-found: error
 
       - name: Keep the rebuilt kernel-core and modules-core (B) for the diagnosis
-        # Solo se il confronto e' rosso: A e' nel registro, B altrimenti sparirebbe col runner.
+        # Only when the comparison is red: A is in the registry, B would otherwise vanish
+        # with the runner.
         if: ${{ failure() && hashFiles('out-b/kernel/kernel-core-*.rpm') != '' }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -197,8 +200,8 @@ jobs:
           if [[ -d out-v ]]; then bench out-v "variant-${VARIANT}" "$VARIANT"; fi
 
       - name: History and report
-        # I risultati dei run settimanali precedenti riusciti su questo branch, in ordine
-        # di run, piu' questo: tabelle, confronto A/B e grafici nel summary.
+        # The results of the previous successful weekly runs on this branch, in run order,
+        # plus this one: tables, A/B comparison and charts in the summary.
         run: |
           set -euo pipefail
           mkdir -p history

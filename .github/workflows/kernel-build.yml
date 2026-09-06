@@ -1,26 +1,27 @@
 name: Kernel Build
 
-# Il kernel Athanor (forge/specs/azoth, docs/architecture/doc_kernel_build.md).
-# build: sul runner self-hosted, `prep` (sorgenti, patch, gate del config) in pochi
-# minuti o `build` (RPM) in un'ora. boot: su runner GitHub con KVM, la boot matrix
-# (SeaBIOS e OVMF con Secure Boot, CPU Nehalem e host) con le asserzioni della spec.
-# publish: su runner GitHub, pubblica gli RPM come quattro OCI (kernel, devel,
-# debuginfo, e il kernel guest delle MicroVM come tag <nvr>-microvm del kernel)
-# firmati con cosign keyless, con SBOM, provenance SLSA e attestazione dei pin;
-# `:latest` si muove solo su main. kmod: i moduli NVIDIA contro il kernel-devel appena
-# costruito (nvidia-build.yml, riusabile). gate: il check unico "Kernel gate" che la
-# protezione del branch richiede alle PR, anche a quelle del bot di bump (fase K5):
-# per questo il workflow parte su ogni PR, senza filtro di percorsi. Una PR costruisce
-# e avvia ma non pubblica. nvidia: sui push, a valle della pubblicazione, avvia
-# nvidia-kmod.yml (firma, boot con Secure Boot, pubblicazione dei moduli). inputs: se
-# l'immagine con questo NVR porta gia' l'attestazione degli identici input di build,
-# build e publish non partono, e boot matrix e kmod usano le immagini pubblicate.
+# The Athanor kernel (forge/specs/azoth, docs/architecture/doc_kernel_build.md).
+# build: on the self-hosted runner, `prep` (sources, patches, config gate) in a few
+# minutes or `build` (RPMs) in about an hour. boot: on a GitHub runner with KVM, the boot
+# matrix (SeaBIOS and OVMF with Secure Boot, Nehalem and host CPUs) with the assertions
+# of the spec. publish: on a GitHub runner, publishes the RPMs as four OCI images
+# (kernel, devel, debuginfo, and the MicroVM guest kernel as the <nvr>-microvm tag of the
+# kernel) signed with cosign keyless, with SBOM, SLSA provenance and the attestation of
+# the pins; `:latest` moves only on main. kmod: the NVIDIA modules against the freshly
+# built kernel-devel (nvidia-build.yml, reusable). gate: the single "Kernel gate" check
+# that the branch protection requires on PRs, including those of the bump bot (phase
+# K5): that is why the workflow runs on every PR, with no path filter. A PR builds and
+# boots but does not publish. nvidia: on pushes, downstream of publish, dispatches
+# nvidia-kmod.yml (signing, boot with Secure Boot, publication of the modules). inputs:
+# when the image with this NVR already carries the attestation of identical build
+# inputs, build and publish do not run, and the boot matrix and kmod use the published
+# images.
 
 on:
   workflow_dispatch:
     inputs:
       stage:
-        description: "prep: sorgenti, patch e gate del config. build: anche gli RPM e la pubblicazione."
+        description: "prep: sources, patches and config gate. build: the RPMs and the publication as well."
         type: choice
         options: [prep, build]
         default: build
@@ -45,9 +46,9 @@ env:
 
 jobs:
   inputs:
-    # Un kernel gia' costruito da questi identici input non si ricompila: l'immagine
-    # `<nvr>` porta l'attestazione dei pin (build-inputs.py), verificata con cosign;
-    # se il predicato coincide con quello di questo commit, il riuso e' provato.
+    # A kernel already built from these identical inputs is not rebuilt: the `<nvr>`
+    # image carries the attestation of the pins (build-inputs.py), verified with cosign;
+    # when the predicate matches the one of this commit, the reuse is proven.
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     outputs:
@@ -61,8 +62,8 @@ jobs:
       - id: key
         run: |
           set -euo pipefail
-          # Lo stesso NVR che rpmbuild produce con `%buildid .azoth` (build.sh);
-          # publish verifica che coincidano.
+          # The same NVR that rpmbuild produces with `%buildid .azoth` (build.sh);
+          # publish checks that they match.
           nvr=$(bash forge/specs/azoth/nvr.sh)
           python3 forge/specs/azoth/build-inputs.py > inputs.json
           reuse=false
@@ -72,17 +73,17 @@ jobs:
                "${IMAGE}:${nvr}" 2> /dev/null \
              | jq -cS '.payload | @base64d | fromjson | .predicate.Data | fromjson' \
              | grep -qxF "$(jq -cS . inputs.json)"; then
-            # Stessi input: si riusa solo se tutte e quattro le immagini sono firmate.
-            # publish puo' essersi fermato dopo il push e prima delle firme.
+            # Identical inputs: reuse only when all four images are signed. publish may
+            # have stopped after the push and before the signatures.
             reuse=true
             for ref in "${IMAGE}:${nvr}" "${IMAGE}:${nvr}-microvm" "${IMAGE}-devel:${nvr}" "${IMAGE}-debuginfo:${nvr}"; do
               cosign verify \
                 --certificate-identity-regexp "^${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/" \
                 --certificate-oidc-issuer https://token.actions.githubusercontent.com "$ref" > /dev/null 2>&1 \
-                || { echo "${ref} non firmata: build necessaria"; reuse=false; }
+                || { echo "${ref} is not signed: build required"; reuse=false; }
             done
           fi
-          echo "kernel ${nvr}: $([[ $reuse == true ]] && echo "immagine pubblicata con gli stessi input, niente build" || echo "build necessaria")" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "kernel ${nvr}: $([[ $reuse == true ]] && echo "image published from identical inputs, no build" || echo "build required")" | tee -a "$GITHUB_STEP_SUMMARY"
           echo "nvr=${nvr}" >> "$GITHUB_OUTPUT"
           echo "reuse=${reuse}" >> "$GITHUB_OUTPUT"
 
@@ -90,15 +91,15 @@ jobs:
     needs: inputs
     if: ${{ (inputs.stage || 'build') == 'prep' || needs.inputs.outputs.reuse != 'true' }}
     runs-on: self-hosted
-    # Kernel completo con -O3 e kCFI: un'ora su 16 core.
+    # A full kernel with kCFI: about an hour on 16 cores.
     timeout-minutes: 360
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: Build the kernel builder image
-        # Podman rootless sul runner WSL non ha una sessione systemd: crun non puo'
-        # creare lo scope del container di build ("sd-bus call: Access denied").
-        # L'isolamento chroot di buildah e' quello che gli altri workflow gia' usano.
+        # Rootless podman on the WSL runner has no systemd session: crun cannot create
+        # the scope of the build container ("sd-bus call: Access denied"). The chroot
+        # isolation of buildah is the one the other workflows already use.
         env:
           BUILDAH_ISOLATION: chroot
         run: podman build -t localhost/azoth-builder forge/specs/azoth/builder
@@ -120,8 +121,8 @@ jobs:
           if-no-files-found: error
 
       - name: Artifact for the boot matrix
-        # Al job boot servono solo vmlinuz (il kernel-core, 21 MB invece di 1.3 GB) e
-        # il pacchetto del kernel guest.
+        # The boot job only needs vmlinuz (the kernel-core, 21 MB instead of 1.3 GB) and
+        # the guest kernel package.
         if: ${{ env.STAGE == 'build' }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -132,7 +133,7 @@ jobs:
           if-no-files-found: error
 
       - name: Artifact for the NVIDIA modules
-        # Al job kmod serve solo il kernel-devel.
+        # The kmod job only needs the kernel-devel.
         if: ${{ env.STAGE == 'build' }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -142,7 +143,7 @@ jobs:
 
   boot:
     needs: [inputs, build]
-    # Anche con build saltato per riuso: la matrice gira sempre.
+    # Also when build is skipped for reuse: the matrix always runs.
     if: ${{ !cancelled() && (inputs.stage || 'build') == 'build' && needs.inputs.result == 'success' && (needs.build.result == 'success' || needs.inputs.outputs.reuse == 'true') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 45
@@ -176,16 +177,17 @@ jobs:
         run: podman build -t localhost/azoth-boot forge/specs/azoth/boot
 
       - name: Run boot.sh
-        # Quattro avvii: {SeaBIOS, OVMF+Secure Boot via shim} x {Nehalem, host}, ognuno
-        # deve chiudere con `K3 RESULT ok` sulla seriale (asserzioni in boot/init).
+        # Four boots: {SeaBIOS, OVMF+Secure Boot via shim} x {Nehalem, host}, each one
+        # must end with `K3 RESULT ok` on the serial console (assertions in boot/init).
         run: |
           set -euo pipefail
           mkdir -p boot-out
           podman run --rm --device /dev/kvm -v "$GITHUB_WORKSPACE:/forge" -w /forge localhost/azoth-boot bash forge/specs/azoth/boot.sh --rpms /forge/out --out /forge/boot-out
 
       - name: Run microvm/boot.sh
-        # Il kernel guest (spec, sezione 9): il vmlinux del pacchetto avvia in Firecracker
-        # con una rootfs di prova e chiude con `K6 RESULT ok` (asserzioni in microvm/init).
+        # The guest kernel (spec, section 9): the vmlinux of the package boots in
+        # Firecracker with a test rootfs and ends with `K6 RESULT ok` (assertions in
+        # microvm/init).
         run: |
           set -euo pipefail
           podman run --rm --device /dev/kvm -v "$GITHUB_WORKSPACE:/forge" -w /forge localhost/azoth-boot bash forge/specs/azoth/microvm/boot.sh --rpms /forge/out --out /forge/boot-out/microvm
@@ -199,7 +201,7 @@ jobs:
           done
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        # Anche se la matrice fallisce, ma solo se boot.sh ha scritto qualcosa.
+        # Even when the matrix fails, but only if boot.sh wrote something.
         if: ${{ always() && hashFiles('boot-out/**') != '' }}
         with:
           name: kernel-boot-logs
@@ -207,8 +209,8 @@ jobs:
           if-no-files-found: error
 
   kmod:
-    # I moduli NVIDIA (spec, sezione 7, gate 4) contro questo kernel: l'artefatto
-    # kernel-devel appena costruito, o l'immagine pubblicata quando il kernel e' riusato.
+    # The NVIDIA modules (spec, section 7, gate 4) against this kernel: the freshly
+    # built kernel-devel artifact, or the published image when the kernel is reused.
     needs: [inputs, build]
     if: ${{ !cancelled() && (inputs.stage || 'build') == 'build' && needs.inputs.result == 'success' && (needs.build.result == 'success' || needs.inputs.outputs.reuse == 'true') }}
     permissions:
@@ -219,9 +221,9 @@ jobs:
       devel-artifact: ${{ needs.inputs.outputs.reuse != 'true' && 'kernel-devel' || '' }}
 
   gate:
-    # Il check unico richiesto dalla protezione del branch: verde solo se ogni gate e'
-    # verde, o saltato perche' il kernel e' riusato (build). Un solo nome da aspettare
-    # per l'auto-merge del bot di bump.
+    # The single check required by the branch protection: green only when every gate is
+    # green, or skipped because the kernel is reused (build). One name to wait for, for
+    # the auto-merge of the bump bot.
     name: Kernel gate
     needs: [inputs, build, boot, kmod]
     if: ${{ always() && (inputs.stage || 'build') == 'build' }}
@@ -264,17 +266,17 @@ jobs:
 
       - name: Publish the four OCI images
         id: publish
-        # Un'immagine da scratch con i soli RPM per ciascun gruppo, digest in digests/;
-        # il kernel guest e' un tag <nvr>-microvm dello stesso pacchetto del kernel.
-        # Le etichette OCI legano l'immagine al commit e all'NVR; i pin completi vanno
-        # nell'attestazione (step successivo).
+        # A scratch image holding only the RPMs of each group, digests in digests/; the
+        # guest kernel is an <nvr>-microvm tag of the same package as the kernel. The OCI
+        # labels bind the image to the commit and the NVR; the full pins go into the
+        # attestation (next step).
         env:
           BUILDAH_ISOLATION: chroot
           NVR_EXPECTED: ${{ needs.inputs.outputs.nvr }}
         run: |
           set -euo pipefail
           nvr=$(cat out/nvr)
-          [[ $nvr == "$NVR_EXPECTED" ]] || { echo "NVR prodotto ${nvr}, atteso dai pin ${NVR_EXPECTED}"; exit 1; }
+          [[ $nvr == "$NVR_EXPECTED" ]] || { echo "NVR built ${nvr}, expected from the pins ${NVR_EXPECTED}"; exit 1; }
           echo "${GH_TOKEN}" | buildah login -u "${GITHUB_ACTOR}" --password-stdin ghcr.io
           mkdir -p digests
           for group in kernel devel debuginfo microvm; do
@@ -301,19 +303,19 @@ jobs:
           done
 
       - name: SBOM, sign, attest
-        # cosign keyless con l'identita' OIDC del workflow: firma, SBOM SPDX di ogni
-        # immagine, e i pin come predicato custom. Le immagini contengono file .rpm, non
-        # un rpmdb: il cataloger degli archivi RPM di syft non e' tra quelli di default
-        # per le immagini, senza di lui la SBOM elenca zero pacchetti.
-        # cosign non legge l'auth.json di buildah: login proprio per caricare firme e
-        # attestazioni nel registro.
+        # cosign keyless with the OIDC identity of the workflow: signature, SPDX SBOM of
+        # every image, and the pins as a custom predicate. The images contain .rpm files,
+        # not an rpmdb: the RPM archive cataloger of syft is not among the defaults for
+        # images, and without it the SBOM lists zero packages. cosign does not read the
+        # auth.json of buildah: its own login uploads signatures and attestations to the
+        # registry.
         run: |
           set -euo pipefail
           echo "${GH_TOKEN}" | cosign login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
           mkdir -p sbom
           python3 forge/specs/azoth/build-inputs.py > pins.json
-          # L'RPM che ogni immagine deve contenere: la SBOM che non lo elenca e' vuota
-          # (senza il cataloger degli archivi RPM syft non vede nulla).
+          # The RPM every image must contain: an SBOM that does not list it is empty
+          # (without the RPM archive cataloger syft sees nothing).
           declare -A SBOM_PACKAGE=([kernel]=kernel-core [devel]=kernel-devel [debuginfo]=kernel-debuginfo [microvm]=azoth-microvm)
           for group in kernel devel debuginfo microvm; do
             image=$IMAGE
@@ -321,7 +323,7 @@ jobs:
             ref="${image}@$(cat "digests/${group}")"
             syft scan "registry:${ref}" --select-catalogers "+rpm-archive-cataloger" -o "spdx-json=sbom/${group}.spdx.json"
             jq -e --arg name "${SBOM_PACKAGE[$group]}" '[.packages[] | select(.name == $name)] | length > 0' "sbom/${group}.spdx.json" > /dev/null \
-              || { echo "SBOM di ${group} senza il pacchetto ${SBOM_PACKAGE[$group]}"; exit 1; }
+              || { echo "SBOM of ${group} lacks package ${SBOM_PACKAGE[$group]}"; exit 1; }
             cosign sign --yes "$ref"
             cosign attest --yes --type spdxjson --predicate "sbom/${group}.spdx.json" "$ref"
             cosign attest --yes --type custom --predicate pins.json "$ref"
@@ -332,17 +334,18 @@ jobs:
           SYFT_REGISTRY_AUTH_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Provenance SLSA (kernel)
-        # Nello store attestazioni di GitHub, non nel registro: `gh attestation verify`
-        # legge da li', e senza referrer senza tag la retention resta esatta.
+        # In the GitHub attestation store, not in the registry: `gh attestation verify`
+        # reads from there, and without untagged referrers the retention stays exact.
         uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8
         with:
           subject-name: ${{ env.IMAGE }}
           subject-digest: ${{ steps.publish.outputs.kernel }}
 
       - name: Retention (retention.sh)
-        # Prima del gate: la verifica prova cio' che resta nel registro. Restano le release
-        # (tutte per kernel e devel, due per il debuginfo) e cio' che e' raggiungibile da
-        # esse: l'indice dei referrer `sha256-<hex>` e i bundle cosign che elenca.
+        # Before the gate: the verification proves what is left in the registry. The
+        # releases stay (all of them for kernel and devel, two for the debuginfo) with
+        # what is reachable from them: the `sha256-<hex>` referrers index and the cosign
+        # bundles it lists.
         run: bash forge/specs/azoth/retention.sh
 
       - name: Verify (gate K2)
@@ -356,7 +359,7 @@ jobs:
             --certificate-identity-regexp "^${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/" \
             --certificate-oidc-issuer https://token.actions.githubusercontent.com "$ref" > /dev/null
           gh attestation verify "oci://${ref}" --repo "${GITHUB_REPOSITORY}"
-          echo "verificato: $ref"
+          echo "verified: $ref"
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -368,9 +371,10 @@ jobs:
           if-no-files-found: error
 
   nvidia:
-    # La catena dei moduli (nvidia-kmod.yml: firma, boot con Secure Boot, pubblicazione)
-    # parte da qui, a valle della pubblicazione o del riuso del kernel: workflow_run vale
-    # solo dal branch di default, e i moduli servono anche quando publish non gira.
+    # The module chain (nvidia-kmod.yml: signing, boot with Secure Boot, publication)
+    # starts here, downstream of the publication or the reuse of the kernel: workflow_run
+    # only works from the default branch, and the modules are needed even when publish
+    # does not run.
     needs: [inputs, boot, kmod, publish]
     if: ${{ !cancelled() && github.event_name != 'pull_request' && needs.boot.result == 'success' && needs.kmod.result == 'success' && (needs.publish.result == 'success' || (needs.publish.result == 'skipped' && needs.inputs.outputs.reuse == 'true')) }}
     runs-on: ubuntu-24.04

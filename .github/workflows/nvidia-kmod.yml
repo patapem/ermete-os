@@ -1,15 +1,15 @@
 name: NVIDIA kmod
 
-# I moduli kernel NVIDIA firmati e pubblicati (forge/specs/azoth/nvidia.sh,
-# docs/architecture/doc_kernel_build.md, sezione 10). build: nvidia-build.yml, i due
-# rami (open 610, legacy 580) contro il kernel-devel pubblicato per l'NVR dei pin.
-# sign: su runner GitHub nell'environment `signing`, un job che vede solo i .ko e la
-# MOK di progetto. boot: in QEMU con Secure Boot e la MOK di progetto arruolata, il
-# nvidia.ko firmato di ogni ramo deve passare la verifica della firma (ENODEV: niente
-# GPU) e una copia non firmata deve essere respinta (EKEYREJECTED). publish: OCI
-# azoth-nvidia:<nvr>-<ramo> con cosign, SBOM, attestazione dei pin e retention.
-# Parte solo per dispatch: da Kernel Build a valle della pubblicazione (o del riuso)
-# del kernel, o a mano. Il gate sulle PR e' il job kmod di Kernel Build.
+# The NVIDIA kernel modules, signed and published (forge/specs/azoth/nvidia.sh,
+# docs/architecture/doc_kernel_build.md, section 10). build: nvidia-build.yml, the two
+# branches (open 610, legacy 580) against the kernel-devel published for the NVR of the
+# pins. sign: on a GitHub runner in the `signing` environment, a job that only sees the
+# .ko files and the project MOK. boot: in QEMU with Secure Boot and the project MOK
+# enrolled, the signed nvidia.ko of each branch must pass the signature check (ENODEV: no
+# GPU) and an unsigned copy must be rejected (EKEYREJECTED). publish: OCI
+# azoth-nvidia:<nvr>-<branch> with cosign, SBOM, attestation of the pins and retention.
+# Runs only on dispatch: from Kernel Build downstream of the publication (or the reuse)
+# of the kernel, or by hand. The gate on PRs is the kmod job of Kernel Build.
 
 on:
   workflow_dispatch:
@@ -55,7 +55,7 @@ jobs:
         run: podman build -t localhost/azoth-nvidia forge/specs/azoth/nvidia
 
       - name: Kernel-devel from the published image
-        # Solo per scripts/sign-file, che nvidia.sh estrae dal RPM.
+        # Only for scripts/sign-file, which nvidia.sh extracts from the RPM.
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -67,8 +67,9 @@ jobs:
           mkdir -p devel && podman cp "${ctr}:/." devel/ && podman rm "$ctr" > /dev/null
 
       - name: Sign with the project MOK
-        # La chiave vive in un file 0600 nel tmp del runner per la durata del comando,
-        # montata in sola lettura nel container; il certificato pubblico e' nel repo.
+        # The key lives in a 0600 file in the runner's tmp for the duration of the
+        # command, mounted read-only in the container; the public certificate is in the
+        # repository.
         env:
           MOK_PRIVATE_KEY: ${{ secrets.MOK_PRIVATE_KEY }}
         run: |
@@ -102,7 +103,7 @@ jobs:
           path: signed
 
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
-        # Il controllo negativo: lo stesso nvidia.ko prima della firma.
+        # The negative check: the same nvidia.ko before signing.
         with:
           name: nvidia-open-unsigned
           path: unsigned
@@ -123,8 +124,9 @@ jobs:
         run: podman build -t localhost/azoth-boot forge/specs/azoth/boot
 
       - name: Run boot.sh with the signed modules
-        # Solo i casi UEFI: la fiducia nella MOK arriva da MokListRT, che senza shim non
-        # esiste. La MOK di progetto entra nel varstore accanto a quella effimera della UKI.
+        # UEFI cases only: the trust in the MOK comes from MokListRT, which does not exist
+        # without shim. The project MOK enters the varstore next to the ephemeral one of
+        # the UKI.
         run: |
           set -euo pipefail
           mkdir -p boot-out
@@ -184,7 +186,7 @@ jobs:
           mkdir -p digests
           for driver in open legacy; do
             version=$(cat "out/${driver}/version")
-            [[ $(cat "out/${driver}/kver") == "${nvr}.x86_64" ]] || { echo "kver dei moduli ${driver} diverso da ${nvr}"; exit 1; }
+            [[ $(cat "out/${driver}/kver") == "${nvr}.x86_64" ]] || { echo "kver of the ${driver} modules differs from ${nvr}"; exit 1; }
             ctr=$(buildah from scratch)
             buildah copy "$ctr" "out/${driver}/" /
             buildah config \
@@ -200,8 +202,8 @@ jobs:
           echo "nvr=${nvr}" >> "$GITHUB_OUTPUT"
 
       - name: SBOM, sign, attest
-        # cosign keyless; la SBOM viene dal cataloger dei moduli kernel di syft; il
-        # predicato custom lega l'immagine ai pin NVIDIA e al kernel.
+        # cosign keyless; the SBOM comes from the kernel module cataloger of syft; the
+        # custom predicate binds the image to the NVIDIA pins and to the kernel.
         run: |
           set -euo pipefail
           echo "${GH_TOKEN}" | cosign login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
@@ -218,7 +220,7 @@ jobs:
           PY
             syft scan "registry:${ref}" -o "spdx-json=sbom/${driver}.spdx.json"
             jq -e '[.packages[] | select(.name | startswith("nvidia"))] | length > 0' "sbom/${driver}.spdx.json" > /dev/null \
-              || { echo "SBOM di ${driver} senza moduli nvidia"; exit 1; }
+              || { echo "SBOM of ${driver} lacks the nvidia modules"; exit 1; }
             cosign sign --yes "$ref"
             cosign attest --yes --type spdxjson --predicate "sbom/${driver}.spdx.json" "$ref"
             cosign attest --yes --type custom --predicate "pins-${driver}.json" "$ref"
@@ -242,7 +244,7 @@ jobs:
             cosign verify-attestation --type custom \
               --certificate-identity-regexp "^${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/" \
               --certificate-oidc-issuer https://token.actions.githubusercontent.com "$ref" > /dev/null
-            echo "verificato: $ref"
+            echo "verified: $ref"
           done
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
