@@ -1,35 +1,35 @@
 %global debug_package %{nil}
+%global theme Bibata-Modern-Classic
 Name:           athanor-bibata-cursor
 Version:        2.0.7
-Release:        1%{?dist}
-Summary:        Open source, compact, and material designed cursor set.
-License:        GPLv3
+Release:        2%{?dist}
+Summary:        Open source, compact, and material designed cursor set
+License:        GPL-3.0-only
 URL:            https://github.com/ful1e5/Bibata_Cursor
-
+Source0:        https://github.com/ful1e5/Bibata_Cursor/releases/download/v%{version}/%{theme}.tar.xz#/%{theme}-%{version}.tar.xz
 
 BuildArch:      noarch
 
 %description
-Bibata cursor theme (Modern Classic). Packaged for Athanor OS.
+Bibata cursor theme (Modern Classic), packaged for Athanor OS from the upstream
+release archive verified against SOURCES/sources.sha256.
 
 %prep
-# Stub prep
+%autosetup -n %{theme}
 
 %build
-# No build required for cursors
+# Nothing to build: the release ships the rendered cursors.
 
 %install
-mkdir -p %{buildroot}
-mkdir -p $(dirname Bibata-Modern-Classic/*) && touch Bibata-Modern-Classic/*
-
-rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/icons/Bibata-Modern-Classic
-cp -r Bibata-Modern-Classic/* %{buildroot}/usr/share/icons/Bibata-Modern-Classic/
+install -d %{buildroot}%{_datadir}/icons/%{theme}
+cp -a cursor.theme index.theme cursors %{buildroot}%{_datadir}/icons/%{theme}/
 
 %files
-/usr/share/icons/Bibata-Modern-Classic
+%{_datadir}/icons/%{theme}
 
 %changelog
+* Sun Sep 06 2026 Athanor Forge <forge@athanor.os> - 2.0.7-2
+- Package the upstream release archive instead of an empty placeholder tree
+
 * Sun Jun 28 2026 Athanor Forge <forge@athanor.os> - 2.0.7-1
 - Repackaged binary asset into RPM for zero-network OS build
-
