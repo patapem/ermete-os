@@ -86,6 +86,6 @@ jobs:
     uses: ./.github/workflows/call-system-image.yml
     with:
       builder_content_hash: ${{ needs.build-builder.outputs.content_hash }}
-      has_changes: ${{ needs.orchestrator-brain.outputs.has_changes }}
+      has_changes: ${{ needs.orchestrator-brain.outputs.has_changes == 'true' }}
     secrets: inherit
 
