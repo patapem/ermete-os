@@ -218,7 +218,7 @@ EOF
           builderImage = pkgs.dockerTools.buildLayeredImage {
             name = "ghcr.io/hr-mes/athanor-builder";
             tag = "latest";
-            contents = [ builder-fhs-compat builder-containers-policy pkgs.bashInteractive pkgs.coreutils pkgs.findutils pkgs.gnused pkgs.gawk pkgs.cacert pkgs.tzdata pkgs.shadow ] ++ security-tools ++ c-toolchain ++ rust-tools ++ build-tools ++ system-deps ++ system-dev ++ system-lib;
+            contents = [ builder-fhs-compat builder-containers-policy pkgs.dockerTools.fakeNss pkgs.bashInteractive pkgs.coreutils pkgs.findutils pkgs.gnused pkgs.gawk pkgs.cacert pkgs.tzdata pkgs.shadow ] ++ security-tools ++ c-toolchain ++ rust-tools ++ build-tools ++ system-deps ++ system-dev ++ system-lib;
             config = {
               Cmd = [ "/bin/bash" ];
               Env = [
