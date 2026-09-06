@@ -131,6 +131,14 @@ EOF
             ln -s ${pkgs.stdenv.cc.cc.lib}/lib/libgcc_s.so.1 $out/lib64/libgcc_s.so.1
           '';
 
+          # containers/image policy for buildah and skopeo inside the builder: without
+          # /etc/containers/policy.json every image operation is refused. nixpkgs' skopeo
+          # carries the upstream default policy; it is installed under the name the
+          # tools look up.
+          builder-containers-policy = pkgs.runCommand "athanor-builder-containers-policy" { } ''
+            install -D -m 0644 ${pkgs.skopeo.policy}/default-policy.json $out/etc/containers/policy.json
+          '';
+
           # Macro RPM di systemd (%_unitdir, %systemd_post, …). In Fedora le fornisce
           # systemd-rpm-macros; l'rpm di nixpkgs non le ha, e rpmbuild lascerebbe
           # `%systemd_post` come testo letterale negli scriptlet. Rese dal template
@@ -210,7 +218,7 @@ EOF
           builderImage = pkgs.dockerTools.buildLayeredImage {
             name = "ghcr.io/hr-mes/athanor-builder";
             tag = "latest";
-            contents = [ builder-fhs-compat pkgs.bashInteractive pkgs.coreutils pkgs.findutils pkgs.gnused pkgs.gawk pkgs.cacert pkgs.tzdata pkgs.shadow ] ++ security-tools ++ c-toolchain ++ rust-tools ++ build-tools ++ system-deps ++ system-dev ++ system-lib;
+            contents = [ builder-fhs-compat builder-containers-policy pkgs.bashInteractive pkgs.coreutils pkgs.findutils pkgs.gnused pkgs.gawk pkgs.cacert pkgs.tzdata pkgs.shadow ] ++ security-tools ++ c-toolchain ++ rust-tools ++ build-tools ++ system-deps ++ system-dev ++ system-lib;
             config = {
               Cmd = [ "/bin/bash" ];
               Env = [
