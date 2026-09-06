@@ -1,0 +1,8 @@
+# Build context of system/Containerfile: only the trees its COPY instructions read.
+# The git history, cargo target trees and the docs stay out of the context, which
+# also keeps a remote podman client from uploading gigabytes before the first layer.
+*
+!forge
+!system
+**/target
+**/.git
